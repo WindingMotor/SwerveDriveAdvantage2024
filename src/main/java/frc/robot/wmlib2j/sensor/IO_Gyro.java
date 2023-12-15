@@ -1,4 +1,4 @@
-package frc.robot.wmlib2.sensor;
+package frc.robot.wmlib2j.sensor;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import org.littletonrobotics.junction.LogTable;

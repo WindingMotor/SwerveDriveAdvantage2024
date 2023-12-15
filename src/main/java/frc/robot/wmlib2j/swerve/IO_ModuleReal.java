@@ -1,4 +1,4 @@
-package frc.robot.wmlib2.swerve;
+package frc.robot.wmlib2j.swerve;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkMaxPIDController;
@@ -17,27 +17,38 @@ public class IO_ModuleReal implements IO_ModuleBase{
     private ModuleSettings settings;
 
     // Create the drive motor
-    private CANSparkMax driveMotor = new CANSparkMax(settings.driveID, MotorType.kBrushless);
+    private CANSparkMax driveMotor;
 
     // Create the drive encoder
-    private RelativeEncoder driveEncoder = driveMotor.getEncoder();
+    private RelativeEncoder driveEncoder;
     
     // Create the turn motor
-    private CANSparkMax turnMotor = new CANSparkMax(settings.turnID, MotorType.kBrushless);
+    private CANSparkMax turnMotor;
 
     // Create the turn encoder
-    private RelativeEncoder turnEncoder = turnMotor.getEncoder();
+    private RelativeEncoder turnEncoder;
 
     // Create the absolute encoder
-    private DutyCycleEncoder turnAbsoluteEncoder = new DutyCycleEncoder(settings.absoluteEncoderID);
+    private DutyCycleEncoder turnAbsoluteEncoder;
 
     // Create module PIDs
-    private SparkMaxPIDController turnPID = turnMotor.getPIDController();
-    private SparkMaxPIDController drivePID = driveMotor.getPIDController();
+    private SparkMaxPIDController turnPID;
+    private SparkMaxPIDController drivePID;
 
     public IO_ModuleReal(ModuleSettings settings){
 
         this.settings = settings;
+
+        driveMotor = new CANSparkMax(settings.driveID, MotorType.kBrushless);
+        driveEncoder = driveMotor.getEncoder();
+
+        turnMotor = new CANSparkMax(settings.turnID, MotorType.kBrushless);
+        turnEncoder = turnMotor.getEncoder();
+
+        turnAbsoluteEncoder = new DutyCycleEncoder(settings.absoluteEncoderID);
+
+        turnPID = turnMotor.getPIDController();
+        drivePID = driveMotor.getPIDController();
 
         driveMotor.setIdleMode(IdleMode.kBrake);
         driveMotor.setSmartCurrentLimit(45);

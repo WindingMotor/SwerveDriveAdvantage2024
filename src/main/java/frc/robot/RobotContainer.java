@@ -3,10 +3,10 @@ package frc.robot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
-import frc.robot.wmlib2.command.SwerveJoystick;
-import frc.robot.wmlib2.sensor.IO_GyroReal;
-import frc.robot.wmlib2.swerve.IO_ModuleReal;
-import frc.robot.wmlib2.swerve.Swerve;
+import frc.robot.wmlib2j.command.SwerveJoystick;
+import frc.robot.wmlib2j.sensor.IO_GyroReal;
+import frc.robot.wmlib2j.swerve.IO_ModuleReal;
+import frc.robot.wmlib2j.swerve.Swerve;
 
 public class RobotContainer {
 

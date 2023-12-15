@@ -7,7 +7,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 public class Constants {
 
     // Current robot mode.
-    public static final RobotMode currentMode = RobotMode.REAL;
+    public static final RobotMode currentMode = RobotMode.SIM;
     public static final double loopPeriodSecs = 0.02;
 
     public enum RobotMode{

@@ -1,8 +1,8 @@
-package frc.robot.wmlib2.swerve;
+package frc.robot.wmlib2j.swerve;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.wmlib2.sensor.IO_Gyro;
+import frc.robot.wmlib2j.sensor.IO_Gyro;
 import org.littletonrobotics.junction.Logger;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.kinematics.*;

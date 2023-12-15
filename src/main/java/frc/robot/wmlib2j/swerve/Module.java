@@ -1,4 +1,4 @@
-package frc.robot.wmlib2.swerve;
+package frc.robot.wmlib2j.swerve;
 
 import org.littletonrobotics.junction.Logger;
 import edu.wpi.first.math.MathUtil;

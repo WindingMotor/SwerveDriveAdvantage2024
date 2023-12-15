@@ -1,9 +1,9 @@
-package frc.robot.wmlib2.command;
+package frc.robot.wmlib2j.command;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
-import frc.robot.wmlib2.swerve.Swerve;
+import frc.robot.wmlib2j.swerve.Swerve;
 import java.util.function.Supplier;
 
 public class SwerveJoystick extends Command{

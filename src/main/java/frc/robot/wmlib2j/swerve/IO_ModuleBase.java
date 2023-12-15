@@ -1,4 +1,4 @@
-package frc.robot.wmlib2.swerve;
+package frc.robot.wmlib2j.swerve;
 
 import org.littletonrobotics.junction.inputs.LoggableInputs;
 import org.littletonrobotics.junction.LogTable;

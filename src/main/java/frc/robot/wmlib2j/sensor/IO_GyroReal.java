@@ -1,4 +1,4 @@
-package frc.robot.wmlib2.sensor;
+package frc.robot.wmlib2j.sensor;
 
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SPI;
