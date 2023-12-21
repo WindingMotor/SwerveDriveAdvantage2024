@@ -1,184 +1,203 @@
 package frc.robot.wmlib2j.swerve;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.SparkMaxPIDController;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import com.revrobotics.RelativeEncoder;
+import com.revrobotics.*;
 import com.revrobotics.CANSparkMax.IdleMode;
-import edu.wpi.first.math.MathUtil;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
-import frc.robot.Constants.MK4SDS;
+import frc.robot.Constants;
 import frc.robot.Constants.ModuleSettings;
 
-// Abstracted from IO_IntakeBase, contains the code to interface with the hardware.
-public class IO_ModuleReal implements IO_ModuleBase{
+/**
+ * Represents a real implementation of the IO module for the robot.
+*/
+public class IO_ModuleReal implements IO_ModuleBase {
 
-    private ModuleSettings settings;
+    // Store module settings
+    private ModuleSettings moduleSettings;
 
-    // Create the drive motor
+    // Drive motor
     private CANSparkMax driveMotor;
 
-    // Create the drive encoder
+    // Encoder for the drive motor
     private RelativeEncoder driveEncoder;
-    
-    // Create the turn motor
+
+    // Turn motor
     private CANSparkMax turnMotor;
 
-    // Create the turn encoder
+    // Encoder for the turn motor
     private RelativeEncoder turnEncoder;
 
-    // Create the absolute encoder
+    // Absolute encoder
     private DutyCycleEncoder turnAbsoluteEncoder;
 
-    // Create module PIDs
-    private SparkMaxPIDController turnPID;
-    private SparkMaxPIDController drivePID;
-
-    private PIDController turnRoboRioPID;
+    // PID controller for the drive motor
     private PIDController driveRoboRioPID;
 
-    public IO_ModuleReal(ModuleSettings settings){
+    // PID controller for the turn motor
+    private PIDController turnRoboRioPID;
 
-        this.settings = settings;
+    /**
+    * Constructor for the IO_ModuleReal class.
+    * @param settings The settings for the module.
+    */
+    public IO_ModuleReal(ModuleSettings settings) {
+        this.moduleSettings = settings;
 
-        driveMotor = new CANSparkMax(settings.driveID, MotorType.kBrushless);
-        driveMotor.restoreFactoryDefaults();
-        driveEncoder = driveMotor.getEncoder();
+        // Initialize the drive motor and its encoder
+        driveMotor = createMotor(settings.driveID, settings.driveInverted);
+        driveEncoder = createEncoder(driveMotor, Constants.MK4SDS.kDriveEncoderRot2Meter, Constants.MK4SDS.kDriveEncoderRPM2MeterPerSec);
 
-        turnMotor = new CANSparkMax(settings.turnID, MotorType.kBrushless);
-        turnMotor.restoreFactoryDefaults();
-        turnEncoder = turnMotor.getEncoder();
+        // Initialize the turn motor and its encoder
+        turnMotor = createMotor(settings.turnID, settings.turnInverted);
+        turnEncoder = createEncoder(turnMotor, Constants.MK4SDS.kTurningEncoderRot2Rad, Constants.MK4SDS.kTurningEncoderRPM2RadPerSec);
 
+        // Initialize the absolute encoder
         turnAbsoluteEncoder = new DutyCycleEncoder(settings.absoluteEncoderID);
-
-        //turnPID = turnMotor.getPIDController();
-        //drivePID = driveMotor.getPIDController();
-
-        driveMotor.setIdleMode(IdleMode.kBrake);
-        driveMotor.setSmartCurrentLimit(35);
-        driveMotor.setInverted(settings.driveInverted);
-
-        driveEncoder.setPositionConversionFactor(MK4SDS.kDriveEncoderRot2Meter);
-        driveEncoder.setVelocityConversionFactor(MK4SDS.kDriveEncoderRPM2MeterPerSec);
-    
-
-        turnMotor.setIdleMode(IdleMode.kBrake);
-        turnMotor.setSmartCurrentLimit(15);
-        turnMotor.setInverted(settings.turnInverted);
- 
-        // Change conversion factors for neo turning encoder - should be in radians!
-        turnEncoder.setPositionConversionFactor(MK4SDS.kTurningEncoderRot2Rad);
-        turnEncoder.setVelocityConversionFactor(MK4SDS.kTurningEncoderRPM2RadPerSec);
-
         turnAbsoluteEncoder.setDutyCycleRange(1.0 / 4096.0, 4095.0 / 4096.0);
 
-        /* 
-        turnPID.setP(MK4SDS.TURN_MODULE_PID_P);
-        turnPID.setI(MK4SDS.TURN_MODULE_PID_I);
-        turnPID.setD(MK4SDS.TURN_MODULE_PID_D);
-        turnPID.setOutputRange(-1.0, 1.0);
-        turnPID.setPositionPIDWrappingEnabled(true);
-        turnPID.setPositionPIDWrappingMinInput(0.0);
-        turnPID.setPositionPIDWrappingMaxInput( 2.0 * Math.PI);
-        turnPID.setFeedbackDevice(turnEncoder);
+        // Reset the encoder positions
+        resetEncoders();
 
-        drivePID.setP(MK4SDS.DRIVE_MODULE_PID_P);
-        drivePID.setI(MK4SDS.DRIVE_MODULE_PID_I);
-        drivePID.setD(MK4SDS.DRIVE_MODULE_PID_D);
-        drivePID.setOutputRange(-1.0, 1.0);
-        drivePID.setFeedbackDevice(driveEncoder);
-        */
-
-        driveEncoder.setPosition(0.0);
-        turnEncoder.setPosition(getAbsoluteEncoderRad());
-
+        // Burn flash on the motors
         driveMotor.burnFlash();
         turnMotor.burnFlash();
 
+        // Initialize the RoboRio PID controllers
         driveRoboRioPID = new PIDController(0.45, 0.08, 0.001);
         turnRoboRioPID = new PIDController(0.25, 0.000001, 0.00025);
-
         turnRoboRioPID.enableContinuousInput(0.0, 2.0 * Math.PI);
-   
-
-
-
     }
 
-    // Update inputs with current values
+    /**
+    * Creates a motor with the given CAN ID and inversion setting.
+    * @param id The CAN ID of the motor.
+    * @param inverted Whether the direction motor is inverted.
+    * @return The created motor.
+    */
+    private CANSparkMax createMotor(int id, boolean inverted) {
+        CANSparkMax motor = new CANSparkMax(id, MotorType.kBrushless);
+        motor.restoreFactoryDefaults();
+        motor.setIdleMode(IdleMode.kBrake);
+        motor.setSmartCurrentLimit(35);
+        motor.setInverted(inverted);
+        return motor;
+    }
+
+    /**
+    * Creates an encoder with the given motor and conversion factors.
+    * @param motor The motor to bind the encoder to.
+    * @param positionConversionFactor The conversion factor for the position.
+    * @param velocityConversionFactor The conversion factor for the velocity.
+    * @return The created encoder.
+    */
+    private RelativeEncoder createEncoder(CANSparkMax motor, double positionConversionFactor, double velocityConversionFactor) {
+        RelativeEncoder encoder = motor.getEncoder();
+        encoder.setPositionConversionFactor(positionConversionFactor);
+        encoder.setVelocityConversionFactor(velocityConversionFactor);
+        return encoder;
+    }
+
+    /**
+    * Updates the inputs with the current values.
+    * @param inputs The inputs to update.
+    */
     @Override
     public void updateInputs(ModuleInputs inputs){
 
+        // Drive motor inputs
         inputs.drivePositionMeters = driveEncoder.getPosition();
         inputs.driveVelocityMetersPerSec = driveEncoder.getVelocity();
         inputs.driveAppliedPercentage = driveMotor.getAppliedOutput();
         inputs.driveCurrentAmps = driveMotor.getOutputCurrent();
         inputs.driveTempCelsius = driveMotor.getMotorTemperature();
 
-        // Get absolute position -> Convert to radians -> Wrap from -pi to pi -> Subtract offset -> Wrap again
-        //inputs.turnAbsolutePositionRad = MathUtil.angleModulus(
-        //    Rotation2d.fromDegrees(turnAbsoluteEncoder.getAbsolutePosition()).minus(settings.absoluteEncoderOffset).getRadians()
-        //);
-
+        // Turn motor inputs
         inputs.turnAbsolutePositionRad = getAbsoluteEncoderRad();
-
         inputs.turnPositionRad = turnEncoder.getPosition();
         inputs.turnVelocityRadPerSec = turnEncoder.getVelocity();
         inputs.turnAppliedPercentage = turnMotor.getAppliedOutput();
         inputs.turnCurrentAmps = turnMotor.getOutputCurrent();
         inputs.driveTempCelsius = turnMotor.getMotorTemperature();
+
     }
 
+    /**
+    * Sets the drive motor speed.
+    * @param percent The percentage of the drive output to set from -1.0 to 0.0.
+    */
     @Override
     public void setDriveOutput(double percent){
         driveMotor.set(0.0);
     }
 
+    /**
+    * Sets the turn motor speed.
+    * @param percent The percentage of the turn output to set from -1.0 to 0.0.
+    */
     @Override
     public void setTurnOutput(double percent){
         turnMotor.set(0.0);
     }
 
+    /**
+    * Stops the both the motors.
+    */
     @Override
     public void stop(){
         driveMotor.set(0.0);
         turnMotor.set(0.0);
     }
 
+    /**
+    * Resets the positions of the encoders.
+    */
+    public void resetEncoders(){
+        driveEncoder.setPosition(0.0);
+        turnEncoder.setPosition(getAbsoluteEncoderRad());
+    }
+
+    /**
+    * Sets the SparkMax PID references. The main way for controlling the motors.
+    * @param driveReference The drive reference in meters per sec.
+    * @param turnReference The turn reference in radians.
+    */
     @Override
     public void setPIDReferences(double driveReference, double turnReference){
         //drivePID.setReference(2.0, CANSparkMax.ControlType.kVelocity);
         //turnPID.setReference(0.0, CANSparkMax.ControlType.kPosition);
-        //driveMotor.set(0.1);
         
-        //turnMotor.set(turnRoboRioPID.calculate(turnEncoder.getPosition(), Math.toRadians(45.0)));
-        //driveMotor.set(driveRoboRioPID.calculate(driveEncoder.getVelocity(), 1.0));
-
         turnMotor.set(turnRoboRioPID.calculate(turnEncoder.getPosition(), turnReference));
        // driveMotor.set(driveRoboRioPID.calculate(driveEncoder.getVelocity(), driveReference));
        driveMotor.set(driveReference);
-       
-
     }
 
-    public double getAbsoluteEncoderRad(){
+    /**
+    * Sets the module angle to zero and the drive velocity to zero.
+    */
+    public void setZero(){
+        //drivePID.setReference(2.0, CANSparkMax.ControlType.kVelocity);
+        //turnPID.setReference(0.0, CANSparkMax.ControlType.kPosition);
+        
+        turnMotor.set(turnRoboRioPID.calculate(turnEncoder.getPosition(), 0));
+        driveMotor.set(driveRoboRioPID.calculate(driveEncoder.getVelocity(), 0));
+    }
 
-        //  Make angle variable
+    /**
+    * Gets the absolute encoder position in radians with the applied offset.
+    * @return The position in radians.
+    */
+    public double getAbsoluteEncoderRad(){
         double angle;
     
-        // Get encoder absolute position goes from 1 to 0
+        // Make sure position goes from 1 to 0 and convert to radians
         angle = 1 - turnAbsoluteEncoder.getAbsolutePosition();
-    
-        // Convert into radians
         angle *= 2.0 * Math.PI;
-        //angle -= (SmartDashboard.getNumber(moduleName + " ABE Manual", 0) / 180.0) * Math.PI;
-        //System.out.println("WARNING: " + moduleName + " is at " + SmartDashboard.getNumber(moduleName + " ABE Manual", 0));
-        angle -= settings.absoluteEncoderOffset.getRadians();
+
+        // Apply the offset in radians
+        angle -= moduleSettings.absoluteEncoderOffset.getRadians();
 
         return angle;
-        
       }
     
 
