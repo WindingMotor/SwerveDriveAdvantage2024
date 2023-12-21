@@ -26,11 +26,22 @@ public class RobotContainer {
 
         Constants.DriverBindings driverBindings = Constants.DriverBindings.XBOX;
 
+        /* 
         swerve.setDefaultCommand(new SwerveJoystick(
                 () -> driverBindings.xInverted ? -driverController.getRawAxis(driverBindings.xInput) : driverController.getRawAxis(driverBindings.xInput),
                 () -> driverBindings.yInverted ? -driverController.getRawAxis(driverBindings.yInput) : driverController.getRawAxis(driverBindings.yInput),
                 () -> driverBindings.rInverted ? -driverController.getRawAxis(driverBindings.rInput) : driverController.getRawAxis(driverBindings.rInput),
-                () -> true,
+                () -> false,
+                swerve
+        ));
+        */
+
+
+        swerve.setDefaultCommand(new SwerveJoystick(
+                () -> driverController.getRawAxis(1) ,
+                () -> driverController.getRawAxis(0) ,
+                () -> driverController.getRawAxis(3) ,
+                () -> false,
                 swerve
         ));
       

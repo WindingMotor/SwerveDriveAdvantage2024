@@ -8,8 +8,8 @@ public interface IO_ModuleBase{
 
     class ModuleInputs implements LoggableInputs{
 
-        public double drivePositionRad = 0.0;
-        public double driveVelocityRadPerSec = 0.0;
+        public double drivePositionMeters = 0.0;
+        public double driveVelocityMetersPerSec = 0.0;
         public double driveAppliedPercentage = 0.0;
         public double driveCurrentAmps = 0.0;
         public double driveTempCelsius = 0.0;
@@ -23,8 +23,8 @@ public interface IO_ModuleBase{
 
         @Override
         public void toLog(LogTable table){
-            table.put("drivePositionRad", drivePositionRad);
-            table.put("driveVelocityRadPerSec", driveVelocityRadPerSec);
+            table.put("drivePositionMeters", drivePositionMeters);
+            table.put("driveVelocityMetersPerSec", driveVelocityMetersPerSec);
             table.put("driveAppliedPercentage", driveAppliedPercentage);
             table.put("driveCurrentAmps", driveCurrentAmps);
             table.put("driveTempCelsius", driveTempCelsius);
@@ -40,8 +40,8 @@ public interface IO_ModuleBase{
         @Override
         public void fromLog(LogTable table){
             // Drive
-            drivePositionRad = table.get("drivePositionRad", drivePositionRad);
-            driveVelocityRadPerSec = table.get("driveVelocityRadPerSec", driveVelocityRadPerSec);
+            drivePositionMeters = table.get("drivePositionMeters", drivePositionMeters);
+            driveVelocityMetersPerSec = table.get("driveVelocityMetersPerSec", driveVelocityMetersPerSec);
             driveAppliedPercentage = table.get("driveAppliedPercentage", driveAppliedPercentage);
             driveCurrentAmps = table.get("driveCurrentAmps", driveCurrentAmps);
             driveTempCelsius = table.get("turnTempCelsius", driveTempCelsius);

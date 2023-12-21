@@ -37,9 +37,10 @@ public class Robot extends LoggedRobot {
     Logger.recordMetadata("ProjectName", "AdvantageJava2024"); // Set a metadata value
 
     if (Constants.currentMode == Constants.RobotMode.REAL){
-        Logger.addDataReceiver(new WPILOGWriter("/U")); // Log to a USB stick
-        Logger.addDataReceiver(new NT4Publisher()); // Publish data to NetworkTables
+        //Logger.addDataReceiver(new WPILOGWriter("/U")); // Log to a USB stick
+        //Logger.addDataReceiver(new NT4Publisher()); // Publish data to NetworkTables
         //new PowerDistribution(1, ModuleType.kRev); // Enables power distribution logging
+        Logger.addDataReceiver(new NT4Publisher());
     }else{
         Logger.addDataReceiver(new NT4Publisher());
     }

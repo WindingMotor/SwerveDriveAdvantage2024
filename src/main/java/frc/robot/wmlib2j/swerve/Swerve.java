@@ -46,17 +46,22 @@ public class Swerve extends SubsystemBase {
         backLeftModule.periodic();
         backRightModule.periodic();
 
+        //ChassisSpeeds testSpeeds = new ChassisSpeeds(2.0, 0, 0.0);
+
         // Get the swerve module states from kinematics method using current setpointSpeeds
         SwerveModuleState[] states = Constants.Kinematics.KINEMATICS.toSwerveModuleStates(setpointSpeeds);
 
         // Desaturate the states, make every turn position and velocity possible.
-        SwerveDriveKinematics.desaturateWheelSpeeds(states, Constants.Kinematics.MAX_LINEAR_VELOCITY);
+        SwerveDriveKinematics.desaturateWheelSpeeds(states, 4.54);
 
         // Set each swerve module with its respective state
-        frontLeftModule.runWithState(states[0]);
-        frontRightModule.runWithState(states[1]);
-        backLeftModule.runWithState(states[2]);
-        backRightModule.runWithState(states[3]);
+        
+        frontLeftModule.runWithState(states[0]); frontRightModule.runWithState(states[1]);
+        backLeftModule.runWithState(states[2]); backRightModule.runWithState(states[3]);
+        
+  
+       // frontRightModule.runWithState(states[0]); backRightModule.runWithState(states[1]);
+        //frontLeftModule.runWithState(states[2]); backLeftModule.runWithState(states[3]);
 
         // Record the setpoint states
         Logger.recordOutput("SwerveStates/setpoints", states);

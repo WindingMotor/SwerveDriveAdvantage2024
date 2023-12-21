@@ -13,6 +13,7 @@ public class IO_GyroReal implements IO_Gyro{
         ahrs = new AHRS(SPI.Port.kMXP);
         ahrs.calibrate();
         ahrs.reset();
+        ahrs.zeroYaw();
     }
 
     // Returns an angle in radians from -pi to pi of the robot's rotation
