@@ -4,8 +4,16 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import org.littletonrobotics.junction.LogTable;
 import org.littletonrobotics.junction.inputs.LoggableInputs;
 
-public interface IO_Gyro{
+/**
+ * Base interface for using the gyroscope, abstracts to the real and simulation classes.
+ * Provides methods for updating inputs.
+*/
+public interface IO_GyroBase{
 
+    /**
+     * Represents the inputs for a gyroscope.
+     * It contains fields for yaw, pitch, and roll positions.
+    */
     class GyroIOInputs implements LoggableInputs{
         public boolean connected = false;
         public Rotation2d yawPosition = new Rotation2d();
@@ -15,6 +23,10 @@ public interface IO_Gyro{
         public Rotation2d rollPosition = new Rotation2d();
 
         @Override
+        /**
+         * Converts the current state of the gyroscope inputs into a loggable format.
+         * @param table The log table to write the inputs to.
+        */
         public void toLog(LogTable table){
             table.put("connected", connected);
             table.put("yawPosition", yawPosition);
@@ -25,6 +37,10 @@ public interface IO_Gyro{
         }
 
         @Override
+        /**
+         * Reads the state of the gyroscope inputs from a log table.
+         * @param table The log table to read the inputs from.
+        */
         public void fromLog(LogTable table){
             connected = table.get("connected", connected);
             yawPosition = table.get("yawPosition", yawPosition);
@@ -35,6 +51,10 @@ public interface IO_Gyro{
         }
     }
 
+    /**
+     * Updates the inputs with the current values.
+     * @param inputs The inputs to update.
+    */
     void updateInputs(GyroIOInputs inputs);
 
 }

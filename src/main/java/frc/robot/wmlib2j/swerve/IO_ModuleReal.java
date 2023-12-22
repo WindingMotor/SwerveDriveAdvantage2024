@@ -45,15 +45,15 @@ public class IO_ModuleReal implements IO_ModuleBase {
         this.moduleSettings = settings;
 
         // Initialize the drive motor and its encoder
-        driveMotor = createMotor(settings.driveID, settings.driveInverted);
-        driveEncoder = createEncoder(driveMotor, Constants.MK4SDS.kDriveEncoderRot2Meter, Constants.MK4SDS.kDriveEncoderRPM2MeterPerSec);
+        driveMotor = createMotor(settings.DRIVE_ID, settings.DRIVE_INVERTED);
+        driveEncoder = createEncoder(driveMotor, Constants.MK4SDS.DRIVE_ENCODER_ROT_TO_METER, Constants.MK4SDS.DRIVE_ENCODER_RPM_TO_METER_PER_SEC);
 
         // Initialize the turn motor and its encoder
-        turnMotor = createMotor(settings.turnID, settings.turnInverted);
-        turnEncoder = createEncoder(turnMotor, Constants.MK4SDS.kTurningEncoderRot2Rad, Constants.MK4SDS.kTurningEncoderRPM2RadPerSec);
+        turnMotor = createMotor(settings.TURN_ID, settings.TURN_INVERTED);
+        turnEncoder = createEncoder(turnMotor, Constants.MK4SDS.TURNING_ENCODER_ROT_TO_RAD, Constants.MK4SDS.TURNING_ENCODER_RPM_TO_RAD_PER_SEC);
 
         // Initialize the absolute encoder
-        turnAbsoluteEncoder = new DutyCycleEncoder(settings.absoluteEncoderID);
+        turnAbsoluteEncoder = new DutyCycleEncoder(settings.ABSOLUTE_ENCODER_ID);
         turnAbsoluteEncoder.setDutyCycleRange(1.0 / 4096.0, 4095.0 / 4096.0);
 
         // Reset the encoder positions
@@ -195,7 +195,7 @@ public class IO_ModuleReal implements IO_ModuleBase {
         angle *= 2.0 * Math.PI;
 
         // Apply the offset in radians
-        angle -= moduleSettings.absoluteEncoderOffset.getRadians();
+        angle -= moduleSettings.ABSOLUTE_ENCODER_OFFSET.getRadians();
 
         return angle;
       }

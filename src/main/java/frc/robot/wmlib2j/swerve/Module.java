@@ -1,16 +1,17 @@
 package frc.robot.wmlib2j.swerve;
 
 import org.littletonrobotics.junction.Logger;
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.controller.PIDController;
 import frc.robot.Constants;
 import frc.robot.Constants.ModuleSettings;
 
+/**
+ * Represents an individual swerve module.
+ * It contains methods for controlling the module's state and retrieving its current state.
+*/
 public class Module {
 
     private final IO_ModuleBase io;
@@ -21,32 +22,33 @@ public class Module {
     private final PIDController simDrivePID = new PIDController(0.1, 0.0, 0.0);
     private final PIDController simTurnPID = new PIDController(0.1, 0.0, 0.0);
 
+    /**
+     * Constructor for the Module class.
+     * @param io The IO module base.
+     * @param settings The module settings.
+    */
     public Module(IO_ModuleBase io, ModuleSettings settings){
         this.io = io;
         this.settings = settings;
     }
 
-    // Returns the new optimized state of the module while sending motor voltage commands.
+    /**
+     * Returns the new optimized state while setting motor speeds via setPIDReferences.
+     * @param newState The new state of the module.
+     * @return The optimized state of the module.
+    */
     public SwerveModuleState runWithState(SwerveModuleState newState){
 
-        // Optimize the desired module state based on the current module angle.
         SwerveModuleState optimizedState = SwerveModuleState.optimize(newState, getModuleState().angle);
 
-        if (Constants.currentMode == Constants.RobotMode.REAL){
-            // Set both PIDs references, (Velocity & Position), to tell the module's SparkMaxes where to go
+        if (Constants.CURRENT_MODE == Constants.RobotMode.REAL){
             io.setPIDReferences(optimizedState.speedMetersPerSecond, optimizedState.angle.getRadians());
-            
-            //SmartDashboard.putNumber( settings.moduleName + " Drive REF", optimizedState.speedMetersPerSecond);
-            //SmartDashboard.putNumber( settings.moduleName + " Turn REF", optimizedState.angle.getRadians());
         }else{
-            // Set output speeds using RoboRio PID controllers for simulation
-            io.setDriveOutput(simTurnPID.calculate(getModuleAngle().getRadians(), optimizedState.angle.getRadians()));
+            double turnError = simTurnPID.calculate(getModuleAngle().getRadians(), optimizedState.angle.getRadians());
+            io.setDriveOutput(turnError);
 
-            // optimizedState.speedMetersPerSecond *= cos(simTurnPID.positionError) // Update velocity based off turn error
-
-            double velocityRadPerSec = optimizedState.speedMetersPerSecond / Constants.MK4SDS.kWheelDiameterMeters;
+            double velocityRadPerSec = optimizedState.speedMetersPerSecond / Constants.MK4SDS.WHEEL_DIAMETER_METERS;
             io.setTurnOutput(simDrivePID.calculate(inputs.driveVelocityMetersPerSec, velocityRadPerSec));
-
         }
 
         return optimizedState;
@@ -57,34 +59,53 @@ public class Module {
         io.updateInputs(inputs);
 
         // Process inputs and send to logger.
-        Logger.processInputs(settings.moduleName, inputs);
+        Logger.processInputs(settings.MODULE_NAME, inputs);
     }
 
-    // Returns the current turn angle of the module.
+
+    /**
+     * Returns the current angle of the module.
+     * @return The current turn angle of the module in radians.
+    */
     public Rotation2d getModuleAngle(){
         return new Rotation2d(inputs.turnPositionRad);
     }
 
-    // Returns the current drive position of the module in meters.
+    /**
+     * Returns the current drive position, distance, of the module.
+     * @return The current drive position of the module in meters.
+    */
     public double getModulePositionMeters(){
         return inputs.drivePositionMeters;
     }
 
-    // Returns the current drive velocity of the module in meters per second.
+    /**
+     * Returns the current wheel velocity of the module.
+     * @return The current drive motor velocity of the module in meters per second.
+    */
     public double getModuleVelocityMetersPerSec(){
         return inputs.driveVelocityMetersPerSec;
     }
 
-    // Returns the module position (turn angle and drive position).
+    /**
+     * Returns the module position, (turn angle and drive position).
+     * @return The module position.
+     */
     public SwerveModulePosition getModulePosition(){
         return new SwerveModulePosition(getModulePositionMeters(), getModuleAngle());
     }
 
-    // Returns the module state (turn angle and drive velocity).
+    /**
+     * Returns the module state, (turn angle and drive velocity).
+     * @return The module state.
+     */
     public SwerveModuleState getModuleState(){
         return new SwerveModuleState(getModuleVelocityMetersPerSec(), getModuleAngle());
     }
 
+    /**
+     * Stops the module.
+    */
     public void stop(){
         io.stop();
     }

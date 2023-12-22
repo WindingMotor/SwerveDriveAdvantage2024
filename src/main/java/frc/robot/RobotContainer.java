@@ -13,10 +13,10 @@ public class RobotContainer {
     private final CommandXboxController driverController = new CommandXboxController(3);
 
     private final Swerve swerve = new Swerve(
-            new IO_ModuleReal(Constants.ModuleSettings.FRONTLEFT),
-            new IO_ModuleReal(Constants.ModuleSettings.FRONTRIGHT),
-            new IO_ModuleReal(Constants.ModuleSettings.BACKLEFT),
-            new IO_ModuleReal(Constants.ModuleSettings.BACKRIGHT),
+            new IO_ModuleReal(Constants.ModuleSettings.FRONT_LEFT),
+            new IO_ModuleReal(Constants.ModuleSettings.FRONT_RIGHT),
+            new IO_ModuleReal(Constants.ModuleSettings.BACK_LEFT),
+            new IO_ModuleReal(Constants.ModuleSettings.BACK_RIGHT),
             new IO_GyroReal()
     );
 
@@ -24,7 +24,7 @@ public class RobotContainer {
 
         configureBindings();
 
-        Constants.DriverBindings driverBindings = Constants.DriverBindings.XBOX;
+        Constants.Input.DriverBindings driverBindings = Constants.Input.DriverBindings.XBOX;
 
         /* 
         swerve.setDefaultCommand(new SwerveJoystick(

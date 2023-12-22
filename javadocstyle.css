@@ -1,0 +1,32 @@
+body {
+    background-color: #2b2b2b;
+    color: #a9b7c6;
+    font-family: Arial, sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: #ffc66d;
+}
+
+a {
+    color: #6897bb;
+}
+
+pre, code {
+    background-color: #3c3f41;
+    color: #a9b7c6;
+}
+
+table {
+    border-color: #4e5579;
+}
+
+th {
+    background-color: #3c3f41;
+    color: #a9b7c6;
+}
+
+td {
+    background-color: #3c3f41;
+    color: #a9b7c6;
+}

@@ -27,8 +27,12 @@
   ],
   "java.test.defaultConfig": "WPIlibUnitTests",
   "cSpell.words": [
+    "ahrs",
     "Brushless",
+    "DEADBAND",
+    "Desaturates",
     "Robo",
+    "setpoints",
     "wmlib"
   ]
 }

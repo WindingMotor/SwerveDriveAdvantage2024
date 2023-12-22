@@ -135,4 +135,9 @@ dependencies {
     annotationProcessor "org.littletonrobotics.akit.junction:junction-autolog:$akitJson.version"
 }
 
+javadoc{
+    //options.addStringOption('stylesheetfile', 'javadocstyle.css')
+}
+
 build.dependsOn javadoc
+
