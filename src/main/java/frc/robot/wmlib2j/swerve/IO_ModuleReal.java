@@ -45,11 +45,11 @@ public class IO_ModuleReal implements IO_ModuleBase {
         this.moduleSettings = settings;
 
         // Initialize the drive motor and its encoder
-        driveMotor = createMotor(settings.DRIVE_ID, settings.DRIVE_INVERTED);
+        driveMotor = createMotor(settings.DRIVE_ID, settings.DRIVE_INVERTED, 35);
         driveEncoder = createEncoder(driveMotor, Constants.MK4SDS.DRIVE_ENCODER_ROT_TO_METER, Constants.MK4SDS.DRIVE_ENCODER_RPM_TO_METER_PER_SEC);
 
         // Initialize the turn motor and its encoder
-        turnMotor = createMotor(settings.TURN_ID, settings.TURN_INVERTED);
+        turnMotor = createMotor(settings.TURN_ID, settings.TURN_INVERTED, 20);
         turnEncoder = createEncoder(turnMotor, Constants.MK4SDS.TURNING_ENCODER_ROT_TO_RAD, Constants.MK4SDS.TURNING_ENCODER_RPM_TO_RAD_PER_SEC);
 
         // Initialize the absolute encoder
@@ -75,11 +75,11 @@ public class IO_ModuleReal implements IO_ModuleBase {
     * @param inverted Whether the direction motor is inverted.
     * @return The created motor.
     */
-    private CANSparkMax createMotor(int id, boolean inverted) {
+    private CANSparkMax createMotor(int id, boolean inverted, int currentLimit){
         CANSparkMax motor = new CANSparkMax(id, MotorType.kBrushless);
         motor.restoreFactoryDefaults();
         motor.setIdleMode(IdleMode.kBrake);
-        motor.setSmartCurrentLimit(35);
+        motor.setSmartCurrentLimit(currentLimit);
         motor.setInverted(inverted);
         return motor;
     }
@@ -91,7 +91,7 @@ public class IO_ModuleReal implements IO_ModuleBase {
     * @param velocityConversionFactor The conversion factor for the velocity.
     * @return The created encoder.
     */
-    private RelativeEncoder createEncoder(CANSparkMax motor, double positionConversionFactor, double velocityConversionFactor) {
+    private RelativeEncoder createEncoder(CANSparkMax motor, double positionConversionFactor, double velocityConversionFactor){
         RelativeEncoder encoder = motor.getEncoder();
         encoder.setPositionConversionFactor(positionConversionFactor);
         encoder.setVelocityConversionFactor(velocityConversionFactor);
