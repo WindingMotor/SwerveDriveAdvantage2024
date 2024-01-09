@@ -2,6 +2,7 @@ package frc.robot;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
 
@@ -137,4 +138,33 @@ public class Constants{
         }
     }
 
+    public static class Vision {
+
+        public enum Camera{
+        LEFT_CAMERA("OV9281_02", "leftCamera", new Translation3d(10.25, 12.5, 12.0)),
+        RIGHT_CAMERA("OV9281_01", "rightCamera", new Translation3d(8.5, 8.5, 9.0));
+
+        public final String PHOTON_NAME;
+        public final String CAMERA_NAME;
+
+        public final Translation3d CAMERA_OFFSET;
+
+        Camera(String photonName, String cameraName, Translation3d cameraOffset) {
+            this.PHOTON_NAME = photonName;
+            this.CAMERA_NAME = cameraName;
+            this.CAMERA_OFFSET = cameraOffset;
+        }
+    }
+
+
+
+
+
+        
+    }
+
+
 }
+
+
+

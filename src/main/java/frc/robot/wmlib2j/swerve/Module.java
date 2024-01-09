@@ -12,7 +12,7 @@ import frc.robot.Constants.ModuleSettings;
  * Represents an individual swerve module.
  * It contains methods for controlling the module's state and retrieving its current state.
 */
-public class Module {
+public class Module{
 
     private final IO_ModuleBase io;
     private final ModuleSettings settings;

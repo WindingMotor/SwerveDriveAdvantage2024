@@ -7,6 +7,8 @@ import frc.robot.wmlib2j.command.SwerveJoystick;
 import frc.robot.wmlib2j.sensor.IO_GyroReal;
 import frc.robot.wmlib2j.swerve.IO_ModuleReal;
 import frc.robot.wmlib2j.swerve.Swerve;
+import frc.robot.wmlib2j.vision.IO_VisionReal;
+import frc.robot.wmlib2j.vision.Vision;
 
 public class RobotContainer {
 
@@ -20,11 +22,13 @@ public class RobotContainer {
             new IO_GyroReal()
     );
 
+    public final Vision vision = new Vision(
+        new IO_VisionReal()
+    );
+    
     public RobotContainer(){
 
         configureBindings();
-
-        Constants.Input.DriverBindings driverBindings = Constants.Input.DriverBindings.XBOX;
 
         /* 
         swerve.setDefaultCommand(new SwerveJoystick(
