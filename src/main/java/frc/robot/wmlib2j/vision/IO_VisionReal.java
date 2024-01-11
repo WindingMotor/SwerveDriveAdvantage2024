@@ -6,6 +6,9 @@ import org.photonvision.PhotonCamera;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
+import frc.robot.Constants;
+import frc.robot.Constants.Vision.Camera;
+
 
 public class IO_VisionReal implements IO_VisionBase{
 
@@ -23,6 +26,7 @@ public class IO_VisionReal implements IO_VisionBase{
      * Updates the inputs with the current values.
      * @param inputs The inputs to update.
     */
+    @Override
     public void updateInputs(VisionInputs inputs){
         inputs.leftCameraIsOn = leftCamera.isConnected();
         inputs.rightCameraIsOn = rightCamera.isConnected();
@@ -30,41 +34,49 @@ public class IO_VisionReal implements IO_VisionBase{
         inputs.leftCameraHasTargets = leftCamera.getLatestResult().hasTargets();
         inputs.rightCameraHasTargets = rightCamera.getLatestResult().hasTargets();
 
-        inputs.leftCameraTargets = getLeftTargets();
-        inputs.rightCameraTargets = getRightTargets();
+        inputs.leftCameraTargets = getResult(Camera.LEFT_CAMERA).targets;
+        inputs.rightCameraTargets = getResult(Camera.RIGHT_CAMERA).targets;
 
         inputs.leftCameraLatency = leftCamera.getLatestResult().getLatencyMillis();
         inputs.rightCameraLatency = leftCamera.getLatestResult().getLatencyMillis();
     }
 
-    public PhotonPipelineResult getLeftCameraResult(){
-        return leftCamera.getLatestResult();
+    /**
+     * Returns the latest result based on the given Camera.
+     * @param  camera  The camera to get the result from
+     * @return         The latest result
+    */
+    @Override
+    public PhotonPipelineResult getResult(Camera camera){
+        if(camera == Constants.Vision.Camera.LEFT_CAMERA){
+            return leftCamera.getLatestResult();
+        }else{
+            return rightCamera.getLatestResult();
+        }
     }
 
-    public PhotonPipelineResult getRightCameraResult(){
-        return rightCamera.getLatestResult();
-    }
+    /**
+     * Retrieves the list of tracked targets from the specified camera.
+     * @param  camera  The camera object from which to retrieve the targets
+     * @return         The list of tracked targets from the camera
+    */
+    @Override
+    public List<PhotonTrackedTarget> getTargets(Camera camera){
 
-    public List<PhotonTrackedTarget> getLeftTargets(){
-        List<PhotonTrackedTarget> leftTargets = new ArrayList<>();
 
-        // Add camera targets to list
-        for(PhotonTrackedTarget target : leftCamera.getLatestResult().getTargets()){
-            leftTargets.add(target);
+        List<PhotonTrackedTarget> targets = new ArrayList<>();
+        var latestResult = getResult(camera);
+
+        if(latestResult.hasTargets()){
+            // Add camera targets to list
+            for(PhotonTrackedTarget target : latestResult.getTargets()){
+                targets.add(target);
+            }
+            return targets;
         }
 
-        return leftTargets;
-    }
+        return new ArrayList<>();
 
-    public List<PhotonTrackedTarget> getRightTargets(){
-        List<PhotonTrackedTarget> rightTargets = new ArrayList<>();
-
-        // Add camera targets to list
-        for(PhotonTrackedTarget target : rightCamera.getLatestResult().getTargets()){
-            rightTargets.add(target);
-        }
-
-        return rightTargets;
     }
 
 

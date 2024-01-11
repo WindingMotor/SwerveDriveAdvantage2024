@@ -27,8 +27,8 @@ public class Vision extends SubsystemBase {
         targets.clear();
 
         // Get latest left and right targets
-        List<PhotonTrackedTarget> leftTargets = io.getLeftTargets();
-        List<PhotonTrackedTarget> rightTargets = io.getRightTargets();
+        List<PhotonTrackedTarget> leftTargets = io.getTargets(Constants.Vision.Camera.LEFT_CAMERA);
+        List<PhotonTrackedTarget> rightTargets = io.getTargets(Constants.Vision.Camera.RIGHT_CAMERA);
 
         // Combine targets from cameras to one list
         for(PhotonTrackedTarget target : leftTargets){

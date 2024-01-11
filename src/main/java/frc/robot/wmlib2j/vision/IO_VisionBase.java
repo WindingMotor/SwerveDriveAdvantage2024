@@ -3,6 +3,9 @@ package frc.robot.wmlib2j.vision;
 import org.littletonrobotics.junction.inputs.LoggableInputs;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
+
+import frc.robot.Constants.Vision.Camera;
+
 import java.util.ArrayList;
 import java.util.List;
 import org.littletonrobotics.junction.LogTable;
@@ -71,13 +74,9 @@ public interface IO_VisionBase{
     */
     void updateInputs(VisionInputs inputs);
     
-    public PhotonPipelineResult getLeftCameraResult();
-
-    public PhotonPipelineResult getRightCameraResult();
-
-    public List<PhotonTrackedTarget> getLeftTargets();
-
-    public List<PhotonTrackedTarget> getRightTargets();
+    public PhotonPipelineResult getResult(Camera camera);
+    
+    public List<PhotonTrackedTarget> getTargets(Camera camera);
 
 
 
