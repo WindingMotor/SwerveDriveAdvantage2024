@@ -1,6 +1,8 @@
 package frc.robot;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -141,18 +143,24 @@ public class Constants{
     public static class Vision {
 
         public enum Camera{
-        LEFT_CAMERA("OV9281_02", "leftCamera", new Translation3d(10.25, 12.5, 12.0)),
-        RIGHT_CAMERA("OV9281_01", "rightCamera", new Translation3d(8.5, 8.5, 9.0));
+        LEFT_CAMERA("OV9281_02", "leftCamera", new Transform3d(
+            new Translation3d(10.25, -12.5, 12.0), 
+            new Rotation3d(0,0,0)) // Camera mounted 10.25in forward, -12.5in left, 12.0in up facing forward.
+        ),
+        RIGHT_CAMERA("OV9281_01", "rightCamera", new Transform3d(
+            new Translation3d(8.5, 8.5, 9.0), 
+            new Rotation3d(0,0,0)) // Camera mounted 8.5in forward, 8.5in right, 9.0in up facing forward.
+        );
 
         public final String PHOTON_NAME;
         public final String CAMERA_NAME;
 
-        public final Translation3d CAMERA_OFFSET;
+        public final Transform3d ROBOT_TO_CAMERA;
 
-        Camera(String photonName, String cameraName, Translation3d cameraOffset) {
+        Camera(String photonName, String cameraName, Transform3d robotToCamera) {
             this.PHOTON_NAME = photonName;
             this.CAMERA_NAME = cameraName;
-            this.CAMERA_OFFSET = cameraOffset;
+            this.ROBOT_TO_CAMERA = robotToCamera;
         }
     }
 

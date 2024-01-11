@@ -1,12 +1,13 @@
 
 package frc.robot.wmlib2j.vision;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import org.photonvision.targeting.PhotonTrackedTarget;
-
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -17,8 +18,17 @@ public class Vision extends SubsystemBase {
 
     private List<PhotonTrackedApriltag> targets = new ArrayList<>();
 
+    AprilTagFieldLayout fieldLayout;
+    
     public Vision(IO_VisionBase io){
         this.io = io;
+        
+        try{
+            fieldLayout = AprilTagFieldLayout.loadFromResource(Filesystem.getDeployDirectory() + "/2024-crescendo.json");
+        }catch(IOException e){
+            DriverStation.reportError("Failed to load AprilTag field layout!", false);
+        }
+
     }
 
     @Override
@@ -53,8 +63,8 @@ public class Vision extends SubsystemBase {
                 }
             }
         }
-        
-        // Print out targets
+
+        // Print out the seen targets, for testing
         List<String> ids = new ArrayList<>();
         for(PhotonTrackedApriltag target : targets){
             ids.add(target.getId() + target.camera.CAMERA_NAME + target.getTranslationMeters().toString());
@@ -68,12 +78,12 @@ public class Vision extends SubsystemBase {
      * Retrieves the robot's center distance to a specific tag with camera offsets applied.
      * @param  id  The fiducial ID of the tag
      * @return     The Pose3d of the robot's distance to the tag.
-    */
+     */
     public Pose3d getRobotCenterDistanceToTag(int id){
         for(PhotonTrackedApriltag target : targets){
             if(target.getId() == id){
                     return new Pose3d(
-                        target.getTranslationMeters().minus(target.camera.CAMERA_OFFSET),
+                        target.getTranslationMeters().minus(target.camera.ROBOT_TO_CAMERA.getTranslation()),
                         target.getRotationRadians()
                     );
             }
@@ -81,7 +91,12 @@ public class Vision extends SubsystemBase {
         return new Pose3d();
     }
 
-    public static double inchesToMeters(double inches) {
+    /**
+     * Converts inches to meters.
+     * @param  inches	The length in inches to be converted
+     * @return         	The length in meters
+     */
+    public static double inchesToMeters(double inches){
         return inches * 0.0254;
     }
 

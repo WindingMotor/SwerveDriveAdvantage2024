@@ -5,7 +5,6 @@ import java.util.List;
 import org.photonvision.PhotonCamera;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
-
 import frc.robot.Constants;
 import frc.robot.Constants.Vision.Camera;
 
