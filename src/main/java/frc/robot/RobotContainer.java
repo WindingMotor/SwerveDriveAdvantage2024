@@ -14,6 +14,11 @@ public class RobotContainer {
 
     private final CommandXboxController driverController = new CommandXboxController(3);
 
+
+    private Vision vision = new Vision(
+        new IO_VisionReal()
+    );
+    
     private final Swerve swerve = new Swerve(
             new IO_ModuleReal(Constants.ModuleSettings.FRONT_LEFT),
             new IO_ModuleReal(Constants.ModuleSettings.FRONT_RIGHT),
@@ -22,9 +27,6 @@ public class RobotContainer {
             new IO_GyroReal()
     );
 
-    public final Vision vision = new Vision(
-        new IO_VisionReal()
-    );
     
     public RobotContainer(){
 
@@ -40,12 +42,11 @@ public class RobotContainer {
         ));
         */
 
-
         swerve.setDefaultCommand(new SwerveJoystick(
                 () -> driverController.getRawAxis(1) ,
                 () -> driverController.getRawAxis(0) ,
                 () -> driverController.getRawAxis(3) ,
-                () -> false,
+                () -> true,
                 swerve
         ));
       
@@ -58,5 +59,10 @@ public class RobotContainer {
     public Command getAutonomousCommand(){
         return new PrintCommand("Test");
     }
+
+    public void resetSwerveEncoders(){
+        swerve.resetModuleEncoders();
+    }
+
   
 }

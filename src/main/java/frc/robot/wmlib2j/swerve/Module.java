@@ -55,11 +55,16 @@ public class Module{
     }
 
     public void periodic(){
+
+        io.testUpdateAbsoluteEncoder();
+
         // Update the inputs.
         io.updateInputs(inputs);
 
         // Process inputs and send to logger.
         Logger.processInputs(settings.MODULE_NAME, inputs);
+
+ 
     }
 
 
@@ -108,6 +113,10 @@ public class Module{
     */
     public void stop(){
         io.stop();
+    }
+
+    public void resetEncoders(){
+        io.resetEncoders();
     }
 
 }

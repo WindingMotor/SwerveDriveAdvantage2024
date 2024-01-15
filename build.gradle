@@ -139,5 +139,5 @@ javadoc{
     //options.addStringOption('stylesheetfile', 'javadocstyle.css')
 }
 
-build.dependsOn javadoc
+//build.dependsOn javadoc
 

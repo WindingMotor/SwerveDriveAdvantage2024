@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.wmlib2j.sensor.IO_GyroBase;
 import org.littletonrobotics.junction.Logger;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.kinematics.*;
 
@@ -13,7 +14,7 @@ import edu.wpi.first.math.kinematics.*;
  * which consists of four swerve modules. It provides methods for controlling
  * the movement and rotation of the robot.
 */
-public class Swerve extends SubsystemBase {
+public class Swerve extends SubsystemBase{
 
     // Gyroscope IO
     private final IO_GyroBase gyroIO;
@@ -29,10 +30,12 @@ public class Swerve extends SubsystemBase {
     private ChassisSpeeds setpointSpeeds = new ChassisSpeeds();
 
     // Odometry for the swerve drive
-    private final SwerveDriveOdometry traditionalOdometry;
+    private final SwerveDriveOdometry odometry;
+    private final SwerveDrivePoseEstimator poseEstimator;
 
     // An array of the 4 swerve modules
     private final Module modules[] = new Module[4];
+
 
     /**
      * Constructor for the Swerve class.
@@ -41,6 +44,7 @@ public class Swerve extends SubsystemBase {
      * @param backLeftIO The IO for the back left swerve module.
      * @param backRightIO The IO for the back right swerve module.
      * @param gyroIO The IO for the gyroscope.
+     * @param vision The vision subsystem.
     */
     public Swerve(IO_ModuleBase frontLeftIO, IO_ModuleBase frontRightIO, IO_ModuleBase backLeftIO, IO_ModuleBase backRightIO, IO_GyroBase gyroIO){
         this.gyroIO = gyroIO;
@@ -57,9 +61,16 @@ public class Swerve extends SubsystemBase {
         this.modules[2] = this.backLeftModule;
         this.modules[3] = this.backRightModule;
 
-        // Initialize the odometry
-        this.traditionalOdometry = new SwerveDriveOdometry(Constants.Kinematics.KINEMATICS, gyroInputs.yawPosition, getSwerveModulePositions());
+        resetModuleEncoders();
+
+        // Initialize the odometry and pose estimator
+        this.odometry = new SwerveDriveOdometry(Constants.Kinematics.KINEMATICS, gyroInputs.yawPosition, getSwerveModulePositions());
+        this.poseEstimator = new SwerveDrivePoseEstimator(Constants.Kinematics.KINEMATICS, getRobotEstimatedRotation(), getSwerveModulePositions(), getRobotEstimatedPose());
+
+
+
     }
+
 
     /**
      * Executes the periodic tasks for the swerve drive. Updates and logs the swerve modules.
@@ -90,8 +101,9 @@ public class Swerve extends SubsystemBase {
         Logger.recordOutput("SwerveStates/Measured", actualStates);
 
         // Log the current robot pose in 3D, 2D, and 2D traditional
-        Logger.recordOutput("Odometry/estimatedPose", new Pose2d(traditionalOdometry.getPoseMeters().getTranslation(), getRobotEstimatedRotation()));
-        Logger.recordOutput("Odometry/traditionalPose", new Pose2d(traditionalOdometry.getPoseMeters().getTranslation(), new Rotation2d(traditionalOdometry.getPoseMeters().getRotation().getRadians())));
+        Logger.recordOutput("Odometry/estimatedPose", new Pose2d(odometry.getPoseMeters().getTranslation(), getRobotEstimatedRotation()));
+        Logger.recordOutput("Odometry/traditionalPose", new Pose2d(odometry.getPoseMeters().getTranslation(), new Rotation2d(odometry.getPoseMeters().getRotation().getRadians())));
+
     }
 
     /**
@@ -129,6 +141,13 @@ public class Swerve extends SubsystemBase {
         runWithSpeeds(new ChassisSpeeds());
     }
 
+    public void resetModuleEncoders(){
+        frontLeftModule.resetEncoders();
+        frontRightModule.resetEncoders();
+        backLeftModule.resetEncoders();
+        backRightModule.resetEncoders();
+    }
+
     /**
      * Retrieves the positions of all swerve modules.
      * @return An array of SwerveModulePosition objects representing the positions of the swerve modules.
@@ -146,7 +165,7 @@ public class Swerve extends SubsystemBase {
      * @return The estimated pose of the robot in meters and radians.
     */
     public Pose2d getRobotEstimatedPose(){
-        return new Pose2d(traditionalOdometry.getPoseMeters().getTranslation(), getRobotEstimatedRotation());
+        return new Pose2d(odometry.getPoseMeters().getTranslation(), getRobotEstimatedRotation());
     }
 
     /**
@@ -155,6 +174,9 @@ public class Swerve extends SubsystemBase {
     */
     public Rotation2d getRobotEstimatedRotation(){
         return gyroInputs.yawPosition;
+
+    
     }
+
 
 }

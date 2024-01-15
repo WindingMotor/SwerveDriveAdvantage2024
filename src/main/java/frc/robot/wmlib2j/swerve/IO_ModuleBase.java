@@ -97,6 +97,10 @@ public interface IO_ModuleBase{
     */
     void stop();
 
+    public void resetEncoders();
+
+    public void testUpdateAbsoluteEncoder();
+
     /**
      * [EMPTY] Sets the SparkMax PID references. The main way for controlling the motors.
      * @param driveReference The drive reference in meters per sec.

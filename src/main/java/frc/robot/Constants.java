@@ -30,17 +30,18 @@ public class Constants{
      * Enum for the settings of each module.
     */
     public enum ModuleSettings {
-        FRONT_LEFT(1, true, 2, true, 0, new Rotation2d(0.0), "FrontLeft"),
-        FRONT_RIGHT(3, true, 4, true, 1, new Rotation2d(6.11), "FrontRight"),
-        BACK_LEFT(7, true, 8, true, 3, new Rotation2d(0.43), "BackLeft"),
-        BACK_RIGHT(5, true, 6, true, 2, new Rotation2d(4.53), "BackRight");
+        FRONT_LEFT(1, true, 2, true, 0, 2.9532 + 0.36, "FrontLeft"),
+        FRONT_RIGHT(3, true, 4, true, 1, 3.2510 - 0.25, "FrontRight"),
+        BACK_LEFT(7, false, 8, true, 3, 1.04324 + 1.02, "BackLeft"),
+        BACK_RIGHT(5, true, 6, true, 2, 1.6486 - 0.18, "BackRight");
 
+        // 0.0, 6.11, 0.43, 4.53
         public final int DRIVE_ID, TURN_ID, ABSOLUTE_ENCODER_ID;
-        public final Rotation2d ABSOLUTE_ENCODER_OFFSET;
+        public final double ABSOLUTE_ENCODER_OFFSET;
         public final String MODULE_NAME;
         public final Boolean DRIVE_INVERTED, TURN_INVERTED;
 
-        ModuleSettings(int driveID, Boolean driveInverted, int turnID, Boolean turnInverted, int absoluteEncoderID, Rotation2d absoluteEncoderOffset, String moduleName) {
+        ModuleSettings(int driveID, Boolean driveInverted, int turnID, Boolean turnInverted, int absoluteEncoderID, double absoluteEncoderOffset, String moduleName) {
             this.DRIVE_ID = driveID;
             this.TURN_ID = turnID;
             this.ABSOLUTE_ENCODER_ID = absoluteEncoderID;
@@ -79,12 +80,24 @@ public class Constants{
         public static final double TRACK_WIDTH_X = Units.inchesToMeters(21.25); // Distance between RIGHT and LEFT wheel centers
         public static final double TRACK_WIDTH_Y = Units.inchesToMeters(21.25); // Distance between FRONT and BACK wheel centers
 
+
+        /* 
+        public static final Translation2d[] MODULE_TRANSLATIONS = {
+             new Translation2d(TRACK_WIDTH_X / 2, TRACK_WIDTH_Y / 2), //fl
+                new Translation2d(-TRACK_WIDTH_X / 2, TRACK_WIDTH_Y / 2), //fr
+                new Translation2d(TRACK_WIDTH_X / 2, -TRACK_WIDTH_Y / 2), //bl
+                new Translation2d(-TRACK_WIDTH_X / 2, -TRACK_WIDTH_Y / 2) //br
+        };
+        */
+
+        
         public static final Translation2d[] MODULE_TRANSLATIONS = {
             new Translation2d(-TRACK_WIDTH_X / 2, TRACK_WIDTH_Y / 2), // Front right
             new Translation2d(-TRACK_WIDTH_X / 2, -TRACK_WIDTH_Y / 2), // Back right
             new Translation2d(TRACK_WIDTH_X / 2, TRACK_WIDTH_Y / 2), // Front left
             new Translation2d(TRACK_WIDTH_X / 2, -TRACK_WIDTH_Y / 2), // Back left
         };
+        
         
         /* Junk code for testing
         public static final Translation2d[] MODULE_TRANSLATIONS = {
@@ -142,13 +155,15 @@ public class Constants{
 
     public static class Vision {
 
+        public static final double LATENCY_THRESHOLD_MILI_SEC = 30.0;
+
         public enum Camera{
         LEFT_CAMERA("OV9281_02", "leftCamera", new Transform3d(
-            new Translation3d(10.25, -12.5, 12.0), 
+            new Translation3d(11.0, -13.5, 12.0), 
             new Rotation3d(0,0,0)) // Camera mounted 10.25in forward, -12.5in left, 12.0in up facing forward.
         ),
         RIGHT_CAMERA("OV9281_01", "rightCamera", new Transform3d(
-            new Translation3d(8.5, 8.5, 9.0), 
+            new Translation3d(11.5, 9.5, 8.5), 
             new Rotation3d(0,0,0)) // Camera mounted 8.5in forward, 8.5in right, 9.0in up facing forward.
         );
 

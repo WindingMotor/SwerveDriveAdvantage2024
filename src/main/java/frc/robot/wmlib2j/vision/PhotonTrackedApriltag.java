@@ -35,7 +35,7 @@ public class PhotonTrackedApriltag{
 
     /**
     * Returns the fiducial ID of the AprilTag.
-    * @return The fiducial ID of the AprilTag.
+    * @return The field fiducial ID of the AprilTag.
     */
     public double getId(){ return id; }
 
@@ -47,13 +47,13 @@ public class PhotonTrackedApriltag{
 
     /**
     * Returns the 3D translation of the AprilTag relative to the camera.
-    * @return The 3D translation of the AprilTag relative to the camera.
+    * @return The 3D translation of the AprilTag relative to the camera in meters.
     */
     public Translation3d getTranslationMeters(){ return translation3d; }
 
     /**
     * Returns the 3D rotation of the AprilTag relative to the camera.
-    * @return The 3D rotation of the AprilTag relative to the camera.
+    * @return The 3D rotation of the AprilTag relative to the camera in radians.
     */
     public Rotation3d getRotationRadians(){ return rotation3d; }
 

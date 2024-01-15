@@ -24,12 +24,13 @@ public class IO_GyroReal implements IO_GyroBase{
     }
     
     /**
-     * Returns the rotation of the robot as an angle in radians, with a range from -pi to pi.
+     * Returns the rotation of the robot as an angle in radians, with a range from 0 to 2pi
      * @return Robots current rotation as an angle in radians.
     */
-    private Rotation2d getRotation2dWrappedRadians(){
-        return new Rotation2d(MathUtil.angleModulus(-ahrs.getYaw()));
-    }
+    private Rotation2d getYaw(){
+        double yawRadians = Math.toRadians((ahrs.getYaw() + 180) % 360);
+        return Rotation2d.fromRadians(yawRadians);
+     }
 
     /**
      * Updates the inputs with the latest values.
@@ -38,9 +39,9 @@ public class IO_GyroReal implements IO_GyroBase{
     @Override
     public void updateInputs(GyroIOInputs inputs){
         inputs.connected = ahrs.isConnected();
-        inputs.yawPosition = getRotation2dWrappedRadians();
-        inputs.yawPositionRadians = getRotation2dWrappedRadians().getRadians();
-        inputs.yawPositionDegrees = getRotation2dWrappedRadians().getDegrees();
+        inputs.yawPosition = getYaw();
+        inputs.yawPositionRadians = getYaw().getRadians();
+        inputs.yawPositionDegrees = getYaw().getDegrees();
         inputs.pitchPosition = new Rotation2d();
         inputs.rollPosition = new Rotation2d();
     }

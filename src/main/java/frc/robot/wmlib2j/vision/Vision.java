@@ -3,31 +3,30 @@ package frc.robot.wmlib2j.vision;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
+import org.littletonrobotics.junction.Logger;
+import org.photonvision.EstimatedRobotPose;
 import org.photonvision.targeting.PhotonTrackedTarget;
-import edu.wpi.first.apriltag.AprilTagFieldLayout;
+
+import edu.wpi.first.math.Pair;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Filesystem;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Vision extends SubsystemBase {
 
     private final IO_VisionBase io;
+    private final IO_VisionBase.VisionInputs inputs = new IO_VisionBase.VisionInputs();
 
     private List<PhotonTrackedApriltag> targets = new ArrayList<>();
-
-    AprilTagFieldLayout fieldLayout;
     
+    private Optional<EstimatedRobotPose> lastEstimatedRobotPose;
+
     public Vision(IO_VisionBase io){
         this.io = io;
-        
-        try{
-            fieldLayout = AprilTagFieldLayout.loadFromResource(Filesystem.getDeployDirectory() + "/2024-crescendo.json");
-        }catch(IOException e){
-            DriverStation.reportError("Failed to load AprilTag field layout!", false);
-        }
 
     }
 
@@ -64,6 +63,7 @@ public class Vision extends SubsystemBase {
             }
         }
 
+        /* 
         // Print out the seen targets, for testing
         List<String> ids = new ArrayList<>();
         for(PhotonTrackedApriltag target : targets){
@@ -71,13 +71,21 @@ public class Vision extends SubsystemBase {
         }
         SmartDashboard.putString("Seen IDs", ids.toString());
         SmartDashboard.putNumber("X Dist ID2", getRobotCenterDistanceToTag(2).getX());
+        */
+
+        // Update the inputs.
+        io.updateInputs(inputs);
+
+        // Process inputs and send to logger.
+        Logger.processInputs("Vision", inputs);
+
 
     }
 
     /**
      * Retrieves the robot's center distance to a specific tag with camera offsets applied.
      * @param  id  The fiducial ID of the tag
-     * @return     The Pose3d of the robot's distance to the tag.
+     * @return     The Pose3d of the robot's distance to the tag in meters and radians.
      */
     public Pose3d getRobotCenterDistanceToTag(int id){
         for(PhotonTrackedApriltag target : targets){
@@ -91,6 +99,7 @@ public class Vision extends SubsystemBase {
         return new Pose3d();
     }
 
+
     /**
      * Converts inches to meters.
      * @param  inches	The length in inches to be converted
@@ -99,5 +108,6 @@ public class Vision extends SubsystemBase {
     public static double inchesToMeters(double inches){
         return inches * 0.0254;
     }
+    
 
 }

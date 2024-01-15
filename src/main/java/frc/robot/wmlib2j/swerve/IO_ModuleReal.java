@@ -3,8 +3,13 @@ package frc.robot.wmlib2j.swerve;
 import com.revrobotics.*;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.Constants.ModuleSettings;
 
@@ -55,9 +60,6 @@ public class IO_ModuleReal implements IO_ModuleBase {
         // Initialize the absolute encoder
         turnAbsoluteEncoder = new DutyCycleEncoder(settings.ABSOLUTE_ENCODER_ID);
         turnAbsoluteEncoder.setDutyCycleRange(1.0 / 4096.0, 4095.0 / 4096.0);
-
-        // Reset the encoder positions
-        resetEncoders();
 
         // Burn flash on the motors
         driveMotor.burnFlash();
@@ -152,8 +154,15 @@ public class IO_ModuleReal implements IO_ModuleBase {
     /**
     * Resets the positions of the encoders.
     */
+    @Override
     public void resetEncoders(){
         driveEncoder.setPosition(0.0);
+        turnEncoder.setPosition(0.0);
+        turnEncoder.setPosition(getAbsoluteEncoderRad());
+    }
+
+    @Override
+    public void testUpdateAbsoluteEncoder(){
         turnEncoder.setPosition(getAbsoluteEncoderRad());
     }
 
@@ -167,10 +176,19 @@ public class IO_ModuleReal implements IO_ModuleBase {
         //drivePID.setReference(2.0, CANSparkMax.ControlType.kVelocity);
         //turnPID.setReference(0.0, CANSparkMax.ControlType.kPosition);
         
-        turnMotor.set(turnRoboRioPID.calculate(turnEncoder.getPosition(), turnReference));
-       // driveMotor.set(driveRoboRioPID.calculate(driveEncoder.getVelocity(), driveReference));
-       driveMotor.set(driveReference);
+        //turnMotor.set(turnRoboRioPID.calculate(turnEncoder.getPosition(), turnReference));
+        // driveMotor.set(driveRoboRioPID.calculate(driveEncoder.getVelocity(), driveReference));
+        //driveMotor.set(driveReference);
+
+            turnMotor.set(turnRoboRioPID.calculate(turnEncoder.getPosition(), turnReference));
+        driveMotor.set(driveReference);
     }
+
+
+    // FL 
+    // FR
+    // BL
+    // BR
 
     /**
     * Sets the module angle to zero and the drive velocity to zero.
@@ -188,17 +206,16 @@ public class IO_ModuleReal implements IO_ModuleBase {
     * @return The position in radians.
     */
     public double getAbsoluteEncoderRad(){
-        double angle;
-    
-        // Make sure position goes from 1 to 0 and convert to radians
-        angle = 1 - turnAbsoluteEncoder.getAbsolutePosition();
+        double angle = turnAbsoluteEncoder.getAbsolutePosition() * -1;
         angle *= 2.0 * Math.PI;
-
-        // Apply the offset in radians
-        angle -= moduleSettings.ABSOLUTE_ENCODER_OFFSET.getRadians();
-
+        angle -= moduleSettings.ABSOLUTE_ENCODER_OFFSET;
+        angle %= 2.0 * Math.PI;
+        if (angle < 0) {
+            angle += 2.0 * Math.PI;
+        }
         return angle;
       }
+
     
 
 }
