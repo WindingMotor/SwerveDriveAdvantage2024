@@ -28,7 +28,7 @@ public class IO_GyroReal implements IO_GyroBase{
      * @return Robots current rotation as an angle in radians.
     */
     private Rotation2d getYaw(){
-        double yawRadians = Math.toRadians((ahrs.getYaw() + 180) % 360);
+        double yawRadians = Math.toRadians((360 - ahrs.getYaw()) % 360);
         return Rotation2d.fromRadians(yawRadians);
      }
 

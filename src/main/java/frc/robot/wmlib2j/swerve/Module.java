@@ -30,6 +30,7 @@ public class Module{
     public Module(IO_ModuleBase io, ModuleSettings settings){
         this.io = io;
         this.settings = settings;
+    
     }
 
     /**

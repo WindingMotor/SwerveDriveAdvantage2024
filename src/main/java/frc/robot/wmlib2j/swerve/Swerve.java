@@ -82,6 +82,8 @@ public class Swerve extends SubsystemBase{
         gyroIO.updateInputs(gyroInputs);
         Logger.processInputs("Gyroscope", gyroInputs);
 
+        odometry.update(gyroInputs.yawPosition, getSwerveModulePositions());
+
         // Execute each swerve modules periodic method
         for (Module module : modules){
             module.periodic();

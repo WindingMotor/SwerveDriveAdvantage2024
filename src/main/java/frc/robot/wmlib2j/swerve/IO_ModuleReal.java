@@ -69,6 +69,7 @@ public class IO_ModuleReal implements IO_ModuleBase {
         driveRoboRioPID = new PIDController(0.45, 0.08, 0.001);
         turnRoboRioPID = new PIDController(0.25, 0.000001, 0.00025);
         turnRoboRioPID.enableContinuousInput(0.0, 2.0 * Math.PI);
+
     }
 
     /**
@@ -206,7 +207,7 @@ public class IO_ModuleReal implements IO_ModuleBase {
     * @return The position in radians.
     */
     public double getAbsoluteEncoderRad(){
-        double angle = turnAbsoluteEncoder.getAbsolutePosition() * -1;
+        double angle = turnAbsoluteEncoder.getAbsolutePosition();
         angle *= 2.0 * Math.PI;
         angle -= moduleSettings.ABSOLUTE_ENCODER_OFFSET;
         angle %= 2.0 * Math.PI;
@@ -215,7 +216,5 @@ public class IO_ModuleReal implements IO_ModuleBase {
         }
         return angle;
       }
-
-    
 
 }

@@ -1,6 +1,4 @@
 package frc.robot;
-
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -30,10 +28,10 @@ public class Constants{
      * Enum for the settings of each module.
     */
     public enum ModuleSettings {
-        FRONT_LEFT(1, true, 2, true, 0, 2.9532 + 0.36, "FrontLeft"),
-        FRONT_RIGHT(3, true, 4, true, 1, 3.2510 - 0.25, "FrontRight"),
-        BACK_LEFT(7, false, 8, true, 3, 1.04324 + 1.02, "BackLeft"),
-        BACK_RIGHT(5, true, 6, true, 2, 1.6486 - 0.18, "BackRight");
+        FRONT_LEFT(1, true, 2, false, 0, 2.9532 + 0.36, "FrontLeft"),
+        FRONT_RIGHT(3, true, 4, false, 1, 3.2510 - 0.25, "FrontRight"),
+        BACK_LEFT(7, true, 8, false, 3, 1.04324 + 1.02, "BackLeft"),
+        BACK_RIGHT(5, true, 6, false, 2, 1.6486 - 0.18, "BackRight");
 
         // 0.0, 6.11, 0.43, 4.53
         public final int DRIVE_ID, TURN_ID, ABSOLUTE_ENCODER_ID;
@@ -80,24 +78,14 @@ public class Constants{
         public static final double TRACK_WIDTH_X = Units.inchesToMeters(21.25); // Distance between RIGHT and LEFT wheel centers
         public static final double TRACK_WIDTH_Y = Units.inchesToMeters(21.25); // Distance between FRONT and BACK wheel centers
 
-
         /* 
-        public static final Translation2d[] MODULE_TRANSLATIONS = {
-             new Translation2d(TRACK_WIDTH_X / 2, TRACK_WIDTH_Y / 2), //fl
-                new Translation2d(-TRACK_WIDTH_X / 2, TRACK_WIDTH_Y / 2), //fr
-                new Translation2d(TRACK_WIDTH_X / 2, -TRACK_WIDTH_Y / 2), //bl
-                new Translation2d(-TRACK_WIDTH_X / 2, -TRACK_WIDTH_Y / 2) //br
-        };
-        */
-
-        
         public static final Translation2d[] MODULE_TRANSLATIONS = {
             new Translation2d(-TRACK_WIDTH_X / 2, TRACK_WIDTH_Y / 2), // Front right
             new Translation2d(-TRACK_WIDTH_X / 2, -TRACK_WIDTH_Y / 2), // Back right
             new Translation2d(TRACK_WIDTH_X / 2, TRACK_WIDTH_Y / 2), // Front left
             new Translation2d(TRACK_WIDTH_X / 2, -TRACK_WIDTH_Y / 2), // Back left
         };
-        
+        */
         
         /* Junk code for testing
         public static final Translation2d[] MODULE_TRANSLATIONS = {
@@ -120,11 +108,17 @@ public class Constants{
         */
 
         // Kinematics for the swerve modules created via the module translations.
-        public static final SwerveDriveKinematics KINEMATICS = new SwerveDriveKinematics(MODULE_TRANSLATIONS);
+        public static final SwerveDriveKinematics KINEMATICS = new SwerveDriveKinematics(
+                new Translation2d(TRACK_WIDTH_X / 2, TRACK_WIDTH_Y / 2), //fl
+                new Translation2d(TRACK_WIDTH_X / 2, -TRACK_WIDTH_Y / 2), //fr
+                new Translation2d(-TRACK_WIDTH_X / 2, TRACK_WIDTH_Y / 2), //bl
+                new Translation2d(-TRACK_WIDTH_X / 2, -TRACK_WIDTH_Y / 2) //br
+        );
 
         // Maximum speeds of the robot. Used for unit conversion and controller input scaling.
         public static final double MAX_LINEAR_VELOCITY = 1.0;
         public static final double MAX_ANGULAR_VELOCITY = 1.0;
+
     }
 
     public static class Input{
