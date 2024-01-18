@@ -4,9 +4,16 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.wmlib2j.sensor.IO_GyroBase;
 import org.littletonrobotics.junction.Logger;
+
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+import com.pathplanner.lib.util.PIDConstants;
+import com.pathplanner.lib.util.ReplanningConfig;
+
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.kinematics.*;
+import edu.wpi.first.wpilibj.DriverStation;
 
 /**
  * Represents a Swerve drive subsystem.
@@ -65,7 +72,7 @@ public class Swerve extends SubsystemBase{
 
         // Initialize the odometry and pose estimator
         this.odometry = new SwerveDriveOdometry(Constants.Kinematics.KINEMATICS, gyroInputs.yawPosition, getSwerveModulePositions());
-        this.poseEstimator = new SwerveDrivePoseEstimator(Constants.Kinematics.KINEMATICS, getRobotEstimatedRotation(), getSwerveModulePositions(), getRobotEstimatedPose());
+        this.poseEstimator = new SwerveDrivePoseEstimator(Constants.Kinematics.KINEMATICS, getRobotVisionRotation(), getSwerveModulePositions(), getRobotVisionPose());
 
 
 
@@ -103,7 +110,7 @@ public class Swerve extends SubsystemBase{
         Logger.recordOutput("SwerveStates/Measured", actualStates);
 
         // Log the current robot pose in 3D, 2D, and 2D traditional
-        Logger.recordOutput("Odometry/estimatedPose", new Pose2d(odometry.getPoseMeters().getTranslation(), getRobotEstimatedRotation()));
+        Logger.recordOutput("Odometry/estimatedPose", new Pose2d(odometry.getPoseMeters().getTranslation(), getRobotVisionRotation()));
         Logger.recordOutput("Odometry/traditionalPose", new Pose2d(odometry.getPoseMeters().getTranslation(), new Rotation2d(odometry.getPoseMeters().getRotation().getRadians())));
 
     }
@@ -132,7 +139,7 @@ public class Swerve extends SubsystemBase{
      * Sets the robot swerve setpoint to the desired chassis speeds.
      * @param newSpeeds The new chassis speeds.
     */
-    public void runWithSpeeds(ChassisSpeeds newSpeeds){
+    public void updateSpeedSetpoint(ChassisSpeeds newSpeeds){
         setpointSpeeds = newSpeeds;
     }
 
@@ -140,23 +147,22 @@ public class Swerve extends SubsystemBase{
      * Stops the swerve modules.
     */
     public void stop(){
-        runWithSpeeds(new ChassisSpeeds());
+        updateSpeedSetpoint(new ChassisSpeeds());
     }
 
     public void resetModuleEncoders(){
-        frontLeftModule.resetEncoders();
-        frontRightModule.resetEncoders();
-        backLeftModule.resetEncoders();
-        backRightModule.resetEncoders();
+        for(Module module : modules){
+            module.resetEncoders();
+        }
     }
 
     /**
      * Retrieves the positions of all swerve modules.
      * @return An array of SwerveModulePosition objects representing the positions of the swerve modules.
-     */
-    public SwerveModulePosition[] getSwerveModulePositions() {
+    */
+    public SwerveModulePosition[] getSwerveModulePositions(){
         SwerveModulePosition[] positions = new SwerveModulePosition[4];
-        for (int i = 0; i < positions.length; i++) {
+        for(int i = 0; i < positions.length; i++){
             positions[i] = modules[i].getModulePosition();
         }
         return positions;
@@ -166,19 +172,59 @@ public class Swerve extends SubsystemBase{
      * Returns the estimated pose of the robot.
      * @return The estimated pose of the robot in meters and radians.
     */
-    public Pose2d getRobotEstimatedPose(){
-        return new Pose2d(odometry.getPoseMeters().getTranslation(), getRobotEstimatedRotation());
+    public Pose2d getRobotVisionPose(){
+        return new Pose2d(odometry.getPoseMeters().getTranslation(), getRobotVisionRotation());
     }
+
+
 
     /**
      * Returns the estimated rotation of the robot.
      * @return The estimated rotation of the robot in radians.
     */
-    public Rotation2d getRobotEstimatedRotation(){
+    public Rotation2d getRobotVisionRotation(){
         return gyroInputs.yawPosition;
-
-    
     }
 
+    public Pose2d getRobotPose(){
+        return odometry.getPoseMeters();
+    }
+
+    public void resetPose(Pose2d newPose){
+        odometry.resetPosition(newPose.getRotation(), getSwerveModulePositions(), newPose);
+    }
+
+    public ChassisSpeeds getRobotRelativeSpeeds(){
+        return setpointSpeeds;
+    }
+
+    // Pathplanner AutoBuilder configuration
+    private void configureAutoBuilder(){
+AutoBuilder.configureHolonomic(
+this::getRobotPose, // Robot pose supplier
+this::resetPose, // Method to reset odometry (will be called if your auto has a starting pose)
+this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+this::updateSpeedSetpoint, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
+new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
+new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
+new PIDConstants(5.0, 0.0, 0.0), // Rotation PID constants
+4.5, // Max module speed, in m/s
+0.4, // Drive base radius in meters. Distance from robot center to furthest module.
+new ReplanningConfig() // Default path replanning config. See the API for the options here
+),
+() -> {
+// Boolean supplier that controls when the path will be mirrored for the red alliance
+// This will flip the path being followed to the red side of the field.
+// THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+
+var alliance = DriverStation.getAlliance();
+if (alliance.isPresent()) {
+return alliance.get() == DriverStation.Alliance.Red;
+}
+return false;
+},
+this // Reference to this subsystem to set requirements
+);
+    }
 
 }

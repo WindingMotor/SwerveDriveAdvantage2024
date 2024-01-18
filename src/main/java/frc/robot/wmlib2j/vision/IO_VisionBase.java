@@ -1,16 +1,11 @@
 
 package frc.robot.wmlib2j.vision;
 import org.littletonrobotics.junction.inputs.LoggableInputs;
-import org.photonvision.EstimatedRobotPose;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
-import edu.wpi.first.math.geometry.Pose2d;
 import frc.robot.Constants.Vision.Camera;
 import java.util.List;
-import java.util.Optional;
-
 import org.littletonrobotics.junction.LogTable;
-
 
 public interface IO_VisionBase{
 

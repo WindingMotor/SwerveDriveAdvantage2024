@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 
-public class IO_GyroReal implements IO_GyroBase{
+public class IO_GyroNavx implements IO_GyroBase{
 
     // The AHRS class
     private final AHRS ahrs;
@@ -15,7 +15,7 @@ public class IO_GyroReal implements IO_GyroBase{
     /**
      * Constructor for the IO_GyroReal class. Creates an instance of the AHRS class and calibrates it.
     */
-    public IO_GyroReal(){
+    public IO_GyroNavx(){
         // Create an instance of the AHRS class
         ahrs = new AHRS(SPI.Port.kMXP);
 

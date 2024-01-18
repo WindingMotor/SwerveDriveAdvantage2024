@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import frc.robot.wmlib2j.command.SwerveJoystick;
-import frc.robot.wmlib2j.sensor.IO_GyroReal;
+import frc.robot.wmlib2j.sensor.IO_GyroNavx;
 import frc.robot.wmlib2j.swerve.IO_ModuleReal;
 import frc.robot.wmlib2j.swerve.Swerve;
 import frc.robot.wmlib2j.vision.IO_VisionReal;
@@ -24,7 +24,7 @@ public class RobotContainer {
             new IO_ModuleReal(Constants.ModuleSettings.FRONT_RIGHT),
             new IO_ModuleReal(Constants.ModuleSettings.BACK_LEFT),
             new IO_ModuleReal(Constants.ModuleSettings.BACK_RIGHT),
-            new IO_GyroReal()
+            new IO_GyroNavx()
     );
 
     

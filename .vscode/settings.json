@@ -31,6 +31,8 @@
     "Brushless",
     "DEADBAND",
     "Desaturates",
+    "Holonomic",
+    "Pathplanner",
     "Robo",
     "setpoints",
     "wmlib"

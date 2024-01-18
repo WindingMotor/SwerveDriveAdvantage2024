@@ -62,15 +62,17 @@ public class SwerveJoystick extends Command{
                     x * Constants.Kinematics.MAX_LINEAR_VELOCITY,
                     y * Constants.Kinematics.MAX_LINEAR_VELOCITY,
                     r * Constants.Kinematics.MAX_ANGULAR_VELOCITY,
-                    swerve.gyroInputs.yawPosition);
+                    swerve.gyroInputs.yawPosition
+                ); 
         }else{
             newSpeeds = new ChassisSpeeds(
                     x * Constants.Kinematics.MAX_LINEAR_VELOCITY,
                     y * Constants.Kinematics.MAX_LINEAR_VELOCITY,
-                    r * Constants.Kinematics.MAX_ANGULAR_VELOCITY);
+                    r * Constants.Kinematics.MAX_ANGULAR_VELOCITY
+                );
         }
 
-        swerve.runWithSpeeds(newSpeeds);
+        swerve.updateSpeedSetpoint(newSpeeds);
     }
 
     /**

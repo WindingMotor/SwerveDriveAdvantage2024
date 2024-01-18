@@ -1,5 +1,5 @@
-package frc.robot.wmlib2j.swerve;
 
+package frc.robot.wmlib2j.swerve;
 import org.littletonrobotics.junction.Logger;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -57,7 +57,8 @@ public class Module{
 
     public void periodic(){
 
-        io.testUpdateAbsoluteEncoder();
+        // Make the SparkMax encoder the same value as the absolute encoder. In testing right now. 
+        io.updateTurnEncoder();
 
         // Update the inputs.
         io.updateInputs(inputs);
@@ -65,9 +66,7 @@ public class Module{
         // Process inputs and send to logger.
         Logger.processInputs(settings.MODULE_NAME, inputs);
 
- 
     }
-
 
     /**
      * Returns the current angle of the module.
@@ -96,7 +95,7 @@ public class Module{
     /**
      * Returns the module position, (turn angle and drive position).
      * @return The module position.
-     */
+    */
     public SwerveModulePosition getModulePosition(){
         return new SwerveModulePosition(getModulePositionMeters(), getModuleAngle());
     }
@@ -104,7 +103,7 @@ public class Module{
     /**
      * Returns the module state, (turn angle and drive velocity).
      * @return The module state.
-     */
+    */
     public SwerveModuleState getModuleState(){
         return new SwerveModuleState(getModuleVelocityMetersPerSec(), getModuleAngle());
     }
@@ -116,6 +115,9 @@ public class Module{
         io.stop();
     }
 
+    /**
+     * Resets the encoders.
+    */
     public void resetEncoders(){
         io.resetEncoders();
     }

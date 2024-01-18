@@ -1,15 +1,10 @@
-package frc.robot.wmlib2j.swerve;
 
+package frc.robot.wmlib2j.swerve;
 import com.revrobotics.*;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.Constants.ModuleSettings;
 
@@ -43,8 +38,8 @@ public class IO_ModuleReal implements IO_ModuleBase {
     private PIDController turnRoboRioPID;
 
     /**
-    * Constructor for the IO_ModuleReal class.
-    * @param settings The settings for the module.
+     * Constructor for the IO_ModuleReal class.
+     * @param settings The settings for the module.
     */
     public IO_ModuleReal(ModuleSettings settings) {
         this.moduleSettings = settings;
@@ -73,10 +68,10 @@ public class IO_ModuleReal implements IO_ModuleBase {
     }
 
     /**
-    * Creates a motor with the given CAN ID and inversion setting.
-    * @param id The CAN ID of the motor.
-    * @param inverted Whether the direction motor is inverted.
-    * @return The created motor.
+     * Creates a motor with the given CAN ID and inversion setting.
+     * @param id The CAN ID of the motor.
+     * @param inverted Whether the direction motor is inverted.
+     * @return The created motor.
     */
     private CANSparkMax createMotor(int id, boolean inverted, int currentLimit){
         CANSparkMax motor = new CANSparkMax(id, MotorType.kBrushless);
@@ -88,11 +83,11 @@ public class IO_ModuleReal implements IO_ModuleBase {
     }
 
     /**
-    * Creates an encoder with the given motor and conversion factors.
-    * @param motor The motor to bind the encoder to.
-    * @param positionConversionFactor The conversion factor for the position.
-    * @param velocityConversionFactor The conversion factor for the velocity.
-    * @return The created encoder.
+     * Creates an encoder with the given motor and conversion factors.
+     * @param motor The motor to bind the encoder to.
+     * @param positionConversionFactor The conversion factor for the position.
+     * @param velocityConversionFactor The conversion factor for the velocity.
+     * @return The created encoder.
     */
     private RelativeEncoder createEncoder(CANSparkMax motor, double positionConversionFactor, double velocityConversionFactor){
         RelativeEncoder encoder = motor.getEncoder();
@@ -102,8 +97,8 @@ public class IO_ModuleReal implements IO_ModuleBase {
     }
 
     /**
-    * Updates the inputs with the current values.
-    * @param inputs The inputs to update.
+     * Updates the inputs with the current values.
+     * @param inputs The inputs to update.
     */
     @Override
     public void updateInputs(ModuleInputs inputs){
@@ -122,12 +117,11 @@ public class IO_ModuleReal implements IO_ModuleBase {
         inputs.turnAppliedPercentage = turnMotor.getAppliedOutput();
         inputs.turnCurrentAmps = turnMotor.getOutputCurrent();
         inputs.driveTempCelsius = turnMotor.getMotorTemperature();
-
     }
 
     /**
-    * Sets the drive motor speed.
-    * @param percent The percentage of the drive output to set from -1.0 to 0.0.
+     * Sets the drive motor speed.
+     * @param percent The percentage of the drive output to set from -1.0 to 0.0.
     */
     @Override
     public void setDriveOutput(double percent){
@@ -135,8 +129,8 @@ public class IO_ModuleReal implements IO_ModuleBase {
     }
 
     /**
-    * Sets the turn motor speed.
-    * @param percent The percentage of the turn output to set from -1.0 to 0.0.
+     * Sets the turn motor speed.
+     * @param percent The percentage of the turn output to set from -1.0 to 0.0.
     */
     @Override
     public void setTurnOutput(double percent){
@@ -144,7 +138,7 @@ public class IO_ModuleReal implements IO_ModuleBase {
     }
 
     /**
-    * Stops the both the motors.
+     * Stops the both the motors.
     */
     @Override
     public void stop(){
@@ -153,7 +147,7 @@ public class IO_ModuleReal implements IO_ModuleBase {
     }
 
     /**
-    * Resets the positions of the encoders.
+     * Resets the positions of the encoders.
     */
     @Override
     public void resetEncoders(){
@@ -162,15 +156,18 @@ public class IO_ModuleReal implements IO_ModuleBase {
         turnEncoder.setPosition(getAbsoluteEncoderRad());
     }
 
+    /**
+     * Updates the module SparkMax turn encoder position based on the current absolute encoder reading.
+    */
     @Override
-    public void testUpdateAbsoluteEncoder(){
+    public void updateTurnEncoder(){
         turnEncoder.setPosition(getAbsoluteEncoderRad());
     }
 
     /**
-    * Sets the SparkMax PID references. The main way for controlling the motors.
-    * @param driveReference The drive reference in meters per sec.
-    * @param turnReference The turn reference in radians.
+     * Sets the SparkMax PID references. The main way for controlling the motors.
+     * @param driveReference The drive reference in meters per sec.
+     * @param turnReference The turn reference in radians.
     */
     @Override
     public void setPIDReferences(double driveReference, double turnReference){
@@ -181,18 +178,12 @@ public class IO_ModuleReal implements IO_ModuleBase {
         // driveMotor.set(driveRoboRioPID.calculate(driveEncoder.getVelocity(), driveReference));
         //driveMotor.set(driveReference);
 
-            turnMotor.set(turnRoboRioPID.calculate(turnEncoder.getPosition(), turnReference));
+        turnMotor.set(turnRoboRioPID.calculate(turnEncoder.getPosition(), turnReference));
         driveMotor.set(driveReference);
     }
 
-
-    // FL 
-    // FR
-    // BL
-    // BR
-
     /**
-    * Sets the module angle to zero and the drive velocity to zero.
+     * Sets the module angle to zero and the drive velocity to zero.
     */
     public void setZero(){
         //drivePID.setReference(2.0, CANSparkMax.ControlType.kVelocity);
@@ -203,8 +194,8 @@ public class IO_ModuleReal implements IO_ModuleBase {
     }
 
     /**
-    * Gets the absolute encoder position in radians with the applied offset.
-    * @return The position in radians.
+     * Gets the absolute encoder position in radians with the applied offset.
+     * @return The position in radians.
     */
     public double getAbsoluteEncoderRad(){
         double angle = turnAbsoluteEncoder.getAbsolutePosition();

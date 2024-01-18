@@ -1,5 +1,5 @@
-package frc.robot.wmlib2j.swerve;
 
+package frc.robot.wmlib2j.swerve;
 import org.littletonrobotics.junction.inputs.LoggableInputs;
 import org.littletonrobotics.junction.LogTable;
 
@@ -97,9 +97,15 @@ public interface IO_ModuleBase{
     */
     void stop();
 
+    /**
+     * [EMPTY] Resets the drive and turn SparkMax encoders.
+    */
     public void resetEncoders();
 
-    public void testUpdateAbsoluteEncoder();
+    /**
+     * [EMPTY] Updates the SparkMax turn encoder with the module absolute encoder.
+    */
+    public void updateTurnEncoder();
 
     /**
      * [EMPTY] Sets the SparkMax PID references. The main way for controlling the motors.
