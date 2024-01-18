@@ -1,5 +1,5 @@
 
-package frc.robot.wmlib2j.sensor;
+package frc.robot.beluga.shooter;
 import edu.wpi.first.math.geometry.Rotation2d;
 import org.littletonrobotics.junction.LogTable;
 import org.littletonrobotics.junction.inputs.LoggableInputs;
@@ -8,19 +8,15 @@ import org.littletonrobotics.junction.inputs.LoggableInputs;
  * Base interface for using the gyroscope, abstracts to the real and simulation classes.
  * Provides methods for updating inputs.
 */
-public interface IO_GyroBase{
+public interface IO_ShooterBase{
 
     /**
      * Represents the inputs for a gyroscope.
      * It contains fields for yaw, pitch, and roll positions.
     */
-    class GyroIOInputs implements LoggableInputs{
-        public boolean connected = false;
-        public Rotation2d yawPosition = new Rotation2d();
-        public double yawPositionRadians = 0.0;
-        public double yawPositionDegrees = 0.0;
-        public Rotation2d pitchPosition = new Rotation2d();
-        public Rotation2d rollPosition = new Rotation2d();
+    class ShooterIOInputs implements LoggableInputs{
+        public double position
+
 
         @Override
         /**
@@ -55,6 +51,6 @@ public interface IO_GyroBase{
      * Updates the inputs with the current values.
      * @param inputs The inputs to update.
     */
-    void updateInputs(GyroIOInputs inputs);
+    void updateInputs(ShooterIOInputs inputs);
 
 }

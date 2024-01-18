@@ -1,24 +1,24 @@
 
 package frc.robot.wmlib2j.sensor;
-import com.kauailabs.navx.frc.AHRS;
+import com.ctre.phoenix6.hardware.Pigeon2;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.math.geometry.Rotation2d;
 
-public class IO_GyroNavx implements IO_GyroBase{
+public class IO_Pigeon implements IO_GyroBase{
 
     // The AHRS class
-    private final AHRS ahrs;
+    private final Pigeon2 pigeon;
 
     /**
      * Constructor for the IO_GyroReal class. Creates an instance of the AHRS class and calibrates it.
     */
-    public IO_GyroNavx(){
+    public IO_Pigeon(){
         // Create an instance of the AHRS class
-        ahrs = new AHRS(SPI.Port.kMXP);
+        pigeon = new Pigeon2(13, "rio");
 
-        // Calibrate and reset the gyro
-        calibrateAndReset();
+        // Set update frequency to 100Hz
+        pigeon.getYaw().setUpdateFrequency(100);
+        pigeon.getGravityVectorZ().setUpdateFrequency(100);
     }
     
     /**
@@ -26,9 +26,8 @@ public class IO_GyroNavx implements IO_GyroBase{
      * @return Robots current rotation as an angle in radians.
     */
     private Rotation2d getYaw(){
-        double yawRadians = Math.toRadians((360 - ahrs.getYaw()) % 360);
-        return Rotation2d.fromRadians(yawRadians);
-     }
+        return pigeon.getRotation2d();
+    }
 
     /**
      * Updates the inputs with the latest values.
@@ -36,7 +35,7 @@ public class IO_GyroNavx implements IO_GyroBase{
      */
     @Override
     public void updateInputs(GyroIOInputs inputs){
-        inputs.connected = ahrs.isConnected();
+        inputs.connected = true;
         inputs.yawPosition = getYaw();
         inputs.yawPositionRadians = getYaw().getRadians();
         inputs.yawPositionDegrees = getYaw().getDegrees();
@@ -49,18 +48,7 @@ public class IO_GyroNavx implements IO_GyroBase{
      * Adds a delay of 1 second, and resets and then zeros the yaw value of the sensor.
     */
     public void calibrateAndReset(){
-        DriverStation.reportWarning("Calibrating Gyro", false);
-        new Thread(() -> {
-            ahrs.calibrate();
-            try{
-                Thread.sleep(1000); // adding delay
-            }catch(InterruptedException ex){
-                DriverStation.reportError("Gyro Calibration Interrupted: " + ex.getMessage(), false);
-            }
-            ahrs.reset();
-            ahrs.zeroYaw();
-            DriverStation.reportWarning("Gyro Successfully Calibrated", false);
-        }).start();
+        DriverStation.reportWarning("Pigeon calibration not implemented!", false);
     }
 
 }
