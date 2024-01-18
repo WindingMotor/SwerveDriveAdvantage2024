@@ -72,12 +72,11 @@ public class Swerve extends SubsystemBase{
 
         // Initialize the odometry and pose estimator
         this.odometry = new SwerveDriveOdometry(Constants.Kinematics.KINEMATICS, gyroInputs.yawPosition, getSwerveModulePositions());
-        this.poseEstimator = new SwerveDrivePoseEstimator(Constants.Kinematics.KINEMATICS, getRobotVisionRotation(), getSwerveModulePositions(), getRobotVisionPose());
+        this.poseEstimator = new SwerveDrivePoseEstimator(Constants.Kinematics.KINEMATICS, gyroInputs.yawPosition, getSwerveModulePositions(), odometry.getPoseMeters());
 
-
-
+        // Confiure default settings for the AutoBuilder
+        configureAutoBuilder();
     }
-
 
     /**
      * Executes the periodic tasks for the swerve drive. Updates and logs the swerve modules.
@@ -112,7 +111,6 @@ public class Swerve extends SubsystemBase{
         // Log the current robot pose in 3D, 2D, and 2D traditional
         Logger.recordOutput("Odometry/estimatedPose", new Pose2d(odometry.getPoseMeters().getTranslation(), getRobotVisionRotation()));
         Logger.recordOutput("Odometry/traditionalPose", new Pose2d(odometry.getPoseMeters().getTranslation(), new Rotation2d(odometry.getPoseMeters().getRotation().getRadians())));
-
     }
 
     /**
@@ -150,6 +148,9 @@ public class Swerve extends SubsystemBase{
         updateSpeedSetpoint(new ChassisSpeeds());
     }
 
+    /**
+     * Resets the encoders of all swerve modules.
+    */
     public void resetModuleEncoders(){
         for(Module module : modules){
             module.resetEncoders();
@@ -176,8 +177,6 @@ public class Swerve extends SubsystemBase{
         return new Pose2d(odometry.getPoseMeters().getTranslation(), getRobotVisionRotation());
     }
 
-
-
     /**
      * Returns the estimated rotation of the robot.
      * @return The estimated rotation of the robot in radians.
@@ -186,45 +185,57 @@ public class Swerve extends SubsystemBase{
         return gyroInputs.yawPosition;
     }
 
+    /**
+     * Retrieves the current pose of the robot.
+     * @return  The current pose of the robot as a Pose2d object
+    */
     public Pose2d getRobotPose(){
         return odometry.getPoseMeters();
     }
 
+    /**
+     * Resets the pose of the robot to the specified new pose.
+     * @param  newPose  The new pose2d to set for the robot
+    */
     public void resetPose(Pose2d newPose){
         odometry.resetPosition(newPose.getRotation(), getSwerveModulePositions(), newPose);
     }
 
-    public ChassisSpeeds getRobotRelativeSpeeds(){
+    /**
+     * Retrieves the setpoint speeds for the chassis.
+     * @return The setpoint speeds for the chassis.
+    */
+    public ChassisSpeeds getSetpointSpeeds(){
         return setpointSpeeds;
     }
 
     // Pathplanner AutoBuilder configuration
     private void configureAutoBuilder(){
-AutoBuilder.configureHolonomic(
-this::getRobotPose, // Robot pose supplier
-this::resetPose, // Method to reset odometry (will be called if your auto has a starting pose)
-this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-this::updateSpeedSetpoint, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
-new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
-new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
-new PIDConstants(5.0, 0.0, 0.0), // Rotation PID constants
-4.5, // Max module speed, in m/s
-0.4, // Drive base radius in meters. Distance from robot center to furthest module.
-new ReplanningConfig() // Default path replanning config. See the API for the options here
-),
-() -> {
-// Boolean supplier that controls when the path will be mirrored for the red alliance
-// This will flip the path being followed to the red side of the field.
-// THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+        AutoBuilder.configureHolonomic(
+            this::getRobotPose, // Robot pose supplier
+            this::resetPose, // Method to reset odometry (will be called if your auto has a starting pose)
+            this::getSetpointSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+            this::updateSpeedSetpoint, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
+            new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
+            new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
+            new PIDConstants(5.0, 0.0, 0.0), // Rotation PID constants
+            4.5, // Max module speed, in m/s
+            0.4, // Drive base radius in meters. Distance from robot center to furthest module.
+            new ReplanningConfig() // Default path replanning config. See the API for the options here
+        ), () -> {
 
-var alliance = DriverStation.getAlliance();
-if (alliance.isPresent()) {
-return alliance.get() == DriverStation.Alliance.Red;
-}
-return false;
-},
-this // Reference to this subsystem to set requirements
-);
+        // Boolean supplier that controls when the path will be mirrored for the red alliance
+        // This will flip the path being followed to the red side of the field.
+        // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+
+        var alliance = DriverStation.getAlliance();
+        if(alliance.isPresent()){
+            return alliance.get() == DriverStation.Alliance.Red;
+        }
+            return false;
+        },
+        this // Reference to this subsystem to set requirements
+        );
     }
 
 }

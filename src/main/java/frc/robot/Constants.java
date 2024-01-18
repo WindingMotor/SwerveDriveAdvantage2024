@@ -172,12 +172,27 @@ public class Constants{
             this.ROBOT_TO_CAMERA = robotToCamera;
         }
     }
-
-
-
-
-
         
+    }
+
+    public static class Beluga{
+
+        public static final int SHOOTER_MOTOR_LEFT_ID = 17;
+        public static final int SHOOTER_MOTOR_RIGHT_ID = 18;
+
+        public static final boolean SHOOTER_MOTOR_LEFT_INVERTED = false;
+        public static final boolean SHOOTER_MOTOR_RIGHT_INVERTED = false;
+
+        public static final double SHOOTER_MOTORS_P = 0.01;
+        public static final double SHOOTER_MOTORS_I = 0.0;
+        public static final double SHOOTER_MOTORS_D = 0.0;
+
+        public static final double SHOOTER_SPEED_TOLERANCE_RPM = 5.0;
+
+        public static final boolean AUTO_SPINUP = false;
+
+        public static final int SHOOTER_BACK_LIMIT_SWITCH = 0;
+
     }
 
 

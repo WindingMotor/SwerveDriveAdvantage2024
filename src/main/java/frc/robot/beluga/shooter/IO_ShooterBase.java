@@ -1,11 +1,10 @@
 
 package frc.robot.beluga.shooter;
-import edu.wpi.first.math.geometry.Rotation2d;
 import org.littletonrobotics.junction.LogTable;
 import org.littletonrobotics.junction.inputs.LoggableInputs;
 
 /**
- * Base interface for using the gyroscope, abstracts to the real and simulation classes.
+ * Base interface for the shooter, abstracts to the real and simulation classes.
  * Provides methods for updating inputs.
 */
 public interface IO_ShooterBase{
@@ -14,8 +13,12 @@ public interface IO_ShooterBase{
      * Represents the inputs for a gyroscope.
      * It contains fields for yaw, pitch, and roll positions.
     */
-    class ShooterIOInputs implements LoggableInputs{
-        public double position
+    class ShooterInputs implements LoggableInputs{
+        public double leftMotorRPM = 0.0;
+        public double rightMotorRPM = 0.0;
+        public double setpointRPM = 0.0;
+        public boolean isUpToSpeed = false;
+        public boolean backLimitSwitchStatus = false;
 
 
         @Override
@@ -24,12 +27,11 @@ public interface IO_ShooterBase{
          * @param table The log table to write the inputs to.
         */
         public void toLog(LogTable table){
-            table.put("connected", connected);
-            table.put("yawPosition", yawPosition);
-            table.put("yawPositionRadians", yawPositionRadians);
-            table.put("yawPositionDegrees", yawPositionDegrees);
-            table.put("pitchPosition", pitchPosition);
-            table.put("rollPosition", rollPosition);
+            table.put("leftMotorRPM", leftMotorRPM);
+            table.put("rightMotorRPM", rightMotorRPM);
+            table.put("setpointRPM", setpointRPM);
+            table.put("isUpToSpeed", isUpToSpeed);
+            table.put("backLimitSwitchStatus", backLimitSwitchStatus);
         }
 
         @Override
@@ -38,12 +40,11 @@ public interface IO_ShooterBase{
          * @param table The log table to read the inputs from.
         */
         public void fromLog(LogTable table){
-            connected = table.get("connected", connected);
-            yawPosition = table.get("yawPosition", yawPosition);
-            yawPositionRadians = table.get("yawPositionRadians", yawPositionRadians);
-            yawPositionDegrees = table.get("yawPositionDegrees", yawPositionDegrees);
-            pitchPosition = table.get("encoderVelocity", pitchPosition);
-            rollPosition = table.get("encoderVelocity", rollPosition);
+            leftMotorRPM = table.get("leftMotorRPM", leftMotorRPM);
+            rightMotorRPM = table.get("rightMotorRPM", rightMotorRPM);
+            setpointRPM = table.get("setpointRPM", setpointRPM);
+            isUpToSpeed = table.get("isUpToSpeed", isUpToSpeed);
+            backLimitSwitchStatus = table.get("backLimitSwitchStatus", backLimitSwitchStatus);
         }
     }
 
@@ -51,6 +52,12 @@ public interface IO_ShooterBase{
      * Updates the inputs with the current values.
      * @param inputs The inputs to update.
     */
-    void updateInputs(ShooterIOInputs inputs);
+    void updateInputs(ShooterInputs inputs);
+
+    void updateSetpoint(double setpointRPM);
+
+    void stop();
+
+    boolean isUpToSpeed();
 
 }

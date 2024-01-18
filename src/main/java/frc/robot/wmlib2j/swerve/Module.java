@@ -30,7 +30,6 @@ public class Module{
     public Module(IO_ModuleBase io, ModuleSettings settings){
         this.io = io;
         this.settings = settings;
-    
     }
 
     /**
@@ -65,7 +64,6 @@ public class Module{
 
         // Process inputs and send to logger.
         Logger.processInputs(settings.MODULE_NAME, inputs);
-
     }
 
     /**

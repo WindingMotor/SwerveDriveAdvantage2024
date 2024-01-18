@@ -32,7 +32,7 @@ public class IO_Pigeon implements IO_GyroBase{
     /**
      * Updates the inputs with the latest values.
      * @param inputs The inputs to update.
-     */
+    */
     @Override
     public void updateInputs(GyroIOInputs inputs){
         inputs.connected = true;
