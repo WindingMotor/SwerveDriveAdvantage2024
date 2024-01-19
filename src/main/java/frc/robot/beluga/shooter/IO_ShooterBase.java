@@ -14,6 +14,7 @@ public interface IO_ShooterBase{
      * It contains fields for yaw, pitch, and roll positions.
     */
     class ShooterInputs implements LoggableInputs{
+        //RPM = Rotation/Minute
         public double leftMotorRPM = 0.0;
         public double rightMotorRPM = 0.0;
         public double setpointRPM = 0.0;

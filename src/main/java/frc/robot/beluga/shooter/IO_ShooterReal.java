@@ -1,9 +1,8 @@
 
 package frc.robot.beluga.shooter;
 import com.revrobotics.*;
-import com.revrobotics.CANSparkMax.IdleMode;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
+import com.revrobotics.CANSparkBase.IdleMode;
+import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.wpilibj.DigitalInput;
 import frc.robot.Constants;
 
@@ -18,8 +17,8 @@ public class IO_ShooterReal implements IO_ShooterBase {
     private RelativeEncoder leftShooterEncoder;
     private RelativeEncoder rightShooterEncoder;
 
-    private SparkMaxPIDController leftShooterPID;
-    private SparkMaxPIDController rightShooterPID;
+    private SparkPIDController leftShooterPID;
+    private SparkPIDController rightShooterPID;
 
     private DigitalInput backLimitSwitch;
 
@@ -47,7 +46,7 @@ public class IO_ShooterReal implements IO_ShooterBase {
     private CANSparkMax createMotor(int id, boolean inverted, int currentLimit){
         CANSparkMax motor = new CANSparkMax(id, MotorType.kBrushless);
         motor.restoreFactoryDefaults();
-        motor.setIdleMode(IdleMode.kCoast);
+        motor.setIdleMode(IdleMode.kBrake);
         motor.setSmartCurrentLimit(currentLimit);
         motor.setInverted(inverted);
         return motor;
@@ -58,8 +57,8 @@ public class IO_ShooterReal implements IO_ShooterBase {
      * @param  motor The SparkMax to create the PID controller for.
      * @return The created SparkMaxPIDController.
     */
-    private SparkMaxPIDController createPIDController(CANSparkMax motor){
-        SparkMaxPIDController pid = motor.getPIDController();
+    private SparkPIDController createPIDController(CANSparkMax motor){
+        SparkPIDController pid = motor.getPIDController();
         pid.setP(Constants.Beluga.SHOOTER_MOTORS_P);
         pid.setI(Constants.Beluga.SHOOTER_MOTORS_I);
         pid.setD(Constants.Beluga.SHOOTER_MOTORS_D);

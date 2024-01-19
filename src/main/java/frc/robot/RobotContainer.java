@@ -5,7 +5,8 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import frc.robot.wmlib2j.command.SwerveJoystick;
 import frc.robot.wmlib2j.sensor.IO_GyroNavx;
-import frc.robot.wmlib2j.swerve.IO_ModuleReal;
+import frc.robot.wmlib2j.swerve.IO_ModuleInverted;
+import frc.robot.wmlib2j.swerve.IO_ModuleStandard;
 import frc.robot.wmlib2j.swerve.Swerve;
 import frc.robot.wmlib2j.vision.IO_VisionReal;
 import frc.robot.wmlib2j.vision.Vision;
@@ -20,10 +21,10 @@ public class RobotContainer {
     );
     
     private final Swerve swerve = new Swerve(
-            new IO_ModuleReal(Constants.ModuleSettings.FRONT_LEFT),
-            new IO_ModuleReal(Constants.ModuleSettings.FRONT_RIGHT),
-            new IO_ModuleReal(Constants.ModuleSettings.BACK_LEFT),
-            new IO_ModuleReal(Constants.ModuleSettings.BACK_RIGHT),
+            new IO_ModuleStandard(Constants.ModuleSettings.FRONT_LEFT),
+            new IO_ModuleStandard(Constants.ModuleSettings.FRONT_RIGHT),
+            new IO_ModuleStandard(Constants.ModuleSettings.BACK_LEFT),
+            new IO_ModuleStandard(Constants.ModuleSettings.BACK_RIGHT),
             new IO_GyroNavx()
     );
 

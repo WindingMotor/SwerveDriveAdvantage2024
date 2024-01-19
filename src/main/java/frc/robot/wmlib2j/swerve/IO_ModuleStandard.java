@@ -1,17 +1,18 @@
 
 package frc.robot.wmlib2j.swerve;
 import com.revrobotics.*;
-import com.revrobotics.CANSparkMax.IdleMode;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.CANSparkBase.IdleMode;
+import com.revrobotics.CANSparkLowLevel.MotorType;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import frc.robot.Constants;
 import frc.robot.Constants.ModuleSettings;
 
 /**
- * Represents a real implementation of the IO module for the robot.
+ * Represents a real implementation of the IO module for the robot with standard MK4.
 */
-public class IO_ModuleReal implements IO_ModuleBase {
+public class IO_ModuleStandard implements IO_ModuleBase {
 
     // Store module settings
     private ModuleSettings moduleSettings;
@@ -38,10 +39,10 @@ public class IO_ModuleReal implements IO_ModuleBase {
     private PIDController turnRoboRioPID;
 
     /**
-     * Constructor for the IO_ModuleReal class.
+     * Constructor for the IO_ModuleStandard class.
      * @param settings The settings for the module.
     */
-    public IO_ModuleReal(ModuleSettings settings) {
+    public IO_ModuleStandard(ModuleSettings settings) {
         this.moduleSettings = settings;
 
         // Initialize the drive motor and its encoder
