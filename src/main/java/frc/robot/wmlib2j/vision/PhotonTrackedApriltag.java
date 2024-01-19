@@ -1,7 +1,7 @@
+// Written by WindingMotor as part of the wmlib2j library.
 
 package frc.robot.wmlib2j.vision;
 import org.photonvision.targeting.PhotonTrackedTarget;
-
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import frc.robot.Constants.Vision.Camera;

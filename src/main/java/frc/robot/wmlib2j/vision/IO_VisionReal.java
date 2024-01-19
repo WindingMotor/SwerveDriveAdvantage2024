@@ -1,14 +1,19 @@
+// Written by WindingMotor as part of the wmlib2j library.
 
 package frc.robot.wmlib2j.vision;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
+import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import frc.robot.Constants;
@@ -92,10 +97,20 @@ public class IO_VisionReal implements IO_VisionBase{
             }
             return targets;
         }
-
         return new ArrayList<>();
-
     }
 
-
+    /**
+     * Returns the pose estimator for the specified camera.
+     * @param  camera  The camera to get the pose estimator for
+     * @return         The pose estimator for the specified camera
+    */
+    @Override
+    public PhotonPoseEstimator getPoseEstimator(Camera camera){
+        if(camera == Constants.Vision.Camera.LEFT_CAMERA){
+            return leftPoseEstimator;
+        }else{
+            return rightPoseEstimator;
+        }
+    }
 }

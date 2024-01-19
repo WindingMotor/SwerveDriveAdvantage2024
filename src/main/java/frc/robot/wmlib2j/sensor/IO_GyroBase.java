@@ -1,3 +1,4 @@
+// Written by WindingMotor as part of the wmlib2j library.
 
 package frc.robot.wmlib2j.sensor;
 import edu.wpi.first.math.geometry.Rotation2d;

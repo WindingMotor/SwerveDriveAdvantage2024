@@ -1,3 +1,4 @@
+// Written by WindingMotor as part of the wmlib2j library.
 
 package frc.robot.wmlib2j.vision;
 import java.io.IOException;
@@ -8,25 +9,34 @@ import java.util.Optional;
 import org.littletonrobotics.junction.Logger;
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.targeting.PhotonTrackedTarget;
-
-import edu.wpi.first.math.Pair;
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.Vision.Camera;
 
 public class Vision extends SubsystemBase {
 
-    private final IO_VisionBase io;
-    private final IO_VisionBase.VisionInputs inputs = new IO_VisionBase.VisionInputs();
+    private  final IO_VisionBase io;
+
+    public final IO_VisionBase.VisionInputs inputs = new IO_VisionBase.VisionInputs();
 
     private List<PhotonTrackedApriltag> targets = new ArrayList<>();
-    
-    private Optional<EstimatedRobotPose> lastEstimatedRobotPose;
+
+    private AprilTagFieldLayout fieldLayout;
 
     public Vision(IO_VisionBase io){
         this.io = io;
+
+        try {
+            fieldLayout = AprilTagFieldLayout.loadFromResource(AprilTagFields.k2024Crescendo.m_resourceFile);
+        } catch (IOException e) {
+            DriverStation.reportError("Failed to load AprilTag field layout!", false);
+        }
+
 
     }
 
@@ -63,23 +73,11 @@ public class Vision extends SubsystemBase {
             }
         }
 
-        /* 
-        // Print out the seen targets, for testing
-        List<String> ids = new ArrayList<>();
-        for(PhotonTrackedApriltag target : targets){
-            ids.add(target.getId() + target.camera.CAMERA_NAME + target.getTranslationMeters().toString());
-        }
-        SmartDashboard.putString("Seen IDs", ids.toString());
-        SmartDashboard.putNumber("X Dist ID2", getRobotCenterDistanceToTag(2).getX());
-        */
-
         // Update the inputs.
         io.updateInputs(inputs);
 
         // Process inputs and send to logger.
         Logger.processInputs("Vision", inputs);
-
-
     }
 
     /**
@@ -99,6 +97,16 @@ public class Vision extends SubsystemBase {
         return new Pose3d();
     }
 
+    /**
+     * Retrieves the estimated global pose of the robot using the specified camera and the previous estimated robot pose.
+     * @param  camera                      The camera used for estimating the pose
+     * @param  previousEstimatedRobotPose  The previous estimated pose of the robot
+     * @return                             An Optional containing the estimated robot pose if the update is successful, otherwise an empty Optional
+    */
+    public Optional<EstimatedRobotPose> getEstimatedGlobalPose(Camera camera, Pose2d previousEstimatedRobotPose){
+        io.getPoseEstimator(camera).setReferencePose(previousEstimatedRobotPose);
+        return io.getPoseEstimator(camera).update();
+    }
 
     /**
      * Converts inches to meters.

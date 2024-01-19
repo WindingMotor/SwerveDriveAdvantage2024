@@ -8,7 +8,7 @@ public class Shooter extends SubsystemBase{
 
     private final IO_ShooterBase io;
 
-    private final IO_ShooterBase.ShooterInputs inputs = new IO_ShooterBase.ShooterInputs();
+    public final IO_ShooterBase.ShooterInputs inputs = new IO_ShooterBase.ShooterInputs();
 
 
 
@@ -27,25 +27,8 @@ public class Shooter extends SubsystemBase{
 
     }
 
-    public void updateSetpoint(double setpointRPM){
-        io.updateSetpoint(setpointRPM);
-    }
-
     public void stop(){
         io.stop();
     }
-
-    public double calculateRequiredRPM(){
-        return 0.0;
-    }
-
-    public boolean getIsUpToSpeed(){
-        return io.isUpToSpeed();
-    }
-
-    public boolean getBackLimitSwitchStatus(){
-        return inputs.backLimitSwitchStatus;
-    }
-
 
 }
