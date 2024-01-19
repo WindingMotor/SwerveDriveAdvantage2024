@@ -103,8 +103,8 @@ public class Vision extends SubsystemBase {
      * @param  previousEstimatedRobotPose  The previous estimated pose of the robot
      * @return                             An Optional containing the estimated robot pose if the update is successful, otherwise an empty Optional
     */
-    public Optional<EstimatedRobotPose> getEstimatedGlobalPose(Camera camera, Pose2d previousEstimatedRobotPose){
-        io.getPoseEstimator(camera).setReferencePose(previousEstimatedRobotPose);
+    public Optional<EstimatedRobotPose> getEstimatedGlobalPose(Camera camera){
+        //io.getPoseEstimator(camera).setReferencePose(previousEstimatedRobotPose);
         return io.getPoseEstimator(camera).update();
     }
 
