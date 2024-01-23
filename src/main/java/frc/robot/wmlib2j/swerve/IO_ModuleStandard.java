@@ -8,6 +8,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import frc.robot.Constants;
 import frc.robot.Constants.ModuleSettings;
+import frc.robot.wmlib2j.util.Builder;
 
 /**
  * Represents a real implementation of the IO module for the robot with standard MK4.
@@ -46,12 +47,12 @@ public class IO_ModuleStandard implements IO_ModuleBase {
         this.moduleSettings = settings;
 
         // Initialize the drive motor and its encoder
-        driveMotor = createMotor(settings.DRIVE_ID, settings.DRIVE_INVERTED, 35);
-        driveEncoder = createEncoder(driveMotor, Constants.MK4SDS.DRIVE_ENCODER_ROT_TO_METER, Constants.MK4SDS.DRIVE_ENCODER_RPM_TO_METER_PER_SEC);
+        driveMotor = Builder.createNeo(settings.DRIVE_ID, settings.DRIVE_INVERTED, 35);
+        driveEncoder = Builder.createEncoder(driveMotor, Constants.MK4SDS.DRIVE_ENCODER_ROT_TO_METER, Constants.MK4SDS.DRIVE_ENCODER_RPM_TO_METER_PER_SEC);
 
         // Initialize the turn motor and its encoder
-        turnMotor = createMotor(settings.TURN_ID, settings.TURN_INVERTED, 20);
-        turnEncoder = createEncoder(turnMotor, Constants.MK4SDS.TURNING_ENCODER_ROT_TO_RAD, Constants.MK4SDS.TURNING_ENCODER_RPM_TO_RAD_PER_SEC);
+        turnMotor = Builder.createNeo(settings.TURN_ID, settings.TURN_INVERTED, 20);
+        turnEncoder = Builder.createEncoder(turnMotor, Constants.MK4SDS.TURNING_ENCODER_ROT_TO_RAD, Constants.MK4SDS.TURNING_ENCODER_RPM_TO_RAD_PER_SEC);
 
         // Initialize the absolute encoder
         turnAbsoluteEncoder = new DutyCycleEncoder(settings.ABSOLUTE_ENCODER_ID);
@@ -66,35 +67,6 @@ public class IO_ModuleStandard implements IO_ModuleBase {
         turnRoboRioPID = new PIDController(0.25, 0.000001, 0.00025);
         turnRoboRioPID.enableContinuousInput(0.0, 2.0 * Math.PI);
 
-    }
-
-    /**
-     * Creates a motor with the given CAN ID and inversion setting.
-     * @param id The CAN ID of the motor.
-     * @param inverted Whether the direction motor is inverted.
-     * @return The created motor.
-    */
-    private CANSparkMax createMotor(int id, boolean inverted, int currentLimit){
-        CANSparkMax motor = new CANSparkMax(id, MotorType.kBrushless);
-        motor.restoreFactoryDefaults();
-        motor.setIdleMode(IdleMode.kBrake);
-        motor.setSmartCurrentLimit(currentLimit);
-        motor.setInverted(inverted);
-        return motor;
-    }
-
-    /**
-     * Creates an encoder with the given motor and conversion factors.
-     * @param motor The motor to bind the encoder to.
-     * @param positionConversionFactor The conversion factor for the position.
-     * @param velocityConversionFactor The conversion factor for the velocity.
-     * @return The created encoder.
-    */
-    private RelativeEncoder createEncoder(CANSparkMax motor, double positionConversionFactor, double velocityConversionFactor){
-        RelativeEncoder encoder = motor.getEncoder();
-        encoder.setPositionConversionFactor(positionConversionFactor);
-        encoder.setVelocityConversionFactor(velocityConversionFactor);
-        return encoder;
     }
 
     /**
@@ -126,7 +98,7 @@ public class IO_ModuleStandard implements IO_ModuleBase {
     */
     @Override
     public void setDriveOutput(double percent){
-        driveMotor.set(0.0);
+        driveMotor.set(percent);
     }
 
     /**
@@ -135,7 +107,7 @@ public class IO_ModuleStandard implements IO_ModuleBase {
     */
     @Override
     public void setTurnOutput(double percent){
-        turnMotor.set(0.0);
+        turnMotor.set(percent);
     }
 
     /**
@@ -198,6 +170,8 @@ public class IO_ModuleStandard implements IO_ModuleBase {
      * Gets the absolute encoder position in radians with the applied offset.
      * @return The position in radians.
     */
+
+    
     public double getAbsoluteEncoderRad(){
         double angle = turnAbsoluteEncoder.getAbsolutePosition();
         angle *= 2.0 * Math.PI;
@@ -208,5 +182,8 @@ public class IO_ModuleStandard implements IO_ModuleBase {
         }
         return angle;
       }
+      
+
+
 
 }

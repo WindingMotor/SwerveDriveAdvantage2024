@@ -5,13 +5,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
 import org.littletonrobotics.junction.Logger;
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.targeting.PhotonTrackedTarget;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -26,17 +24,8 @@ public class Vision extends SubsystemBase {
 
     private List<PhotonTrackedApriltag> targets = new ArrayList<>();
 
-    private AprilTagFieldLayout fieldLayout;
-
     public Vision(IO_VisionBase io){
         this.io = io;
-
-        try {
-            fieldLayout = AprilTagFieldLayout.loadFromResource(AprilTagFields.k2024Crescendo.m_resourceFile);
-        } catch (IOException e) {
-            DriverStation.reportError("Failed to load AprilTag field layout!", false);
-        }
-
 
     }
 
@@ -81,6 +70,20 @@ public class Vision extends SubsystemBase {
     }
 
     /**
+     * Retrieves the PhotonTrackedApriltag with the specified id.
+     * @param  id   The id of the PhotonTrackedApriltag to retrieve
+     * @return      The PhotonTrackedApriltag with the specified id, or null if not found
+     */
+    public PhotonTrackedApriltag getTag(int id){
+        for(PhotonTrackedApriltag target : targets){
+            if(target.getId() == id){
+                return target;
+            }
+        }
+        return null;
+    }
+
+    /**
      * Retrieves the robot's center distance to a specific tag with camera offsets applied.
      * @param  id  The fiducial ID of the tag
      * @return     The Pose3d of the robot's distance to the tag in meters and radians.
@@ -98,9 +101,33 @@ public class Vision extends SubsystemBase {
     }
 
     /**
+     * Get the distance in meters to a specific tag.
+     * @param  id   The ID of the tag
+     * @return     The direct distance in meters to the tag
+     */
+    public Double getDirectDistanceMetersToTag(int id){
+        PhotonTrackedApriltag target = getTag(id);
+        double distance = 0.0;
+
+        if(target != null){
+            // Get the height of the camera and the height of the target
+            double cameraHeight = target.getCamera().ROBOT_TO_CAMERA.getTranslation().getZ();
+            double targetHeight = target.getTranslationMeters().getZ();
+
+            // Get the pitch of the camera and the pitch of the target
+            double cameraPitch = target.getCamera().ROBOT_TO_CAMERA.getRotation().getAngle();
+            double targetPitch = target.getRotationRadians().getAngle();
+
+            // Get the distance from the camera to the target
+            distance = (targetHeight - cameraHeight) / Math.tan(cameraPitch - targetPitch);
+        }
+
+        return distance;
+    }
+
+    /**
      * Retrieves the estimated global pose of the robot using the specified camera and the previous estimated robot pose.
      * @param  camera                      The camera used for estimating the pose
-     * @param  previousEstimatedRobotPose  The previous estimated pose of the robot
      * @return                             An Optional containing the estimated robot pose if the update is successful, otherwise an empty Optional
     */
     public Optional<EstimatedRobotPose> getEstimatedGlobalPose(Camera camera){

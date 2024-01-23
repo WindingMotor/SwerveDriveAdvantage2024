@@ -35,7 +35,7 @@ public class IO_Pigeon implements IO_GyroBase{
      * @param inputs The inputs to update.
     */
     @Override
-    public void updateInputs(GyroIOInputs inputs){
+    public void updateInputs(GyroInputs inputs){
         inputs.connected = true;
         inputs.yawPosition = getYaw();
         inputs.yawPositionRadians = getYaw().getRadians();

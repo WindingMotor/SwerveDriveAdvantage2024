@@ -5,7 +5,6 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import frc.robot.wmlib2j.command.SwerveJoystick;
 import frc.robot.wmlib2j.sensor.IO_GyroNavx;
-import frc.robot.wmlib2j.swerve.IO_ModuleInverted;
 import frc.robot.wmlib2j.swerve.IO_ModuleStandard;
 import frc.robot.wmlib2j.swerve.Swerve;
 import frc.robot.wmlib2j.vision.IO_VisionReal;
@@ -14,7 +13,6 @@ import frc.robot.wmlib2j.vision.Vision;
 public class RobotContainer {
 
     private final CommandXboxController driverController = new CommandXboxController(3);
-
 
     private Vision vision = new Vision(
         new IO_VisionReal()
@@ -25,7 +23,8 @@ public class RobotContainer {
             new IO_ModuleStandard(Constants.ModuleSettings.FRONT_RIGHT),
             new IO_ModuleStandard(Constants.ModuleSettings.BACK_LEFT),
             new IO_ModuleStandard(Constants.ModuleSettings.BACK_RIGHT),
-            new IO_GyroNavx()
+            new IO_GyroNavx(),
+            vision
     );
 
     

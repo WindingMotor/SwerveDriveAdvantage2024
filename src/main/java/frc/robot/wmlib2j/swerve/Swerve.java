@@ -5,22 +5,13 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.wmlib2j.sensor.IO_GyroBase;
 import frc.robot.wmlib2j.vision.Vision;
-
-import java.io.IOException;
-import java.sql.Driver;
 import java.util.Optional;
-
 import org.littletonrobotics.junction.Logger;
 import org.photonvision.EstimatedRobotPose;
-import org.photonvision.PhotonPoseEstimator;
-
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
-
-import edu.wpi.first.apriltag.AprilTagFieldLayout;
-import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.kinematics.*;
@@ -36,7 +27,7 @@ public class Swerve extends SubsystemBase{
 
     // Gyroscope IO
     private final IO_GyroBase gyroIO;
-    public final IO_GyroBase.GyroIOInputs gyroInputs = new IO_GyroBase.GyroIOInputs();
+    public final IO_GyroBase.GyroInputs gyroInputs = new IO_GyroBase.GyroInputs();
 
     // Swerve modules
     private final Module frontLeftModule;
@@ -49,8 +40,8 @@ public class Swerve extends SubsystemBase{
 
     // Odometry for the swerve drive
     private final SwerveDriveOdometry traditionalOdometry;
-    private final SwerveDrivePoseEstimator poseEstimator;
-    private Pose2d previousEstimatedPose = new Pose2d();
+  //  private final SwerveDrivePoseEstimator poseEstimator;
+  //  private Pose2d previousEstimatedPose = new Pose2d();
 
     // An array of the 4 swerve modules
     private final Module modules[] = new Module[4];
@@ -90,8 +81,8 @@ public class Swerve extends SubsystemBase{
         // Initialize traditional odometry and the pose estimator
         this.traditionalOdometry = new SwerveDriveOdometry(Constants.Kinematics.KINEMATICS, gyroInputs.yawPosition, getSwerveModulePositions());
 
-        this.poseEstimator = new SwerveDrivePoseEstimator(Constants.Kinematics.KINEMATICS, gyroInputs.yawPosition,
-            getSwerveModulePositions(), traditionalOdometry.getPoseMeters());
+      //  this.poseEstimator = new SwerveDrivePoseEstimator(Constants.Kinematics.KINEMATICS, gyroInputs.yawPosition,
+      //   getSwerveModulePositions(), traditionalOdometry.getPoseMeters());
 
         // Configure default settings for the AutoBuilder
         configureAutoBuilder();
@@ -111,8 +102,9 @@ public class Swerve extends SubsystemBase{
         traditionalOdometry.update(gyroInputs.yawPosition, getSwerveModulePositions());
 
         // Update the pose estimator
-        poseEstimator.update(gyroInputs.yawPosition, getSwerveModulePositions());
+    //    poseEstimator.update(gyroInputs.yawPosition, getSwerveModulePositions());
 
+    /* 
         Optional<EstimatedRobotPose> newEstimatedPose = vision.getEstimatedGlobalPose(Constants.Vision.Camera.LEFT_CAMERA);
         poseEstimator.addVisionMeasurement(
             new Pose2d(newEstimatedPose.get().estimatedPose.getX(),
@@ -121,6 +113,7 @@ public class Swerve extends SubsystemBase{
             ),
             newEstimatedPose.get().timestampSeconds
         );
+        */
         
         // Execute each swerve modules periodic method
         for (Module module : modules){

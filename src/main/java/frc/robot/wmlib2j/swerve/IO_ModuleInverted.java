@@ -5,6 +5,8 @@ import com.revrobotics.*;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import frc.robot.Constants;
 import frc.robot.Constants.ModuleSettings;
+import frc.robot.wmlib2j.util.Builder;
+
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 /**
@@ -44,64 +46,29 @@ public class IO_ModuleInverted implements IO_ModuleBase {
         this.moduleSettings = settings;
 
         // Initialize the drive motor and its encoder
-        driveMotor = createVortex(settings.DRIVE_ID, settings.DRIVE_INVERTED, 35);
-        driveEncoder = createEncoder(driveMotor, Constants.MK4SDS.DRIVE_ENCODER_ROT_TO_METER, Constants.MK4SDS.DRIVE_ENCODER_RPM_TO_METER_PER_SEC);
+        driveMotor = Builder.createVortex(settings.DRIVE_ID, settings.DRIVE_INVERTED, 35);
+        driveEncoder = Builder.createEncoder(driveMotor, Constants.MK4SDS.DRIVE_ENCODER_ROT_TO_METER, Constants.MK4SDS.DRIVE_ENCODER_RPM_TO_METER_PER_SEC);
 
         // Initialize the turn motor and its encoder
-        turnMotor = createNeo(settings.TURN_ID, settings.TURN_INVERTED, 20);
-        turnEncoder = createEncoder(turnMotor, Constants.MK4SDS.TURNING_ENCODER_ROT_TO_RAD, Constants.MK4SDS.TURNING_ENCODER_RPM_TO_RAD_PER_SEC);
+        turnMotor = Builder.createNeo(settings.TURN_ID, settings.TURN_INVERTED, 20);
+        turnEncoder = Builder.createEncoder(turnMotor, Constants.MK4SDS.TURNING_ENCODER_ROT_TO_RAD, Constants.MK4SDS.TURNING_ENCODER_RPM_TO_RAD_PER_SEC);
 
         // Initialize the absolute encoder
         turnAbsoluteEncoder = new DutyCycleEncoder(settings.ABSOLUTE_ENCODER_ID);
         turnAbsoluteEncoder.setDutyCycleRange(1.0 / 4096.0, 4095.0 / 4096.0);
 
+        // Initialize the RoboRio PID controllers
+        driveInternalPID = driveMotor.getPIDController();
+        turnInternalPID = turnMotor.getPIDController();
+
+        // Configure the RoboRio PID controllers
+        Builder.configurePIDController(driveInternalPID, false);
+        Builder.configurePIDController(turnInternalPID, true);
+
         // Burn flash on the motors
         driveMotor.burnFlash();
         turnMotor.burnFlash();
 
-        // Initialize the RoboRio PID controllers
-        //driveRoboRioPID = new PIDController(0.45, 0.08, 0.001);
-        //turnRoboRioPID = new PIDController(0.25, 0.000001, 0.00025);
-        //turnRoboRioPID.enableContinuousInput(0.0, 2.0 * Math.PI);
-
-    }
-
-    /**
-     * Creates a motor with the given CAN ID and inversion setting.
-     * @param id The CAN ID of the motor.
-     * @param inverted Whether the direction motor is inverted.
-     * @return The created motor.
-    */
-    private CANSparkMax createNeo(int id, boolean inverted, int currentLimit){
-        CANSparkMax motor = new CANSparkMax(id, MotorType.kBrushless);
-        motor.restoreFactoryDefaults();
-        motor.setIdleMode(com.revrobotics.CANSparkBase.IdleMode.kBrake);
-        motor.setSmartCurrentLimit(currentLimit);
-        motor.setInverted(inverted);
-        return motor;
-    }
-
-    private CANSparkFlex createVortex(int id, boolean inverted, int currentLimit){
-        CANSparkFlex motor = new CANSparkFlex(id, MotorType.kBrushless);
-        motor.restoreFactoryDefaults();
-        motor.setIdleMode(com.revrobotics.CANSparkBase.IdleMode.kBrake);
-        motor.setSmartCurrentLimit(currentLimit);
-        motor.setInverted(inverted);
-        return motor;
-    }
-
-    /**
-     * Creates an encoder with the given motor and conversion factors.
-     * @param motor The motor to bind the encoder to.
-     * @param positionConversionFactor The conversion factor for the position.
-     * @param velocityConversionFactor The conversion factor for the velocity.
-     * @return The created encoder.
-    */
-    private RelativeEncoder createEncoder(CANSparkBase motor, double positionConversionFactor, double velocityConversionFactor){
-        RelativeEncoder encoder = motor.getEncoder();
-        encoder.setPositionConversionFactor(positionConversionFactor);
-        encoder.setVelocityConversionFactor(velocityConversionFactor);
-        return encoder;
     }
 
     /**
@@ -119,7 +86,7 @@ public class IO_ModuleInverted implements IO_ModuleBase {
         inputs.driveTempCelsius = driveMotor.getMotorTemperature();
 
         // Turn motor inputs
-        inputs.turnAbsolutePositionRad = getAbsoluteEncoderRad();
+        inputs.turnAbsolutePositionRad = 0.0;
         inputs.turnPositionRad = turnEncoder.getPosition();
         inputs.turnVelocityRadPerSec = turnEncoder.getVelocity();
         inputs.turnAppliedPercentage = turnMotor.getAppliedOutput();
@@ -161,15 +128,15 @@ public class IO_ModuleInverted implements IO_ModuleBase {
     public void resetEncoders(){
         driveEncoder.setPosition(0.0);
         turnEncoder.setPosition(0.0);
-        turnEncoder.setPosition(getAbsoluteEncoderRad());
+        //turnEncoder.setPosition(getAbsoluteEncoderRad());
     }
 
     /**
-     * Updates the module SparkMax turn encoder position based on the current absolute encoder reading.
+     * [EMPTY] Updates the module SparkMax turn encoder position based on the current absolute encoder reading.
     */
     @Override
     public void updateTurnEncoder(){
-        turnEncoder.setPosition(getAbsoluteEncoderRad());
+        //turnEncoder.setPosition(getAbsoluteEncoderRad());
     }
 
     /**
@@ -181,13 +148,8 @@ public class IO_ModuleInverted implements IO_ModuleBase {
     public void setPIDReferences(double driveReference, double turnReference){
         //drivePID.setReference(2.0, CANSparkMax.ControlType.kVelocity);
         //turnPID.setReference(0.0, CANSparkMax.ControlType.kPosition);
-        
-        //turnMotor.set(turnRoboRioPID.calculate(turnEncoder.getPosition(), turnReference));
-        // driveMotor.set(driveRoboRioPID.calculate(driveEncoder.getVelocity(), driveReference));
-        //driveMotor.set(driveReference);
 
-       // //turnMotor.set(turnRoboRioPID.calculate(turnEncoder.getPosition(), turnReference));
-        //driveMotor.set(driveReference);
+
     }
 
     /**
@@ -200,19 +162,5 @@ public class IO_ModuleInverted implements IO_ModuleBase {
 
     }
 
-    /**
-     * Gets the absolute encoder position in radians with the applied offset.
-     * @return The position in radians.
-    */
-    public double getAbsoluteEncoderRad(){
-        double angle = turnAbsoluteEncoder.getAbsolutePosition();
-        angle *= 2.0 * Math.PI;
-        angle -= moduleSettings.ABSOLUTE_ENCODER_OFFSET;
-        angle %= 2.0 * Math.PI;
-        if (angle < 0) {
-            angle += 2.0 * Math.PI;
-        }
-        return angle;
-      }
 
 }

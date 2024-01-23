@@ -99,9 +99,7 @@ public class Robot extends LoggedRobot {
     }
 
     m_robotContainer.resetSwerveEncoders();
-
-
-
+    
   }
 
   /** This function is called periodically during operator control. */

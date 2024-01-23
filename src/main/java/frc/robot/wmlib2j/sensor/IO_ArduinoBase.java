@@ -1,7 +1,6 @@
 // Written by WindingMotor as part of the wmlib2j library.
 
 package frc.robot.wmlib2j.sensor;
-import edu.wpi.first.math.geometry.Rotation2d;
 import org.littletonrobotics.junction.LogTable;
 import org.littletonrobotics.junction.inputs.LoggableInputs;
 
@@ -9,19 +8,20 @@ import org.littletonrobotics.junction.inputs.LoggableInputs;
  * Base interface for using the gyroscope, abstracts to the real and simulation classes.
  * Provides methods for updating inputs.
 */
-public interface IO_GyroBase{
+public interface IO_ArduinoBase{
 
     /**
      * Represents the inputs for a gyroscope.
      * It contains fields for yaw, pitch, and roll positions.
     */
-    class GyroInputs implements LoggableInputs{
+    class ArduinoInputs implements LoggableInputs{
         public boolean connected = false;
-        public Rotation2d yawPosition = new Rotation2d();
-        public double yawPositionRadians = 0.0;
-        public double yawPositionDegrees = 0.0;
-        public Rotation2d pitchPosition = new Rotation2d();
-        public Rotation2d rollPosition = new Rotation2d();
+        public double rawPWMOutput = 0.0;
+        public double rawPWMInput = 0.0;
+        public boolean triggerOne = false;
+        public boolean triggerTwo = false;
+        public boolean triggerThree = false;
+        
 
         @Override
         /**
@@ -30,11 +30,11 @@ public interface IO_GyroBase{
         */
         public void toLog(LogTable table){
             table.put("connected", connected);
-            table.put("yawPosition", yawPosition);
-            table.put("yawPositionRadians", yawPositionRadians);
-            table.put("yawPositionDegrees", yawPositionDegrees);
-            table.put("pitchPosition", pitchPosition);
-            table.put("rollPosition", rollPosition);
+            table.put("rawPWMOutput", rawPWMOutput);
+            table.put("rawPWMInput", rawPWMInput);
+            table.put("triggerOne", triggerOne);
+            table.put("triggerTwo", triggerTwo);
+            table.put("triggerThree", triggerThree);
         }
 
         @Override
@@ -44,11 +44,11 @@ public interface IO_GyroBase{
         */
         public void fromLog(LogTable table){
             connected = table.get("connected", connected);
-            yawPosition = table.get("yawPosition", yawPosition);
-            yawPositionRadians = table.get("yawPositionRadians", yawPositionRadians);
-            yawPositionDegrees = table.get("yawPositionDegrees", yawPositionDegrees);
-            pitchPosition = table.get("encoderVelocity", pitchPosition);
-            rollPosition = table.get("encoderVelocity", rollPosition);
+            rawPWMOutput = table.get("rawPWMOutput", rawPWMOutput);
+            rawPWMInput = table.get("rawPWMInput", rawPWMInput);
+            triggerOne = table.get("triggerOne", triggerOne);
+            triggerTwo = table.get("triggerTwo", triggerTwo);
+            triggerThree = table.get("triggerThree", triggerThree);
         }
     }
 
@@ -56,6 +56,6 @@ public interface IO_GyroBase{
      * Updates the inputs with the current values.
      * @param inputs The inputs to update.
     */
-    void updateInputs(GyroInputs inputs);
+    void updateInputs(ArduinoInputs inputs);
 
 }

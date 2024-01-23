@@ -27,11 +27,18 @@ public class Constants{
     /**
      * Enum for the settings of each module.
     */
+    /*
+     * 
+     * 2.88
+4.83
+0.95
+4.71
+     */
     public enum ModuleSettings {
-        FRONT_LEFT(1, true, 2, false, 0, 2.9532 + 0.36, "FrontLeft"),
-        FRONT_RIGHT(3, true, 4, false, 1, 3.2510 - 0.25, "FrontRight"),
-        BACK_LEFT(7, true, 8, false, 3, 1.04324 + 1.02, "BackLeft"),
-        BACK_RIGHT(5, true, 6, false, 2, 1.6486 - 0.18, "BackRight");
+        FRONT_LEFT(1, true, 2, false, 0, 3.32, "FrontLeft"),
+        FRONT_RIGHT(3, true, 4, false, 1, 1.49, "FrontRight"),
+        BACK_LEFT(7, true, 8, false, 3, 5.3, "BackLeft"),
+        BACK_RIGHT(5, true, 6, false, 2, 1.6, "BackRight");
 
         // 0.0, 6.11, 0.43, 4.53
         public final int DRIVE_ID, TURN_ID, ABSOLUTE_ENCODER_ID;
@@ -55,7 +62,7 @@ public class Constants{
     */
     public static class MK4SDS{
         public static final double WHEEL_DIAMETER_METERS = Units.inchesToMeters(4);
-        public static final double DRIVE_MOTOR_GEAR_RATIO = 1 / 6.12;
+        public static final double DRIVE_MOTOR_GEAR_RATIO = 1 / 6.75;
         public static final double TURNING_MOTOR_GEAR_RATIO = 1 / 12.8;
         public static final double DRIVE_ENCODER_ROT_TO_METER = DRIVE_MOTOR_GEAR_RATIO * Math.PI * WHEEL_DIAMETER_METERS;
         public static final double TURNING_ENCODER_ROT_TO_RAD = TURNING_MOTOR_GEAR_RATIO * 2 * Math.PI;
@@ -194,6 +201,31 @@ public class Constants{
         public static final int SHOOTER_BACK_LIMIT_SWITCH = 0;
 
     }
+
+
+    public static class Arduino{
+
+        public static final double PWM_PORT = 5;
+
+        public enum OutputMapping{
+            HEARTBEAT(1, "Heartbeat"),
+            RED(2, "Red"),
+            GREEN(3, "Green"),
+            BLUE(4, "Blue"),
+            PURPLE(5, "Purple"),
+            YELLOW(6, "Yellow");
+
+            public final int rawPWM;
+            public final String name;
+
+            OutputMapping(int rawPWM, String name) {
+                this.rawPWM = rawPWM;
+                this.name = name;
+            }
+
+        }
+    }
+
 
 
 }

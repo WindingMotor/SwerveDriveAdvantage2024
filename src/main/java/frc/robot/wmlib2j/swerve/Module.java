@@ -58,13 +58,14 @@ public class Module{
     public void periodic(){
 
         // Make the SparkMax encoder the same value as the absolute encoder. In testing right now. 
-        io.updateTurnEncoder();
+        //io.updateTurnEncoder();
 
         // Update the inputs.
         io.updateInputs(inputs);
 
         // Process inputs and send to logger.
         Logger.processInputs(settings.MODULE_NAME, inputs);
+
     }
 
     /**

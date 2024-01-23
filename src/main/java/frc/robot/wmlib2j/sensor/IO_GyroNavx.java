@@ -36,7 +36,7 @@ public class IO_GyroNavx implements IO_GyroBase{
      * @param inputs The inputs to update.
     */
     @Override
-    public void updateInputs(GyroIOInputs inputs){
+    public void updateInputs(GyroInputs inputs){
         inputs.connected = ahrs.isConnected();
         inputs.yawPosition = getYaw();
         inputs.yawPositionRadians = getYaw().getRadians();
