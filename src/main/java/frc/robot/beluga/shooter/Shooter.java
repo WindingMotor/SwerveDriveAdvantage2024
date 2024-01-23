@@ -8,7 +8,7 @@ public class Shooter extends SubsystemBase{
 
     private final IO_ShooterBase io;
 
-    public final IO_ShooterBase.ShooterInputs inputs = new IO_ShooterBase.ShooterInputs();
+    private final ShooterInputsAutoLogged inputs = new ShooterInputsAutoLogged();
 
 
 

@@ -9,7 +9,6 @@ import com.revrobotics.SparkPIDController;
 
 /**
  * The Builder class provides static methods to create different types of hardware.
- * 
  * Example usage:
  * CANSparkMax neoMotor = Builder.createNeo(1, false, 40);
  * RelativeEncoder encoder = Builder.createEncoder(neoMotor, 0.5, 1.0);
