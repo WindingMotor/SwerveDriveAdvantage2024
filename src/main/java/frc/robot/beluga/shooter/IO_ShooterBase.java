@@ -2,7 +2,6 @@
 package frc.robot.beluga.shooter;
 import org.littletonrobotics.junction.AutoLog;
 
-
 /**
  * Base interface for the shooter, abstracts to the real and simulation classes.
  * Provides methods for updating inputs.

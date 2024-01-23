@@ -1,10 +1,15 @@
 
 package frc.robot.yagsl;
+import java.util.Optional;
 import java.util.function.DoubleSupplier;
 import org.littletonrobotics.junction.Logger;
+import org.photonvision.EstimatedRobotPose;
+
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
+import frc.robot.wmlib2j.vision.Vision;
 
 public class Swerve extends SubsystemBase  {
 
@@ -12,18 +17,27 @@ public class Swerve extends SubsystemBase  {
 
     private final SwerveInputsAutoLogged inputs = new SwerveInputsAutoLogged();
 
-    public Swerve(IO_SwerveBase io){
+    private final Vision vision;
+
+    public Swerve(IO_SwerveBase io, Vision vision){
         this.io = io;
+        this.vision = vision;
     }
 
     public void periodic(){
+
+        // Add vision measurements
+        io.addVisionMeasurement(vision.getEstimatedGlobalPose(Constants.Vision.Camera.LEFT_CAMERA).get());
+        io.addVisionMeasurement(vision.getEstimatedGlobalPose(Constants.Vision.Camera.RIGHT_CAMERA).get());
+
+        // Update the odometry
+        io.updateOdometry();
 
         // Update the inputs.
         io.updateInputs(inputs);
 
         // Process inputs and send to logger.
         Logger.processInputs("Swerve", inputs);
-
     }
 
     /**

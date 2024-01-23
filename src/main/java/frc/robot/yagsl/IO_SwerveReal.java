@@ -4,6 +4,9 @@ package frc.robot.yagsl;
 import java.io.File;
 import java.io.IOException;
 
+import org.photonvision.EstimatedRobotPose;
+
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Filesystem;
@@ -15,7 +18,7 @@ import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
 /**
  * Represents a real implementation of the shooter.
 */
-public class IO_SwerveReal implements IO_SwerveBase {
+public class IO_SwerveReal implements IO_SwerveBase{
 
     private static double maxSpeed = Units.feetToMeters(4.5);
     private static File jsonDirectory = new File(Filesystem.getDeployDirectory(),"swerve");
@@ -32,7 +35,6 @@ public class IO_SwerveReal implements IO_SwerveBase {
 
         // Set the telemetry verbosity to high for debugging
         SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH;
-
     }
 
     /**
@@ -41,7 +43,7 @@ public class IO_SwerveReal implements IO_SwerveBase {
     */
     @Override
     public void updateInputs(SwerveInputs inputs){
-        inputs.field = swerveDrive.field;
+        inputs.pose = swerveDrive.getPose();
         inputs.yaw = swerveDrive.getYaw();
         inputs.odometryHeading = swerveDrive.getOdometryHeading();
         inputs.states = swerveDrive.getStates();
@@ -61,6 +63,16 @@ public class IO_SwerveReal implements IO_SwerveBase {
     @Override
     public double getMaximumAngularVelocity(){
         return swerveDrive.getMaximumAngularVelocity();
+    }
+
+    @Override
+    public void addVisionMeasurement(EstimatedRobotPose pose){
+        swerveDrive.addVisionMeasurement(pose.estimatedPose.toPose2d(), pose.timestampSeconds);
+    }
+
+    @Override
+    public void updateOdometry(){
+        swerveDrive.updateOdometry();
     }
 
 }
