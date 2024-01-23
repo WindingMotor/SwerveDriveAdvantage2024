@@ -81,8 +81,8 @@ public class Swerve extends SubsystemBase{
         // Initialize traditional odometry and the pose estimator
         this.traditionalOdometry = new SwerveDriveOdometry(Constants.Kinematics.KINEMATICS, gyroInputs.yawPosition, getSwerveModulePositions());
 
-      //  this.poseEstimator = new SwerveDrivePoseEstimator(Constants.Kinematics.KINEMATICS, gyroInputs.yawPosition,
-      //   getSwerveModulePositions(), traditionalOdometry.getPoseMeters());
+        //this.poseEstimator = new SwerveDrivePoseEstimator(Constants.Kinematics.KINEMATICS, gyroInputs.yawPosition,
+        //      getSwerveModulePositions(), traditionalOdometry.getPoseMeters());
 
         // Configure default settings for the AutoBuilder
         configureAutoBuilder();
@@ -102,9 +102,9 @@ public class Swerve extends SubsystemBase{
         traditionalOdometry.update(gyroInputs.yawPosition, getSwerveModulePositions());
 
         // Update the pose estimator
-    //    poseEstimator.update(gyroInputs.yawPosition, getSwerveModulePositions());
+        //poseEstimator.update(gyroInputs.yawPosition, getSwerveModulePositions());
 
-    /* 
+        /* 
         Optional<EstimatedRobotPose> newEstimatedPose = vision.getEstimatedGlobalPose(Constants.Vision.Camera.LEFT_CAMERA);
         poseEstimator.addVisionMeasurement(
             new Pose2d(newEstimatedPose.get().estimatedPose.getX(),

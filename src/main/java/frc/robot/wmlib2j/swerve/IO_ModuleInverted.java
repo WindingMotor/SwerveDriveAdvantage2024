@@ -7,8 +7,6 @@ import frc.robot.Constants;
 import frc.robot.Constants.ModuleSettings;
 import frc.robot.wmlib2j.util.Builder;
 
-import com.revrobotics.CANSparkLowLevel.MotorType;
-
 /**
  * Represents a real implementation of the IO module for the robot with the MK4i.
 */

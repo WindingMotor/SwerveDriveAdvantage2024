@@ -2,8 +2,6 @@
 
 package frc.robot.wmlib2j.swerve;
 import com.revrobotics.*;
-import com.revrobotics.CANSparkBase.IdleMode;
-import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import frc.robot.Constants;
