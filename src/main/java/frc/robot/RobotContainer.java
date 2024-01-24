@@ -25,6 +25,11 @@ public class RobotContainer {
 
         configureBindings();
 
+        
+        swerve.setDefaultCommand( 
+            swerve.driveSwerve(() -> driverController.getRawAxis(1) , () -> -driverController.getRawAxis(0) , () -> driverController.getRawAxis(3))
+        );
+
     }
 
     private void configureBindings(){
@@ -32,7 +37,7 @@ public class RobotContainer {
     }
 
     public Command getAutonomousCommand(){
-        return new PrintCommand("Test");
+        return swerve.getAutonomousCommand("Test", true);
     }
   
 }

@@ -1,17 +1,13 @@
 
 package frc.robot.yagsl;
-import java.util.Optional;
 import java.util.function.DoubleSupplier;
 import org.littletonrobotics.junction.Logger;
-import org.photonvision.EstimatedRobotPose;
-
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 import frc.robot.wmlib2j.vision.Vision;
 
-public class Swerve extends SubsystemBase  {
+public class Swerve extends SubsystemBase{
 
     private final IO_SwerveBase io;
 
@@ -22,13 +18,16 @@ public class Swerve extends SubsystemBase  {
     public Swerve(IO_SwerveBase io, Vision vision){
         this.io = io;
         this.vision = vision;
+
+        // Configure PathPlanner
+        io.setupPathPlanner(this);
     }
 
     public void periodic(){
 
         // Add vision measurements
-        io.addVisionMeasurement(vision.getEstimatedGlobalPose(Constants.Vision.Camera.LEFT_CAMERA).get());
-        io.addVisionMeasurement(vision.getEstimatedGlobalPose(Constants.Vision.Camera.RIGHT_CAMERA).get());
+        //io.addVisionMeasurement(vision.getEstimatedGlobalPose(Constants.Vision.Camera.LEFT_CAMERA).get());
+        //io.addVisionMeasurement(vision.getEstimatedGlobalPose(Constants.Vision.Camera.RIGHT_CAMERA).get());
 
         // Update the odometry
         io.updateOdometry();
@@ -57,5 +56,11 @@ public class Swerve extends SubsystemBase  {
                 false);
           });
     }
+
+
+    public Command getAutonomousCommand(String name, boolean setOdomToStart){
+        return io.getAutonomousCommand(name, setOdomToStart);
+    }
+
 
 }

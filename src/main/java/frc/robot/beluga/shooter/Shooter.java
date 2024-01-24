@@ -10,8 +10,6 @@ public class Shooter extends SubsystemBase{
 
     private final ShooterInputsAutoLogged inputs = new ShooterInputsAutoLogged();
 
-
-
     public Shooter(IO_ShooterBase io){
         this.io = io;
     }

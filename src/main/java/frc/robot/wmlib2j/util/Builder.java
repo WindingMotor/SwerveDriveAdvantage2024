@@ -1,11 +1,14 @@
+// Written by WindingMotor as part of the wmlib2j library.
 
 package frc.robot.wmlib2j.util;
+import com.pathplanner.lib.util.PIDConstants;
 import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
+import com.revrobotics.CANSparkBase.IdleMode;
 
 /**
  * The Builder class provides static methods to create different types of hardware.
@@ -65,10 +68,13 @@ public class Builder {
 
     /**
      * Configures a Spark PID controller.
-     * @param  pid          the SparkPIDController to be configured
-     * @param  isTurnPID    true if it is a turn PID, false otherwise
+     * @param  pid          The SparkPIDController to be configured
+     * @param  isTurnPID    True if it is a turn PID, false otherwise
+     * @param  p            The proportional gain
+     * @param  i            The integral gain
+     * @param  d            The derivative gain
      */
-    public static void configurePIDController(SparkPIDController pid, boolean isTurnPID){
+    public static void configurePIDController(SparkPIDController pid, boolean isTurnPID, double p, double i, double d){
         pid.setP(0.0);
         pid.setI(0.0);
         pid.setD(0.0);
@@ -78,6 +84,44 @@ public class Builder {
         }
     }
 
+    /**
+     * Configures a Spark PID controller.
+     * @param  pid          The SparkPIDController to be configured
+     * @param  isTurnPID    True if it is a turn PID, false otherwise
+     * @param  pidConstants The PID constants
+     */
+    public static void configurePIDController(SparkPIDController pid, boolean isTurnPID, PIDConstants pidConstants){
+        pid.setP(pidConstants.kP);
+        pid.setI(pidConstants.kI);
+        pid.setD(pidConstants.kD);
+        pid.setOutputRange(-1.0, 1.0);
+        if(isTurnPID){
+            pid.setOutputRange(0.0, 2 * Math.PI);
+        }
+    }
 
+    /**
+     * Sets the provided Spark Max as a follower of the specified master Spark Max.
+     * @param  master   The master Spark Max
+     * @param  follower    The Spark Max to set as a follower
+     * @return         The modifed follower Spark Max
+    */
+    public static CANSparkMax setNeoFollower(CANSparkMax master, CANSparkMax follower){
+        follower.follow(master);
+        return follower;
+    }
+
+    /**
+     * Configures the idle mode of the motor, either brake or coast.
+     * @param  motor   The motor to configure
+     * @param  isBrake True if the idle mode should be set to brake, false if it should be set to coast
+    */
+    public static void configureIdleMode(CANSparkBase motor, boolean isBrake){
+        if(isBrake){
+            motor.setIdleMode(IdleMode.kBrake);
+        }else{
+            motor.setIdleMode(IdleMode.kCoast);
+        }
+    }
 
 }

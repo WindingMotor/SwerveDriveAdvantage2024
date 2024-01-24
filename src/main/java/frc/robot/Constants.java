@@ -120,9 +120,57 @@ public class Constants{
         }
     }
 
+    public static class Shooter{
 
+        public static final double MOTOR_ONE_ID = -1;
+        public static final double MOTOR_TWO_ID = -1;
+
+        public enum ShooterState{
+            OFF(0, "OFF"), // No motors running
+            IDLE(0, "IDLE"), // Shooter running at lower rpm but ready to spin up
+            SPEAKER(0, "SPEAKER"), // Shooter running at constant rpm for speaker scoring
+            AMP(0, "SPEAKER"), // Shooter running at constant rpm for direct amp scoring
+            ACTIVE(-1.0, "ACTIVE"), // Shooter auto calculating rpm depending on distance to speaker 
+            DEMO(2000.0, "DEMO"); // Shooter running at constant rpm for demo purposes
+
+            public final double rpm;
+            public final String name;
+
+            ShooterState(double rpm, String name) {
+                this.rpm = rpm;
+                this.name = name;
+            }
+
+        }
+    }
+
+    public static class Arm{
+
+        public static final double MOTOR_ONE_ID = -1;
+        public static final double MOTOR_TWO_ID = -1;
+
+        public enum ArmState{
+            OFF(0, "OFF"), // No motors running
+            IDLE(0, "IDLE"), // Arm sitting on right above hard stops and ready to move
+            SPEAKER(0, "SPEAKER"), // Arm at position needed for speaker
+            AMP(0, "AMP"), // Arm at position needed for direct amp scoring
+            ACTIVE(-1.0, "ACTIVE"), // Arm calculating position depending on distance to speaker 
+            DEMO(30.0, "DEMO"); // Arm at position needed for demo purposes
+
+            public final double position;
+            public final String name;
+
+            ArmState(double position, String name) {
+                this.position = position;
+                this.name = name;
+            }
+
+        }
+    }
 
 }
+
+
 
 
 

@@ -1,21 +1,21 @@
 
 package frc.robot.beluga.shooter;
+import com.pathplanner.lib.util.PIDConstants;
 import com.revrobotics.*;
-import com.revrobotics.CANSparkBase.IdleMode;
-import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.wpilibj.DigitalInput;
 import frc.robot.Constants;
+import frc.robot.wmlib2j.util.Builder;
 
 /**
  * Represents a real implementation of the shooter.
 */
 public class IO_ShooterReal implements IO_ShooterBase {
 
-    private CANSparkMax leftShooterMotor;       
-    private CANSparkMax rightShooterMotor;         
+    private CANSparkMax motorOne;       
+    private CANSparkMax motorTwo;         
     
-    private RelativeEncoder leftShooterEncoder;
-    private RelativeEncoder rightShooterEncoder;
+    private RelativeEncoder motorOneEncoder;
+    private RelativeEncoder motorTwoEncoder;
 
     private SparkPIDController leftShooterPID;
     private SparkPIDController rightShooterPID;
@@ -25,52 +25,43 @@ public class IO_ShooterReal implements IO_ShooterBase {
     private double setpointRPM;
 
     public IO_ShooterReal(){
-        leftShooterMotor = createMotor(Constants.Beluga.SHOOTER_MOTOR_LEFT_ID, Constants.Beluga.SHOOTER_MOTOR_LEFT_INVERTED, 30);
-        rightShooterMotor = createMotor(Constants.Beluga.SHOOTER_MOTOR_RIGHT_ID, Constants.Beluga.SHOOTER_MOTOR_RIGHT_INVERTED, 30);
+        motorOne = Builder.createNeo(Constants.Beluga.SHOOTER_MOTOR_LEFT_ID, Constants.Beluga.SHOOTER_MOTOR_LEFT_INVERTED, 30);
+        motorTwo = Builder.createNeo(Constants.Beluga.SHOOTER_MOTOR_RIGHT_ID, Constants.Beluga.SHOOTER_MOTOR_RIGHT_INVERTED, 30);
 
-        leftShooterPID = createPIDController(leftShooterMotor);
-        rightShooterPID = createPIDController(rightShooterMotor);
+        Builder.configureIdleMode(motorOne, false);
+        Builder.configureIdleMode(motorTwo, false);
 
-        leftShooterEncoder = leftShooterMotor.getEncoder();
-        rightShooterEncoder = rightShooterMotor.getEncoder();
+        leftShooterPID = motorOne.getPIDController();
+        rightShooterPID = motorTwo.getPIDController();
+
+        Builder.configurePIDController(leftShooterPID, false, new PIDConstants(0.1));
+        Builder.configurePIDController(rightShooterPID, false, new PIDConstants(0.1));
+
+        motorOneEncoder = motorOne.getEncoder();
+        motorTwoEncoder = motorTwo.getEncoder();
 
         backLimitSwitch = new DigitalInput(Constants.Beluga.SHOOTER_BACK_LIMIT_SWITCH);
     }
 
     /**
-     * Creates a motor with the given CAN ID and inversion setting.
-     * @param id The CAN ID of the motor.
-     * @param inverted Whether the direction motor is inverted.
-     * @return The created motor.
+     * Updates the inputs with the current values.
+     * @param inputs The inputs to update.
     */
-    private CANSparkMax createMotor(int id, boolean inverted, int currentLimit){
-        CANSparkMax motor = new CANSparkMax(id, MotorType.kBrushless);
-        motor.restoreFactoryDefaults();
-        motor.setIdleMode(IdleMode.kBrake);
-        motor.setSmartCurrentLimit(currentLimit);
-        motor.setInverted(inverted);
-        return motor;
+    @Override
+    public void updateInputs(ShooterInputs inputs){
+        inputs.motorOneRPM = motorOneEncoder.getVelocity();
+        inputs.motorTwoRPM = motorTwoEncoder.getVelocity();
+        inputs.setpointRPM = setpointRPM;
+        inputs.isUpToSpeed = isUpToSpeed();
+        inputs.backLimitSwitchStatus = backLimitSwitch.get();
     }
-
-    /**
-     * Creates a PID controller for a SparkMax.
-     * @param  motor The SparkMax to create the PID controller for.
-     * @return The created SparkMaxPIDController.
-    */
-    private SparkPIDController createPIDController(CANSparkMax motor){
-        SparkPIDController pid = motor.getPIDController();
-        pid.setP(Constants.Beluga.SHOOTER_MOTORS_P);
-        pid.setI(Constants.Beluga.SHOOTER_MOTORS_I);
-        pid.setD(Constants.Beluga.SHOOTER_MOTORS_D);
-        return pid;
-    }
-
+    
     /**
      * Updates the setpoint RPM for the left and right shooter PIDs.
      * @param  setpointRPM    The desired setpoint in RPM.
     */
     @Override
-    public void updateSetpoint(double setpointRPM){
+    public void updatePID(double setpointRPM){
         this.setpointRPM = setpointRPM;
         leftShooterPID.setReference(setpointRPM, CANSparkMax.ControlType.kVelocity);
         rightShooterPID.setReference(setpointRPM, CANSparkMax.ControlType.kVelocity);
@@ -81,9 +72,7 @@ public class IO_ShooterReal implements IO_ShooterBase {
     */
     @Override
     public void stop(){
-        setpointRPM = 0.0;
-        leftShooterPID.setReference(0, CANSparkMax.ControlType.kVelocity);
-        rightShooterPID.setReference(0, CANSparkMax.ControlType.kVelocity);
+        updatePID(0.0);
     }
     
     /**
@@ -92,8 +81,8 @@ public class IO_ShooterReal implements IO_ShooterBase {
     */
     @Override
     public boolean isUpToSpeed() {
-        double leftVelocity = leftShooterEncoder.getVelocity();
-        double rightVelocity = rightShooterEncoder.getVelocity();
+        double leftVelocity = motorOneEncoder.getVelocity();
+        double rightVelocity = motorOneEncoder.getVelocity();
     
         boolean isLeftUpToSpeed = leftVelocity >= setpointRPM - Constants.Beluga.SHOOTER_SPEED_TOLERANCE_RPM
                 && leftVelocity <= setpointRPM + Constants.Beluga.SHOOTER_SPEED_TOLERANCE_RPM;
@@ -103,17 +92,5 @@ public class IO_ShooterReal implements IO_ShooterBase {
     
         return isLeftUpToSpeed && isRightUpToSpeed;
     }
-    
-    /**
-     * Updates the inputs with the current values.
-     * @param inputs The inputs to update.
-    */
-    @Override
-    public void updateInputs(ShooterInputs inputs){
-        inputs.leftMotorRPM = leftShooterEncoder.getVelocity();
-        inputs.rightMotorRPM = rightShooterEncoder.getVelocity();
-        inputs.setpointRPM = setpointRPM;
-        inputs.isUpToSpeed = isUpToSpeed();
-        inputs.backLimitSwitchStatus = backLimitSwitch.get();
-    }
+
 }

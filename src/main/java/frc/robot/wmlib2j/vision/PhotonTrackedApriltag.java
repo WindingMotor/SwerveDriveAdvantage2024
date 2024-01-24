@@ -57,6 +57,4 @@ public class PhotonTrackedApriltag{
     */
     public Rotation3d getRotationRadians(){ return rotation3d; }
 
-
-
 }

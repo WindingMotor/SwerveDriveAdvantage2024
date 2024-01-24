@@ -16,13 +16,12 @@ public class Vision extends SubsystemBase {
 
     private  final IO_VisionBase io;
 
-    public final IO_VisionBase.VisionInputs inputs = new IO_VisionBase.VisionInputs();
+    public final VisionInputsAutoLogged inputs = new VisionInputsAutoLogged();
 
     private List<PhotonTrackedApriltag> targets = new ArrayList<>();
 
     public Vision(IO_VisionBase io){
         this.io = io;
-
     }
 
     @Override
@@ -139,6 +138,5 @@ public class Vision extends SubsystemBase {
     public static double inchesToMeters(double inches){
         return inches * 0.0254;
     }
-    
 
 }

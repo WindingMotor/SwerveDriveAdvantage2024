@@ -7,6 +7,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj2.command.Command;
 
 public interface IO_SwerveBase{
 
@@ -34,5 +35,9 @@ public interface IO_SwerveBase{
     void addVisionMeasurement(EstimatedRobotPose pose);
 
     void updateOdometry();
+
+    void setupPathPlanner(Swerve subsystem);
+
+    Command getAutonomousCommand(String pathName, boolean resetPose);
 
 }

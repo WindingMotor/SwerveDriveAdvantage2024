@@ -1,18 +1,17 @@
 // Written by WindingMotor as part of the wmlib2j library.
 
 package frc.robot.wmlib2j.vision;
-import org.littletonrobotics.junction.inputs.LoggableInputs;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 import frc.robot.Constants.Vision.Camera;
 import java.util.List;
-
-import org.littletonrobotics.junction.LogTable;
-
+import org.littletonrobotics.junction.AutoLog;
 public interface IO_VisionBase{
 
-    class VisionInputs implements LoggableInputs{
+
+    @AutoLog
+    public static class VisionInputs{
 
         public boolean leftCameraIsOn = false;
         public boolean rightCameraIsOn = false;
@@ -25,34 +24,6 @@ public interface IO_VisionBase{
         public double leftCameraLatency = 0.0;
         public double rightCameraLatency = 0.0;
         public double intakeCameraLatency = 0.0;
-
-        public void toLog(LogTable table){
-            table.put("leftCameraIsOn", leftCameraIsOn);
-            table.put("rightCameraIsOn", rightCameraIsOn);
-            table.put("intakeCameraIsOn", intakeCameraIsOn);
-
-            table.put("leftCameraHasTargets", leftCameraHasTargets);
-            table.put("rightCameraHasTargets", rightCameraHasTargets);
-            table.put("intakeCameraHasTargets", intakeCameraHasTargets);
-
-            table.put("leftCameraLatency", leftCameraLatency);
-            table.put("rightCameraLatency", rightCameraLatency);
-            table.put("intakeCameraLatency", intakeCameraLatency);
-        }
-
-        public void fromLog(LogTable table){
-            leftCameraIsOn = table.get("leftCameraIsOn", leftCameraIsOn);
-            rightCameraIsOn = table.get("rightCameraIsOn", rightCameraIsOn);
-            intakeCameraIsOn = table.get("intakeCameraIsOn", intakeCameraIsOn);
-
-            leftCameraHasTargets = table.get("leftCameraHasTargets", leftCameraHasTargets);
-            rightCameraHasTargets = table.get("rightCameraHasTargets", rightCameraHasTargets);
-            intakeCameraHasTargets = table.get("intakeCameraHasTargets", intakeCameraHasTargets);
-
-            leftCameraLatency = table.get("leftCameraLatency", leftCameraLatency);
-            rightCameraLatency = table.get("rightCameraLatency", rightCameraLatency);
-            intakeCameraLatency = table.get("intakeCameraLatency", intakeCameraLatency);
-        }
     }
 
     /**

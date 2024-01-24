@@ -15,8 +15,8 @@ public interface IO_ShooterBase{
     @AutoLog
     public static class ShooterInputs{
         //RPM = Rotation/Minute
-        public double leftMotorRPM = 0.0;
-        public double rightMotorRPM = 0.0;
+        public double motorOneRPM = 0.0;
+        public double motorTwoRPM = 0.0;
         public double setpointRPM = 0.0;
         public boolean isUpToSpeed = false;
         public boolean backLimitSwitchStatus = false;
@@ -28,7 +28,7 @@ public interface IO_ShooterBase{
     */
     void updateInputs(ShooterInputs inputs);
 
-    void updateSetpoint(double setpointRPM);
+    void updatePID(double setpointRPM);
 
     void stop();
 
