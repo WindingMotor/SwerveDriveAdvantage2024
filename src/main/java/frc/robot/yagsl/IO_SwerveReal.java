@@ -2,6 +2,8 @@
 package frc.robot.yagsl;
 import java.io.File;
 import java.io.IOException;
+
+import org.littletonrobotics.junction.Logger;
 import org.photonvision.EstimatedRobotPose;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathPlannerPath;
@@ -44,6 +46,7 @@ public class IO_SwerveReal implements IO_SwerveBase{
 
         // Should only be enabled when controlling the robot via angle
         swerveDrive.setHeadingCorrection(false);
+
     }
 
     /**
@@ -100,6 +103,7 @@ public class IO_SwerveReal implements IO_SwerveBase{
     }
 
     private Rotation2d getHeading(){
+        // return swerveDrive.getYaw();
         return getPose().getRotation();
     }
 
@@ -131,10 +135,14 @@ public class IO_SwerveReal implements IO_SwerveBase{
     @Override
     public Command getAutonomousCommand(String pathName, boolean resetPose){
         PathPlannerPath path = PathPlannerPath.fromPathFile(pathName);
-        if(resetPose){
-            resetOdometry(new Pose2d(path.getPoint(0).position, getHeading()));
+        if(resetPose){ 
+            resetOdometry(
+                new Pose2d(path.getPoint(0).position, getHeading())
+                //path.getPoint(0).rotationTarget.getTarget()
+            );
         }
         return AutoBuilder.followPath(path);
+
     }
 
 }

@@ -69,17 +69,17 @@ public class Builder {
     /**
      * Configures a Spark PID controller.
      * @param  pid          The SparkPIDController to be configured
-     * @param  isTurnPID    True if it is a turn PID, false otherwise
+     * @param  wrap    Wrap encoder output from 0 to 2PI
      * @param  p            The proportional gain
      * @param  i            The integral gain
      * @param  d            The derivative gain
      */
-    public static void configurePIDController(SparkPIDController pid, boolean isTurnPID, double p, double i, double d){
+    public static void configurePIDController(SparkPIDController pid, boolean wrap, double p, double i, double d){
         pid.setP(0.0);
         pid.setI(0.0);
         pid.setD(0.0);
         pid.setOutputRange(-1.0, 1.0);
-        if(isTurnPID){
+        if(wrap){
             pid.setOutputRange(0.0, 2 * Math.PI);
         }
     }
@@ -87,15 +87,15 @@ public class Builder {
     /**
      * Configures a Spark PID controller.
      * @param  pid          The SparkPIDController to be configured
-     * @param  isTurnPID    True if it is a turn PID, false otherwise
+     * @param  wrap    Wrap encoder output from 0 to 2PI
      * @param  pidConstants The PID constants
      */
-    public static void configurePIDController(SparkPIDController pid, boolean isTurnPID, PIDConstants pidConstants){
+    public static void configurePIDController(SparkPIDController pid, boolean wrap, PIDConstants pidConstants){
         pid.setP(pidConstants.kP);
         pid.setI(pidConstants.kI);
         pid.setD(pidConstants.kD);
         pid.setOutputRange(-1.0, 1.0);
-        if(isTurnPID){
+        if(wrap){
             pid.setOutputRange(0.0, 2 * Math.PI);
         }
     }
