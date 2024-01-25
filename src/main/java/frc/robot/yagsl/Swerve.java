@@ -13,11 +13,11 @@ public class Swerve extends SubsystemBase{
 
     private final SwerveInputsAutoLogged inputs = new SwerveInputsAutoLogged();
 
-    private final Vision vision;
+    //private final Vision vision;
 
-    public Swerve(IO_SwerveBase io, Vision vision){
+    public Swerve(IO_SwerveBase io){
         this.io = io;
-        this.vision = vision;
+        //this.vision = vision;
 
         // Configure PathPlanner
         io.setupPathPlanner(this);
@@ -61,6 +61,5 @@ public class Swerve extends SubsystemBase{
     public Command getAutonomousCommand(String name, boolean setOdomToStart){
         return io.getAutonomousCommand(name, setOdomToStart);
     }
-
 
 }
