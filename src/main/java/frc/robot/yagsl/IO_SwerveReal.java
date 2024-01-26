@@ -62,7 +62,7 @@ public class IO_SwerveReal implements IO_SwerveBase{
         inputs.positions = swerveDrive.getModulePositions();
     }
 
-    public void setupPathPlanner(Swerve subsystem){
+    public void setupPathPlanner(SUB_Swerve subsystem){
         AutoBuilder.configureHolonomic(
             this::getPose, // Gets current robot pose
             this::resetOdometry, // Resets robot odometry if path has starter pose

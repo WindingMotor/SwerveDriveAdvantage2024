@@ -36,7 +36,7 @@ public interface IO_SwerveBase{
 
     void updateOdometry();
 
-    void setupPathPlanner(Swerve subsystem);
+    void setupPathPlanner(SUB_Swerve subsystem);
 
     Command getAutonomousCommand(String pathName, boolean resetPose);
 

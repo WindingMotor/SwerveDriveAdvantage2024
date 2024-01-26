@@ -5,9 +5,8 @@ import org.littletonrobotics.junction.Logger;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.wmlib2j.vision.Vision;
 
-public class Swerve extends SubsystemBase{
+public class SUB_Swerve extends SubsystemBase{
 
     private final IO_SwerveBase io;
 
@@ -15,7 +14,7 @@ public class Swerve extends SubsystemBase{
 
     //private final Vision vision;
 
-    public Swerve(IO_SwerveBase io){
+    public SUB_Swerve(IO_SwerveBase io){
         this.io = io;
         //this.vision = vision;
 

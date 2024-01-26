@@ -120,7 +120,7 @@ public class Constants{
         }
     }
 
-    public static class Shooter{
+    public static class States{
 
         public static final double MOTOR_ONE_ID = -1;
         public static final double MOTOR_TWO_ID = -1;
@@ -130,7 +130,7 @@ public class Constants{
             IDLE(0, "IDLE"), // Shooter running at lower rpm but ready to spin up
             SPEAKER(0, "SPEAKER"), // Shooter running at constant rpm for speaker scoring
             AMP(0, "SPEAKER"), // Shooter running at constant rpm for direct amp scoring
-            ACTIVE(-1.0, "ACTIVE"), // Shooter auto calculating rpm depending on distance to speaker 
+            TARGET(-1.0, "TARGET"), // Shooter auto calculating rpm depending on distance to speaker 
             DEMO(2000.0, "DEMO"); // Shooter running at constant rpm for demo purposes
 
             public final double rpm;
@@ -142,19 +142,13 @@ public class Constants{
             }
 
         }
-    }
-
-    public static class Arm{
-
-        public static final double MOTOR_ONE_ID = -1;
-        public static final double MOTOR_TWO_ID = -1;
 
         public enum ArmState{
             OFF(0, "OFF"), // No motors running
             IDLE(0, "IDLE"), // Arm sitting on right above hard stops and ready to move
             SPEAKER(0, "SPEAKER"), // Arm at position needed for speaker
             AMP(0, "AMP"), // Arm at position needed for direct amp scoring
-            ACTIVE(-1.0, "ACTIVE"), // Arm calculating position depending on distance to speaker 
+            TARGET(-1.0, "TARGET"), // Arm calculating position depending on distance to speaker 
             DEMO(30.0, "DEMO"); // Arm at position needed for demo purposes
 
             public final double position;
@@ -166,6 +160,35 @@ public class Constants{
             }
 
         }
+
+        public enum SuperStructureState{
+            OFF(ArmState.OFF, ShooterState.OFF, "Robot has disabled the subsystems"),
+            IDLE(ArmState.OFF, ShooterState.OFF, "Robot is idle"), 
+            SPEAKER(ArmState.OFF, ShooterState.OFF, "Robot is in speaker mode"),
+            AMP(ArmState.OFF, ShooterState.OFF, "Robot is in amp mode"), 
+            TARGET(ArmState.OFF, ShooterState.OFF, "Robot is in target mode"), 
+            DEMO(ArmState.OFF, ShooterState.OFF, "Robot is in demo mode");
+
+            public final ArmState armState;
+            public final ShooterState shooterState;
+            public final String name;
+
+            SuperStructureState(ArmState armState, ShooterState shooterState, String name) {
+                this.armState = armState;
+                this.shooterState = shooterState;
+                this.name = name;
+            }
+
+        }
+
+
+    }
+
+    public static class Arm{
+
+        public static final double MOTOR_ONE_ID = -1;
+        public static final double MOTOR_TWO_ID = -1;
+    
     }
 
 }

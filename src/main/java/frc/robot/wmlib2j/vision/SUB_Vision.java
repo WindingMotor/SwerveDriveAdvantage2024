@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.Vision.Camera;
 
-public class Vision extends SubsystemBase {
+public class SUB_Vision extends SubsystemBase {
 
     private  final IO_VisionBase io;
 
@@ -20,7 +20,7 @@ public class Vision extends SubsystemBase {
 
     private List<PhotonTrackedApriltag> targets = new ArrayList<>();
 
-    public Vision(IO_VisionBase io){
+    public SUB_Vision(IO_VisionBase io){
         this.io = io;
     }
 

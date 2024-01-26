@@ -2,17 +2,17 @@
 package frc.robot.beluga.shooter;
 import java.util.function.Supplier;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.wmlib2j.vision.Vision;
+import frc.robot.wmlib2j.vision.SUB_Vision;
 
 /** An example command that uses an example subsystem. */
-public class Shoot extends Command {
+public class CMD_Shoot extends Command {
 
-  private final Shooter shooter;
-  private final Vision vision;
+  private final SUB_Shooter shooter;
+  private final SUB_Vision vision;
 
   private final Supplier<Boolean> manualCancel;
 
-  public Shoot(Shooter shooter, Vision vision, Supplier<Boolean> manualCancel){
+  public CMD_Shoot(SUB_Shooter shooter, SUB_Vision vision, Supplier<Boolean> manualCancel){
     this.shooter = shooter;
     this.vision = vision;
     this.manualCancel = manualCancel;

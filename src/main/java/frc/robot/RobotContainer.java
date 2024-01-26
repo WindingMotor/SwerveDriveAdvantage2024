@@ -4,9 +4,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import frc.robot.wmlib2j.vision.IO_VisionReal;
-import frc.robot.wmlib2j.vision.Vision;
+import frc.robot.wmlib2j.vision.SUB_Vision;
 import frc.robot.yagsl.IO_SwerveReal;
-import frc.robot.yagsl.Swerve;
+import frc.robot.yagsl.SUB_Swerve;
 
 public class RobotContainer {
 
@@ -17,7 +17,7 @@ public class RobotContainer {
     );
     */
     
-    private final Swerve swerve = new Swerve(
+    private final SUB_Swerve swerve = new SUB_Swerve(
         new IO_SwerveReal()
     );
 
@@ -28,7 +28,7 @@ public class RobotContainer {
     
         
         swerve.setDefaultCommand( 
-            swerve.driveSwerve(() -> driverController.getRawAxis(5) , () -> -driverController.getRawAxis(4) , () -> driverController.getRawAxis(0))
+            swerve.driveSwerve(() -> -driverController.getRawAxis(1) , () -> driverController.getRawAxis(0) , () -> driverController.getRawAxis(3))
         );
         
 
