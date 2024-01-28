@@ -2,6 +2,10 @@
 package frc.robot.beluga.shooter;
 import com.pathplanner.lib.util.PIDConstants;
 import com.revrobotics.*;
+
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.DigitalInput;
 import frc.robot.Constants;
 import frc.robot.wmlib2j.util.Builder;
@@ -11,36 +15,65 @@ import frc.robot.wmlib2j.util.Builder;
 */
 public class IO_ShooterReal implements IO_ShooterBase {
 
-    private CANSparkMax motorOne;       
-    private CANSparkMax motorTwo;         
+    private CANSparkFlex motorOne;       
+    private CANSparkFlex motorTwo;         
     
     private RelativeEncoder motorOneEncoder;
     private RelativeEncoder motorTwoEncoder;
+    
+    private SparkPIDController leftPID;
 
-    private SparkPIDController leftShooterPID;
-    private SparkPIDController rightShooterPID;
+    private SparkPIDController rightPID;
+
+    public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput, maxRPM;
+
 
     private DigitalInput backLimitSwitch;
 
     private double setpointRPM;
 
     public IO_ShooterReal(){
-        motorOne = Builder.createNeo(Constants.Beluga.SHOOTER_MOTOR_LEFT_ID, Constants.Beluga.SHOOTER_MOTOR_LEFT_INVERTED, 30);
-        motorTwo = Builder.createNeo(Constants.Beluga.SHOOTER_MOTOR_RIGHT_ID, Constants.Beluga.SHOOTER_MOTOR_RIGHT_INVERTED, 30);
+        motorOne = Builder.createVortex(Constants.Beluga.SHOOTER_MOTOR_LEFT_ID, Constants.Beluga.SHOOTER_MOTOR_LEFT_INVERTED, 45);
+        motorTwo = Builder.createVortex(Constants.Beluga.SHOOTER_MOTOR_RIGHT_ID, Constants.Beluga.SHOOTER_MOTOR_RIGHT_INVERTED, 45);
 
         Builder.configureIdleMode(motorOne, false);
         Builder.configureIdleMode(motorTwo, false);
 
-        leftShooterPID = motorOne.getPIDController();
-        rightShooterPID = motorTwo.getPIDController();
-
-        Builder.configurePIDController(leftShooterPID, false, new PIDConstants(0.1));
-        Builder.configurePIDController(rightShooterPID, false, new PIDConstants(0.1));
-
+        leftPID = motorOne.getPIDController();
+        rightPID = motorTwo.getPIDController();
+        
         motorOneEncoder = motorOne.getEncoder();
         motorTwoEncoder = motorTwo.getEncoder();
 
         backLimitSwitch = new DigitalInput(Constants.Beluga.SHOOTER_BACK_LIMIT_SWITCH);
+
+        // TESTING PID coefficients
+        kP = 6e-5; 
+        kP = 0.4;
+        kI = 0;
+        kD = 0; 
+        kIz = 0; 
+        kFF = 0.000015; 
+        kMaxOutput = 1; 
+        kMinOutput = -1;
+        maxRPM = 5700;
+
+        // set left PID coefficients
+        leftPID.setP(kP);
+        leftPID.setI(kI);
+        leftPID.setD(kD);
+        leftPID.setIZone(kIz);
+        leftPID.setFF(kFF);
+        leftPID.setOutputRange(kMinOutput, kMaxOutput);
+
+        // set right PID coefficients
+        rightPID.setP(kP);
+        rightPID.setI(kI);
+        rightPID.setD(kD);
+        rightPID.setIZone(kIz);
+        rightPID.setFF(kFF);
+        rightPID.setOutputRange(kMinOutput, kMaxOutput);
+
     }
 
     /**
@@ -49,6 +82,7 @@ public class IO_ShooterReal implements IO_ShooterBase {
     */
     @Override
     public void updateInputs(ShooterInputs inputs){
+
         inputs.motorOneRPM = motorOneEncoder.getVelocity();
         inputs.motorTwoRPM = motorTwoEncoder.getVelocity();
         inputs.setpointRPM = setpointRPM;
@@ -63,8 +97,10 @@ public class IO_ShooterReal implements IO_ShooterBase {
     @Override
     public void updatePID(double setpointRPM){
         this.setpointRPM = setpointRPM;
-        leftShooterPID.setReference(setpointRPM, CANSparkMax.ControlType.kVelocity);
-        rightShooterPID.setReference(setpointRPM, CANSparkMax.ControlType.kVelocity);
+
+        leftPID.setReference(setpointRPM, CANSparkMax.ControlType.kVelocity);
+        rightPID.setReference(setpointRPM, CANSparkMax.ControlType.kVelocity);
+
     }
 
     /**

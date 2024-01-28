@@ -75,9 +75,9 @@ public class Builder {
      * @param  d            The derivative gain
      */
     public static void configurePIDController(SparkPIDController pid, boolean wrap, double p, double i, double d){
-        pid.setP(0.0);
-        pid.setI(0.0);
-        pid.setD(0.0);
+        pid.setP(p);
+        pid.setI(i);
+        pid.setD(d);
         pid.setOutputRange(-1.0, 1.0);
         if(wrap){
             pid.setOutputRange(0.0, 2 * Math.PI);

@@ -1,5 +1,6 @@
 
 package frc.robot.beluga;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.States.SuperStructureState;
 import frc.robot.beluga.arm.SUB_Arm;
@@ -16,6 +17,8 @@ public class SUB_SuperStructure extends SubsystemBase{
     public SUB_SuperStructure(SUB_Arm arm, SUB_Shooter shooter){
         this.arm = arm;
         this.shooter = shooter;
+        state = SuperStructureState.OFF;
+        lastState = SuperStructureState.OFF;
     }
 
     public void periodic(){
@@ -23,13 +26,12 @@ public class SUB_SuperStructure extends SubsystemBase{
         shooter.setState(state.shooterState);
     }
 
-    public void setState(SuperStructureState newState){
-        if(newState != lastState){
-            lastState = state;
-            state = newState;
-        }
+    public Command setState(SuperStructureState newState){
+        return run(()->{
+            if(newState != lastState){
+                lastState = state;
+                state = newState;
+            }
+        });
     }
-
 }
-
-

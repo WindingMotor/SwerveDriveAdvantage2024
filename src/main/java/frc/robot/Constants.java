@@ -78,24 +78,48 @@ public class Constants{
 
     public static class Beluga{
 
-        public static final int SHOOTER_MOTOR_LEFT_ID = 17;
-        public static final int SHOOTER_MOTOR_RIGHT_ID = 18;
+        // Arm
+        public static final int ARM_MOTOR_LEAD_ID = 9;
+        public static final int ARM_MOTOR_FOLLOWER_ID = 10;
+
+        public static final boolean ARM_MOTOR_LEAD_INVERTED = true;
+        public static final boolean ARM_MOTOR_FOLLOWER_INVERTED = true;
+
+        public static final double ARM_MOTORS_P = 0.01;
+        public static final double ARM_MOTORS_I = 0.0;
+        public static final double ARM_MOTORS_D = 0.0005;
+
+        public static final double ARM_POSITION_TOLERANCE_DEGREES = 0.25;
+
+        // Shooter
+        public static final int SHOOTER_MOTOR_LEFT_ID = 12;
+        public static final int SHOOTER_MOTOR_RIGHT_ID = 13;
 
         public static final boolean SHOOTER_MOTOR_LEFT_INVERTED = false;
-        public static final boolean SHOOTER_MOTOR_RIGHT_INVERTED = false;
+        public static final boolean SHOOTER_MOTOR_RIGHT_INVERTED = true;
 
-        public static final double SHOOTER_MOTORS_P = 0.01;
+        public static final double SHOOTER_MOTORS_P = 0.001;
         public static final double SHOOTER_MOTORS_I = 0.0;
         public static final double SHOOTER_MOTORS_D = 0.0;
 
-        public static final double SHOOTER_SPEED_TOLERANCE_RPM = 5.0;
-
-        public static final boolean AUTO_SPINUP = false;
+        public static final double SHOOTER_SPEED_TOLERANCE_RPM = 3.0;
 
         public static final int SHOOTER_BACK_LIMIT_SWITCH = 0;
 
-    }
+        // Intake
+        public static final int INDEXER_MOTOR_ID = 11;
+ 
+        // Indexer
+        public static final int INTAKE_MOTOR_ID = 88;
 
+        /*
+            Motor IDs
+            1-8 swerve
+            9-10 arm
+            11 indexer
+            12-13 shooter
+        */
+    }
 
     public static class Arduino{
 
@@ -116,14 +140,10 @@ public class Constants{
                 this.rawPWM = rawPWM;
                 this.name = name;
             }
-
         }
     }
 
     public static class States{
-
-        public static final double MOTOR_ONE_ID = -1;
-        public static final double MOTOR_TWO_ID = -1;
 
         public enum ShooterState{
             OFF(0, "OFF"), // No motors running
@@ -131,7 +151,8 @@ public class Constants{
             SPEAKER(0, "SPEAKER"), // Shooter running at constant rpm for speaker scoring
             AMP(0, "SPEAKER"), // Shooter running at constant rpm for direct amp scoring
             TARGET(-1.0, "TARGET"), // Shooter auto calculating rpm depending on distance to speaker 
-            DEMO(2000.0, "DEMO"); // Shooter running at constant rpm for demo purposes
+            INTAKE(-1.0, "INTAKE"), // Shooter off for intake pickup
+            DEMO(150, "DEMO"); // Shooter running at constant rpm for demo purposes
 
             public final double rpm;
             public final String name;
@@ -140,16 +161,18 @@ public class Constants{
                 this.rpm = rpm;
                 this.name = name;
             }
-
         }
 
+
+
         public enum ArmState{
-            OFF(0, "OFF"), // No motors running
+            OFF(-18, "OFF"), // No motors running
             IDLE(0, "IDLE"), // Arm sitting on right above hard stops and ready to move
             SPEAKER(0, "SPEAKER"), // Arm at position needed for speaker
             AMP(0, "AMP"), // Arm at position needed for direct amp scoring
             TARGET(-1.0, "TARGET"), // Arm calculating position depending on distance to speaker 
-            DEMO(30.0, "DEMO"); // Arm at position needed for demo purposes
+            INTAKE(0, "INTAKE"), // Arm at position needed for intake pickup
+            DEMO(55.0, "DEMO"); // Arm at position needed for demo purposes
 
             public final double position;
             public final String name;
@@ -158,16 +181,16 @@ public class Constants{
                 this.position = position;
                 this.name = name;
             }
-
         }
 
         public enum SuperStructureState{
             OFF(ArmState.OFF, ShooterState.OFF, "Robot has disabled the subsystems"),
-            IDLE(ArmState.OFF, ShooterState.OFF, "Robot is idle"), 
-            SPEAKER(ArmState.OFF, ShooterState.OFF, "Robot is in speaker mode"),
-            AMP(ArmState.OFF, ShooterState.OFF, "Robot is in amp mode"), 
-            TARGET(ArmState.OFF, ShooterState.OFF, "Robot is in target mode"), 
-            DEMO(ArmState.OFF, ShooterState.OFF, "Robot is in demo mode");
+            IDLE(ArmState.IDLE, ShooterState.IDLE, "Robot is idle"), 
+            SPEAKER(ArmState.SPEAKER, ShooterState.SPEAKER, "Robot is in speaker mode"),
+            AMP(ArmState.AMP, ShooterState.AMP, "Robot is in amp mode"), 
+            TARGET(ArmState.TARGET, ShooterState.TARGET, "Robot is in target mode"), 
+            INTAKE(ArmState.INTAKE, ShooterState.INTAKE, "Robot is in intake mode"),
+            DEMO(ArmState.DEMO, ShooterState.DEMO, "Robot is in demo mode");
 
             public final ArmState armState;
             public final ShooterState shooterState;
@@ -178,19 +201,8 @@ public class Constants{
                 this.shooterState = shooterState;
                 this.name = name;
             }
-
         }
-
-
     }
-
-    public static class Arm{
-
-        public static final double MOTOR_ONE_ID = -1;
-        public static final double MOTOR_TWO_ID = -1;
-    
-    }
-
 }
 
 

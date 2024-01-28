@@ -2,7 +2,6 @@
 package frc.robot.beluga.shooter;
 import org.littletonrobotics.junction.Logger;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.States.ArmState;
 import frc.robot.Constants.States.ShooterState;
 
 public class SUB_Shooter extends SubsystemBase{
@@ -16,6 +15,8 @@ public class SUB_Shooter extends SubsystemBase{
 
     public SUB_Shooter(IO_ShooterBase io){
         this.io = io;
+        this.lastState = ShooterState.OFF;
+        this.state = ShooterState.OFF;
     }
 
     @Override
@@ -25,6 +26,8 @@ public class SUB_Shooter extends SubsystemBase{
 
         // Process inputs and send to logger.
         Logger.processInputs("Shooter", inputs);
+
+        io.updatePID(state.rpm);
     }
 
     public void setState(ShooterState newState){

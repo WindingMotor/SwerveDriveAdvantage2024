@@ -15,6 +15,7 @@ public class SUB_Arm extends SubsystemBase{
 
     public SUB_Arm(IO_ArmBase io){
         this.io = io;
+        state = ArmState.OFF;
         lastState = ArmState.OFF;
     }
 
