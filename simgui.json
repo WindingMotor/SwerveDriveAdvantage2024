@@ -3,6 +3,7 @@
     "types": {
       "/FMSInfo": "FMSInfo",
       "/SmartDashboard/Field": "Field2d",
+      "/SmartDashboard/Pigeon 2 (v6) [1]": "Gyro",
       "/SmartDashboard/navX-Sensor[4]": "Gyro"
     }
   },

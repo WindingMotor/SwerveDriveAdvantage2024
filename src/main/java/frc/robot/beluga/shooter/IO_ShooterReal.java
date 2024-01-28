@@ -27,7 +27,6 @@ public class IO_ShooterReal implements IO_ShooterBase {
 
     public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput, maxRPM;
 
-
     private DigitalInput backLimitSwitch;
 
     private double setpointRPM;
@@ -41,6 +40,8 @@ public class IO_ShooterReal implements IO_ShooterBase {
 
         leftPID = motorOne.getPIDController();
         rightPID = motorTwo.getPIDController();
+
+        Builder.configurePIDController(leftPID, false, new PIDConstants(Constants.Beluga.SHOOTER_MOTORS_P, Constants.Beluga.SHOOTER_MOTORS_I, Constants.Beluga.SHOOTER_MOTORS_D), Constants.Beluga.SHOOTER_MOTORS_IZ, Constants.Beluga.SHOOTER_MOTORS_FF);
         
         motorOneEncoder = motorOne.getEncoder();
         motorTwoEncoder = motorTwo.getEncoder();
@@ -49,36 +50,16 @@ public class IO_ShooterReal implements IO_ShooterBase {
 
         // TESTING PID coefficients
         kP = 6e-5; 
-        kP = 0.4;
         kI = 0;
         kD = 0; 
         kIz = 0; 
         kFF = 0.000015; 
-        kMaxOutput = 1; 
-        kMinOutput = -1;
         maxRPM = 5700;
-
-        // set left PID coefficients
-        leftPID.setP(kP);
-        leftPID.setI(kI);
-        leftPID.setD(kD);
-        leftPID.setIZone(kIz);
-        leftPID.setFF(kFF);
-        leftPID.setOutputRange(kMinOutput, kMaxOutput);
-
-        // set right PID coefficients
-        rightPID.setP(kP);
-        rightPID.setI(kI);
-        rightPID.setD(kD);
-        rightPID.setIZone(kIz);
-        rightPID.setFF(kFF);
-        rightPID.setOutputRange(kMinOutput, kMaxOutput);
-
     }
 
     /**
      * Updates the inputs with the current values.
-     * @param inputs The inputs to update.
+     * @param inputs The inputs to update
     */
     @Override
     public void updateInputs(ShooterInputs inputs){
@@ -92,15 +73,14 @@ public class IO_ShooterReal implements IO_ShooterBase {
     
     /**
      * Updates the setpoint RPM for the left and right shooter PIDs.
-     * @param  setpointRPM    The desired setpoint in RPM.
+     * @param  setpointRPM    The desired setpoint in RPM
     */
     @Override
     public void updatePID(double setpointRPM){
         this.setpointRPM = setpointRPM;
 
-        leftPID.setReference(setpointRPM, CANSparkMax.ControlType.kVelocity);
-        rightPID.setReference(setpointRPM, CANSparkMax.ControlType.kVelocity);
-
+        leftPID.setReference(setpointRPM, CANSparkFlex.ControlType.kVelocity);
+        rightPID.setReference(setpointRPM, CANSparkFlex.ControlType.kVelocity);
     }
 
     /**

@@ -1,4 +1,6 @@
 package frc.robot;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
@@ -90,6 +92,7 @@ public class Constants{
         public static final double ARM_MOTORS_D = 0.0005;
 
         public static final double ARM_POSITION_TOLERANCE_DEGREES = 0.25;
+        public static final double ARM_OFFSET_DEGREES = 19.0;
 
         // Shooter
         public static final int SHOOTER_MOTOR_LEFT_ID = 12;
@@ -101,6 +104,8 @@ public class Constants{
         public static final double SHOOTER_MOTORS_P = 0.001;
         public static final double SHOOTER_MOTORS_I = 0.0;
         public static final double SHOOTER_MOTORS_D = 0.0;
+        public static final double SHOOTER_MOTORS_IZ = 0.0005;
+        public static final double SHOOTER_MOTORS_FF = 0.0005;
 
         public static final double SHOOTER_SPEED_TOLERANCE_RPM = 3.0;
 
@@ -147,11 +152,10 @@ public class Constants{
 
         public enum ShooterState{
             OFF(0, "OFF"), // No motors running
-            IDLE(0, "IDLE"), // Shooter running at lower rpm but ready to spin up
-            SPEAKER(0, "SPEAKER"), // Shooter running at constant rpm for speaker scoring
-            AMP(0, "SPEAKER"), // Shooter running at constant rpm for direct amp scoring
-            TARGET(-1.0, "TARGET"), // Shooter auto calculating rpm depending on distance to speaker 
-            INTAKE(-1.0, "INTAKE"), // Shooter off for intake pickup
+            IDLE(2000, "IDLE"), // Shooter running at lower rpm but ready to spin up
+            SPEAKER(3500, "SPEAKER"), // Shooter running at constant rpm for speaker scoring
+            AMP(4500, "SPEAKER"), // Shooter running at constant rpm for direct amp scoring
+            DYNAMIC(-1.0, "DYNAMIC"), // Shooter auto calculating rpm depending on distance to speaker 
             DEMO(150, "DEMO"); // Shooter running at constant rpm for demo purposes
 
             public final double rpm;
@@ -163,16 +167,14 @@ public class Constants{
             }
         }
 
-
-
         public enum ArmState{
             OFF(-18, "OFF"), // No motors running
-            IDLE(0, "IDLE"), // Arm sitting on right above hard stops and ready to move
-            SPEAKER(0, "SPEAKER"), // Arm at position needed for speaker
+            IDLE(10.0, "IDLE"), // Arm sitting on right above hard stops and ready to move
+            SPEAKER(55.0, "SPEAKER"), // Arm at position needed for speaker
             AMP(0, "AMP"), // Arm at position needed for direct amp scoring
-            TARGET(-1.0, "TARGET"), // Arm calculating position depending on distance to speaker 
-            INTAKE(0, "INTAKE"), // Arm at position needed for intake pickup
-            DEMO(55.0, "DEMO"); // Arm at position needed for demo purposes
+            DYNAMIC(-1.0, "DYNAMIC"), // Arm calculating position depending on distance to speaker 
+            INTAKE(110.0, "INTAKE"), // Arm at position needed for intake pickup
+            DEMO(45.0, "DEMO"); // Arm at position needed for demo purposes
 
             public final double position;
             public final String name;
@@ -183,26 +185,45 @@ public class Constants{
             }
         }
 
-        public enum SuperStructureState{
+        public enum SuperStructureStatePosition{
             OFF(ArmState.OFF, ShooterState.OFF, "Robot has disabled the subsystems"),
             IDLE(ArmState.IDLE, ShooterState.IDLE, "Robot is idle"), 
             SPEAKER(ArmState.SPEAKER, ShooterState.SPEAKER, "Robot is in speaker mode"),
             AMP(ArmState.AMP, ShooterState.AMP, "Robot is in amp mode"), 
-            TARGET(ArmState.TARGET, ShooterState.TARGET, "Robot is in target mode"), 
-            INTAKE(ArmState.INTAKE, ShooterState.INTAKE, "Robot is in intake mode"),
+            TARGET(ArmState.DYNAMIC, ShooterState.DYNAMIC, "Robot is in dynamic mode"), 
+            INTAKE(ArmState.INTAKE, ShooterState.IDLE, "Robot is in intake mode"),
             DEMO(ArmState.DEMO, ShooterState.DEMO, "Robot is in demo mode");
 
             public final ArmState armState;
             public final ShooterState shooterState;
             public final String name;
 
-            SuperStructureState(ArmState armState, ShooterState shooterState, String name) {
+            SuperStructureStatePosition(ArmState armState, ShooterState shooterState, String name) {
                 this.armState = armState;
                 this.shooterState = shooterState;
                 this.name = name;
             }
         }
     }
+
+    public static class Auto{
+
+        public enum Poses{
+            BLU_SPEAKER(new Pose2d(1.25, 5.5, Rotation2d.fromDegrees(0))),
+            BLU_AMP(new Pose2d(1.25, 5.5, Rotation2d.fromDegrees(90))),
+            RED_SPEAKER(new Pose2d(1.25, 5.5, Rotation2d.fromDegrees(180))),
+            RED_AMP(new Pose2d(1.25, 5.5, Rotation2d.fromDegrees(90)));
+        
+            public final Pose2d pose;
+        
+            Poses(Pose2d pose){
+                this.pose = pose;
+            }
+        }
+        
+        
+    }
+
 }
 
 

@@ -32,6 +32,7 @@
     "DEADBAND",
     "Desaturates",
     "Holonomic",
+    "pathfinding",
     "Pathplanner",
     "Robo",
     "setpoints",

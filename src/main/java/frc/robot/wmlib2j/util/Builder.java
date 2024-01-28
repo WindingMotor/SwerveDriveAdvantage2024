@@ -74,7 +74,7 @@ public class Builder {
      * @param  i            The integral gain
      * @param  d            The derivative gain
      */
-    public static void configurePIDController(SparkPIDController pid, boolean wrap, double p, double i, double d){
+    public static SparkPIDController configurePIDController(SparkPIDController pid, boolean wrap, double p, double i, double d){
         pid.setP(p);
         pid.setI(i);
         pid.setD(d);
@@ -82,6 +82,7 @@ public class Builder {
         if(wrap){
             pid.setOutputRange(0.0, 2 * Math.PI);
         }
+        return pid;
     }
 
     /**
@@ -90,7 +91,7 @@ public class Builder {
      * @param  wrap    Wrap encoder output from 0 to 2PI
      * @param  pidConstants The PID constants
      */
-    public static void configurePIDController(SparkPIDController pid, boolean wrap, PIDConstants pidConstants){
+    public static SparkPIDController configurePIDController(SparkPIDController pid, boolean wrap, PIDConstants pidConstants){
         pid.setP(pidConstants.kP);
         pid.setI(pidConstants.kI);
         pid.setD(pidConstants.kD);
@@ -98,13 +99,33 @@ public class Builder {
         if(wrap){
             pid.setOutputRange(0.0, 2 * Math.PI);
         }
+        return pid;
+    }
+
+    /**
+     * Configures a Spark PID controller.
+     * @param  pid          The SparkPIDController to be configured
+     * @param  wrap    Wrap encoder output from 0 to 2PI
+     * @param  pidConstants The PID constants
+     */
+    public static SparkPIDController configurePIDController(SparkPIDController pid, boolean wrap, PIDConstants pidConstants, double iz, double ff){
+        pid.setP(pidConstants.kP);
+        pid.setI(pidConstants.kI);
+        pid.setD(pidConstants.kD);
+        pid.setIZone(iz);
+        pid.setFF(ff);
+        pid.setOutputRange(-1.0, 1.0);
+        if(wrap){
+            pid.setOutputRange(0.0, 2 * Math.PI);
+        }
+        return pid;
     }
 
     /**
      * Sets the provided Spark Max as a follower of the specified master Spark Max.
      * @param  master   The master Spark Max
      * @param  follower    The Spark Max to set as a follower
-     * @return         The modifed follower Spark Max
+     * @return         The modified follower Spark Max
     */
     public static CANSparkMax setNeoFollower(CANSparkMax master, CANSparkMax follower){
         follower.follow(master);

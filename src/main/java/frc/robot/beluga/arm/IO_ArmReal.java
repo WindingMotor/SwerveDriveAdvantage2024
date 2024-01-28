@@ -1,10 +1,10 @@
 
 package frc.robot.beluga.arm;
-import com.pathplanner.lib.util.PIDConstants;
-import com.revrobotics.*;
-import com.revrobotics.CANSparkBase.ControlType;
+import org.littletonrobotics.junction.Logger;
 
+import com.revrobotics.*;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import frc.robot.Constants;
 import frc.robot.wmlib2j.util.Builder;
 
@@ -17,7 +17,6 @@ public class IO_ArmReal implements IO_ArmBase{
     private RelativeEncoder motorTwoEncoder;
 
     private PIDController armPID;
-
     private double setpointPosition;
 
     public IO_ArmReal(){
@@ -46,26 +45,40 @@ public class IO_ArmReal implements IO_ArmBase{
     */
     @Override
     public void updateInputs(ArmInputs inputs){
-        inputs.motorOnePosition = getMotorOnePosition();
-        inputs.motorTwoPosition = motorTwoEncoder.getPosition() * 360 - 19.5;
+        inputs.motorOnePositionDegrees = convertToDegrees(motorOneEncoder.getPosition());
+        inputs.motorTwoPositionDegrees = convertToDegrees(motorTwoEncoder.getPosition());
         inputs.setpointPosition = setpointPosition;
         inputs.isAtSetpoint = Math.abs(motorOneEncoder.getPosition() - setpointPosition) < 0.1;
+
+        Mechanism2d mechanism = new Mechanism2d(3, 3);
+        Logger.recordOutput("armMechanism", mechanism);
+
     }
 
-    private double getMotorOnePosition(){
-        return motorOneEncoder.getPosition() * 360 - 19.5;
+    /**
+     * Converts the input value to degrees and applies the arm offset.
+     * @param  input	The input value to be converted
+     * @return         The converted value in degrees with arm offset applied.
+    */
+    private double convertToDegrees(double input){
+        return motorOneEncoder.getPosition() * 360 - Constants.Beluga.ARM_OFFSET_DEGREES;
     }
 
+    /**
+     * Updates the PID controller with the new setpoint position.
+     * @param  setpointPosition  The new setpoint position for the PID controller
+    */
     @Override
     public void updatePID(double setpointPosition){
         this.setpointPosition = setpointPosition;
         motorOne.set(
-            armPID.calculate(getMotorOnePosition(), setpointPosition)
+            armPID.calculate(convertToDegrees(motorOneEncoder.getPosition()), setpointPosition)
         );
-        //motorOnePID.setReference(setpointPosition, ControlType.kPosition);
-        //motorTwoPID.setReference(setpointPosition, ControlType.kPosition);
     }
 
+    /**
+     * Stops the arm motors.
+    */
     @Override
     public void stop(){
         updatePID(0.0);
