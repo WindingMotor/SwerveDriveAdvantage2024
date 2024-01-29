@@ -58,7 +58,7 @@ public class IO_ArmReal implements IO_ArmBase{
     /**
      * Converts the input value to degrees and applies the arm offset.
      * @param  input	The input value to be converted
-     * @return         The converted value in degrees with arm offset applied.
+     * @return         The converted value in degrees with arm offset applied
     */
     private double convertToDegrees(double input){
         return motorOneEncoder.getPosition() * 360 - Constants.Beluga.ARM_OFFSET_DEGREES;
