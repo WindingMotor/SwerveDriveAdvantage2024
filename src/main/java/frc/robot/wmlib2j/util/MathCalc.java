@@ -180,3 +180,5 @@ public class MathCalc{
         return new Prediction(rpm, angle);
     }
 }
+
+// https://www.desmos.com/calculator/on4xzwtdwz
