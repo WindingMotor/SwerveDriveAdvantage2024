@@ -1,9 +1,10 @@
 
 package frc.robot.beluga.arm;
 import org.littletonrobotics.junction.Logger;
-
-import com.revrobotics.*;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import frc.robot.Constants;
 import frc.robot.wmlib2j.util.Builder;
@@ -19,9 +20,12 @@ public class IO_ArmReal implements IO_ArmBase{
     private PIDController armPID;
     private double setpointPosition;
 
+
+    private SlewRateLimiter slewRate;
+
     public IO_ArmReal(){
-        motorOne = Builder.createNeo(Constants.Beluga.ARM_MOTOR_LEAD_ID, Constants.Beluga.ARM_MOTOR_LEAD_INVERTED, 30);
-        motorTwo = Builder.setNeoFollower(motorOne, Builder.createNeo(Constants.Beluga.ARM_MOTOR_FOLLOWER_ID, Constants.Beluga.ARM_MOTOR_FOLLOWER_INVERTED, 30));
+        motorOne = Builder.createNeo(Constants.Beluga.ARM_MOTOR_LEAD_ID, Constants.Beluga.ARM_MOTOR_LEAD_INVERTED, 25);
+        motorTwo = Builder.setNeoFollower(motorOne, Builder.createNeo(Constants.Beluga.ARM_MOTOR_FOLLOWER_ID, Constants.Beluga.ARM_MOTOR_FOLLOWER_INVERTED, 25));
 
         Builder.configureIdleMode(motorOne, true);
         Builder.configureIdleMode(motorTwo, true);
@@ -32,11 +36,13 @@ public class IO_ArmReal implements IO_ArmBase{
         armPID = new PIDController(Constants.Beluga.ARM_MOTORS_P, Constants.Beluga.ARM_MOTORS_I, Constants.Beluga.ARM_MOTORS_D);
 
 
-        //Builder.configurePIDController(motorOnePID, false, new PIDConstants(Constants.Beluga.ARM_MOTORS_P, Constants.Beluga.ARM_MOTORS_I, Constants.Beluga.ARM_MOTORS_D));
+        //Builder.configurePIDController(motorOnePID, false, new PIDConstants(Constant s.Beluga.ARM_MOTORS_P, Constants.Beluga.ARM_MOTORS_I, Constants.Beluga.ARM_MOTORS_D));
         //Builder.configurePIDController(motorTwoPID, false, new PIDConstants(Constants.Beluga.ARM_MOTORS_P, Constants.Beluga.ARM_MOTORS_I, Constants.Beluga.ARM_MOTORS_D));
         
         Builder.configureIdleMode(motorOne, false);
         Builder.configureIdleMode(motorTwo, false);
+
+        slewRate = new SlewRateLimiter(Constants.Beluga.ARM_SLEW_RATE);
     }
 
     /**
@@ -52,7 +58,6 @@ public class IO_ArmReal implements IO_ArmBase{
 
         Mechanism2d mechanism = new Mechanism2d(3, 3);
         Logger.recordOutput("armMechanism", mechanism);
-
     }
 
     /**
@@ -72,7 +77,7 @@ public class IO_ArmReal implements IO_ArmBase{
     public void updatePID(double setpointPosition){
         this.setpointPosition = setpointPosition;
         motorOne.set(
-            armPID.calculate(convertToDegrees(motorOneEncoder.getPosition()), setpointPosition)
+            slewRate.calculate(armPID.calculate(convertToDegrees(motorOneEncoder.getPosition()), setpointPosition))
         );
     }
 
@@ -82,6 +87,11 @@ public class IO_ArmReal implements IO_ArmBase{
     @Override
     public void stop(){
         updatePID(0.0);
+    }
+
+    @Override
+    public void setAngle(double angle){
+        setpointPosition = angle;
     }
 
 }

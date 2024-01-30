@@ -8,7 +8,7 @@ public class SUB_Arm extends SubsystemBase{
 
     private final IO_ArmBase io;
 
-    private final ArmInputsAutoLogged inputs = new ArmInputsAutoLogged();
+    public final ArmInputsAutoLogged inputs = new ArmInputsAutoLogged();
 
     private ArmState lastState;
     private ArmState state;
@@ -21,12 +21,13 @@ public class SUB_Arm extends SubsystemBase{
 
     @Override
     public void periodic(){
-        // Update the inputs.
+        // Update the inputs
         io.updateInputs(inputs);
 
-        // Process inputs and send to logger.
+        // Process inputs and send to logger
         Logger.processInputs("Arm", inputs);
         
+        // Update the PID
         io.updatePID(state.position);
     }
 
@@ -47,6 +48,10 @@ public class SUB_Arm extends SubsystemBase{
 
     public void stop(){
         io.stop();
+    }
+
+    public void setAngle(double angle){
+        io.setAngle(angle);
     }
 
 }

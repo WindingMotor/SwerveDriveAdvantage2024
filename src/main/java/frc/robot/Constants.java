@@ -87,9 +87,11 @@ public class Constants{
         public static final boolean ARM_MOTOR_LEAD_INVERTED = true;
         public static final boolean ARM_MOTOR_FOLLOWER_INVERTED = true;
 
-        public static final double ARM_MOTORS_P = 0.01;
-        public static final double ARM_MOTORS_I = 0.0;
-        public static final double ARM_MOTORS_D = 0.0005;
+        public static final double ARM_MOTORS_P = 0.015;
+        public static final double ARM_MOTORS_I = 0.0001;
+        public static final double ARM_MOTORS_D = 0.0006;
+
+        public static final double ARM_SLEW_RATE = 25; // Smaller slower
 
         public static final double ARM_POSITION_TOLERANCE_DEGREES = 0.25;
         public static final double ARM_OFFSET_DEGREES = 19.0;
@@ -101,11 +103,12 @@ public class Constants{
         public static final boolean SHOOTER_MOTOR_LEFT_INVERTED = false;
         public static final boolean SHOOTER_MOTOR_RIGHT_INVERTED = true;
 
-        public static final double SHOOTER_MOTORS_P = 0.001;
+        // 6e-5
+        public static final double SHOOTER_MOTORS_P = 0.00065; 
         public static final double SHOOTER_MOTORS_I = 0.0;
-        public static final double SHOOTER_MOTORS_D = 0.0;
+        public static final double SHOOTER_MOTORS_D = 0.00005;
         public static final double SHOOTER_MOTORS_IZ = 0.0005;
-        public static final double SHOOTER_MOTORS_FF = 0.0005;
+        public static final double SHOOTER_MOTORS_FF = 0.00018; 
 
         public static final double SHOOTER_SPEED_TOLERANCE_RPM = 3.0;
 
@@ -115,7 +118,18 @@ public class Constants{
         public static final int INDEXER_MOTOR_ID = 11;
  
         // Indexer
-        public static final int INTAKE_MOTOR_ID = 88;
+        public static final int INTAKE_MOTOR_ID = 31;
+
+        // Sensor IDs
+        public static final int INTAKE_INITAL_SENSOR_ID = 0;
+        public static final int INTAKE_FINAL_SENSOR_ID = 1;
+
+        public static final int INDEXER_INITAL_SENSOR_ID = 2;
+        public static final int INDEXER_FINAL_SENSOR_ID = 3;
+
+        public static final int SENSOR_TOLERANCE_MAX_CENTIMETERS = 12;
+        public static final int SENSOR_TOLERANCE_MIN_CENTIMETERS = 8;
+
 
         /*
             Motor IDs
@@ -124,6 +138,9 @@ public class Constants{
             11 indexer
             12-13 shooter
         */
+
+
+        
     }
 
     public static class Arduino{
@@ -150,13 +167,19 @@ public class Constants{
 
     public static class States{
 
+        public enum ShooterMode{
+            SPEAKER,
+            AMP,
+            DYNAMIC
+        }
+
         public enum ShooterState{
             OFF(0, "OFF"), // No motors running
             IDLE(2000, "IDLE"), // Shooter running at lower rpm but ready to spin up
             SPEAKER(3500, "SPEAKER"), // Shooter running at constant rpm for speaker scoring
-            AMP(4500, "SPEAKER"), // Shooter running at constant rpm for direct amp scoring
+            AMP(500, "AMP"), // Shooter running at constant rpm for direct amp scoring
             DYNAMIC(-1.0, "DYNAMIC"), // Shooter auto calculating rpm depending on distance to speaker 
-            DEMO(150, "DEMO"); // Shooter running at constant rpm for demo purposes
+            DEMO(3500, "DEMO"); // Shooter running at constant rpm for demo purposes
 
             public final double rpm;
             public final String name;
@@ -169,12 +192,12 @@ public class Constants{
 
         public enum ArmState{
             OFF(-18, "OFF"), // No motors running
-            IDLE(10.0, "IDLE"), // Arm sitting on right above hard stops and ready to move
+            IDLE(-15, "IDLE"), // Arm sitting on right above hard stops and ready to move
             SPEAKER(55.0, "SPEAKER"), // Arm at position needed for speaker
-            AMP(0, "AMP"), // Arm at position needed for direct amp scoring
+            AMP(96, "AMP"), // Arm at position needed for direct amp scoring,
             DYNAMIC(-1.0, "DYNAMIC"), // Arm calculating position depending on distance to speaker 
             INTAKE(110.0, "INTAKE"), // Arm at position needed for intake pickup
-            DEMO(45.0, "DEMO"); // Arm at position needed for demo purposes
+            DEMO(15, "DEMO"); // Arm at position needed for demo purposes
 
             public final double position;
             public final String name;
@@ -185,25 +208,22 @@ public class Constants{
             }
         }
 
-        public enum SuperStructureStatePosition{
-            OFF(ArmState.OFF, ShooterState.OFF, "Robot has disabled the subsystems"),
-            IDLE(ArmState.IDLE, ShooterState.IDLE, "Robot is idle"), 
-            SPEAKER(ArmState.SPEAKER, ShooterState.SPEAKER, "Robot is in speaker mode"),
-            AMP(ArmState.AMP, ShooterState.AMP, "Robot is in amp mode"), 
-            TARGET(ArmState.DYNAMIC, ShooterState.DYNAMIC, "Robot is in dynamic mode"), 
-            INTAKE(ArmState.INTAKE, ShooterState.IDLE, "Robot is in intake mode"),
-            DEMO(ArmState.DEMO, ShooterState.DEMO, "Robot is in demo mode");
+        public enum ConveyorState{
+            OFF(0.0, 0.0, "OFF"), // No motors running
+            INTAKE(0.9, 0.65, "INTAKE"), // Intake and Indexer running
+            INTAKE_REV(0.9, -0.45, "INTAKE REV"), // Intake and Indexer running backwards
+            SHOOT(0.0, 0.8, "SHOOT"); // Indexer for shooting
 
-            public final ArmState armState;
-            public final ShooterState shooterState;
+            public final double intakeSpeed, indexerSpeed;
             public final String name;
 
-            SuperStructureStatePosition(ArmState armState, ShooterState shooterState, String name) {
-                this.armState = armState;
-                this.shooterState = shooterState;
+            ConveyorState(double intakeSpeed, double indexerSpeed, String name) {
+                this.intakeSpeed = intakeSpeed;
+                this.indexerSpeed = indexerSpeed;
                 this.name = name;
             }
         }
+
     }
 
     public static class Auto{

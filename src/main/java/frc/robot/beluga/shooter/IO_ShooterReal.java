@@ -1,11 +1,9 @@
 
 package frc.robot.beluga.shooter;
 import com.pathplanner.lib.util.PIDConstants;
-import com.revrobotics.*;
-
-import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import com.revrobotics.CANSparkFlex;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkPIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
 import frc.robot.Constants;
 import frc.robot.wmlib2j.util.Builder;
@@ -42,19 +40,13 @@ public class IO_ShooterReal implements IO_ShooterBase {
         rightPID = motorTwo.getPIDController();
 
         Builder.configurePIDController(leftPID, false, new PIDConstants(Constants.Beluga.SHOOTER_MOTORS_P, Constants.Beluga.SHOOTER_MOTORS_I, Constants.Beluga.SHOOTER_MOTORS_D), Constants.Beluga.SHOOTER_MOTORS_IZ, Constants.Beluga.SHOOTER_MOTORS_FF);
+        Builder.configurePIDController(rightPID, false, new PIDConstants(Constants.Beluga.SHOOTER_MOTORS_P, Constants.Beluga.SHOOTER_MOTORS_I, Constants.Beluga.SHOOTER_MOTORS_D), Constants.Beluga.SHOOTER_MOTORS_IZ, Constants.Beluga.SHOOTER_MOTORS_FF);
         
         motorOneEncoder = motorOne.getEncoder();
         motorTwoEncoder = motorTwo.getEncoder();
 
         backLimitSwitch = new DigitalInput(Constants.Beluga.SHOOTER_BACK_LIMIT_SWITCH);
 
-        // TESTING PID coefficients
-        kP = 6e-5; 
-        kI = 0;
-        kD = 0; 
-        kIz = 0; 
-        kFF = 0.000015; 
-        maxRPM = 5700;
     }
 
     /**
@@ -78,9 +70,8 @@ public class IO_ShooterReal implements IO_ShooterBase {
     @Override
     public void updatePID(double setpointRPM){
         this.setpointRPM = setpointRPM;
-
         leftPID.setReference(setpointRPM, CANSparkFlex.ControlType.kVelocity);
-        rightPID.setReference(setpointRPM, CANSparkFlex.ControlType.kVelocity);
+        rightPID.setReference(setpointRPM + setpointRPM * 0.12, CANSparkFlex.ControlType.kVelocity);
     }
 
     /**
@@ -89,6 +80,11 @@ public class IO_ShooterReal implements IO_ShooterBase {
     @Override
     public void stop(){
         updatePID(0.0);
+    }
+
+    @Override
+    public void setRPM(double rpm){
+        updatePID(rpm);
     }
     
     /**

@@ -156,28 +156,25 @@ public class MathCalc{
     }
 
     /**
-     * Calculates the required launch angle and RPM to hit a static target.
-     * @return A string describing the required angle in degrees and RPM.
+     * Calculate the RPM required for hiting the target based on the current angle and distance to the target:  https://www.desmos.com/calculator/vu2iw2ssbj.
+     * @param  currentAngle     The current angle of the projectile motion
+     * @param  distanceToTarget The distance to the target
+     * @return                  The calculated required RPM to hit the target.
+     * @author                  Dustin B
     */
-    public static Prediction calculateProjectileMotion(double targetDistance, double targetHeight){
+    public static double calculateRPM(double currentAngle, double distanceToTarget){
 
-        final double g = 9.81; // gravity in m/s^2
-        final double v0 = 60 * Math.PI * 2 / 60; // initial velocity in m/s
-        final double h = targetHeight; // height of target in m
-        final double d = targetDistance; // distance to target in m
-    
-        // Compute time of flight using quadratic formula
-        double discriminant = Math.pow(v0, 2) - 4 * g * h;
-        if (discriminant < 0) {
-            throw new IllegalArgumentException("Target is too high");
-        }
-        double t = (-v0 + Math.sqrt(discriminant)) / (2 * g);
-    
-        // Compute required wheel RPM and launch angle
-        double rpm = 60 * Math.sqrt(2 * h / g);
-        double angle = Math.toDegrees(Math.atan(Math.sqrt(2 * h / g)));
-    
-        return new Prediction(rpm, angle);
+        double g = -1/2 * 9.8 * Math.pow(distanceToTarget, 2);
+
+	    double den1 = Math.pow(Math.PI * 2 * 0.05 * 1/60, 2) * Math.pow(Math.cos(currentAngle), 2);
+
+	    double den2 = 2.2 - (0.45 + 0.47 * Math.sin(currentAngle)) - distanceToTarget * Math.tan(currentAngle);
+
+	    double temp = g / den1; 
+
+	    temp = temp / den2; 
+
+	    return Math.sqrt(temp);
     }
 }
 

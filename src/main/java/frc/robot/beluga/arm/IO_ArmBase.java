@@ -1,8 +1,6 @@
 package frc.robot.beluga.arm;
 import org.littletonrobotics.junction.AutoLog;
 
-import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
-
 public interface IO_ArmBase {
     
     @AutoLog
@@ -27,6 +25,8 @@ public interface IO_ArmBase {
     void updatePID(double newSetpoint);
     
     void stop();
+
+    public void setAngle(double angle);
 
 }
     

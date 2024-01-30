@@ -32,6 +32,8 @@ public interface IO_ShooterBase{
 
     void stop();
 
+    void setRPM(double rpm);
+
     boolean isUpToSpeed();
 
 }
