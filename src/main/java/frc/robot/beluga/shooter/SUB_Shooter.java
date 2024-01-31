@@ -12,13 +12,15 @@ public class SUB_Shooter extends SubsystemBase{
 
     private ShooterState lastState;
     private ShooterState state;
-    private double rpm;
+    private double setpointRPM;
+    private boolean dynamicMode;
 
     public SUB_Shooter(IO_ShooterBase io){
         this.io = io;
         this.lastState = ShooterState.OFF;
         this.state = ShooterState.OFF;
-        this.rpm = 0.0;
+        this.setpointRPM = 0.0;
+        this.dynamicMode = false;
     }
 
     @Override
@@ -30,14 +32,21 @@ public class SUB_Shooter extends SubsystemBase{
         Logger.processInputs("Shooter", inputs);
 
         // Update the PID based off rpm
-        rpm = state.rpm;
-        io.updatePID(rpm);
+        if(!dynamicMode){
+            setpointRPM = state.rpm;
+        }
+        io.updatePID(setpointRPM);
     }
 
     public void setState(ShooterState newState){
         if(newState != lastState){
             lastState = state;
             state = newState;
+        }
+        if(newState == ShooterState.DYNAMIC){
+            setDynamicMode(true);
+        }else{
+            setDynamicMode(false);
         }
     }
 
@@ -49,12 +58,16 @@ public class SUB_Shooter extends SubsystemBase{
         return lastState;
     }
 
-    public void setRPM(double rpm){
-        this.rpm = rpm; 
+    public void updateSetpointRPM(double newSetpointRPM){
+        this.setpointRPM = newSetpointRPM; 
     }
 
     public void stop(){
         io.stop();
+    }
+
+    private void setDynamicMode(boolean dynamicMode){
+        this.dynamicMode = dynamicMode;
     }
 
 }

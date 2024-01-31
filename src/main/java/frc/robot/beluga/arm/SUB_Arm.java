@@ -13,10 +13,15 @@ public class SUB_Arm extends SubsystemBase{
     private ArmState lastState;
     private ArmState state;
 
+    private boolean dynamicMode;
+
+    private double setpointAngle;
+
     public SUB_Arm(IO_ArmBase io){
         this.io = io;
         state = ArmState.OFF;
         lastState = ArmState.OFF;
+        dynamicMode = false;
     }
 
     @Override
@@ -27,14 +32,22 @@ public class SUB_Arm extends SubsystemBase{
         // Process inputs and send to logger
         Logger.processInputs("Arm", inputs);
         
+        if(!dynamicMode){
+            setpointAngle = state.position;
+        }
         // Update the PID
-        io.updatePID(state.position);
+        io.updatePID(setpointAngle);
     }
 
     public void setState(ArmState newState){
         if(newState != lastState){
             lastState = state;
             state = newState;
+        }
+        if(newState == ArmState.DYNAMIC){
+            setDynamicMode(true);
+        }else{
+            setDynamicMode(false);
         }
     }
 
@@ -50,8 +63,12 @@ public class SUB_Arm extends SubsystemBase{
         io.stop();
     }
 
-    public void setAngle(double angle){
-        io.setAngle(angle);
+    public void updateSetpointAngle(double angle){
+        setpointAngle = angle;
+    }
+
+    public void setDynamicMode(boolean mode){
+        dynamicMode = mode;
     }
 
 }

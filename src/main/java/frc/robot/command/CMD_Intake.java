@@ -27,7 +27,7 @@ public class CMD_Intake extends Command{
   // Called when the command is initially scheduled.
   @Override
   public void initialize(){
-    DriverStation.reportWarning("[init] CMD_Intake Running", false);
+    DriverStation.reportWarning("[init] CMD_Intake running", false);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

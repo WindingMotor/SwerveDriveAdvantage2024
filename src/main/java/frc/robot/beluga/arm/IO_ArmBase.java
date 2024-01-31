@@ -26,7 +26,7 @@ public interface IO_ArmBase {
     
     void stop();
 
-    public void setAngle(double angle);
+    void setAngle(double angle);
 
 }
     

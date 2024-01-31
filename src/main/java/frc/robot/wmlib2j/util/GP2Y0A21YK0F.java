@@ -23,14 +23,6 @@ public class GP2Y0A21YK0F{
     */
     public int getDistanceCentimeters(){
 
-        if(System.currentTimeMillis() <= lastTime + 20){
-            try{
-                Thread.sleep(20);
-            }catch(InterruptedException e){ e.printStackTrace(); }
-        }
-
-        lastTime = System.currentTimeMillis();
-
         double rawVoltage = analogInput.getVoltage();
         int distance = (int)(4800 / (rawVoltage - 20));
 

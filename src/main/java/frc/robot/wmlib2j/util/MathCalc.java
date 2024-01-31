@@ -176,6 +176,10 @@ public class MathCalc{
 
 	    return Math.sqrt(temp);
     }
+
+    public static int random(int min, int max) {
+        return (int)(Math.random() * ((max - min) + 1)) + min;
+    }
 }
 
 // https://www.desmos.com/calculator/on4xzwtdwz

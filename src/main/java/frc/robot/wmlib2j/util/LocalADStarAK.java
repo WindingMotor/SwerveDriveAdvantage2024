@@ -1,5 +1,4 @@
 package frc.robot.wmlib2j.util;
-
 import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.geometry.Translation2d;
 import com.pathplanner.lib.path.GoalEndState;

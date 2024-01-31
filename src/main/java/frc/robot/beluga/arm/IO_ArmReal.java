@@ -20,7 +20,6 @@ public class IO_ArmReal implements IO_ArmBase{
     private PIDController armPID;
     private double setpointPosition;
 
-
     private SlewRateLimiter slewRate;
 
     public IO_ArmReal(){
@@ -93,5 +92,6 @@ public class IO_ArmReal implements IO_ArmBase{
     public void setAngle(double angle){
         setpointPosition = angle;
     }
+
 
 }

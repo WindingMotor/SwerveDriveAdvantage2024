@@ -118,7 +118,7 @@ public class Constants{
         public static final int INDEXER_MOTOR_ID = 11;
  
         // Indexer
-        public static final int INTAKE_MOTOR_ID = 31;
+        public static final int INTAKE_MOTOR_ID = 14;
 
         // Sensor IDs
         public static final int INTAKE_INITAL_SENSOR_ID = 0;

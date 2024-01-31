@@ -23,7 +23,7 @@ public class CMD_Idle extends Command{
   // Called when the command is initially scheduled.
   @Override
   public void initialize(){
-    DriverStation.reportWarning("[init] CMD_Idle", false);
+    DriverStation.reportWarning("[init] CMD_Idle running", false);
     // Stop and idle the robot subsystems
     intexer.setState(Constants.States.ConveyorState.OFF);
     arm.setState(Constants.States.ArmState.IDLE);
