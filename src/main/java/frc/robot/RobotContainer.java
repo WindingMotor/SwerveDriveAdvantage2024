@@ -1,5 +1,11 @@
 
  package frc.robot;
+import com.pathplanner.lib.auto.AutoBuilder;
+
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.States.ShooterMode;
@@ -18,13 +24,14 @@ import frc.robot.wmlib2j.vision.IO_VisionReal;
 import frc.robot.wmlib2j.vision.SUB_Vision;
 import frc.robot.yagsl.IO_SwerveReal;
 import frc.robot.yagsl.SUB_Swerve;
+import swervelib.math.SwerveMath;
+import swervelib.parser.SwerveParser;
 
 public class RobotContainer{
 
     private final CommandXboxController driverController = new CommandXboxController(3);
     private final CommandXboxController operatorController = new CommandXboxController(4);
     // private final CommandJoystick driverSim = new CommandJoystick(0);
-
     
     private final SUB_Vision vision = new SUB_Vision(
         new IO_VisionReal()
@@ -53,10 +60,13 @@ public class RobotContainer{
         configureBindings();
         
         swerve.setDefaultCommand( 
-            swerve.driveJoystick(() -> -driverController.getRawAxis(1) , () -> driverController.getRawAxis(0) , () -> -driverController.getRawAxis(3))
+            swerve.driveJoystick(() -> driverController.getRawAxis(1) , () -> -driverController.getRawAxis(0) , () -> -driverController.getRawAxis(3))
             //swerve.driveJoystick(() -> -driverSim.getRawAxis(4) , () -> -driverSim.getRawAxis(3) , () -> -driverSim.getRawAxis(0))
             //swerve.driveJoystick(() -> -driverSim.getRawAxis(0) , () -> -driverSim.getRawAxis(1) , () -> -driverSim.getRawAxis(2))
         );
+
+        SmartDashboard.putNumber("SWR MTH: ", SwerveMath.calculateMetersPerRotation(Units.inchesToMeters(3.161), 6.12, 1));
+
     }
 
     /**
@@ -74,7 +84,12 @@ public class RobotContainer{
             ShooterMode.SPEAKER, () -> operatorController.a().getAsBoolean()
         ));
 
-        operatorController.b().onTrue(new CMD_Idle(intexer, arm, shooter));
+        //operatorController.b().onTrue(new CMD_Idle(intexer, arm, shooter));
+
+       operatorController.b().onTrue(swerve.driveToPose(
+        new Pose2d(2.30, 5.37, Rotation2d.fromDegrees(180))
+       ));
+    
     }
 
     /**
@@ -82,6 +97,6 @@ public class RobotContainer{
      * @return The autonomous command
     */
     public Command getAutonomousCommand(){
-        return swerve.getAutonomousCommand("Test", true);
+        return AutoBuilder.buildAuto("Test_Auto");
     }
 }

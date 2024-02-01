@@ -228,19 +228,41 @@ public class Constants{
 
     public static class Auto{
 
-        public enum Poses{
-            BLU_SPEAKER(new Pose2d(1.25, 5.5, Rotation2d.fromDegrees(0))),
-            BLU_AMP(new Pose2d(1.25, 5.5, Rotation2d.fromDegrees(90))),
-            RED_SPEAKER(new Pose2d(1.25, 5.5, Rotation2d.fromDegrees(180))),
-            RED_AMP(new Pose2d(1.25, 5.5, Rotation2d.fromDegrees(90)));
+        public static final double MAX_VELOCITY_MPS = 1.5;
+        public static final double MAX_ACCELERATION_MPS_SQ = 2.0;
+        
+        public static final double MAX_ANGULAR_VELOCITY_RADS = 360;
+        public static final double MAX_ANGULAR_VELOCITY_RADS_SQ = 540;
+
+        public enum ScoringPoses{
+            BLU_SPEAKER(new Pose2d(1.5, 5.5, Rotation2d.fromDegrees(180))),
+            RED_SPEAKER(new Pose2d(12.0, 5.5, Rotation2d.fromDegrees(180))),
+
+            BLU_AMP(new Pose2d(1.85, 7.75, Rotation2d.fromDegrees(90))),
+            RED_AMP(new Pose2d(15.0, 14.75, Rotation2d.fromDegrees(90)));
         
             public final Pose2d pose;
         
-            Poses(Pose2d pose){
+            ScoringPoses(Pose2d pose){
                 this.pose = pose;
             }
         }
         
+        public enum NotePoses{
+            BLU_TOP(new Pose2d(2.9, 7.0, Rotation2d.fromDegrees(0))),
+            BLU_MIDDLE(new Pose2d(2.9, 5.5, Rotation2d.fromDegrees(0))),
+            BLU_BOTTOM(new Pose2d(2.9, 4.1, Rotation2d.fromDegrees(0))),
+    
+            RED_TOP(new Pose2d(13.67, 7.0, Rotation2d.fromDegrees(0))),
+            RED_MIDDLE(new Pose2d(13.67, 5.5, Rotation2d.fromDegrees(0))),
+            RED_BOTTOM(new Pose2d(13.67, 4.1, Rotation2d.fromDegrees(0)));
+        
+            public final Pose2d pose;
+        
+            NotePoses(Pose2d pose){
+                this.pose = pose;
+            }
+        }
         
     }
 

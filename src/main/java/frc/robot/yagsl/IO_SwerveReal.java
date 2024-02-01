@@ -90,7 +90,8 @@ public class IO_SwerveReal implements IO_SwerveBase{
         return swerveDrive.getPose();
     }
 
-    private void resetOdometry(Pose2d pose){
+    @Override
+    public void resetOdometry(Pose2d pose){
         swerveDrive.resetOdometry(pose);
     }
 
@@ -102,7 +103,8 @@ public class IO_SwerveReal implements IO_SwerveBase{
         swerveDrive.setChassisSpeeds(chassisSpeeds);
     }
 
-    private Rotation2d getHeading(){
+    @Override
+    public Rotation2d getHeading(){
         // return swerveDrive.getYaw();
         return getPose().getRotation();
     }
@@ -130,18 +132,6 @@ public class IO_SwerveReal implements IO_SwerveBase{
     @Override
     public void updateOdometry(){
         swerveDrive.updateOdometry();
-    }
-
-    @Override
-    public Command getAutonomousCommand(String pathName, boolean resetPose){
-        PathPlannerPath path = PathPlannerPath.fromPathFile(pathName);
-        if(resetPose){ 
-            resetOdometry(
-                new Pose2d(path.getPoint(0).position, getHeading())
-                //path.getPoint(0).rotationTarget.getTarget()
-            );
-        }
-        return AutoBuilder.followPath(path);
     }
 
 }

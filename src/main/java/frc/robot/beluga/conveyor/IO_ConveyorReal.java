@@ -20,11 +20,11 @@ public class IO_ConveyorReal implements IO_ConveyorBase{
         intakeMotor = Builder.createNeo(Constants.Beluga.INTAKE_MOTOR_ID, false, 35);
         indexerMotor = Builder.createNeo(Constants.Beluga.INDEXER_MOTOR_ID, false, 15);
 
-        intakeInitalSensor = new IRBeamBreak(3);
-        intakeFinalSensor = new IRBeamBreak(2);
+        intakeInitalSensor = new IRBeamBreak(6);
+        intakeFinalSensor = new IRBeamBreak(5);
 
-        idexerInitalSensor = new IRBeamBreak(1);
-        indexerFinalSensor = new IRBeamBreak(0);
+        idexerInitalSensor = new IRBeamBreak(4);
+        indexerFinalSensor = new IRBeamBreak(3);
     }
 
     /**

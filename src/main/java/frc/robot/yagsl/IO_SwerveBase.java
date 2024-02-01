@@ -38,6 +38,8 @@ public interface IO_SwerveBase{
 
     void setupPathPlanner(SUB_Swerve subsystem);
 
-    Command getAutonomousCommand(String pathName, boolean resetPose);
+    void resetOdometry(Pose2d pose);
+
+    Rotation2d getHeading();
 
 }

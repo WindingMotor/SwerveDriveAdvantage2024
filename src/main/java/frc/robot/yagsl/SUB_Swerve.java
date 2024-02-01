@@ -1,8 +1,8 @@
 
 package frc.robot.yagsl;
+import java.util.Optional;
 import java.util.function.DoubleSupplier;
 import org.littletonrobotics.junction.Logger;
-
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
@@ -11,11 +11,14 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.Auto.Poses;
-
+import frc.robot.Constants;
 public class SUB_Swerve extends SubsystemBase{
 
     private final IO_SwerveBase io;
@@ -66,28 +69,48 @@ public class SUB_Swerve extends SubsystemBase{
           });
     }
 
-    public Command driveToPose(Poses pose){
+    public Command driveToPose(Pose2d pose){
 
+        Logger.recordOutput("Drive To Pose", pose);
         Command pathfindingCommand = AutoBuilder.pathfindToPose(
-            pose.pose,
+            pose,
             new PathConstraints(
-                6.0,
-                5.0,
-                Units.degreesToRadians(540),
-                Units.degreesToRadians(720)
+                1,
+                1.5,
+                Units.degreesToRadians(350), // 540
+                Units.degreesToRadians(540) // 720
             )
         );
-
         return pathfindingCommand;
     }
 
-
-    public Command getAutonomousCommand(String name, boolean setOdomToStart){
-        //return io.getAutonomousCommand(name, setOdomToStart);
-        return new SequentialCommandGroup(
-            io.getAutonomousCommand(name, setOdomToStart)
-            //drivePath()
-        );
+    public Command driveToSpeaker(){
+        Optional<Alliance> alliance = DriverStation.getAlliance();
+        if(alliance.isPresent() && alliance.get() == Alliance.Blue){
+            return driveToPose(Constants.Auto.ScoringPoses.BLU_SPEAKER.pose);
+        }else if(alliance.isPresent() && alliance.get() == Alliance.Red){
+            return driveToPose(Constants.Auto.ScoringPoses.RED_SPEAKER.pose);
+        }
+        return new PrintCommand("[SUB_Swerve] No Alliance Detected!");
     }
 
+    public Command driveToAmp(){
+        Optional<Alliance> alliance = DriverStation.getAlliance();
+        if(alliance.isPresent() && alliance.get() == Alliance.Blue){
+            return driveToPose(Constants.Auto.ScoringPoses.BLU_AMP.pose);
+        }else if(alliance.isPresent() && alliance.get() == Alliance.Red){
+            return driveToPose(Constants.Auto.ScoringPoses.RED_AMP.pose);
+        }
+        return new PrintCommand("[SUB_Swerve] No Alliance Detected!");
+    }
+
+    public Command drivePath(String name, boolean setOdomToStart){
+        PathPlannerPath path = PathPlannerPath.fromPathFile(name);
+        if(setOdomToStart){ 
+            io.resetOdometry(
+                new Pose2d(path.getPoint(0).position, io.getHeading())
+            );
+        }
+        return AutoBuilder.followPath(path);
+    }
 }

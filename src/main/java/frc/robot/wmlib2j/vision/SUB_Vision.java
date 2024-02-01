@@ -116,7 +116,6 @@ public class SUB_Vision extends SubsystemBase {
             // Get the distance from the camera to the target
             distance = (targetHeight - cameraHeight) / Math.tan(cameraPitch - targetPitch);
         }
-
         return distance;
     }
 
