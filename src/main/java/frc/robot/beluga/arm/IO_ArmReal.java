@@ -29,78 +29,47 @@ public class IO_ArmReal implements IO_ArmBase{
     private CANSparkMax motorOne;       
     private CANSparkMax motorTwo;         
     
- //   private RelativeEncoder motorOneEncoder;
-   // private RelativeEncoder motorTwoEncoder;
-
-    private PIDController armPID;
-    //private SimpleMotoArmFeedforwardrFeedforward feedforward;
-
-
-    private double setpointPosition;
-
-    private SparkPIDController armSparkPID;
-
     private SparkAbsoluteEncoder motorOneAbsoluteEncoder;
 
-    //private ProfiledPIDController armPIDController;
-
-    private ArmFeedforward armFeedforward;
+    private ProfiledPIDController pid;
 
     private SlewRateLimiter slew;
 
-    private double currentArmAngle;
+    private double setpointPosition;
+
+    private double currentAngle;
 
     private boolean isOnLowSide;
 
+
+
     public IO_ArmReal(){
 
-        currentArmAngle = 0.0; 
+        currentAngle = 0.0; 
 
         isOnLowSide = true;
 
         motorOne = Builder.createNeo(Constants.Beluga.ARM_MOTOR_LEAD_ID, Constants.Beluga.ARM_MOTOR_LEAD_INVERTED, 25);
         motorTwo = Builder.setNeoFollower(motorOne, Builder.createNeo(Constants.Beluga.ARM_MOTOR_FOLLOWER_ID, Constants.Beluga.ARM_MOTOR_FOLLOWER_INVERTED, 25));
 
-       // motorOneEncoder = Builder.createEncoder(motorOne, 0.0105, 0.0105);
-       // motorTwoEncoder = Builder.createEncoder(motorTwo, 0.0105, 0.0105);
-
-  
-       armPID = new PIDController(Constants.Beluga.ARM_MOTORS_P, Constants.Beluga.ARM_MOTORS_I, Constants.Beluga.ARM_MOTORS_D);
-        //feedforward = new SimpleMotorFeedforward(0.98, 0.03);
-        //feedforward = new ArmFeedforward(setpointPosition, setpointPosition, setpointPosition)
-
-        //Builder.configurePIDController(motorOnePID, false, new PIDConstants(Constant s.Beluga.ARM_MOTORS_P, Constants.Beluga.ARM_MOTORS_I, Constants.Beluga.ARM_MOTORS_D));
-        //Builder.configurePIDController(motorTwoPID, false, new PIDConstants(Constants.Beluga.ARM_MOTORS_P, Constants.Beluga.ARM_MOTORS_I, Constants.Beluga.ARM_MOTORS_D));
-        
         Builder.configureIdleMode(motorOne, false);
         Builder.configureIdleMode(motorTwo, false);
 
+        pid = new ProfiledPIDController(
+            Constants.Beluga.ARM_MOTORS_P,
+            Constants.Beluga.ARM_MOTORS_I,
+            Constants.Beluga.ARM_MOTORS_D,
+            new TrapezoidProfile.Constraints(Constants.Beluga.ARM_MAX_VELOCITY, Constants.Beluga.ARM_MAX_ACCELERATION)
+        );
+
         slew = new SlewRateLimiter(Constants.Beluga.ARM_SLEW_RATE_POS);
 
-        //Builder.configurePIDController(armSparkPID, false, new PIDConstants(Constants.Beluga.ARM_MOTORS_P, Constants.Beluga.ARM_MOTORS_I, Constants.Beluga.ARM_MOTORS_D));
-
-
-        armSparkPID = motorOne.getPIDController();
-        
         motorOneAbsoluteEncoder = motorOne.getAbsoluteEncoder(Type.kDutyCycle);
-
         motorOneAbsoluteEncoder.setPositionConversionFactor(0.3 * 360);
         motorOneAbsoluteEncoder.setVelocityConversionFactor(0.3 * 360);
         motorOneAbsoluteEncoder.setZeroOffset(0);
-
-        
-        armSparkPID.setFeedbackDevice(motorOneAbsoluteEncoder);
-        armSparkPID.setPositionPIDWrappingEnabled(false);
-        armSparkPID.setP(0.05);
-        
         
         SmartDashboard.putNumber("armAngle", 0.0);
-
-
-        //armFeedforward = new ArmFeedforward(0.0, 1.22, 0.03);
-       // armFeedforward = new ArmFeedforward(0.0, 1.22, 0.03, 0.00174);
-
-       // armPIDController = new ProfiledPIDController(Constants.Beluga.ARM_MOTORS_P, Constants.Beluga.ARM_MOTORS_I, Constants.Beluga.ARM_MOTORS_D, new TrapezoidProfile.Constraints(Constants.Beluga.ARM_MAX_VELOCITY, Constants.Beluga.ARM_MAX_ACCLERATION));
     }
 
     /**
@@ -110,44 +79,45 @@ public class IO_ArmReal implements IO_ArmBase{
     @Override
     public void updateInputs(ArmInputs inputs){
 
+        currentAngle = motorOneAbsoluteEncoder.getPosition();
 
-        currentArmAngle = motorOneAbsoluteEncoder.getPosition();
+        // Check if the arm has passed the wrap-around point, does not work!
+        if (currentAngle >   106 && isOnLowSide) {
+            isOnLowSide = false;
+        } else if (currentAngle <   5 && !isOnLowSide) {
+            isOnLowSide = true;
+        }
 
-    // Check if the arm has passed the wrap-around point while moving in the opposite direction
-    if (currentArmAngle >   106 && isOnLowSide) {
-        isOnLowSide = false;
-    } else if (currentArmAngle <   5 && !isOnLowSide) {
-        isOnLowSide = true;
-    }
+        Logger.recordOutput("Is On Low Side", isOnLowSide);
 
-        SmartDashboard.putBoolean("ISONLOWSIDE", isOnLowSide);
-
-        inputs.motorOnePositionDegrees = currentArmAngle;
-        inputs.motorTwoPositionDegrees = -1.0;
+        inputs.motorOnePositionDegrees = currentAngle;
+        inputs.motorTwoPositionDegrees = currentAngle;
         inputs.setpointPosition = setpointPosition;
-       // inputs.isAtSetpoint = Math.abs(motorOneEncoder.getPosition() - setpointPosition) < 0.1;
+        // inputs.isAtSetpoint = Math.abs(motorOneEncoder.getPosition() - setpointPosition) < 0.1;
 
         Mechanism2d mechanism = new Mechanism2d(3, 3);
         Logger.recordOutput("armMechanism", mechanism);
     }
 
     /**
-     * Converts the input value to degrees and applies the arm offset.
+     * DEPRECATED Converts the input value to degrees and applies the arm offset.
      * @param  input	The input value to be converted
      * @return         The converted value in degrees with arm offset applied
     */
-   // private double convertToDegrees(double input){
-  //      return motorOneEncoder.getPosition() * 360 - Constants.Beluga.ARM_OFFSET_DEGREES;
-  //  }
+    /* DEPRECATED
+    private double convertToDegrees(double input){
+        return motorOneEncoder.getPosition() * 360 - Constants.Beluga.ARM_OFFSET_DEGREES;
+    }
+    */
 
     /**
      * Updates the PID controller with the new setpoint position.
      * @param  setpointPosition  The new setpoint position for the PID controller
-        */
-        @Override
+    */
+    @Override
     public void updatePID(double setpointPosition){
 
-        /* 
+        /* Live debug code
         double armAngle = SmartDashboard.getNumber("armAngle",  0);
         if(armAngle > 110){
             armAngle = 110;
@@ -155,23 +125,13 @@ public class IO_ArmReal implements IO_ArmBase{
         }
 
         this.setpointPosition = setpointPosition;
-*/
+        */
 
-
-    motorOne.set(
-        slew.calculate(
-           armPID.calculate(currentArmAngle, 25)
-        )
-    );
-
-      //double calculated = -armPIDController.calculate(motorOneAbsoluteEncoder.getPosition(), 25);
-        
-     // motorOne.set(calculated);
-
-     
-        //SmartDashboard.putNumber("ARM NEW SETPOINT", armAngle - Constants.Beluga.ARM_OFFSET_DEGREES);
-
-       // armSparkPID.setReference(15, CANSparkMax.ControlType.kPosition);
+        motorOne.set(
+            slew.calculate(
+                pid.calculate(currentAngle, 25)
+            )
+        );
     }
 
     /**

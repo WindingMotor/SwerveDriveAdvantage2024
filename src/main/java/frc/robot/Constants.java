@@ -104,7 +104,7 @@ public class Constants{
         public static final double ARM_MOTORS_D = 0.0006;
 
         public static final double ARM_MAX_VELOCITY = 0.5;
-        public static final double ARM_MAX_ACCLERATION = 0.5;
+        public static final double ARM_MAX_ACCELERATION = 0.5;
 
         public static final double ARM_SLEW_RATE_POS = 1.0; // Smaller slower
         public static final double ARM_SLEW_RATE_NEG = 0.5; // Smaller slower
