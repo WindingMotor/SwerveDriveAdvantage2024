@@ -24,16 +24,14 @@ public class SUB_Conveyor extends SubsystemBase{
         io.updateInputs(inputs);
 
         // Process inputs and send to logger.
-        Logger.processInputs("Intexer", inputs);
+        Logger.processInputs("Conveyor", inputs);
 
         io.update(state.intakeSpeed, state.indexerSpeed);
     }
 
     public void setState(ConveyorState newState){
-        if(newState != lastState){
-            lastState = state;
-            state = newState;
-        }
+        lastState = state;
+        state = newState;
     }
 
     public ConveyorState getState(){

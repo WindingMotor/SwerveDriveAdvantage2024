@@ -87,24 +87,40 @@ public class Constants{
         public static final boolean ARM_MOTOR_LEAD_INVERTED = true;
         public static final boolean ARM_MOTOR_FOLLOWER_INVERTED = true;
 
+        /* 
+            public static final double ARM_MOTORS_P = 0.015;
+            public static final double ARM_MOTORS_I = 0.0001;
+            public static final double ARM_MOTORS_D = 0.0006;
+        */
+
+        /*
+            public static final double ARM_MOTORS_P = 0.025;
+            public static final double ARM_MOTORS_I = 0.0;
+            public static final double ARM_MOTORS_D = 0.01;
+        */
+
         public static final double ARM_MOTORS_P = 0.015;
         public static final double ARM_MOTORS_I = 0.0001;
         public static final double ARM_MOTORS_D = 0.0006;
 
-        public static final double ARM_SLEW_RATE = 25; // Smaller slower
+        public static final double ARM_MAX_VELOCITY = 0.5;
+        public static final double ARM_MAX_ACCLERATION = 0.5;
+
+        public static final double ARM_SLEW_RATE_POS = 1.0; // Smaller slower
+        public static final double ARM_SLEW_RATE_NEG = 0.5; // Smaller slower
 
         public static final double ARM_POSITION_TOLERANCE_DEGREES = 0.25;
-        public static final double ARM_OFFSET_DEGREES = 19.0;
+        public static final double ARM_OFFSET_DEGREES = 22.92;
 
         // Shooter
-        public static final int SHOOTER_MOTOR_LEFT_ID = 12;
-        public static final int SHOOTER_MOTOR_RIGHT_ID = 13;
+        public static final int SHOOTER_MOTOR_BOTTOM_ID = 12;
+        public static final int SHOOTER_MOTOR_TOP_ID = 13;
 
-        public static final boolean SHOOTER_MOTOR_LEFT_INVERTED = false;
-        public static final boolean SHOOTER_MOTOR_RIGHT_INVERTED = true;
+        public static final boolean SHOOTER_MOTOR_BOTTOM_INVERTED = true; 
+        public static final boolean SHOOTER_MOTOR_TOP_INVERTED = true; // true normal shoot, false amp
 
         // 6e-5
-        public static final double SHOOTER_MOTORS_P = 0.00065; 
+        public static final double SHOOTER_MOTORS_P = 0.00068; 
         public static final double SHOOTER_MOTORS_I = 0.0;
         public static final double SHOOTER_MOTORS_D = 0.00005;
         public static final double SHOOTER_MOTORS_IZ = 0.0005;
@@ -121,11 +137,11 @@ public class Constants{
         public static final int INTAKE_MOTOR_ID = 14;
 
         // Sensor IDs
-        public static final int INTAKE_INITAL_SENSOR_ID = 0;
-        public static final int INTAKE_FINAL_SENSOR_ID = 1;
+        public static final int INTAKE_INITAL_SENSOR_ID = 4;
+        public static final int INTAKE_FINAL_SENSOR_ID = 5;
 
         public static final int INDEXER_INITAL_SENSOR_ID = 2;
-        public static final int INDEXER_FINAL_SENSOR_ID = 3;
+        public static final int INDEXER_FINAL_SENSOR_ID = 1;
 
         public static final int SENSOR_TOLERANCE_MAX_CENTIMETERS = 12;
         public static final int SENSOR_TOLERANCE_MIN_CENTIMETERS = 8;
@@ -139,8 +155,6 @@ public class Constants{
             12-13 shooter
         */
 
-
-        
     }
 
     public static class Arduino{
@@ -165,65 +179,76 @@ public class Constants{
         }
     }
 
+    // States of the robot subsystems
     public static class States{
 
+        // Modes of the shooter
         public enum ShooterMode{
             SPEAKER,
             AMP,
             DYNAMIC
         }
 
+        // Speeds of the shooter for the various modes
         public enum ShooterState{
-            OFF(0, "OFF"), // No motors running
-            IDLE(2000, "IDLE"), // Shooter running at lower rpm but ready to spin up
-            SPEAKER(3500, "SPEAKER"), // Shooter running at constant rpm for speaker scoring
-            AMP(500, "AMP"), // Shooter running at constant rpm for direct amp scoring
-            DYNAMIC(-1.0, "DYNAMIC"), // Shooter auto calculating rpm depending on distance to speaker 
-            DEMO(3500, "DEMO"); // Shooter running at constant rpm for demo purposes
+            OFF(0.0, 0.0), 
+            IDLE(3000, 0.0), 
+
+            SPEAKER_1M(3500, 1.0),
+            SPEAKER_2M(3500, 2.0),
+            SPEAKER_3M(3500, 3.0),
+            SPEAKER_4M(3500, 4.0),
+            SPEAKER_5M(3500, 5.0),
+
+
+            AMP(5600, 0.0); 
 
             public final double rpm;
-            public final String name;
-
-            ShooterState(double rpm, String name) {
+            public final double distanceMeters;
+            ShooterState(double rpm, double distanceMeters) {
                 this.rpm = rpm;
-                this.name = name;
+                this.distanceMeters = distanceMeters;
             }
         }
 
+        // Positions of the arm for various modes
         public enum ArmState{
-            OFF(-18, "OFF"), // No motors running
-            IDLE(-15, "IDLE"), // Arm sitting on right above hard stops and ready to move
-            SPEAKER(55.0, "SPEAKER"), // Arm at position needed for speaker
-            AMP(96, "AMP"), // Arm at position needed for direct amp scoring,
-            DYNAMIC(-1.0, "DYNAMIC"), // Arm calculating position depending on distance to speaker 
-            INTAKE(110.0, "INTAKE"), // Arm at position needed for intake pickup
-            DEMO(15, "DEMO"); // Arm at position needed for demo purposes
+            OFF(-18, 0.0), 
+            IDLE(-15, 0.0),
+
+            SPEAKER_1M(55.0, 1.0),
+            SPEAKER_2M(55.0, 2.0),
+            SPEAKER_3M(55.0, 3.0),
+            SPEAKER_4M(55.0, 4.0),
+            SPEAKER_5M(55.0, 5.0),
+
+
+            AMP(84, 0.0), 
+            DYNAMIC(-1.0, 0.0),
+            INTAKE(80.0, 0.0 ); 
 
             public final double position;
-            public final String name;
-
-            ArmState(double position, String name) {
-                this.position = position;
-                this.name = name;
+            public final double distanceMeters;
+            ArmState(double position, double distanceMeters){
+                this.position = position; 
+                this.distanceMeters = distanceMeters;
             }
         }
 
+        // Speeds of conveyor, intake & indexer, for various modes
         public enum ConveyorState{
-            OFF(0.0, 0.0, "OFF"), // No motors running
-            INTAKE(0.9, 0.65, "INTAKE"), // Intake and Indexer running
-            INTAKE_REV(0.9, -0.45, "INTAKE REV"), // Intake and Indexer running backwards
-            SHOOT(0.0, 0.8, "SHOOT"); // Indexer for shooting
+            OFF(0.0, 0.0),
+            INTAKE(-1.0, -0.5),
+            EJECT(1.0, 0.45),
+            SHOOT(0.0, -0.8), 
+            AMP(0.0, -0.); 
 
             public final double intakeSpeed, indexerSpeed;
-            public final String name;
-
-            ConveyorState(double intakeSpeed, double indexerSpeed, String name) {
+            ConveyorState(double intakeSpeed, double indexerSpeed){
                 this.intakeSpeed = intakeSpeed;
                 this.indexerSpeed = indexerSpeed;
-                this.name = name;
             }
         }
-
     }
 
     public static class Auto{

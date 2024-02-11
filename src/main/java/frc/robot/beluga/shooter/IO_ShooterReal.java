@@ -5,6 +5,7 @@ import com.revrobotics.CANSparkFlex;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.wmlib2j.util.Builder;
 
@@ -13,8 +14,8 @@ import frc.robot.wmlib2j.util.Builder;
 */
 public class IO_ShooterReal implements IO_ShooterBase {
 
-    private CANSparkFlex motorOne;       
-    private CANSparkFlex motorTwo;         
+    private CANSparkFlex motorBottom;       
+    private CANSparkFlex motorTop;         
     
     private RelativeEncoder motorOneEncoder;
     private RelativeEncoder motorTwoEncoder;
@@ -30,23 +31,24 @@ public class IO_ShooterReal implements IO_ShooterBase {
     private double setpointRPM;
 
     public IO_ShooterReal(){
-        motorOne = Builder.createVortex(Constants.Beluga.SHOOTER_MOTOR_LEFT_ID, Constants.Beluga.SHOOTER_MOTOR_LEFT_INVERTED, 45);
-        motorTwo = Builder.createVortex(Constants.Beluga.SHOOTER_MOTOR_RIGHT_ID, Constants.Beluga.SHOOTER_MOTOR_RIGHT_INVERTED, 45);
+        motorBottom = Builder.createVortex(Constants.Beluga.SHOOTER_MOTOR_BOTTOM_ID, Constants.Beluga.SHOOTER_MOTOR_BOTTOM_INVERTED, 45);
+        motorTop = Builder.createVortex(Constants.Beluga.SHOOTER_MOTOR_TOP_ID, Constants.Beluga.SHOOTER_MOTOR_TOP_INVERTED, 45);
 
-        Builder.configureIdleMode(motorOne, false);
-        Builder.configureIdleMode(motorTwo, false);
+        Builder.configureIdleMode(motorBottom, false);
+        Builder.configureIdleMode(motorTop, false);
 
-        leftPID = motorOne.getPIDController();
-        rightPID = motorTwo.getPIDController();
+        leftPID = motorBottom.getPIDController();
+        rightPID = motorTop.getPIDController();
 
         Builder.configurePIDController(leftPID, false, new PIDConstants(Constants.Beluga.SHOOTER_MOTORS_P, Constants.Beluga.SHOOTER_MOTORS_I, Constants.Beluga.SHOOTER_MOTORS_D), Constants.Beluga.SHOOTER_MOTORS_IZ, Constants.Beluga.SHOOTER_MOTORS_FF);
         Builder.configurePIDController(rightPID, false, new PIDConstants(Constants.Beluga.SHOOTER_MOTORS_P, Constants.Beluga.SHOOTER_MOTORS_I, Constants.Beluga.SHOOTER_MOTORS_D), Constants.Beluga.SHOOTER_MOTORS_IZ, Constants.Beluga.SHOOTER_MOTORS_FF);
         
-        motorOneEncoder = motorOne.getEncoder();
-        motorTwoEncoder = motorTwo.getEncoder();
+        motorOneEncoder = motorBottom.getEncoder();
+        motorTwoEncoder = motorTop.getEncoder();
 
         backLimitSwitch = new DigitalInput(Constants.Beluga.SHOOTER_BACK_LIMIT_SWITCH);
 
+        SmartDashboard.putNumber("shooterSpeed", 0.0);
     }
 
     /**
@@ -69,9 +71,13 @@ public class IO_ShooterReal implements IO_ShooterBase {
     */
     @Override
     public void updatePID(double setpointRPM){
+
+        double shooterSpeed = SmartDashboard.getNumber("shooterSpeed",  0);
+
+
         this.setpointRPM = setpointRPM;
-        leftPID.setReference(setpointRPM, CANSparkFlex.ControlType.kVelocity);
-        rightPID.setReference(setpointRPM + setpointRPM * 0.12, CANSparkFlex.ControlType.kVelocity);
+        leftPID.setReference(shooterSpeed, CANSparkFlex.ControlType.kVelocity);
+        rightPID.setReference(shooterSpeed /*+ setpointRPM * 0.12*/, CANSparkFlex.ControlType.kVelocity);
     }
 
     /**
@@ -103,6 +109,12 @@ public class IO_ShooterReal implements IO_ShooterBase {
                 && rightVelocity <= setpointRPM + Constants.Beluga.SHOOTER_SPEED_TOLERANCE_RPM;
     
         return isLeftUpToSpeed && isRightUpToSpeed;
+    }
+
+    @Override
+    public void invertMotors(boolean inverted){
+       // motorBottom.setInverted(inverted);
+        motorTop.setInverted(inverted);
     }
 
 }

@@ -6,17 +6,17 @@ import frc.robot.Constants;
 /** An example command that uses an example subsystem. */
 public class CMD_IndexerStop extends Command {
 
-  private final SUB_Conveyor intexer;
+  private final SUB_Conveyor conveyor;
 
-  public CMD_IndexerStop(SUB_Conveyor intexer){
-    this.intexer = intexer;
-    addRequirements(intexer);
+  public CMD_IndexerStop(SUB_Conveyor conveyor){
+    this.conveyor = conveyor;
+    addRequirements(conveyor);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize(){
-      intexer.setState(Constants.States.ConveyorState.OFF);
+    conveyor.setState(Constants.States.ConveyorState.OFF);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -26,7 +26,7 @@ public class CMD_IndexerStop extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted){
-    intexer.stop();
+    conveyor.stop();
   }
 
   // Returns true when the command should end.

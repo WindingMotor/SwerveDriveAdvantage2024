@@ -3,31 +3,28 @@ package frc.robot.command;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
+import frc.robot.Constants.States.ArmState;
 import frc.robot.beluga.arm.SUB_Arm;
 import frc.robot.beluga.conveyor.SUB_Conveyor;
 import frc.robot.beluga.shooter.SUB_Shooter;
 
-public class CMD_Idle extends Command{
+public class CMD_Arm extends Command{
 
-  private final SUB_Conveyor conveyor;
-  private final SUB_Arm arm;
-  private final SUB_Shooter shooter;
+  private SUB_Arm arm;
+  private ArmState state;
 
-  public CMD_Idle(SUB_Conveyor conveyor, SUB_Arm arm, SUB_Shooter shooter){
-    this.conveyor = conveyor;
+  public CMD_Arm(SUB_Arm arm, ArmState state){
     this.arm = arm;
-    this.shooter = shooter;
-    addRequirements(conveyor, arm, shooter);
+    this.state = state;
+    addRequirements(arm);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize(){
-    DriverStation.reportWarning("[init] CMD_Idle running", false);
+    DriverStation.reportWarning("[init] CMD_Arm set new state", false);
     // Stop and idle the robot subsystems
-    conveyor.setState(Constants.States.ConveyorState.OFF);
-    arm.setState(Constants.States.ArmState.IDLE);
-    shooter.setState(Constants.States.ShooterState.IDLE);
+    arm.setState(state);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

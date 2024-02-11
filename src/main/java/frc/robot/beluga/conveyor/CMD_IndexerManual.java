@@ -6,23 +6,23 @@ import frc.robot.Constants;
 /** An example command that uses an example subsystem. */
 public class CMD_IndexerManual extends Command {
 
-  private final SUB_Conveyor intexer;
-  private final boolean run;
+  private final SUB_Conveyor conveyor;
+  private final boolean isReversed;
 
 
-  public CMD_IndexerManual(SUB_Conveyor intexer, boolean run){
-    this.intexer = intexer;
-    this.run = run;
-    addRequirements(intexer);
+  public CMD_IndexerManual(SUB_Conveyor conveyor, boolean isReversed){
+    this.conveyor = conveyor;
+    this.isReversed = isReversed;
+    addRequirements(conveyor);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize(){
-    if(run){
-      intexer.setState(Constants.States.ConveyorState.INTAKE);
+    if(isReversed){
+      conveyor.setState(Constants.States.ConveyorState.EJECT);
     }else{
-      intexer.setState(Constants.States.ConveyorState.INTAKE_REV);
+      conveyor.setState(Constants.States.ConveyorState.INTAKE);
     }
   }
 
@@ -33,7 +33,7 @@ public class CMD_IndexerManual extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted){
-    intexer.stop();
+    conveyor.stop();
   }
 
   // Returns true when the command should end.

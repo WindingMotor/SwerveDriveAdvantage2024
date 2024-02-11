@@ -36,4 +36,6 @@ public interface IO_ShooterBase{
 
     boolean isUpToSpeed();
 
+    void invertMotors(boolean inverted);
+
 }

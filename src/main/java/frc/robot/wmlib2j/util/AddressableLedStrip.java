@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.util.Color;
+import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class AddressableLedStrip extends SubsystemBase{
@@ -21,12 +22,18 @@ public class AddressableLedStrip extends SubsystemBase{
     private int hue;
 
     public AddressableLedStrip(int port, int length){
+
         this.length = length;
+
         ledStrip = new AddressableLED(port);
-        ledStrip.setLength(length);
         ledBuffer = new AddressableLEDBuffer(length);
 
-        state = LEDState.PINK;
+        ledStrip.setLength(ledBuffer.getLength());
+
+        ledStrip.setData(ledBuffer);
+
+        state = LEDState.RAINBOW;
+
         hue = 0;
 
         ledStrip.start();
@@ -34,6 +41,11 @@ public class AddressableLedStrip extends SubsystemBase{
 
     @Override
     public void periodic(){
+
+        if(DriverStation.isDisabled()){
+            solid(Color.kPurple);
+        }else{
+
         switch(state){
             case RAINBOW:
                 rainbow();
@@ -50,11 +62,6 @@ public class AddressableLedStrip extends SubsystemBase{
             case RED:
                 solid(Color.kRed);
                 break;
-
-            case PINK:
-                solid(Color.kPink);
-                break;
-            
             case WHITE:
                 solid(Color.kWhite);
                 break;
@@ -80,7 +87,10 @@ public class AddressableLedStrip extends SubsystemBase{
                 }
                 break;
         }
+    }
+
         ledStrip.setData(ledBuffer);
+
     }
 
     public void setState(LEDState state){

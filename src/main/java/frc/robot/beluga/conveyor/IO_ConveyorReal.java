@@ -17,14 +17,14 @@ public class IO_ConveyorReal implements IO_ConveyorBase{
     private IRBeamBreak indexerFinalSensor;
     
     public IO_ConveyorReal(){
-        intakeMotor = Builder.createNeo(Constants.Beluga.INTAKE_MOTOR_ID, false, 35);
-        indexerMotor = Builder.createNeo(Constants.Beluga.INDEXER_MOTOR_ID, false, 15);
+        intakeMotor = Builder.createNeo(Constants.Beluga.INTAKE_MOTOR_ID, false, 60);
+        indexerMotor = Builder.createNeo(Constants.Beluga.INDEXER_MOTOR_ID, false, 45);
 
-        intakeInitalSensor = new IRBeamBreak(6);
-        intakeFinalSensor = new IRBeamBreak(5);
+        intakeInitalSensor = new IRBeamBreak(Constants.Beluga.INTAKE_INITAL_SENSOR_ID);
+        intakeFinalSensor = new IRBeamBreak(Constants.Beluga.INTAKE_FINAL_SENSOR_ID);
 
-        idexerInitalSensor = new IRBeamBreak(4);
-        indexerFinalSensor = new IRBeamBreak(3);
+        idexerInitalSensor = new IRBeamBreak(Constants.Beluga.INDEXER_INITAL_SENSOR_ID);
+        indexerFinalSensor = new IRBeamBreak(Constants.Beluga.INDEXER_FINAL_SENSOR_ID);
     }
 
     /**
@@ -50,7 +50,7 @@ public class IO_ConveyorReal implements IO_ConveyorBase{
     */
     @Override
     public void update(double intakeSpeed, double indexerSpeed){
-     //   intakeMotor.set(indexerSpeed);  
+        intakeMotor.set(intakeSpeed);  
         indexerMotor.set(indexerSpeed);
     }
 
