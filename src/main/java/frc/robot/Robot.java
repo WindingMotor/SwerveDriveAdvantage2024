@@ -10,12 +10,13 @@ import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
+import org.littletonrobotics.urcl.URCL;
 
 import com.pathplanner.lib.pathfinding.Pathfinding;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.wmlib2j.util.LocalADStarAK;
+import frc.robot.util.LocalADStarAK;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -50,6 +51,7 @@ public class Robot extends LoggedRobot {
     }
 
     // Logger.disableDeterministicTimestamps() // See "Deterministic Timestamps" in the "Understanding Data Flow" page
+    Logger.registerURCL(URCL.startExternal());
     Logger.start(); // Start logging! No more data receivers, replay sources, or metadata values may be added.
 
     //Pathfinding.setPathfinder(new LocalADStarAK());

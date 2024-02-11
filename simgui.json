@@ -1,4 +1,16 @@
 {
+  "HALProvider": {
+    "Addressable LEDs": {
+      "window": {
+        "visible": true
+      }
+    },
+    "DIO": {
+      "window": {
+        "visible": true
+      }
+    }
+  },
   "NTProvider": {
     "types": {
       "/AdvantageKit/RealOutputs/armMechanism": "Mechanism2d",
@@ -9,9 +21,6 @@
     }
   },
   "NetworkTables Info": {
-    "Server": {
-      "open": true
-    },
     "visible": true
   }
 }
