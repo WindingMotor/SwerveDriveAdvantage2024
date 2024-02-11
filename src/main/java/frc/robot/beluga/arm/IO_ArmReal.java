@@ -10,6 +10,7 @@ import com.revrobotics.SparkAbsoluteEncoder;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.SparkAbsoluteEncoder.Type;
 
+import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -81,35 +82,57 @@ public class IO_ArmReal implements IO_ArmBase{
 
         currentAngle = motorOneAbsoluteEncoder.getPosition();
 
-        // Check if the arm has passed the wrap-around point, does not work!
-        if (currentAngle >   106 && isOnLowSide) {
-            isOnLowSide = false;
-        } else if (currentAngle <   5 && !isOnLowSide) {
-            isOnLowSide = true;
-        }
+        double simTestAngleInput = 15.0;
 
-        Logger.recordOutput("Is On Low Side", isOnLowSide);
+        Logger.recordOutput("Updated Arm Angle", 
+            updateArmAngle(simTestAngleInput, 100.0).getFirst()
+        );
+
+        Logger.recordOutput("Updated Arm Boolean", 
+            updateArmAngle(simTestAngleInput, 100.0).getSecond()
+        );
 
         inputs.motorOnePositionDegrees = currentAngle;
         inputs.motorTwoPositionDegrees = currentAngle;
         inputs.setpointPosition = setpointPosition;
         // inputs.isAtSetpoint = Math.abs(motorOneEncoder.getPosition() - setpointPosition) < 0.1;
 
-        Mechanism2d mechanism = new Mechanism2d(3, 3);
-        Logger.recordOutput("armMechanism", mechanism);
     }
 
     /**
-     * DEPRECATED Converts the input value to degrees and applies the arm offset.
-     * @param  input	The input value to be converted
-     * @return         The converted value in degrees with arm offset applied
-    */
-    /* DEPRECATED
-    private double convertToDegrees(double input){
-        return motorOneEncoder.getPosition() * 360 - Constants.Beluga.ARM_OFFSET_DEGREES;
-    }
+     * Updates the arm angle based of current absolute encoder position and if its passed the wrap around point. 
+     * @param  absoluteValue	The value of the absolute encoder in degrees
+     * @param  wrapAroundPositionDegrees	The point where the absolute encoder wraps around in degrees
+     * @return         The new arm angle and isOnLowSide boolean to apply in a Pair
+     * @author         Alec
     */
 
+    /**
+     * Updates the arm angle based on the current absolute encoder position and if it's passed the wrap around point. 
+     * @param  absoluteValue	The value of the absolute encoder in degrees
+     * @param  wrapAroundPositionDegrees	The point where the absolute encoder wraps around in degrees
+     * @return         The new arm angle and isOnLowSide boolean to apply in a Pair
+    */
+    public Pair<Double, Boolean> updateArmAngle(double absoluteValue, double wrapAroundPositionDegrees) {
+        if (absoluteValue > wrapAroundPositionDegrees && isOnLowSide) {
+            return new Pair<>(absoluteValue - 360, false);
+        } else if (absoluteValue < wrapAroundPositionDegrees && !isOnLowSide) {
+            return new Pair<>(absoluteValue + 360, true);
+        } else {
+            return new Pair<>(absoluteValue, isOnLowSide);
+        }
+    }
+
+    /**
+     * Converts the input value to degrees and applies the arm offset.
+     * @param  input	The input value to be converted
+     * @return         The converted value in degrees with arm offset applied
+     * @deprecated     Use {@link #updateArmAngle(double)}
+    */
+    private double convertToDegrees(double relativeEncoderPosition){
+        return relativeEncoderPosition * 360 - Constants.Beluga.ARM_OFFSET_DEGREES;
+    }
+    
     /**
      * Updates the PID controller with the new setpoint position.
      * @param  setpointPosition  The new setpoint position for the PID controller
