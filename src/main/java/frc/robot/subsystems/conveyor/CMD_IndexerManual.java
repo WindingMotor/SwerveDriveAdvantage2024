@@ -1,9 +1,10 @@
+// Written by WindingMotor, 2024, Crescendo
 
 package frc.robot.subsystems.conveyor;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 
-/** An example command that uses an example subsystem. */
+/* Manual control of the indexer. */
 public class CMD_IndexerManual extends Command {
 
   private final SUB_Conveyor conveyor;

@@ -1,3 +1,4 @@
+// Written by WindingMotor as part of the wmlib2j library.
 
 package frc.robot.commands;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -16,19 +17,15 @@ public class CMD_Led extends Command{
     addRequirements(led);
   }
 
-  // Called when the command is initially scheduled.
+  // Print a message to the driver station and set the LED state
   @Override
   public void initialize(){
     DriverStation.reportWarning("[init] CMD_Led switching to " + state.toString() + " state", false);
     led.setState(state);
   }
 
-  // Called once the command ends or is interrupted.
+  // Command ends immediately
   @Override
-  public void end(boolean interrupted){}
-
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished(){ return true;}
+  public boolean isFinished(){ return true; }
 
 }

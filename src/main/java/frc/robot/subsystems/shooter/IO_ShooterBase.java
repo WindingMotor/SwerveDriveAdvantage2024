@@ -1,3 +1,4 @@
+// Written by WindingMotor, 2024, Crescendo
 
 package frc.robot.subsystems.shooter;
 import org.littletonrobotics.junction.AutoLog;
@@ -19,7 +20,6 @@ public interface IO_ShooterBase{
         public double motorTwoRPM = 0.0;
         public double setpointRPM = 0.0;
         public boolean isUpToSpeed = false;
-        public boolean backLimitSwitchStatus = false;
     }
 
     /**

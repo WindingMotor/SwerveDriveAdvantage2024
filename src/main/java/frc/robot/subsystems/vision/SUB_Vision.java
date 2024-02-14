@@ -11,7 +11,6 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.Vision.Camera;
-import frc.robot.subsystems.vision.VisionInputsAutoLogged;
 
 public class SUB_Vision extends SubsystemBase {
 

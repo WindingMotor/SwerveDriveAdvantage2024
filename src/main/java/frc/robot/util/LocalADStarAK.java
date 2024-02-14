@@ -1,3 +1,5 @@
+// Written by WindingMotor as part of the wmlib2j library.
+
 package frc.robot.util;
 import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.geometry.Translation2d;

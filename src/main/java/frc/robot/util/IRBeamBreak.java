@@ -1,3 +1,4 @@
+// Written by WindingMotor as part of the wmlib2j library.
 
 package frc.robot.util;
 import edu.wpi.first.wpilibj.DigitalInput;

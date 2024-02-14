@@ -1,3 +1,4 @@
+// Written by WindingMotor, 2024, Crescendo
 
 package frc.robot.subsystems.shooter;
 import com.pathplanner.lib.util.PIDConstants;
@@ -14,41 +15,40 @@ import frc.robot.util.Builder;
 */
 public class IO_ShooterReal implements IO_ShooterBase {
 
-    private CANSparkFlex motorBottom;       
-    private CANSparkFlex motorTop;         
+    private CANSparkFlex bottomMotor;       
+    private CANSparkFlex topMotor;         
     
-    private RelativeEncoder motorOneEncoder;
-    private RelativeEncoder motorTwoEncoder;
+    private RelativeEncoder bottomMotorEncoder;
+    private RelativeEncoder topMotorEncoder;
     
-    private SparkPIDController leftPID;
+    private SparkPIDController bottomPID;
 
-    private SparkPIDController rightPID;
-
-    public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput, maxRPM;
-
-    private DigitalInput backLimitSwitch;
+    private SparkPIDController topPID;
 
     private double setpointRPM;
 
     public IO_ShooterReal(){
-        motorBottom = Builder.createVortex(Constants.Beluga.SHOOTER_MOTOR_BOTTOM_ID, Constants.Beluga.SHOOTER_MOTOR_BOTTOM_INVERTED, 45);
-        motorTop = Builder.createVortex(Constants.Beluga.SHOOTER_MOTOR_TOP_ID, Constants.Beluga.SHOOTER_MOTOR_TOP_INVERTED, 45);
 
-        Builder.configureIdleMode(motorBottom, false);
-        Builder.configureIdleMode(motorTop, false);
+        setpointRPM = 0;
 
-        leftPID = motorBottom.getPIDController();
-        rightPID = motorTop.getPIDController();
+        bottomMotor = Builder.createVortex(Constants.Robot.SHOOTER_MOTOR_BOTTOM_ID, Constants.Robot.SHOOTER_MOTOR_BOTTOM_INVERTED, 45);
+        topMotor = Builder.createVortex(Constants.Robot.SHOOTER_MOTOR_TOP_ID, Constants.Robot.SHOOTER_MOTOR_TOP_INVERTED, 45);
 
-        Builder.configurePIDController(leftPID, false, new PIDConstants(Constants.Beluga.SHOOTER_MOTORS_P, Constants.Beluga.SHOOTER_MOTORS_I, Constants.Beluga.SHOOTER_MOTORS_D), Constants.Beluga.SHOOTER_MOTORS_IZ, Constants.Beluga.SHOOTER_MOTORS_FF);
-        Builder.configurePIDController(rightPID, false, new PIDConstants(Constants.Beluga.SHOOTER_MOTORS_P, Constants.Beluga.SHOOTER_MOTORS_I, Constants.Beluga.SHOOTER_MOTORS_D), Constants.Beluga.SHOOTER_MOTORS_IZ, Constants.Beluga.SHOOTER_MOTORS_FF);
+        Builder.configureIdleMode(bottomMotor, false);
+        Builder.configureIdleMode(topMotor, false);
+
+        bottomPID = bottomMotor.getPIDController();
+        topPID = topMotor.getPIDController();
+
+        Builder.configurePIDController(bottomPID, false, new PIDConstants(Constants.Robot.SHOOTER_MOTORS_P, Constants.Robot.SHOOTER_MOTORS_I, Constants.Robot.SHOOTER_MOTORS_D), Constants.Robot.SHOOTER_MOTORS_IZ, Constants.Robot.SHOOTER_MOTORS_FF);
+        Builder.configurePIDController(topPID, false, new PIDConstants(Constants.Robot.SHOOTER_MOTORS_P, Constants.Robot.SHOOTER_MOTORS_I, Constants.Robot.SHOOTER_MOTORS_D), Constants.Robot.SHOOTER_MOTORS_IZ, Constants.Robot.SHOOTER_MOTORS_FF);
         
-        motorOneEncoder = motorBottom.getEncoder();
-        motorTwoEncoder = motorTop.getEncoder();
+        bottomMotorEncoder = bottomMotor.getEncoder();
+        topMotorEncoder = topMotor.getEncoder();
 
-        backLimitSwitch = new DigitalInput(Constants.Beluga.SHOOTER_BACK_LIMIT_SWITCH);
-
-        SmartDashboard.putNumber("shooterSpeed", 0.0);
+        if(Constants.TEST_MODE){
+            SmartDashboard.putNumber("shooterTestRPMInput",  0);    
+        }
     }
 
     /**
@@ -58,11 +58,10 @@ public class IO_ShooterReal implements IO_ShooterBase {
     @Override
     public void updateInputs(ShooterInputs inputs){
 
-        inputs.motorOneRPM = motorOneEncoder.getVelocity();
-        inputs.motorTwoRPM = motorTwoEncoder.getVelocity();
+        inputs.motorOneRPM = bottomMotorEncoder.getVelocity();
+        inputs.motorTwoRPM = topMotorEncoder.getVelocity();
         inputs.setpointRPM = setpointRPM;
         inputs.isUpToSpeed = isUpToSpeed();
-        inputs.backLimitSwitchStatus = backLimitSwitch.get();
     }
     
     /**
@@ -71,13 +70,17 @@ public class IO_ShooterReal implements IO_ShooterBase {
     */
     @Override
     public void updatePID(double setpointRPM){
-
-        double shooterSpeed = SmartDashboard.getNumber("shooterSpeed",  0);
-
-
         this.setpointRPM = setpointRPM;
-        leftPID.setReference(shooterSpeed, CANSparkFlex.ControlType.kVelocity);
-        rightPID.setReference(shooterSpeed /*+ setpointRPM * 0.12*/, CANSparkFlex.ControlType.kVelocity);
+
+        if(Constants.TEST_MODE){
+            double shooterTestRPMInput = SmartDashboard.getNumber("shooterTestRPMInput",  0);
+            bottomPID.setReference(shooterTestRPMInput, CANSparkFlex.ControlType.kVelocity);
+            topPID.setReference(shooterTestRPMInput, CANSparkFlex.ControlType.kVelocity);
+        }else{
+
+            bottomPID.setReference(setpointRPM, CANSparkFlex.ControlType.kVelocity);
+            topPID.setReference(setpointRPM, CANSparkFlex.ControlType.kVelocity);
+        }
     }
 
     /**
@@ -88,6 +91,9 @@ public class IO_ShooterReal implements IO_ShooterBase {
         updatePID(0.0);
     }
 
+    /**
+     * Sets the setpoint RPM.
+    */
     @Override
     public void setRPM(double rpm){
         updatePID(rpm);
@@ -99,14 +105,14 @@ public class IO_ShooterReal implements IO_ShooterBase {
     */
     @Override
     public boolean isUpToSpeed() {
-        double leftVelocity = motorOneEncoder.getVelocity();
-        double rightVelocity = motorOneEncoder.getVelocity();
+        double leftVelocity = bottomMotorEncoder.getVelocity();
+        double rightVelocity = bottomMotorEncoder.getVelocity();
     
-        boolean isLeftUpToSpeed = leftVelocity >= setpointRPM - Constants.Beluga.SHOOTER_SPEED_TOLERANCE_RPM
-                && leftVelocity <= setpointRPM + Constants.Beluga.SHOOTER_SPEED_TOLERANCE_RPM;
+        boolean isLeftUpToSpeed = leftVelocity >= setpointRPM - Constants.Robot.SHOOTER_TOLERANCE_RPM
+                && leftVelocity <= setpointRPM + Constants.Robot.SHOOTER_TOLERANCE_RPM;
     
-        boolean isRightUpToSpeed = rightVelocity >= setpointRPM - Constants.Beluga.SHOOTER_SPEED_TOLERANCE_RPM
-                && rightVelocity <= setpointRPM + Constants.Beluga.SHOOTER_SPEED_TOLERANCE_RPM;
+        boolean isRightUpToSpeed = rightVelocity >= setpointRPM - Constants.Robot.SHOOTER_TOLERANCE_RPM
+                && rightVelocity <= setpointRPM + Constants.Robot.SHOOTER_TOLERANCE_RPM;
     
         return isLeftUpToSpeed && isRightUpToSpeed;
     }
@@ -114,7 +120,7 @@ public class IO_ShooterReal implements IO_ShooterBase {
     @Override
     public void invertMotors(boolean inverted){
        // motorBottom.setInverted(inverted);
-        motorTop.setInverted(inverted);
+        topMotor.setInverted(inverted);
     }
 
 }

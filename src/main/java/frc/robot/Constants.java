@@ -1,4 +1,8 @@
+// Written by WindingMotor as part of the wmlib2j library.
+
 package frc.robot;
+import com.pathplanner.lib.util.PIDConstants;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
@@ -14,9 +18,10 @@ public class Constants{
     public static final RobotMode CURRENT_MODE = RobotMode.REAL;
     public static final double LOOP_PERIOD_SECS = 0.02;
 
-    /**
-     * Enum representing the robot mode.
-    */
+    // Use extreme caution when enabled, manually controls PID setpoints through smart dashboard.
+    public static final boolean TEST_MODE = false;
+
+    // Current robot mode
     public enum RobotMode {
         REAL,   // Running on a real robot
         SIM,    // Running a physics simulator
@@ -24,6 +29,7 @@ public class Constants{
     }
 
 
+    // Input class for controllers, allows quick hot-swaping.
     public static class Input{
 
         public static final double DRIVER_DEADBAND = 0.05;
@@ -52,8 +58,10 @@ public class Constants{
 
     public static class Vision {
 
+        // Latency warning trigger threshold in miliseconds
         public static final double LATENCY_THRESHOLD_MILI_SEC = 30.0;
 
+        // Camera enum, contains name and position of the camera relative to the robot.
         public enum Camera{
         LEFT_CAMERA("OV9281_02", "leftCamera", new Transform3d(
             new Translation3d(11.0, -13.5, 12.0), 
@@ -78,39 +86,33 @@ public class Constants{
         
     }
 
-    public static class Beluga{
+    public static class Robot{
 
         // Arm
         public static final int ARM_MOTOR_LEAD_ID = 9;
         public static final int ARM_MOTOR_FOLLOWER_ID = 10;
 
-        public static final boolean ARM_MOTOR_LEAD_INVERTED = true;
-        public static final boolean ARM_MOTOR_FOLLOWER_INVERTED = true;
+        public static final boolean ARM_MOTOR_LEAD_INVERTED = false;
+        public static final boolean ARM_MOTOR_FOLLOWER_INVERTED = false;
 
-        /* 
-            public static final double ARM_MOTORS_P = 0.015;
-            public static final double ARM_MOTORS_I = 0.0001;
-            public static final double ARM_MOTORS_D = 0.0006;
-        */
+        public static final double ARM_P = 0.46; // Volts 
+        public static final double ARM_I = 0.0;
+        public static final double ARM_D = 0.00012;
 
-        /*
-            public static final double ARM_MOTORS_P = 0.025;
-            public static final double ARM_MOTORS_I = 0.0;
-            public static final double ARM_MOTORS_D = 0.01;
-        */
+        public static final double ARM_KS = 0.01; // Volts
+        public static final double ARM_KG = 0.379;
+        public static final double ARM_KV = 1.86;
+        public static final double ARM_KA = 0.06;
 
-        public static final double ARM_MOTORS_P = 0.015;
-        public static final double ARM_MOTORS_I = 0.0001;
-        public static final double ARM_MOTORS_D = 0.0006;
+        public static final double ARM_MAX_VELOCITY = 180; // Deg/sec
+        public static final double ARM_MAX_ACCELERATION = 200; // Deg/sec/sec
 
-        public static final double ARM_MAX_VELOCITY = 0.5;
-        public static final double ARM_MAX_ACCELERATION = 0.5;
+        public static final double ARM_SLEW_RATE = 15.0; // Smaller slower -> Deg/sec
+        
+        public static final double ARM_VOLTAGE_CLAMPING = 11.9;
 
-        public static final double ARM_SLEW_RATE_POS = 1.0; // Smaller slower
-        public static final double ARM_SLEW_RATE_NEG = 0.5; // Smaller slower
-
-        public static final double ARM_POSITION_TOLERANCE_DEGREES = 0.25;
-        public static final double ARM_OFFSET_DEGREES = 22.92;
+        public static final double ARM_TOLERANCE_DEGREES = 0.12;
+        public static final double ARM_OFFSET_DEGREES = 4.85;
 
         // Shooter
         public static final int SHOOTER_MOTOR_BOTTOM_ID = 12;
@@ -126,9 +128,7 @@ public class Constants{
         public static final double SHOOTER_MOTORS_IZ = 0.0005;
         public static final double SHOOTER_MOTORS_FF = 0.00018; 
 
-        public static final double SHOOTER_SPEED_TOLERANCE_RPM = 3.0;
-
-        public static final int SHOOTER_BACK_LIMIT_SWITCH = 0;
+        public static final double SHOOTER_TOLERANCE_RPM = 3.0;
 
         // Intake
         public static final int INDEXER_MOTOR_ID = 11;
@@ -213,8 +213,8 @@ public class Constants{
 
         // Positions of the arm for various modes
         public enum ArmState{
-            OFF(-18, 0.0), 
-            IDLE(-15, 0.0),
+            OFF(0, 0.0), 
+            IDLE(-4, 0.0),
 
             SPEAKER_1M(55.0, 1.0),
             SPEAKER_2M(55.0, 2.0),
@@ -225,7 +225,7 @@ public class Constants{
 
             AMP(84, 0.0), 
             DYNAMIC(-1.0, 0.0),
-            INTAKE(80.0, 0.0 ); 
+            INTAKE(85.0, 0.0 ); 
 
             public final double position;
             public final double distanceMeters;
@@ -253,11 +253,15 @@ public class Constants{
 
     public static class Auto{
 
+        public static final PIDConstants AUTO_PID = new PIDConstants(1.5, 0.0, 0.0005);
+
         public static final double MAX_VELOCITY_MPS = 1.5;
         public static final double MAX_ACCELERATION_MPS_SQ = 2.0;
         
         public static final double MAX_ANGULAR_VELOCITY_RADS = 360;
         public static final double MAX_ANGULAR_VELOCITY_RADS_SQ = 540;
+
+        public static final double MAX_MODULE_SPEED_MPS = 4.5;
 
         public enum ScoringPoses{
             BLU_SPEAKER(new Pose2d(1.5, 5.5, Rotation2d.fromDegrees(180))),

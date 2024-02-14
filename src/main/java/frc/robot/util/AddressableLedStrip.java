@@ -5,7 +5,6 @@ import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.util.Color;
-import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class AddressableLedStrip extends SubsystemBase{
@@ -43,7 +42,9 @@ public class AddressableLedStrip extends SubsystemBase{
     public void periodic(){
 
         if(DriverStation.isDisabled()){
-            solid(Color.kPurple);
+            //solid(Color.kPurple);
+            //everyOther(Color.kRed, Color.kBlue);
+            everyOther(Color.kGreen, Color.kBlue);
         }else{
 
         switch(state){

@@ -1,11 +1,9 @@
-package frc.robot.commands;
+// Written by WindingMotor as part of the wmlib2j library.
 
-import edu.wpi.first.wpilibj.AddressableLED;
+package frc.robot.commands;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
-import frc.robot.Constants.States.ConveyorState;
 import frc.robot.Constants.States.ShooterMode;
 import frc.robot.subsystems.arm.SUB_Arm;
 import frc.robot.subsystems.conveyor.SUB_Conveyor;
@@ -13,7 +11,6 @@ import frc.robot.subsystems.shooter.SUB_Shooter;
 import frc.robot.subsystems.vision.SUB_Vision;
 import frc.robot.util.AddressableLedStrip;
 import frc.robot.util.AddressableLedStrip.LEDState;
-
 import java.util.function.Supplier;
 
 /**
@@ -31,6 +28,7 @@ public class CMD_Shoot extends Command{
     private final Supplier<Boolean> shoot;
     private boolean isCommandDone = false;
     private boolean hasShootBeenCalled = false;
+    private boolean autoShoot = false;
 
     /**
      * Constructor for the CMD_Shoot command.
@@ -56,13 +54,30 @@ public class CMD_Shoot extends Command{
         addRequirements(conveyor, arm, shooter);
     }
 
+    // Auto Shoot Contructor
+    public CMD_Shoot(SUB_Conveyor conveyor, SUB_Arm arm, SUB_Shooter shooter, SUB_Vision vision, AddressableLedStrip led, ShooterMode mode, Supplier<Boolean> manualCancel, Supplier<Boolean> shoot, boolean autoShoot){
+        this.conveyor = conveyor;
+        this.arm = arm;
+        this.shooter = shooter;
+        this.vision = vision;
+        this.led = led;
+        this.mode = mode;
+        this.shoot = shoot;
+        this.autoShoot = autoShoot;
+        this.manualCancel = manualCancel;
+
+        addRequirements(conveyor, arm, shooter);
+    }
+
     /**
-     * Reports to the driver station that the command is running.
+     * Reports to the driver station that the command is
+     * running and reset all the flags.
     */
     @Override
     public void initialize(){
         isCommandDone = false;
-        hasShootBeenCalled = false;
+        hasShootBeenCalled = false; 
+
         DriverStation.reportWarning("[init] CMD_Shoot Running with " + mode.toString() + " mode", false);
     }
 
@@ -83,17 +98,29 @@ public class CMD_Shoot extends Command{
             arm.setState(Constants.States.ArmState.AMP);
         }else{ dynamicMode(); } // DYNAMIC mode
 
-        // If operator presses shoot button run the conveyor to shoot
-        if(shoot.get()){
-            hasShootBeenCalled = true;
-            if(mode == ShooterMode.AMP){
-                conveyor.setState(Constants.States.ConveyorState.AMP);
-            }else{
-                conveyor.setState(Constants.States.ConveyorState.SHOOT);
+        if(!autoShoot){ // Manual shoot
+            // If operator presses shoot button run the conveyor
+            if(shoot.get()){
+                hasShootBeenCalled = true;
+                if(mode == ShooterMode.AMP){
+                    conveyor.setState(Constants.States.ConveyorState.AMP);
+                }else{
+                    conveyor.setState(Constants.States.ConveyorState.SHOOT);
+                }
+            }
+        }else{ // Auto shoot if up to RPM
+            // If shooter RPM is up to speed run the conveyor
+            if(true){ // shooter.inputs.isUpToSpeed
+                hasShootBeenCalled = true;
+                if(mode == ShooterMode.AMP){
+                    conveyor.setState(Constants.States.ConveyorState.AMP);
+                }else{
+                    conveyor.setState(Constants.States.ConveyorState.SHOOT);
+                }
             }
         }
 
-        /*
+        
         // Once operator has pressed shoot button and the donut leaves the conveyor end the command
         if(hasShootBeenCalled){
             if(!conveyor.inputs.indexerFinalSensorState){
@@ -101,7 +128,7 @@ public class CMD_Shoot extends Command{
                 
             }
         }
-         */
+         
 
     }
 

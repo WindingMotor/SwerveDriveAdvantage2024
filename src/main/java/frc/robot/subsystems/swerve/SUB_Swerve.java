@@ -1,3 +1,4 @@
+// Written by WindingMotor, 2024, Crescendo
 
 package frc.robot.subsystems.swerve;
 import java.util.Optional;
@@ -6,20 +7,15 @@ import org.littletonrobotics.junction.Logger;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
-
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.subsystems.swerve.SwerveInputsAutoLogged;
 
 public class SUB_Swerve extends SubsystemBase{
 
@@ -43,13 +39,8 @@ public class SUB_Swerve extends SubsystemBase{
         //io.addVisionMeasurement(vision.getEstimatedGlobalPose(Constants.Vision.Camera.LEFT_CAMERA).get());
         //io.addVisionMeasurement(vision.getEstimatedGlobalPose(Constants.Vision.Camera.RIGHT_CAMERA).get());
 
-        // Update the odometry
         io.updateOdometry();
-
-        // Update the inputs.
         io.updateInputs(inputs);
-
-        // Process inputs and send to logger.
         Logger.processInputs("Swerve", inputs);
     }
 

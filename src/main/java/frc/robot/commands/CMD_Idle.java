@@ -1,3 +1,4 @@
+// Written by WindingMotor as part of the wmlib2j library.
 
 package frc.robot.commands;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -20,7 +21,7 @@ public class CMD_Idle extends Command{
     addRequirements(conveyor, arm, shooter);
   }
 
-  // Called when the command is initially scheduled.
+  // Print a message to the driver station and idle the robot subsystems
   @Override
   public void initialize(){
     DriverStation.reportWarning("[init] CMD_Idle running", false);
@@ -30,15 +31,7 @@ public class CMD_Idle extends Command{
     shooter.setState(Constants.States.ShooterState.IDLE);
   }
 
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute(){}
-
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted){}
-
-  // Returns true when the command should end.
+  // Command ends immediately
   @Override
   public boolean isFinished(){ return true;}
 

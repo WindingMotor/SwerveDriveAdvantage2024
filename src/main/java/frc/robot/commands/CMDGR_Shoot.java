@@ -1,3 +1,4 @@
+// Written by WindingMotor as part of the wmlib2j library.
 
 package frc.robot.commands;
 import java.util.function.Supplier;
@@ -17,9 +18,22 @@ public class CMDGR_Shoot extends SequentialCommandGroup{
     addRequirements(conveyor, arm, shooter);
       // Call the shoot command, then wait 0.5 seconds, then call the idle command
       addCommands(
-        new CMD_Led(led, LEDState.ORANGE),
+        new CMD_Led(led, LEDState.GREEN),
         new WaitCommand(0.25),
         new CMD_Shoot(conveyor, arm, shooter, vision, led, mode, manualCancel, shoot),
+        new WaitCommand(0.25), // Delay to allow dount to leave the robot
+        new CMD_Idle(conveyor, arm, shooter),
+        new CMD_Led(led, LEDState.RAINBOW)
+      );
+  }
+
+  public CMDGR_Shoot(SUB_Conveyor conveyor, SUB_Arm arm, SUB_Shooter shooter, SUB_Vision vision, AddressableLedStrip led, ShooterMode mode, Supplier<Boolean> manualCancel, Supplier<Boolean> shoot, boolean autoShoot){
+    addRequirements(conveyor, arm, shooter);
+      // Call the shoot command, then wait 0.5 seconds, then call the idle command
+      addCommands(
+        new CMD_Led(led, LEDState.GREEN),
+        new WaitCommand(0.25),
+        new CMD_Shoot(conveyor, arm, shooter, vision, led, mode, manualCancel, shoot, autoShoot),
         new WaitCommand(0.25), // Delay to allow dount to leave the robot
         new CMD_Idle(conveyor, arm, shooter),
         new CMD_Led(led, LEDState.RAINBOW)

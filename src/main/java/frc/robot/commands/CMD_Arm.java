@@ -1,12 +1,10 @@
+// Written by WindingMotor as part of the wmlib2j library.
 
 package frc.robot.commands;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants;
 import frc.robot.Constants.States.ArmState;
 import frc.robot.subsystems.arm.SUB_Arm;
-import frc.robot.subsystems.conveyor.SUB_Conveyor;
-import frc.robot.subsystems.shooter.SUB_Shooter;
 
 public class CMD_Arm extends Command{
 
@@ -19,7 +17,7 @@ public class CMD_Arm extends Command{
     addRequirements(arm);
   }
 
-  // Called when the command is initially scheduled.
+  // Print a message to the driver station and set the arm state
   @Override
   public void initialize(){
     DriverStation.reportWarning("[init] CMD_Arm set new state", false);
@@ -27,15 +25,7 @@ public class CMD_Arm extends Command{
     arm.setState(state);
   }
 
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute(){}
-
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted){}
-
-  // Returns true when the command should end.
+  // Command ends immediately
   @Override
   public boolean isFinished(){ return true;}
 

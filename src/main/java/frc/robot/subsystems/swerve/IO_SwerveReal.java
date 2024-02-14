@@ -1,12 +1,10 @@
+// Written by WindingMotor, 2024, Crescendo
 
 package frc.robot.subsystems.swerve;
 import java.io.File;
 import java.io.IOException;
-
-import org.littletonrobotics.junction.Logger;
 import org.photonvision.EstimatedRobotPose;
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
@@ -17,7 +15,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
-import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 import swervelib.SwerveDrive;
 import swervelib.parser.SwerveParser;
 import swervelib.telemetry.SwerveDriveTelemetry;
@@ -69,12 +67,12 @@ public class IO_SwerveReal implements IO_SwerveBase{
             this::getRobotVelocity, // Gets chassis speed in robot relative
             this::setChassisSpeeds, // Drives the robot in robot realative chassis speeds
             new HolonomicPathFollowerConfig(
-                new PIDConstants(1.0, 0.0, 0.0), // Translation PID
+                Constants.Auto.AUTO_PID, // Path follower PID constants
 
                 new PIDConstants(swerveDrive.swerveController.config.headingPIDF.p, // Rotation PID
                     swerveDrive.swerveController.config.headingPIDF.i,
                     swerveDrive.swerveController.config.headingPIDF.d),
-                    4.5, // Max module speed in m/s
+                    Constants.Auto.MAX_MODULE_SPEED_MPS,
                 swerveDrive.swerveDriveConfiguration.getDriveBaseRadiusMeters(), // Drive base radius in meters
 
                 new ReplanningConfig() // Replanning config see docs

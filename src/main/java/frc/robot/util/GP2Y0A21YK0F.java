@@ -1,3 +1,4 @@
+// Written by WindingMotor as part of the wmlib2j library.
 
 package frc.robot.util;
 import edu.wpi.first.wpilibj.AnalogInput;
@@ -53,7 +54,7 @@ public class GP2Y0A21YK0F{
 
     public boolean isWithinRange(){
         double measurement = getDistanceCentimeters();
-        if(measurement > Constants.Beluga.SENSOR_TOLERANCE_MIN_CENTIMETERS && measurement < Constants.Beluga.SENSOR_TOLERANCE_MAX_CENTIMETERS){
+        if(measurement > Constants.Robot.SENSOR_TOLERANCE_MIN_CENTIMETERS && measurement < Constants.Robot.SENSOR_TOLERANCE_MAX_CENTIMETERS){
             return true;
         }else{
             return false;

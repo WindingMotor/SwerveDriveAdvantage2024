@@ -1,3 +1,4 @@
+// Written by WindingMotor, 2024, Crescendo
 
 package frc.robot.subsystems.swerve;
 import org.littletonrobotics.junction.AutoLog;
@@ -7,7 +8,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj2.command.Command;
 
 public interface IO_SwerveBase{
 

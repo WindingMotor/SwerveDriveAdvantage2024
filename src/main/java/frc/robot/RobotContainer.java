@@ -1,6 +1,9 @@
 
  package frc.robot;
+import org.littletonrobotics.junction.Logger;
+
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -11,8 +14,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.States.ArmState;
 import frc.robot.Constants.States.ShooterMode;
+import frc.robot.auto.AutoSelector;
+import frc.robot.auto.CommandRegistrar;
 import frc.robot.commands.CMDGR_Shoot;
 import frc.robot.commands.CMD_Arm;
+import frc.robot.commands.CMD_Eject;
 import frc.robot.commands.CMD_Idle;
 import frc.robot.commands.CMD_Intake;
 import frc.robot.subsystems.arm.IO_ArmReal;
@@ -35,46 +41,43 @@ public class RobotContainer{
     private final CommandXboxController operatorController = new CommandXboxController(4);
     // private final CommandJoystick driverSim = new CommandJoystick(0);
     
-    private final SUB_Vision vision = new SUB_Vision(
-        new IO_VisionReal()
-    );
+    private final SUB_Vision vision = new SUB_Vision( new IO_VisionReal() );
     
-    private final SUB_Swerve swerve = new SUB_Swerve(
-        new IO_SwerveReal()
-    );  
+    // All methods using these subsystems should be called in this order -> conveyor, arm, shooter
+    private final SUB_Conveyor conveyor = new SUB_Conveyor( new IO_ConveyorReal() );
 
-    private final SUB_Arm arm = new SUB_Arm(
-        new IO_ArmReal()
-    );
+    private final SUB_Arm arm = new SUB_Arm( new IO_ArmReal() );
 
-    private final SUB_Shooter shooter = new SUB_Shooter(
-        new IO_ShooterReal()
-    );
-
-    private final SUB_Conveyor conveyor = new SUB_Conveyor(
-        new IO_ConveyorReal()
-    );
+    private final SUB_Shooter shooter = new SUB_Shooter( new IO_ShooterReal() );
 
     private final AddressableLedStrip led = new AddressableLedStrip(0, 71);
 
+    private final SUB_Swerve swerve = new SUB_Swerve( new IO_SwerveReal() );  
+
+    private final CommandRegistrar commandRegistrar = new CommandRegistrar(vision, swerve, conveyor, arm, shooter, led);
+
+    private final AutoSelector autoSelector;
+
+
     public RobotContainer(){
+        
+        commandRegistrar.register();
+
+        autoSelector = new AutoSelector();
 
         configureBindings();
-        
-        swerve.setDefaultCommand( 
-            swerve.driveJoystick(() -> driverController.getRawAxis(1) , () -> -driverController.getRawAxis(0) , () -> -driverController.getRawAxis(3))
-            //swerve.driveJoystick(() -> -driverSim.getRawAxis(4) , () -> -driverSim.getRawAxis(3) , () -> -driverSim.getRawAxis(0))
-            //swerve.driveJoystick(() -> -driverSim.getRawAxis(0) , () -> -driverSim.getRawAxis(1) , () -> -driverSim.getRawAxis(2))
-        );
 
-        //SmartDashboard.putNumber("SWR MTH: ", SwerveMath.calculateMetersPerRotation(Units.inchesToMeters(3.161), 6.12, 1));
-
+        logMetadata();
     }
 
     /**
      * Configure the bindings for the controller buttons to specific commands.
     */
     private void configureBindings(){
+
+        swerve.setDefaultCommand( 
+            swerve.driveJoystick(() -> driverController.getRawAxis(1) , () -> -driverController.getRawAxis(0) , () -> -driverController.getRawAxis(3))
+        );
 
        // operatorController.y().onTrue( new CMD_IndexerManual(conveyor, true));
         //operatorController.y().onFalse(new CMD_IndexerStop(conveyor));
@@ -118,11 +121,16 @@ public class RobotContainer{
        //));
     }
 
+    private void logMetadata(){
+        Logger.recordMetadata("Robot Mode",  Constants.CURRENT_MODE + "");
+        Logger.recordMetadata("Test Mode",  Constants.TEST_MODE + "");
+    }
+
     /**
      * Get the autonomous command.
      * @return The autonomous command
     */
     public Command getAutonomousCommand(){
-        return AutoBuilder.buildAuto("Test_Auto");
+        return autoSelector.getSelectedAuto();
     }
 }

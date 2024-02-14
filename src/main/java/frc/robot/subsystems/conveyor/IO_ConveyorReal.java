@@ -1,3 +1,4 @@
+// Written by WindingMotor, 2024, Crescendo
 
 package frc.robot.subsystems.conveyor;
 import com.revrobotics.*;
@@ -17,14 +18,14 @@ public class IO_ConveyorReal implements IO_ConveyorBase{
     private IRBeamBreak indexerFinalSensor;
     
     public IO_ConveyorReal(){
-        intakeMotor = Builder.createNeo(Constants.Beluga.INTAKE_MOTOR_ID, false, 60);
-        indexerMotor = Builder.createNeo(Constants.Beluga.INDEXER_MOTOR_ID, false, 45);
+        intakeMotor = Builder.createNeo(Constants.Robot.INTAKE_MOTOR_ID, false, 60);
+        indexerMotor = Builder.createNeo(Constants.Robot.INDEXER_MOTOR_ID, false, 45);
 
-        intakeInitalSensor = new IRBeamBreak(Constants.Beluga.INTAKE_INITAL_SENSOR_ID);
-        intakeFinalSensor = new IRBeamBreak(Constants.Beluga.INTAKE_FINAL_SENSOR_ID);
+        intakeInitalSensor = new IRBeamBreak(Constants.Robot.INTAKE_INITAL_SENSOR_ID);
+        intakeFinalSensor = new IRBeamBreak(Constants.Robot.INTAKE_FINAL_SENSOR_ID);
 
-        idexerInitalSensor = new IRBeamBreak(Constants.Beluga.INDEXER_INITAL_SENSOR_ID);
-        indexerFinalSensor = new IRBeamBreak(Constants.Beluga.INDEXER_FINAL_SENSOR_ID);
+        idexerInitalSensor = new IRBeamBreak(Constants.Robot.INDEXER_INITAL_SENSOR_ID);
+        indexerFinalSensor = new IRBeamBreak(Constants.Robot.INDEXER_FINAL_SENSOR_ID);
     }
 
     /**

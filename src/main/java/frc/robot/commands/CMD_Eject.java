@@ -13,7 +13,7 @@ import java.util.function.Supplier;
 /**
  * Command to control the intake process.
  */
-public class CMD_Intake extends Command{
+public class CMD_Eject extends Command{
 
     private final SUB_Conveyor conveyor;
     private final SUB_Arm arm;
@@ -27,35 +27,34 @@ public class CMD_Intake extends Command{
      * @param arm            The arm subsystem.
      * @param manualCancel   The supplier to determine if the command should be manually cancelled.
      */
-    public CMD_Intake(SUB_Conveyor conveyor, SUB_Arm arm, Supplier<Boolean> manualCancel){
+    public CMD_Eject(SUB_Conveyor conveyor, SUB_Arm arm, Supplier<Boolean> manualCancel){
         this.conveyor = conveyor;
         this.arm = arm;
         this.manualCancel = manualCancel;
-        debouncer = new Debouncer(0.025, Debouncer.DebounceType.kRising);
+        debouncer = new Debouncer(0.5, Debouncer.DebounceType.kFalling);
 
         addRequirements(conveyor, arm);
     }
 
     /**
      * When command starts reset the isCommandDone flag, report to the
-     * driver station that the command is running, and set the robot subsystems to intake mode.
+     * driver station that the command is running, and set the robot subsystems to eject mode.
     */
     @Override
     public void initialize(){
         isCommandDone = false;
-        DriverStation.reportWarning("[init] CMD_Intake running", false);
-        conveyor.setState(Constants.States.ConveyorState.INTAKE);
+        DriverStation.reportWarning("[init] CMD_Eject running", false);
+        conveyor.setState(Constants.States.ConveyorState.EJECT);
         arm.setState(Constants.States.ArmState.INTAKE);
     }
 
     /**
-     * Every cycle check if the indexer sensor is triggered. Once
-     * donut enters the indexer set the isCommandDone flag to true.
+     * Every cycle check if the intake sensor is triggered. Once donut
+     * leaves the intake set the isCommandDone flag to true.
     */
     @Override
     public void execute(){
-        // If the indexer sensor is triggered, end the command
-        if(debouncer.calculate(conveyor.inputs.indexerInitalSensorState)){
+        if(debouncer.calculate(!conveyor.inputs.intakeInitalSensorState)){
             isCommandDone = true;
         }
     }
