@@ -1,30 +1,18 @@
 
- package frc.robot;
+package frc.robot;
 import org.littletonrobotics.junction.Logger;
-
-import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.auto.NamedCommands;
-
-import edu.wpi.first.math.filter.Debouncer.DebounceType;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.Constants.States.ArmState;
 import frc.robot.Constants.States.ShooterMode;
 import frc.robot.auto.AutoSelector;
 import frc.robot.auto.CommandRegistrar;
+import frc.robot.commands.CMDGR_DrivePose;
 import frc.robot.commands.CMDGR_Shoot;
-import frc.robot.commands.CMD_Arm;
-import frc.robot.commands.CMD_Eject;
 import frc.robot.commands.CMD_Idle;
 import frc.robot.commands.CMD_Intake;
 import frc.robot.subsystems.arm.IO_ArmReal;
 import frc.robot.subsystems.arm.SUB_Arm;
 import frc.robot.subsystems.conveyor.CMD_IndexerManual;
-import frc.robot.subsystems.conveyor.CMD_IndexerStop;
 import frc.robot.subsystems.conveyor.IO_ConveyorReal;
 import frc.robot.subsystems.conveyor.SUB_Conveyor;
 import frc.robot.subsystems.shooter.IO_ShooterReal;
@@ -39,8 +27,7 @@ public class RobotContainer{
 
     private final CommandXboxController driverController = new CommandXboxController(3);
     private final CommandXboxController operatorController = new CommandXboxController(4);
-    // private final CommandJoystick driverSim = new CommandJoystick(0);
-    
+
     private final SUB_Vision vision = new SUB_Vision( new IO_VisionReal() );
     
     // All methods using these subsystems should be called in this order -> conveyor, arm, shooter
@@ -52,7 +39,7 @@ public class RobotContainer{
 
     private final AddressableLedStrip led = new AddressableLedStrip(0, 71);
 
-    private final SUB_Swerve swerve = new SUB_Swerve( new IO_SwerveReal() );  
+    private final SUB_Swerve swerve = new SUB_Swerve( new IO_SwerveReal(), vision );  
 
     private final CommandRegistrar commandRegistrar = new CommandRegistrar(vision, swerve, conveyor, arm, shooter, led);
 
@@ -75,54 +62,41 @@ public class RobotContainer{
     */
     private void configureBindings(){
 
+        // Default drive command
         swerve.setDefaultCommand( 
             swerve.driveJoystick(() -> driverController.getRawAxis(1) , () -> -driverController.getRawAxis(0) , () -> -driverController.getRawAxis(3))
         );
 
-       // operatorController.y().onTrue( new CMD_IndexerManual(conveyor, true));
-        //operatorController.y().onFalse(new CMD_IndexerStop(conveyor));
-
-       // operatorController.x().onTrue( new CMD_IndexerManual(conveyor, false));
-        //operatorController.x().onTrue(new CMD_IndexerStop(conveyor));
-
-        
-        /* 
+        // Shoot command
         operatorController.x().onTrue(new CMDGR_Shoot(conveyor, arm, shooter, vision, led,
-            ShooterMode.SPEAKER, () -> operatorController.b().getAsBoolean(), () -> operatorController.y().getAsBoolean()
-        ));
-        */
-
-        operatorController.x().onTrue(new CMDGR_Shoot(conveyor, arm, shooter, vision, led,
-            ShooterMode.SPEAKER, () -> operatorController.b().getAsBoolean(), () -> operatorController.y().getAsBoolean()
+            ShooterMode.SPEAKER, () -> operatorController.b().getAsBoolean(), () -> operatorController.x().getAsBoolean()
         ));
         
-        operatorController.rightBumper().onTrue(new CMDGR_Shoot(conveyor, arm, shooter, vision, led,
+        // Amp command
+        operatorController.y().onTrue(new CMDGR_Shoot(conveyor, arm, shooter, vision, led,
             ShooterMode.AMP, () -> operatorController.b().getAsBoolean(), () -> operatorController.y().getAsBoolean()
         ));
+
+        // Intake command
+        operatorController.a().onTrue(new CMD_Intake(conveyor, arm, () -> operatorController.b().getAsBoolean()));
         
+        // Eject command
         operatorController.leftBumper().onTrue(new CMD_IndexerManual(conveyor, false));
 
-        //operatorController.a().onTrue(new CMD_Arm(arm, ArmState.INTAKE));
-
-        operatorController.a().onTrue(new CMD_Intake(conveyor, arm, () -> operatorController.b().getAsBoolean()));
-
-        //operatorController.a().debounce(0.25, DebounceType.kRising).onTrue(new CMD_Arm(arm, ArmState.INTAKE));
-
-        //operatorController.a().debounce(0.25, DebounceType.kFalling).onFalse(new CMD_Arm(arm, ArmState.IDLE));
-
+        // Idle command
         operatorController.b().onTrue(new CMD_Idle(conveyor, arm, shooter));
 
-        //operatorController.x().onTrue(new CMD_Intake(conveyor, arm, () -> operatorController.b().getAsBoolean()));
+        // Drive to speaker command
+        operatorController.povRight().debounce(0.25).onTrue(new CMDGR_DrivePose(swerve, Constants.Auto.DriveScoringPoseState.SPEAKER, () -> operatorController.b().getAsBoolean()));
 
-        
-      // operatorController.b().onTrue(swerve.driveToPose(
-      //  new Pose2d(2.30, 5.37, Rotation2d.fromDegrees(180))
-       //));
+        // Drive to amp command
+        operatorController.povLeft().debounce(0.25).onTrue(new CMDGR_DrivePose(swerve, Constants.Auto.DriveScoringPoseState.AMP, () -> operatorController.b().getAsBoolean()));
     }
 
     private void logMetadata(){
         Logger.recordMetadata("Robot Mode",  Constants.CURRENT_MODE + "");
-        Logger.recordMetadata("Test Mode",  Constants.TEST_MODE + "");
+        Logger.recordMetadata("PID Test Mode",  Constants.PID_TEST_MODE + "");
+        Logger.recordMetadata("Teleop Auto Drive",  Constants.TELEOP_AUTO_DRIVE_ENABLED + "");
     }
 
     /**

@@ -137,9 +137,57 @@ public class AddressableLedStrip extends SubsystemBase{
     }
 
     private void flame(){
-        for(var i = 0; i < length; i++){
-            int decay = MathCalc.random(0, ((i+1) * 10) / length + 1);
-            ledBuffer.setRGB(i, 160 - decay, 120 - decay, 90 - decay);
+        byte[] heat = new byte[length];
+        final int COOLING =  55;
+        final int SPARKING =  120;
+    
+        // Step  1. Cool down every cell a little
+        for(var i =  0; i < length; i++){
+            heat[i] = (byte)Math.max(0, heat[i] - random(0, ((COOLING *  10) / length) +  2));
         }
+    
+        // Step  2. Heat from each cell drifts 'up' and diffuses a little
+        for(var k = length -  3; k >  0; k--){
+            heat[k] = (byte)((heat[k -  1] + heat[k -  2] + heat[k -  2]) /  3);
+        }
+    
+        // Step  3. Randomly ignite new 'sparks' of heat near the bottom
+        if(random(0,  255) < SPARKING){
+            int y = random(0,  7);
+            heat[y] = (byte)(heat[y] + random(160,  255));
+        }
+    
+        // Step  4. Map from heat cells to LED colors
+        for (var j =  0; j < length; j++) {
+            byte colorIndex = (byte)scale8(heat[j],  240);
+            // Use the color index to map to a color palette
+            // You would need to define a color palette similar to the one in Source  1
+            Color color = paletteLookup(colorIndex); // Replace with actual implementation
+            ledBuffer.setLED(j, color);
+        }
+    }
+    
+    private int random(int min, int max){
+        return (int)(Math.random() * (max - min +  1)) + min;
+    }
+
+    private int scale8(int num, int ceilVal){
+        return (num * ceilVal) >>  8;
+    }
+
+    private static final Color[] palette = {
+        new Color(0,  0,  0), // Black
+        new Color(128,  0,  0), // Dark red
+        new Color(255,  0,  0), // Red
+        new Color(255,  165,  0), // Orange
+        new Color(255,  255,  0), // Yellow
+        new Color(255,  255,  255) // White
+    };
+    
+    private Color paletteLookup(int index){
+        // Ensure index is within bounds
+        index = Math.max(0, Math.min(index, palette.length -  1));
+        // Return the corresponding color from the palette
+        return palette[index];
     }
 }

@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.subsystems.vision.SUB_Vision;
 
 public class SUB_Swerve extends SubsystemBase{
 
@@ -23,11 +24,11 @@ public class SUB_Swerve extends SubsystemBase{
 
     private final SwerveInputsAutoLogged inputs = new SwerveInputsAutoLogged();
 
-    //private final Vision vision;
+    private final SUB_Vision vision;
 
-    public SUB_Swerve(IO_SwerveBase io){
+    public SUB_Swerve(IO_SwerveBase io, SUB_Vision vision){
         this.io = io;
-        //this.vision = vision;
+        this.vision = vision;
 
         // Configure PathPlanner
         io.setupPathPlanner(this);
@@ -36,8 +37,8 @@ public class SUB_Swerve extends SubsystemBase{
     public void periodic(){
 
         // Add vision measurements
-        //io.addVisionMeasurement(vision.getEstimatedGlobalPose(Constants.Vision.Camera.LEFT_CAMERA).get());
-        //io.addVisionMeasurement(vision.getEstimatedGlobalPose(Constants.Vision.Camera.RIGHT_CAMERA).get());
+        io.addVisionMeasurement(vision.getEstimatedGlobalPose(Constants.Vision.Camera.LEFT_CAMERA).get());
+        io.addVisionMeasurement(vision.getEstimatedGlobalPose(Constants.Vision.Camera.RIGHT_CAMERA).get());
 
         io.updateOdometry();
         io.updateInputs(inputs);

@@ -46,7 +46,7 @@ public class IO_ShooterReal implements IO_ShooterBase {
         bottomMotorEncoder = bottomMotor.getEncoder();
         topMotorEncoder = topMotor.getEncoder();
 
-        if(Constants.TEST_MODE){
+        if(Constants.PID_TEST_MODE){
             SmartDashboard.putNumber("shooterTestRPMInput",  0);    
         }
     }
@@ -72,7 +72,7 @@ public class IO_ShooterReal implements IO_ShooterBase {
     public void updatePID(double setpointRPM){
         this.setpointRPM = setpointRPM;
 
-        if(Constants.TEST_MODE){
+        if(Constants.PID_TEST_MODE){
             double shooterTestRPMInput = SmartDashboard.getNumber("shooterTestRPMInput",  0);
             bottomPID.setReference(shooterTestRPMInput, CANSparkFlex.ControlType.kVelocity);
             topPID.setReference(shooterTestRPMInput, CANSparkFlex.ControlType.kVelocity);
@@ -104,18 +104,18 @@ public class IO_ShooterReal implements IO_ShooterBase {
     */
     @Override
     public boolean isUpToSpeed() {
-        double leftVelocity = bottomMotorEncoder.getVelocity();
-        double rightVelocity = bottomMotorEncoder.getVelocity();
+        double topMotorVelocity = topMotorEncoder.getVelocity();
+        double bottomMotorVelocity = bottomMotorEncoder.getVelocity();
     
-        boolean isLeftUpToSpeed = leftVelocity >= setpointRPM - Constants.Robot.SHOOTER_TOLERANCE_RPM
-                && leftVelocity <= setpointRPM + Constants.Robot.SHOOTER_TOLERANCE_RPM;
+        boolean isLeftUpToSpeed = topMotorVelocity >= setpointRPM - Constants.Robot.SHOOTER_TOLERANCE_RPM
+                && topMotorVelocity <= setpointRPM + Constants.Robot.SHOOTER_TOLERANCE_RPM;
     
-        boolean isRightUpToSpeed = rightVelocity >= setpointRPM - Constants.Robot.SHOOTER_TOLERANCE_RPM
-                && rightVelocity <= setpointRPM + Constants.Robot.SHOOTER_TOLERANCE_RPM;
+        boolean isRightUpToSpeed = bottomMotorVelocity >= setpointRPM - Constants.Robot.SHOOTER_TOLERANCE_RPM
+                && bottomMotorVelocity <= setpointRPM + Constants.Robot.SHOOTER_TOLERANCE_RPM;
     
         return isLeftUpToSpeed && isRightUpToSpeed;
     }
-
+    
     @Override
     public void invertMotors(boolean inverted){
        // motorBottom.setInverted(inverted);

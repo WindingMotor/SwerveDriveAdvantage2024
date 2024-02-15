@@ -59,7 +59,7 @@ public class IO_ArmReal implements IO_ArmBase{
         armEncoder.reset();
         armAngle = armEncoder.getDistance() - Constants.Robot.ARM_OFFSET_DEGREES;
 
-        if(Constants.TEST_MODE){
+        if(Constants.PID_TEST_MODE){
             SmartDashboard.putNumber("armTestAngleInput",  0);
         }
     }
@@ -95,7 +95,7 @@ public class IO_ArmReal implements IO_ArmBase{
         this.setpointPosition = newSetpointPosition;
 
         // Live debug code
-        if(Constants.TEST_MODE){
+        if(Constants.PID_TEST_MODE){
             double armTestAngleInput = SmartDashboard.getNumber("armTestAngleInput",  0);
             if(armTestAngleInput > 110){
                 armTestAngleInput = 110;

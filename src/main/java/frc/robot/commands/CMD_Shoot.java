@@ -86,23 +86,34 @@ public class CMD_Shoot extends Command{
     */
     @Override
     public void execute(){
+        setInitalStates();
+        checkConveyor();
+        checkEndCommand();
+    }
 
-        if(mode == ShooterMode.SPEAKER){ // SPEAKER mode
+    private void setInitalStates(){
+        // SPEAKER mode
+        if(mode == ShooterMode.SPEAKER){ 
             shooter.invertMotors(true);
-
             shooter.setState(Constants.States.ShooterState.SPEAKER_2M);
             arm.setState(Constants.States.ArmState.SPEAKER_2M);
 
-
-        }else if(mode == ShooterMode.AMP){ // AMP mode
+        // AMP mode
+        }else if(mode == ShooterMode.AMP){ 
             shooter.invertMotors(false);
             shooter.setState(Constants.States.ShooterState.AMP);
             arm.setState(Constants.States.ArmState.AMP);
-        }else{ dynamicMode(); } // DYNAMIC mode
 
+        // Dynamic mode
+        }else{ 
+        
+        }
+    }
 
-        if(!autoShoot){ // Manual shoot
-            // If operator presses shoot button run the conveyor
+    private void checkConveyor(){
+
+        // Manual operator shoot
+        if(!autoShoot){
             if(shoot.get()){
                 hasShootBeenCalled = true;
                 if(mode == ShooterMode.AMP){
@@ -111,9 +122,10 @@ public class CMD_Shoot extends Command{
                     conveyor.setState(Constants.States.ConveyorState.SHOOT);
                 }
             }
-        }else{ // Auto shoot if up to RPM
-            // If shooter RPM is up to speed run the conveyor
-            if(shooter.inputs.isUpToSpeed){ // 
+            
+        // Auto shoot with RPM check
+        }else{ 
+            if(shooter.inputs.isUpToSpeed){ 
                 hasShootBeenCalled = true;
                 if(mode == ShooterMode.AMP){
                     conveyor.setState(Constants.States.ConveyorState.AMP);
@@ -122,17 +134,16 @@ public class CMD_Shoot extends Command{
                 }
             }
         }
+    }
 
-        
+    private void checkEndCommand(){
+
         // Once operator has pressed shoot button and the donut leaves the conveyor end the command
         if(hasShootBeenCalled){
             if(conveyor.inputs.indexerFinalSensorState){
                 isCommandDone = true;
-                
             }
         }
-         
-
     }
 
     /**
@@ -141,9 +152,6 @@ public class CMD_Shoot extends Command{
      */
     @Override
     public void end(boolean interrupted){
-        //conveyor.setState(Constants.States.ConveyorState.OFF);
-        //arm.setState(Constants.States.ArmState.IDLE);
-        //shooter.setState(Constants.States.ShooterState.IDLE);
         led.setState(LEDState.RAINBOW);
     }
 
@@ -158,27 +166,5 @@ public class CMD_Shoot extends Command{
         }else{
             return false;
         }
-    }
-
-    /**
-     * Handles dynamic mode. Sets the state of the arm to IDLE,
-     * calculates the angle of the arm, and sets the angle and rpm of the shooter.
-    */
-    private void dynamicMode(){
-
-
-        shooter.invertMotors(true);
-        
-        // Set state of arm to IDLE
-        arm.setState(Constants.States.ArmState.IDLE);
-
-        // Calculate the angle of the arm
-        double calculatedAngle = 0.0;
-
-        // Set the angle of the arm
-        // TODO: Set the angle of the arm
-
-        // Set the rpm of the shooter
-        // TODO: Set the rpm of the shooter
     }
 }

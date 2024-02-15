@@ -1,14 +1,6 @@
 // Written by WindingMotor as part of the wmlib2j library.
 
 package frc.robot.util;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import org.apache.commons.math3.fitting.PolynomialCurveFitter;
-import org.apache.commons.math3.fitting.WeightedObservedPoints;
-import com.opencsv.CSVReader;
-import com.opencsv.exceptions.CsvException;
 
 /**
  * The MathCalc class provides functionality to find the best RPM and angle

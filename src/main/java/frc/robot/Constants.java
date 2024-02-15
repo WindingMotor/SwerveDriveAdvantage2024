@@ -20,7 +20,10 @@ public class Constants{
     public static final double LOOP_PERIOD_SECS = 0.02;
 
     // Use extreme caution when enabled, manually controls PID setpoints through smart dashboard.
-    public static final boolean TEST_MODE = false;
+    public static final boolean PID_TEST_MODE = false;
+
+    // Enables auto driving to a pose with pathplanner during teletop. Be very careful when activated!
+    public static final boolean TELEOP_AUTO_DRIVE_ENABLED = false;
 
     // Current robot mode
     public enum RobotMode {
@@ -39,14 +42,14 @@ public class Constants{
         public static final double OPERATOR_DEADBAND = 0.05;
         public static final int OPERATOR_PORT = 2;
 
-        public enum DriverBindings{
+        public enum InputAxes{
             TX16S(0, false, 1, false, 3, false),
             XBOX(1, true, 0, true, 4, false);
 
             public final int xInput, yInput, rInput;
             public final boolean xInverted, yInverted, rInverted;
 
-            DriverBindings(int xInput, boolean xInverted, int yInput, boolean yInverted, int rInput, boolean rInverted) {
+            InputAxes(int xInput, boolean xInverted, int yInput, boolean yInverted, int rInput, boolean rInverted) {
                 this.xInput = xInput;
                 this.xInverted = xInverted;
                 this.yInput = yInput;
@@ -54,7 +57,12 @@ public class Constants{
                 this.rInput = rInput;
                 this.rInverted = rInverted;
             }
-        }
+        }        
+    }
+
+    public static class InputBindings{
+
+
     }
 
     public static class Vision {
@@ -62,16 +70,27 @@ public class Constants{
         // Latency warning trigger threshold in miliseconds
         public static final double LATENCY_THRESHOLD_MILI_SEC = 30.0;
 
+        /*
+            Robot Space
+            3d Cartesian Coordinate System with (0,0,0) located at the center of the robot’s frame projected down to the floor.
+
+            X+ → Pointing forward (Forward Vector)
+
+            Y+ → Pointing toward the robot’s right (Right Vector)
+
+            Z+ → Pointing upward (Up Vector)
+        */
+
         // Camera enum, contains name and position of the camera relative to the robot.
         public enum Camera{
         LEFT_CAMERA("OV9281_02", "leftCamera", new Transform3d(
-            new Translation3d(Units.inchesToMeters(9.125), Units.inchesToMeters(12), Units.inchesToMeters(8.625)), 
-            new Rotation3d(0,15,133)) // Camera mounted 10.25in forward, -12.5in left, 12.0in up facing forward.
+            new Translation3d(Units.inchesToMeters(12.0), Units.inchesToMeters(-9.125), Units.inchesToMeters(8.625)), // Camera mounted 12in forward, 9.125in left, 8.625 up.
+            new Rotation3d(0,Units.degreesToRadians(15),Units.degreesToRadians(133)))  // No roll, Pitch on 15 degrees from robot frame, and yaw of 133 degrees from robot frame.
         ),
 
         RIGHT_CAMERA("OV9281_01", "rightCamera", new Transform3d(
-            new Translation3d(Units.inchesToMeters(9.125), Units.inchesToMeters(12), Units.inchesToMeters(8.625)), 
-            new Rotation3d(0,15,47)) // Camera mounted 8.5in forward, 8.5in right, 9.0in up facing forward.
+            new Translation3d(Units.inchesToMeters(12.0), Units.inchesToMeters(9.125), Units.inchesToMeters(8.625)), // Camera mounted 12in forward, 9.125in right, 8.625 up.
+            new Rotation3d(0,Units.degreesToRadians(15),Units.degreesToRadians(47))) // No roll, Pitch on 15 degrees from robot frame, and yaw of 47 degrees from robot frame.
         );
 
         public final String PHOTON_NAME;
@@ -194,7 +213,7 @@ public class Constants{
         // Speeds of the shooter for the various modes
         public enum ShooterState{
             OFF(0.0, 0.0), 
-            IDLE(3700, 0.0), 
+            IDLE(3500, 0.0), 
 
             SPEAKER_1M(3700, 1.0),
             SPEAKER_2M(3700, 2.0),
@@ -291,6 +310,11 @@ public class Constants{
             NotePoses(Pose2d pose){
                 this.pose = pose;
             }
+        }
+
+        public enum DriveScoringPoseState{
+            SPEAKER,
+            AMP
         }
         
     }
