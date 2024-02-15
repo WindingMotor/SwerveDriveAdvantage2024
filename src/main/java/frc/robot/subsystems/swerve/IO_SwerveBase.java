@@ -3,11 +3,16 @@
 package frc.robot.subsystems.swerve;
 import org.littletonrobotics.junction.AutoLog;
 import org.photonvision.EstimatedRobotPose;
+
+import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
 
 public interface IO_SwerveBase{
 
@@ -32,7 +37,12 @@ public interface IO_SwerveBase{
 
     double getMaximumAngularVelocity();
 
-    void addVisionMeasurement(EstimatedRobotPose pose);
+    /** See {@link SwerveDrivePoseEstimator#addVisionMeasurement(Pose2d, double)}. */
+    public void addVisionMeasurement(Pose2d visionMeasurement, double timestampSeconds);
+
+    /** See {@link SwerveDrivePoseEstimator#addVisionMeasurement(Pose2d, double, Matrix)}. */
+    public void addVisionMeasurement( Pose2d visionMeasurement, double timestampSeconds, Matrix<N3, N1> stdDevs);
+
 
     void updateOdometry();
 
@@ -41,5 +51,7 @@ public interface IO_SwerveBase{
     void resetOdometry(Pose2d pose);
 
     Rotation2d getHeading();
+
+
 
 }

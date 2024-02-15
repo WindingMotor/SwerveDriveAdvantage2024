@@ -1,11 +1,19 @@
 // Written by WindingMotor as part of the wmlib2j library.
 
 package frc.robot.subsystems.vision;
+import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
+
+import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
 import frc.robot.Constants.Vision.Camera;
 import java.util.List;
+import java.util.Optional;
+
 import org.littletonrobotics.junction.AutoLog;
 public interface IO_VisionBase{
 
@@ -35,7 +43,11 @@ public interface IO_VisionBase{
     public PhotonPipelineResult getResult(Camera camera);
     
     public List<PhotonTrackedTarget> getTargets(Camera camera);
-
     public PhotonPoseEstimator getPoseEstimator(Camera camera);
 
+
+    public Optional<EstimatedRobotPose> getEstimatedGlobalPose(Camera camera);
+
+    public Matrix<N3, N1> getEstimationStdDevs(Pose2d estimatedPose);
+    
 }

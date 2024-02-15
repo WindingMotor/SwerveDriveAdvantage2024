@@ -14,7 +14,7 @@ import frc.robot.Constants.Vision.Camera;
 
 public class SUB_Vision extends SubsystemBase {
 
-    private  final IO_VisionBase io;
+    public  final IO_VisionBase io;
 
     public final VisionInputsAutoLogged inputs = new VisionInputsAutoLogged();
 

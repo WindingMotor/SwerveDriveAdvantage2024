@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.Vision.Camera;
 import frc.robot.subsystems.vision.SUB_Vision;
 
 public class SUB_Swerve extends SubsystemBase{
@@ -36,9 +37,31 @@ public class SUB_Swerve extends SubsystemBase{
 
     public void periodic(){
 
-        // Add vision measurements
-        io.addVisionMeasurement(vision.getEstimatedGlobalPose(Constants.Vision.Camera.LEFT_CAMERA).get());
-        io.addVisionMeasurement(vision.getEstimatedGlobalPose(Constants.Vision.Camera.RIGHT_CAMERA).get());
+ 
+       var leftVisionEst = vision.io.getEstimatedGlobalPose(Camera.LEFT_CAMERA);
+       leftVisionEst.ifPresent(
+               est -> {
+                   var estPose = est.estimatedPose.toPose2d();
+                   // Change our trust in the measurement based on the tags we can see
+                   var estStdDevs = vision.io.getEstimationStdDevs(estPose);
+
+                   io.addVisionMeasurement(
+                           est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
+                    Logger.recordOutput("Estimated Left Pose", est.estimatedPose.toPose2d());
+               });
+
+ 
+       var rightVisionEst = vision.io.getEstimatedGlobalPose(Camera.RIGHT_CAMERA);
+       rightVisionEst.ifPresent(
+               est -> {
+                   var estPose = est.estimatedPose.toPose2d();
+                   // Change our trust in the measurement based on the tags we can see
+                   var estStdDevs = vision.io.getEstimationStdDevs(estPose);
+
+                   io.addVisionMeasurement(
+                           est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
+                    Logger.recordOutput("Estimated Right Pose", est.estimatedPose.toPose2d());
+               });
 
         io.updateOdometry();
         io.updateInputs(inputs);
