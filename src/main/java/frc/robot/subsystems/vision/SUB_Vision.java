@@ -62,6 +62,8 @@ public class SUB_Vision extends SubsystemBase {
 
         // Process inputs and send to logger.
         Logger.processInputs("Vision", inputs);
+        Logger.recordOutput("ID 7", getDirectDistanceMetersToTag(7));
+        Logger.recordOutput("Targets", targets.toString());
     }
 
     /**

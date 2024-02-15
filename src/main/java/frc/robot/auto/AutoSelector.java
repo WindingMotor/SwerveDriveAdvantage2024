@@ -15,23 +15,12 @@ public class AutoSelector{
 
     private SendableChooser<Command> autoSelector;
 
-    private double autosLoaded = 0;
 
     public AutoSelector(){
 
         shuffleboardTab = Shuffleboard.getTab("Auto Selector");
     
-        autoSelector = new SendableChooser<Command>();
-
-        autoSelector.setDefaultOption("A3_3D_SM", AutoBuilder.buildAuto("A3_3D_SM"));
-        
-        AutoBuilder.getAllAutoNames().forEach( name -> {
-            autoSelector.addOption(name, AutoBuilder.buildAuto(name));
-            DriverStation.reportError("[init] [auto] " + name, false);
-            autosLoaded += 1;
-        });
-
-        Logger.recordMetadata("Autos Loaded", autosLoaded + "");
+        autoSelector = AutoBuilder.buildAutoChooser("A1_D1_SM");
         
         shuffleboardTab.add(autoSelector);
     }    

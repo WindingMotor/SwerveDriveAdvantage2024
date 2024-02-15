@@ -86,17 +86,20 @@ public class CMD_Shoot extends Command{
     */
     @Override
     public void execute(){
+
         if(mode == ShooterMode.SPEAKER){ // SPEAKER mode
             shooter.invertMotors(true);
 
-            //shooter.setState(Constants.States.ShooterState.SPEAKER_1M);
-            //arm.setState(Constants.States.ArmState.SPEAKER_1M);
+            shooter.setState(Constants.States.ShooterState.SPEAKER_2M);
+            arm.setState(Constants.States.ArmState.SPEAKER_2M);
+
 
         }else if(mode == ShooterMode.AMP){ // AMP mode
             shooter.invertMotors(false);
             shooter.setState(Constants.States.ShooterState.AMP);
             arm.setState(Constants.States.ArmState.AMP);
         }else{ dynamicMode(); } // DYNAMIC mode
+
 
         if(!autoShoot){ // Manual shoot
             // If operator presses shoot button run the conveyor
@@ -110,7 +113,7 @@ public class CMD_Shoot extends Command{
             }
         }else{ // Auto shoot if up to RPM
             // If shooter RPM is up to speed run the conveyor
-            if(true){ // shooter.inputs.isUpToSpeed
+            if(shooter.inputs.isUpToSpeed){ // 
                 hasShootBeenCalled = true;
                 if(mode == ShooterMode.AMP){
                     conveyor.setState(Constants.States.ConveyorState.AMP);
@@ -123,7 +126,7 @@ public class CMD_Shoot extends Command{
         
         // Once operator has pressed shoot button and the donut leaves the conveyor end the command
         if(hasShootBeenCalled){
-            if(!conveyor.inputs.indexerFinalSensorState){
+            if(conveyor.inputs.indexerFinalSensorState){
                 isCommandDone = true;
                 
             }
@@ -138,9 +141,9 @@ public class CMD_Shoot extends Command{
      */
     @Override
     public void end(boolean interrupted){
-        conveyor.setState(Constants.States.ConveyorState.OFF);
-        arm.setState(Constants.States.ArmState.IDLE);
-        shooter.setState(Constants.States.ShooterState.IDLE);
+        //conveyor.setState(Constants.States.ConveyorState.OFF);
+        //arm.setState(Constants.States.ArmState.IDLE);
+        //shooter.setState(Constants.States.ShooterState.IDLE);
         led.setState(LEDState.RAINBOW);
     }
 

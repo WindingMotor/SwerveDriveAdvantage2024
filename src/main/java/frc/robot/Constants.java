@@ -8,6 +8,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.util.Units;
 
 /**
  * This class contains constants used in the robot code.
@@ -64,12 +65,13 @@ public class Constants{
         // Camera enum, contains name and position of the camera relative to the robot.
         public enum Camera{
         LEFT_CAMERA("OV9281_02", "leftCamera", new Transform3d(
-            new Translation3d(11.0, -13.5, 12.0), 
-            new Rotation3d(0,0,0)) // Camera mounted 10.25in forward, -12.5in left, 12.0in up facing forward.
+            new Translation3d(Units.inchesToMeters(9.125), Units.inchesToMeters(12), Units.inchesToMeters(8.625)), 
+            new Rotation3d(0,15,133)) // Camera mounted 10.25in forward, -12.5in left, 12.0in up facing forward.
         ),
+
         RIGHT_CAMERA("OV9281_01", "rightCamera", new Transform3d(
-            new Translation3d(11.5, 9.5, 8.5), 
-            new Rotation3d(0,0,0)) // Camera mounted 8.5in forward, 8.5in right, 9.0in up facing forward.
+            new Translation3d(Units.inchesToMeters(9.125), Units.inchesToMeters(12), Units.inchesToMeters(8.625)), 
+            new Rotation3d(0,15,47)) // Camera mounted 8.5in forward, 8.5in right, 9.0in up facing forward.
         );
 
         public final String PHOTON_NAME;
@@ -95,7 +97,7 @@ public class Constants{
         public static final boolean ARM_MOTOR_LEAD_INVERTED = false;
         public static final boolean ARM_MOTOR_FOLLOWER_INVERTED = false;
 
-        public static final double ARM_P = 0.46; // Volts 
+        public static final double ARM_P = 0.45; // Volts 
         public static final double ARM_I = 0.0;
         public static final double ARM_D = 0.00012;
 
@@ -192,13 +194,13 @@ public class Constants{
         // Speeds of the shooter for the various modes
         public enum ShooterState{
             OFF(0.0, 0.0), 
-            IDLE(3000, 0.0), 
+            IDLE(3700, 0.0), 
 
-            SPEAKER_1M(3500, 1.0),
-            SPEAKER_2M(3500, 2.0),
-            SPEAKER_3M(3500, 3.0),
-            SPEAKER_4M(3500, 4.0),
-            SPEAKER_5M(3500, 5.0),
+            SPEAKER_1M(3700, 1.0),
+            SPEAKER_2M(3700, 2.0),
+            SPEAKER_3M(3700, 3.0),
+            SPEAKER_4M(3700, 4.0),
+            SPEAKER_5M(3700, 5.0),
 
 
             AMP(5600, 0.0); 
@@ -217,15 +219,13 @@ public class Constants{
             IDLE(-4, 0.0),
 
             SPEAKER_1M(55.0, 1.0),
-            SPEAKER_2M(55.0, 2.0),
-            SPEAKER_3M(55.0, 3.0),
-            SPEAKER_4M(55.0, 4.0),
-            SPEAKER_5M(55.0, 5.0),
-
+            SPEAKER_2M(43.0, 2.0),
+            SPEAKER_3M(39.0, 3.0),
+            SPEAKER_4M(34.15, 4.0),
 
             AMP(84, 0.0), 
             DYNAMIC(-1.0, 0.0),
-            INTAKE(85.0, 0.0 ); 
+            INTAKE(89.0, 0.0 ); 
 
             public final double position;
             public final double distanceMeters;
@@ -240,8 +240,8 @@ public class Constants{
             OFF(0.0, 0.0),
             INTAKE(-1.0, -0.5),
             EJECT(1.0, 0.45),
-            SHOOT(0.0, -0.8), 
-            AMP(0.0, -0.); 
+            SHOOT(0.0, -1.0), 
+            AMP(0.0, -0.3); 
 
             public final double intakeSpeed, indexerSpeed;
             ConveyorState(double intakeSpeed, double indexerSpeed){

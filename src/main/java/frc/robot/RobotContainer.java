@@ -96,7 +96,6 @@ public class RobotContainer{
             ShooterMode.SPEAKER, () -> operatorController.b().getAsBoolean(), () -> operatorController.y().getAsBoolean()
         ));
         
-
         operatorController.rightBumper().onTrue(new CMDGR_Shoot(conveyor, arm, shooter, vision, led,
             ShooterMode.AMP, () -> operatorController.b().getAsBoolean(), () -> operatorController.y().getAsBoolean()
         ));

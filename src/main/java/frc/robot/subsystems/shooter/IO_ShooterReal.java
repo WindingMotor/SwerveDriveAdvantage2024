@@ -77,7 +77,6 @@ public class IO_ShooterReal implements IO_ShooterBase {
             bottomPID.setReference(shooterTestRPMInput, CANSparkFlex.ControlType.kVelocity);
             topPID.setReference(shooterTestRPMInput, CANSparkFlex.ControlType.kVelocity);
         }else{
-
             bottomPID.setReference(setpointRPM, CANSparkFlex.ControlType.kVelocity);
             topPID.setReference(setpointRPM, CANSparkFlex.ControlType.kVelocity);
         }
