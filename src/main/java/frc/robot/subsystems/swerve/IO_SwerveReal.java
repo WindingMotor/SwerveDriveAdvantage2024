@@ -3,24 +3,20 @@
 package frc.robot.subsystems.swerve;
 import java.io.File;
 import java.io.IOException;
-import org.photonvision.EstimatedRobotPose;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
-
-import edu.wpi.first.math.Matrix;
-import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.numbers.N1;
-import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import frc.robot.Constants;
+import frc.robot.Constants.Vision.Camera;
+import frc.robot.subsystems.vision.SUB_Vision;
 import swervelib.SwerveDrive;
 import swervelib.parser.SwerveParser;
 import swervelib.telemetry.SwerveDriveTelemetry;
@@ -34,6 +30,10 @@ public class IO_SwerveReal implements IO_SwerveBase{
     private static double maxSpeed = Units.feetToMeters(4.5);
     private static File jsonDirectory = new File(Filesystem.getDeployDirectory(),"swerve");
     private static SwerveDrive swerveDrive;
+
+    // Local pose estimates that will be updated and sent to updateInputs when updateEstimations is called
+    private Pose2d localEstimatedLeftPose = new Pose2d();
+    private Pose2d localEstimatedRightPose = new Pose2d();
 
     public IO_SwerveReal(){
 
@@ -63,6 +63,8 @@ public class IO_SwerveReal implements IO_SwerveBase{
         inputs.odometryHeading = swerveDrive.getOdometryHeading();
         inputs.states = swerveDrive.getStates();
         inputs.positions = swerveDrive.getModulePositions();
+        inputs.estimatedLeftPose = localEstimatedLeftPose;
+        inputs.estimatedRightPose = localEstimatedRightPose;
     }
 
     public void setupPathPlanner(SUB_Swerve subsystem){
@@ -108,7 +110,6 @@ public class IO_SwerveReal implements IO_SwerveBase{
 
     @Override
     public Rotation2d getHeading(){
-        // return swerveDrive.getYaw();
         return getPose().getRotation();
     }
 
@@ -127,15 +128,35 @@ public class IO_SwerveReal implements IO_SwerveBase{
         return swerveDrive.getMaximumAngularVelocity();
     }
 
-    /** See {@link SwerveDrivePoseEstimator#addVisionMeasurement(Pose2d, double)}. */
-    public void addVisionMeasurement(Pose2d visionMeasurement, double timestampSeconds) {
-        swerveDrive.addVisionMeasurement(visionMeasurement, timestampSeconds);
-    }
+    /**
+     * Update estimations based on vision measurements from left and right cameras.
+    */
+    @Override
+    public void updateEstimations(SUB_Vision vision){
 
-    /** See {@link SwerveDrivePoseEstimator#addVisionMeasurement(Pose2d, double, Matrix)}. */
-    public void addVisionMeasurement(
-            Pose2d visionMeasurement, double timestampSeconds, Matrix<N3, N1> stdDevs) {
-        swerveDrive.addVisionMeasurement(visionMeasurement, timestampSeconds, stdDevs);
+       var leftVisionEst = vision.getEstimatedGlobalPose(Camera.LEFT_CAMERA);
+       leftVisionEst.ifPresent(
+               est -> {
+                   var estPose = est.estimatedPose.toPose2d();
+                   // Change our trust in the measurement based on the tags we can see
+                   var estStdDevs = vision.getEstimationStdDevs(estPose);
+
+                   swerveDrive.addVisionMeasurement(
+                           est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
+                    localEstimatedLeftPose = est.estimatedPose.toPose2d();
+               });
+ 
+       var rightVisionEst = vision.getEstimatedGlobalPose(Camera.RIGHT_CAMERA);
+       rightVisionEst.ifPresent(
+               est -> {
+                   var estPose = est.estimatedPose.toPose2d();
+                   // Change our trust in the measurement based on the tags we can see
+                   var estStdDevs = vision.getEstimationStdDevs(estPose);
+
+                   swerveDrive.addVisionMeasurement(
+                           est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
+                    localEstimatedRightPose = est.estimatedPose.toPose2d();
+               });
     }
 
     @Override

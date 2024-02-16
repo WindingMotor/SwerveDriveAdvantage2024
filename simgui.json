@@ -21,6 +21,13 @@
       "/SmartDashboard/navX-Sensor[4]": "Gyro"
     }
   },
+  "NetworkTables": {
+    "transitory": {
+      "SmartDashboard": {
+        "open": true
+      }
+    }
+  },
   "NetworkTables Info": {
     "visible": true
   }
