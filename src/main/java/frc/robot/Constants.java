@@ -70,51 +70,10 @@ public class Constants{
     }
 
     public static class Vision {
-
-
-    /*
-
-cameraPoses =
-
-// ROLL, PITCH, YAW
-            new Pose3d[] {
-              // Front left (forward facing, camera 6)
-              new Pose3d(
-                  Units.inchesToMeters(9.875),
-                  Units.inchesToMeters(9.55),
-                  Units.inchesToMeters(6.752) + Module.getWheelRadius(),
-                  new Rotation3d(0.0, Units.degreesToRadians(-28.125), 0.0) // 0 roll, pitch -28, dont have yaw -> apply a rotation of yaw by -35 deg
-                      .rotateBy(new Rotation3d(0.0, 0.0, Units.degreesToRadians(-35.0)))),
-
-              // Back right (right facing, camera 4)
-              new Pose3d(
-                  Units.inchesToMeters(-10.375),
-                  Units.inchesToMeters(-10.242),
-                  Units.inchesToMeters(7.252) + Module.getWheelRadius(),
-                  new Rotation3d(0.0, Units.degreesToRadians(-28.125), 0.0)
-                      .rotateBy(new Rotation3d(0.0, 0.0, Units.degreesToRadians(-82.829)))),
-
-              // Back left (left facing, camera 5)
-              new Pose3d(
-                  Units.inchesToMeters(-10.15),
-                  Units.inchesToMeters(9.7),
-                  Units.inchesToMeters(5.752) + Module.getWheelRadius(),
-                  new Rotation3d(0.0, Units.degreesToRadians(-28.125), 0.0)
-                      .rotateBy(new Rotation3d(0.0, 0.0, Units.degreesToRadians(82.829)))),
-
-              // Back right (back facing, camera 3)
-              new Pose3d(
-                  Units.inchesToMeters(-10.5),
-                  Units.inchesToMeters(-9.25),
-                  Units.inchesToMeters(6.252) + Module.getWheelRadius(),
-                  new Rotation3d(0.0, Units.degreesToRadians(-28.125), 0.0)
-                      .rotateBy(new Rotation3d(0.0, 0.0, Units.degreesToRadians(145.0))))
-            };
-
-
-
-    */
-
+// The standard deviations of our vision estimated poses, which affect correction rate
+        // (Fake values. Experiment and determine estimation noise on an actual robot.)
+        public static final Matrix<N3, N1> SINGLE_TAG_STD_DEVS = VecBuilder.fill(4, 4, 8);
+        public static final Matrix<N3, N1> MULTI_TAG_STD_DEVS = VecBuilder.fill(0.5, 0.5, 1);
 
         // Latency warning trigger threshold in miliseconds
         public static final double LATENCY_THRESHOLD_MILI_SEC = 30.0;

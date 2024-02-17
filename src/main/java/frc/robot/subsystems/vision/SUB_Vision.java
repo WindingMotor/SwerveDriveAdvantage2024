@@ -131,13 +131,14 @@ public class SUB_Vision extends SubsystemBase {
         return io.getEstimatedGlobalPose(camera);
     }
 
+
     /**
      * Retrieves the estimation standard deviations for the given estimated pose.
      * @param  estimatedPose   The estimated pose for which to retrieve standard deviations
      * @return                 The estimation standard deviations for the given estimated pose
      */
-    public Matrix<N3, N1> getEstimationStdDevs(Pose2d estimatedPose){
-        return io.getEstimationStdDevs(estimatedPose);
+    public Matrix<N3, N1> getEstimationStdDevs(Pose2d estimatedPose, Camera camera){
+        return io.getEstimationStdDevs(estimatedPose, camera);
     }
 
     public Double getAmbiguity(int id){

@@ -135,18 +135,14 @@ public class IO_VisionReal implements IO_VisionBase{
 
         if(camera == Camera.LEFT_CAMERA){
             var visionEst = leftPoseEstimator.update();
-            if(!visionEst.isEmpty()){
-                 double latestTimestamp = leftCamera.getLatestResult().getTimestampSeconds();
-                boolean newResult = Math.abs(latestTimestamp - lastEstTimestamp) < 1e-2;
+            double latestTimestamp = leftCamera.getLatestResult().getTimestampSeconds();
+            boolean newResult = Math.abs(latestTimestamp - lastEstTimestamp) > 1e-5;
 
-                 if (newResult) lastEstTimestamp = latestTimestamp;
-                 return visionEst;
-        }
-    }
+            if (newResult) lastEstTimestamp = latestTimestamp;
+            return visionEst;
 
-        else{
+        }else{
             var visionEst = rightPoseEstimator.update();
-            if(!visionEst.isEmpty()){
             double latestTimestamp = rightCamera.getLatestResult().getTimestampSeconds();
             boolean newResult = Math.abs(latestTimestamp - lastEstTimestamp) > 1e-5;
 
@@ -180,29 +176,6 @@ public class IO_VisionReal implements IO_VisionBase{
             if(camera == Constants.Vision.Camera.LEFT_CAMERA){
                 tagPose = leftPoseEstimator.getFieldTags().getTagPose(tgt.getFiducialId());
             }
-            }
-        }
-        return null;
-
-    }
-
-
-
-
-        // The standard deviations of our vision estimated poses, which affect correction rate
-        // (Fake values. Experiment and determine estimation noise on an actual robot.)
-        public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(4, 4, 8);
-        public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
-
-
-
-    public Matrix<N3, N1> getEstimationStdDevs(Pose2d estimatedPose) {
-        var estStdDevs = kSingleTagStdDevs;
-        var targets = leftCamera.getLatestResult().getTargets();
-        int numTags = 0;
-        double avgDist = 0;
-        for (var tgt : targets) {
-            var tagPose = leftPoseEstimator.getFieldTags().getTagPose(tgt.getFiducialId());
             if (tagPose.isEmpty()) continue;
             numTags++;
             // Add the distance from the estimated pose to the tag's pose to the average distance

@@ -41,7 +41,7 @@ public class SUB_Swerve extends SubsystemBase{
         io.updateEstimations(vision);
 
  
-       var leftVisionEst = vision.io.getEstimatedGlobalPose(Camera.LEFT_CAMERA);
+       var leftVisionEst = vision.getEstimatedGlobalPose(Camera.LEFT_CAMERA);
        if(leftVisionEst != null){
        leftVisionEst.ifPresent(
                est -> {
@@ -54,7 +54,7 @@ public class SUB_Swerve extends SubsystemBase{
                         }
                     }
                    // Change our trust in the measurement based on the tags we can see
-                   var estStdDevs = vision.io.getEstimationStdDevs(estPose);
+                   var estStdDevs = vision.getEstimationStdDevs(estPose, Camera.LEFT_CAMERA);
 
                    if(!isAmbiguous){
                    io.addVisionMeasurement(

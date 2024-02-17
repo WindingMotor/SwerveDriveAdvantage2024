@@ -140,7 +140,7 @@ public class IO_SwerveReal implements IO_SwerveBase{
                est -> {
                    var estPose = est.estimatedPose.toPose2d();
                    // Change our trust in the measurement based on the tags we can see
-                   var estStdDevs = vision.getEstimationStdDevs(estPose);
+                   var estStdDevs = vision.getEstimationStdDevs(estPose, Camera.LEFT_CAMERA);
 
                    swerveDrive.addVisionMeasurement(
                            est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
@@ -152,7 +152,7 @@ public class IO_SwerveReal implements IO_SwerveBase{
                est -> {
                    var estPose = est.estimatedPose.toPose2d();
                    // Change our trust in the measurement based on the tags we can see
-                   var estStdDevs = vision.getEstimationStdDevs(estPose);
+                   var estStdDevs = vision.getEstimationStdDevs(estPose, Camera.RIGHT_CAMERA);
 
                    swerveDrive.addVisionMeasurement(
                            est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
