@@ -48,6 +48,6 @@ public interface IO_VisionBase{
 
     public Optional<EstimatedRobotPose> getEstimatedGlobalPose(Camera camera);
 
-    public Matrix<N3, N1> getEstimationStdDevs(Pose2d estimatedPose);
+    public Matrix<N3, N1> getEstimationStdDevs(Pose2d estimatedPose, Camera camera);
     
 }

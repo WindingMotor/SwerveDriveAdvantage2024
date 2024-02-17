@@ -4,21 +4,27 @@ package frc.robot.subsystems.vision;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import org.littletonrobotics.junction.Logger;
+
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.targeting.PhotonTrackedTarget;
+
+import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.Vision.Camera;
 
+
 public class SUB_Vision extends SubsystemBase {
 
-    public  final IO_VisionBase io;
+    private final IO_VisionBase io;
 
     public final VisionInputsAutoLogged inputs = new VisionInputsAutoLogged();
 
-    private List<PhotonTrackedApriltag> targets = new ArrayList<>();
+    private List<PhotonTrackedApriltag> trackedTargets = new ArrayList<>();
 
     public SUB_Vision(IO_VisionBase io){
         this.io = io;
@@ -27,7 +33,7 @@ public class SUB_Vision extends SubsystemBase {
     @Override
     public void periodic(){
 
-        targets.clear();
+        trackedTargets.clear();
 
         // Get latest left and right targets
         List<PhotonTrackedTarget> leftTargets = io.getTargets(Constants.Vision.Camera.LEFT_CAMERA);
@@ -35,23 +41,23 @@ public class SUB_Vision extends SubsystemBase {
 
         // Combine targets from cameras to one list
         for(PhotonTrackedTarget target : leftTargets){
-            targets.add(
+            trackedTargets.add(
                 new PhotonTrackedApriltag(target, Constants.Vision.Camera.LEFT_CAMERA)
             );
         }
 
         for(PhotonTrackedTarget target : rightTargets){
-            targets.add(
+            trackedTargets.add(
                 new PhotonTrackedApriltag(target, Constants.Vision.Camera.RIGHT_CAMERA)
             );
         }
 
         // Remove duplicates targets with same fiducial ID
-        for(int i = 0; i < targets.size(); i++){
-            PhotonTrackedApriltag target = targets.get(i);
-            for(int j = i + 1; j < targets.size(); j++){
-                if(targets.get(j).getId() == target.getId()){
-                    targets.remove(j);
+        for(int i = 0; i < trackedTargets.size(); i++){
+            PhotonTrackedApriltag target = trackedTargets.get(i);
+            for(int j = i + 1; j < trackedTargets.size(); j++){
+                if(trackedTargets.get(j).getId() == target.getId()){
+                    trackedTargets.remove(j);
                     j--; // adjust index after removal
                 }
             }
@@ -59,11 +65,6 @@ public class SUB_Vision extends SubsystemBase {
 
         // Update the inputs.
         io.updateInputs(inputs);
-
-        // Process inputs and send to logger.
-        Logger.processInputs("Vision", inputs);
-        Logger.recordOutput("ID 7", getDirectDistanceMetersToTag(7));
-        Logger.recordOutput("Targets", targets.toString());
     }
 
     /**
@@ -72,7 +73,7 @@ public class SUB_Vision extends SubsystemBase {
      * @return      The PhotonTrackedApriltag with the specified id, or null if not found
      */
     public PhotonTrackedApriltag getTag(int id){
-        for(PhotonTrackedApriltag target : targets){
+        for(PhotonTrackedApriltag target : trackedTargets){
             if(target.getId() == id){
                 return target;
             }
@@ -86,11 +87,11 @@ public class SUB_Vision extends SubsystemBase {
      * @return     The Pose3d of the robot's distance to the tag in meters and radians.
      */
     public Pose3d getRobotCenterDistanceToTag(int id){
-        for(PhotonTrackedApriltag target : targets){
+        for(PhotonTrackedApriltag target : trackedTargets){
             if(target.getId() == id){
                     return new Pose3d(
                         target.getTranslationMeters().minus(target.camera.ROBOT_TO_CAMERA.getTranslation()),
-                        target.getRotationRadians()
+                        target.getRotationRadians().minus(target.camera.ROBOT_TO_CAMERA.getRotation())
                     );
             }
         }
@@ -127,17 +128,16 @@ public class SUB_Vision extends SubsystemBase {
      * @return                             An Optional containing the estimated robot pose if the update is successful, otherwise an empty Optional
     */
     public Optional<EstimatedRobotPose> getEstimatedGlobalPose(Camera camera){
-        //io.getPoseEstimator(camera).setReferencePose(previousEstimatedRobotPose);
-        return io.getPoseEstimator(camera).update();
+        return io.getEstimatedGlobalPose(camera);
     }
 
     /**
-     * Converts inches to meters.
-     * @param  inches	The length in inches to be converted
-     * @return         	The length in meters
+     * Retrieves the estimation standard deviations for the given estimated pose.
+     * @param  estimatedPose   The estimated pose for which to retrieve standard deviations
+     * @return                 The estimation standard deviations for the given estimated pose
      */
-    public static double inchesToMeters(double inches){
-        return inches * 0.0254;
+    public Matrix<N3, N1> getEstimationStdDevs(Pose2d estimatedPose){
+        return io.getEstimationStdDevs(estimatedPose);
     }
 
     public Double getAmbiguity(int id){

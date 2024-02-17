@@ -31,8 +31,8 @@ public class IO_ShooterReal implements IO_ShooterBase {
 
         setpointRPM = 0;
 
-        bottomMotor = Builder.createVortex(Constants.Robot.SHOOTER_MOTOR_BOTTOM_ID, Constants.Robot.SHOOTER_MOTOR_BOTTOM_INVERTED, 45);
-        topMotor = Builder.createVortex(Constants.Robot.SHOOTER_MOTOR_TOP_ID, Constants.Robot.SHOOTER_MOTOR_TOP_INVERTED, 45);
+        bottomMotor = Builder.createVortex(Constants.Maestro.SHOOTER_MOTOR_BOTTOM_ID, Constants.Maestro.SHOOTER_MOTOR_BOTTOM_INVERTED, 45);
+        topMotor = Builder.createVortex(Constants.Maestro.SHOOTER_MOTOR_TOP_ID, Constants.Maestro.SHOOTER_MOTOR_TOP_INVERTED, 45);
 
         Builder.configureIdleMode(bottomMotor, false);
         Builder.configureIdleMode(topMotor, false);
@@ -40,8 +40,8 @@ public class IO_ShooterReal implements IO_ShooterBase {
         bottomPID = bottomMotor.getPIDController();
         topPID = topMotor.getPIDController();
 
-        Builder.configurePIDController(bottomPID, false, new PIDConstants(Constants.Robot.SHOOTER_MOTORS_P, Constants.Robot.SHOOTER_MOTORS_I, Constants.Robot.SHOOTER_MOTORS_D), Constants.Robot.SHOOTER_MOTORS_IZ, Constants.Robot.SHOOTER_MOTORS_FF);
-        Builder.configurePIDController(topPID, false, new PIDConstants(Constants.Robot.SHOOTER_MOTORS_P, Constants.Robot.SHOOTER_MOTORS_I, Constants.Robot.SHOOTER_MOTORS_D), Constants.Robot.SHOOTER_MOTORS_IZ, Constants.Robot.SHOOTER_MOTORS_FF);
+        Builder.configurePIDController(bottomPID, false, new PIDConstants(Constants.Maestro.SHOOTER_MOTORS_P, Constants.Maestro.SHOOTER_MOTORS_I, Constants.Maestro.SHOOTER_MOTORS_D), Constants.Maestro.SHOOTER_MOTORS_IZ, Constants.Maestro.SHOOTER_MOTORS_FF);
+        Builder.configurePIDController(topPID, false, new PIDConstants(Constants.Maestro.SHOOTER_MOTORS_P, Constants.Maestro.SHOOTER_MOTORS_I, Constants.Maestro.SHOOTER_MOTORS_D), Constants.Maestro.SHOOTER_MOTORS_IZ, Constants.Maestro.SHOOTER_MOTORS_FF);
         
         bottomMotorEncoder = bottomMotor.getEncoder();
         topMotorEncoder = topMotor.getEncoder();
@@ -107,11 +107,11 @@ public class IO_ShooterReal implements IO_ShooterBase {
         double topMotorVelocity = topMotorEncoder.getVelocity();
         double bottomMotorVelocity = bottomMotorEncoder.getVelocity();
     
-        boolean isLeftUpToSpeed = topMotorVelocity >= setpointRPM - Constants.Robot.SHOOTER_TOLERANCE_RPM
-                && topMotorVelocity <= setpointRPM + Constants.Robot.SHOOTER_TOLERANCE_RPM;
+        boolean isLeftUpToSpeed = topMotorVelocity >= setpointRPM - Constants.Maestro.SHOOTER_TOLERANCE_RPM
+                && topMotorVelocity <= setpointRPM + Constants.Maestro.SHOOTER_TOLERANCE_RPM;
     
-        boolean isRightUpToSpeed = bottomMotorVelocity >= setpointRPM - Constants.Robot.SHOOTER_TOLERANCE_RPM
-                && bottomMotorVelocity <= setpointRPM + Constants.Robot.SHOOTER_TOLERANCE_RPM;
+        boolean isRightUpToSpeed = bottomMotorVelocity >= setpointRPM - Constants.Maestro.SHOOTER_TOLERANCE_RPM
+                && bottomMotorVelocity <= setpointRPM + Constants.Maestro.SHOOTER_TOLERANCE_RPM;
     
         return isLeftUpToSpeed && isRightUpToSpeed;
     }

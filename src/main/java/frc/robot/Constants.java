@@ -3,11 +3,15 @@
 package frc.robot;
 import com.pathplanner.lib.util.PIDConstants;
 
+import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
 
 /**
@@ -118,11 +122,8 @@ cameraPoses =
         /*
             Robot Space
             3d Cartesian Coordinate System with (0,0,0) located at the center of the robot’s frame projected down to the floor.
-
             X+ → Pointing forward (Forward Vector)
-
             Y+ → Pointing toward the robot’s right (Right Vector)
-
             Z+ → Pointing upward (Up Vector)
         */
 
@@ -155,21 +156,20 @@ cameraPoses =
             //new Rotation3d(0,Units.degreesToRadians(29),Units.degreesToRadians(37.5))) // No roll, Pitch on 15 degrees from robot frame, and yaw of 47 degrees from robot frame.
         );
 
-        public final String PHOTON_NAME;
-        public final String CAMERA_NAME;
+            public final String PHOTON_NAME;
+            public final String CAMERA_NAME;
 
-        public final Transform3d ROBOT_TO_CAMERA;
+            public final Transform3d ROBOT_TO_CAMERA;
 
-        Camera(String photonName, String cameraName, Transform3d robotToCamera) {
-            this.PHOTON_NAME = photonName;
-            this.CAMERA_NAME = cameraName;
-            this.ROBOT_TO_CAMERA = robotToCamera;
-        }
+            Camera(String photonName, String cameraName, Transform3d robotToCamera){
+                this.PHOTON_NAME = photonName;
+                this.CAMERA_NAME = cameraName;
+                this.ROBOT_TO_CAMERA = robotToCamera;
+            }
+        }    
     }
-        
-    }
 
-    public static class Robot{
+    public static class Maestro{
 
         // Arm
         public static final int ARM_MOTOR_LEAD_ID = 9;
@@ -357,7 +357,7 @@ cameraPoses =
                 this.pose = pose;
             }
         }
-        
+
         public enum NotePoses{
             BLU_TOP(new Pose2d(2.9, 7.0, Rotation2d.fromDegrees(0))),
             BLU_MIDDLE(new Pose2d(2.9, 5.5, Rotation2d.fromDegrees(0))),

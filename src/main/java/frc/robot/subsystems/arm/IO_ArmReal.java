@@ -37,27 +37,27 @@ public class IO_ArmReal implements IO_ArmBase{
         pidOutputVolts = 0;
         ffOutputVolts = 0;
         
-        motorOne = Builder.createNeo(Constants.Robot.ARM_MOTOR_LEAD_ID, Constants.Robot.ARM_MOTOR_LEAD_INVERTED, 25);
-        motorTwo = Builder.setNeoFollower(motorOne, Builder.createNeo(Constants.Robot.ARM_MOTOR_FOLLOWER_ID, Constants.Robot.ARM_MOTOR_FOLLOWER_INVERTED, 25));
+        motorOne = Builder.createNeo(Constants.Maestro.ARM_MOTOR_LEAD_ID, Constants.Maestro.ARM_MOTOR_LEAD_INVERTED, 25);
+        motorTwo = Builder.setNeoFollower(motorOne, Builder.createNeo(Constants.Maestro.ARM_MOTOR_FOLLOWER_ID, Constants.Maestro.ARM_MOTOR_FOLLOWER_INVERTED, 25));
 
         Builder.configureIdleMode(motorOne, false);
         Builder.configureIdleMode(motorTwo, false);
 
         pid = new ProfiledPIDController(
-            Constants.Robot.ARM_P,
-            Constants.Robot.ARM_I,
-            Constants.Robot.ARM_D,
-            new Constraints(Constants.Robot.ARM_MAX_VELOCITY, Constants.Robot.ARM_MAX_ACCELERATION)
+            Constants.Maestro.ARM_P,
+            Constants.Maestro.ARM_I,
+            Constants.Maestro.ARM_D,
+            new Constraints(Constants.Maestro.ARM_MAX_VELOCITY, Constants.Maestro.ARM_MAX_ACCELERATION)
         );
 
-        feedforward = new ArmFeedforward(Constants.Robot.ARM_KS, Constants.Robot.ARM_KG, Constants.Robot.ARM_KV, Constants.Robot.ARM_KA);
+        feedforward = new ArmFeedforward(Constants.Maestro.ARM_KS, Constants.Maestro.ARM_KG, Constants.Maestro.ARM_KV, Constants.Maestro.ARM_KA);
         
-        slew = new SlewRateLimiter(Constants.Robot.ARM_SLEW_RATE);
+        slew = new SlewRateLimiter(Constants.Maestro.ARM_SLEW_RATE);
 
         armEncoder = new Encoder(7, 8, true, Encoder.EncodingType.k2X);
         armEncoder.setDistancePerPulse(0.1);
         armEncoder.reset();
-        armAngle = armEncoder.getDistance() - Constants.Robot.ARM_OFFSET_DEGREES;
+        armAngle = armEncoder.getDistance() - Constants.Maestro.ARM_OFFSET_DEGREES;
 
         if(Constants.PID_TEST_MODE){
             SmartDashboard.putNumber("armTestAngleInput",  0);
@@ -71,11 +71,11 @@ public class IO_ArmReal implements IO_ArmBase{
     @Override
     public void updateInputs(ArmInputs inputs){
 
-        armAngle = armEncoder.getDistance() - Constants.Robot.ARM_OFFSET_DEGREES;
+        armAngle = armEncoder.getDistance() - Constants.Maestro.ARM_OFFSET_DEGREES;
         inputs.armPositionDegrees = armAngle;
 
         inputs.setpointPosition = setpointPosition;
-        inputs.isAtSetpoint = Math.abs(armAngle - setpointPosition) < Constants.Robot.ARM_TOLERANCE_DEGREES;
+        inputs.isAtSetpoint = Math.abs(armAngle - setpointPosition) < Constants.Maestro.ARM_TOLERANCE_DEGREES;
 
         inputs.motorOneCurrent = motorOne.getOutputCurrent();
         inputs.motorTwoCurrent = motorTwo.getOutputCurrent();
@@ -115,7 +115,7 @@ public class IO_ArmReal implements IO_ArmBase{
     }
 
     private void runPID(double setpointDegrees){
-            pidOutputVolts = MathUtil.clamp(-pid.calculate(armAngle, setpointDegrees), -Constants.Robot.ARM_VOLTAGE_CLAMPING, Constants.Robot.ARM_VOLTAGE_CLAMPING);
+            pidOutputVolts = MathUtil.clamp(-pid.calculate(armAngle, setpointDegrees), -Constants.Maestro.ARM_VOLTAGE_CLAMPING, Constants.Maestro.ARM_VOLTAGE_CLAMPING);
             ffOutputVolts = -feedforward.calculate(Math.toRadians(setpointDegrees), 0.0);
     }
 

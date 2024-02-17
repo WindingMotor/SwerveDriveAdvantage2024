@@ -38,6 +38,7 @@ public class SUB_Swerve extends SubsystemBase{
     }
 
     public void periodic(){
+        io.updateEstimations(vision);
 
  
        var leftVisionEst = vision.io.getEstimatedGlobalPose(Camera.LEFT_CAMERA);
@@ -91,6 +92,8 @@ public class SUB_Swerve extends SubsystemBase{
         Logger.processInputs("Swerve", inputs);
     }
 
+
+
     /**
      * Drives the robot, in field-relative, based of the specified inputs.
      * @param  translationX      A supplier for the X translation
@@ -109,9 +112,14 @@ public class SUB_Swerve extends SubsystemBase{
           });
     }
 
+    /**
+     * Drives the robot to the specified pose.
+     * @param  pose  The target pose to drive to
+     * @return       The command to run to drive to the pose.
+     */
     public Command driveToPose(Pose2d pose){
 
-        Logger.recordOutput("Drive To Pose", pose);
+        DriverStation.reportWarning("[init] [driveToPose] Driving to " + pose.toString() + "", false);
         Command pathfindingCommand = AutoBuilder.pathfindToPose(
             pose,
             new PathConstraints(
@@ -124,6 +132,10 @@ public class SUB_Swerve extends SubsystemBase{
         return pathfindingCommand;
     }
 
+    /**
+     * Drives the robot to the speaker depending on the alliance.
+     * @return       The command to run to drive to the pose.
+     */
     public Command driveToSpeaker(){
         Optional<Alliance> alliance = DriverStation.getAlliance();
         if(alliance.isPresent() && alliance.get() == Alliance.Blue){
@@ -131,9 +143,13 @@ public class SUB_Swerve extends SubsystemBase{
         }else if(alliance.isPresent() && alliance.get() == Alliance.Red){
             return driveToPose(Constants.Auto.ScoringPoses.RED_SPEAKER.pose);
         }
-        return new PrintCommand("[SUB_Swerve] No Alliance Detected!");
+        return new PrintCommand("[error] [driveToSpeaker] No Alliance Detected!");
     }
 
+    /**
+     * Drives the robot to the amp depending on the alliance.
+     * @return       The command to run to drive to the pose.
+     */
     public Command driveToAmp(){
         Optional<Alliance> alliance = DriverStation.getAlliance();
         if(alliance.isPresent() && alliance.get() == Alliance.Blue){
@@ -141,9 +157,15 @@ public class SUB_Swerve extends SubsystemBase{
         }else if(alliance.isPresent() && alliance.get() == Alliance.Red){
             return driveToPose(Constants.Auto.ScoringPoses.RED_AMP.pose);
         }
-        return new PrintCommand("[SUB_Swerve] No Alliance Detected!");
+        return new PrintCommand("[error] [driveToAmp] 'No Alliance Detected!");
     }
 
+    /**
+     * Drives the robot on the path specified.
+     * @param  name  The name of the path to follow
+     * @param  setOdomToStart  Whether or not to reset the odometry to the start of the path
+     * @return       The command to run to drive the path
+     */
     public Command drivePath(String name, boolean setOdomToStart){
         PathPlannerPath path = PathPlannerPath.fromPathFile(name);
         if(setOdomToStart){ 
@@ -151,6 +173,7 @@ public class SUB_Swerve extends SubsystemBase{
                 new Pose2d(path.getPoint(0).position, io.getHeading())
             );
         }
+        DriverStation.reportWarning("[init] [drivePath] Driving on path " + name + " and setOdomToStart is " + setOdomToStart + "", false);
         return AutoBuilder.followPath(path);
     }
 }

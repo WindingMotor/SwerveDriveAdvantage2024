@@ -1,6 +1,8 @@
 
 package frc.robot;
 import org.littletonrobotics.junction.Logger;
+
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.States.ShooterMode;
@@ -22,6 +24,7 @@ import frc.robot.subsystems.swerve.SUB_Swerve;
 import frc.robot.subsystems.vision.IO_VisionReal;
 import frc.robot.subsystems.vision.SUB_Vision;
 import frc.robot.util.AddressableLedStrip;
+import swervelib.telemetry.SwerveDriveTelemetry;
 
 public class RobotContainer{
 
@@ -96,8 +99,16 @@ public class RobotContainer{
 
     private void logMetadata(){
         Logger.recordMetadata("Robot Mode",  Constants.CURRENT_MODE + "");
+        DriverStation.reportWarning("[sys init] Robot Mode: " + Constants.CURRENT_MODE, false);
+
         Logger.recordMetadata("PID Test Mode",  Constants.PID_TEST_MODE + "");
+        DriverStation.reportWarning("[sys init] PID Test Mode: " + Constants.PID_TEST_MODE, false);
+
         Logger.recordMetadata("Teleop Auto Drive",  Constants.TELEOP_AUTO_DRIVE_ENABLED + "");
+        DriverStation.reportWarning("[sys init] Teleop Auto Drive: " + Constants.TELEOP_AUTO_DRIVE_ENABLED, false);
+        
+        Logger.recordMetadata("Swerve Drive Simulation", SwerveDriveTelemetry.isSimulation + "");
+        DriverStation.reportWarning("[sys init] Swerve Drive Simulation: " + SwerveDriveTelemetry.isSimulation, false);
     }
 
     /**

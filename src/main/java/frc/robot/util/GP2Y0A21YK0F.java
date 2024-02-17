@@ -54,7 +54,7 @@ public class GP2Y0A21YK0F{
 
     public boolean isWithinRange(){
         double measurement = getDistanceCentimeters();
-        if(measurement > Constants.Robot.SENSOR_TOLERANCE_MIN_CENTIMETERS && measurement < Constants.Robot.SENSOR_TOLERANCE_MAX_CENTIMETERS){
+        if(measurement > Constants.Maestro.SENSOR_TOLERANCE_MIN_CENTIMETERS && measurement < Constants.Maestro.SENSOR_TOLERANCE_MAX_CENTIMETERS){
             return true;
         }else{
             return false;
