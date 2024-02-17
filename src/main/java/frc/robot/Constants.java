@@ -213,7 +213,7 @@ public class Constants{
         // Speeds of the shooter for the various modes
         public enum ShooterState{
             OFF(0.0, 0.0), 
-            IDLE(3500, 0.0), 
+            IDLE(3100, 0.0), 
 
             SPEAKER_1M(3700, 1.0),
             SPEAKER_2M(3700, 2.0),
@@ -222,7 +222,7 @@ public class Constants{
             SPEAKER_5M(3700, 5.0),
 
 
-            AMP(5600, 0.0); 
+            AMP(500, 0.0); 
 
             public final double rpm;
             public final double distanceMeters;
@@ -242,7 +242,7 @@ public class Constants{
             SPEAKER_3M(39.0, 3.0),
             SPEAKER_4M(34.15, 4.0),
 
-            AMP(84, 0.0), 
+            AMP(95, 0.0), 
             DYNAMIC(-1.0, 0.0),
             INTAKE(89.0, 0.0 ); 
 
@@ -260,7 +260,7 @@ public class Constants{
             INTAKE(-1.0, -0.5),
             EJECT(1.0, 0.45),
             SHOOT(0.0, -1.0), 
-            AMP(0.0, -0.3); 
+            AMP(0.0, -0.8); 
 
             public final double intakeSpeed, indexerSpeed;
             ConveyorState(double intakeSpeed, double indexerSpeed){

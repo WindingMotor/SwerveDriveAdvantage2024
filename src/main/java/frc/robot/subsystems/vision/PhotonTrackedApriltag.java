@@ -12,7 +12,7 @@ import frc.robot.Constants.Vision.Camera;
 */
 public class PhotonTrackedApriltag{
 
-    double id;
+    int id;
     Camera camera;
     
     Translation3d translation3d;
@@ -37,7 +37,7 @@ public class PhotonTrackedApriltag{
     * Returns the fiducial ID of the AprilTag.
     * @return The field fiducial ID of the AprilTag.
     */
-    public double getId(){ return id; }
+    public int getId(){ return id; }
 
     /**
     * Returns the camera that detected the AprilTag.

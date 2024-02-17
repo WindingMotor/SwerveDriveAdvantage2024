@@ -3,8 +3,10 @@
 package frc.robot.commands;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
 import frc.robot.Constants.States.ShooterMode;
+import frc.robot.subsystems.arm.IO_ArmReal;
 import frc.robot.subsystems.arm.SUB_Arm;
 import frc.robot.subsystems.conveyor.SUB_Conveyor;
 import frc.robot.subsystems.shooter.SUB_Shooter;
@@ -63,7 +65,7 @@ public class CMD_Shoot extends Command{
         this.led = led;
         this.mode = mode;
         this.shoot = shoot;
-        this.autoShoot = autoShoot;
+        this.autoShoot = true;
         this.manualCancel = manualCancel;
 
         addRequirements(conveyor, arm, shooter);
@@ -91,16 +93,16 @@ public class CMD_Shoot extends Command{
         checkEndCommand();
     }
 
-    private void setInitalStates(){
+    private int setInitalStates(){
         // SPEAKER mode
         if(mode == ShooterMode.SPEAKER){ 
             shooter.invertMotors(true);
-            shooter.setState(Constants.States.ShooterState.SPEAKER_2M);
-            arm.setState(Constants.States.ArmState.SPEAKER_2M);
+            shooter.setState(Constants.States.ShooterState.SPEAKER_1M);
+            arm.setState(Constants.States.ArmState.SPEAKER_1M);
 
         // AMP mode
         }else if(mode == ShooterMode.AMP){ 
-            shooter.invertMotors(false);
+            shooter.invertMotors(true);
             shooter.setState(Constants.States.ShooterState.AMP);
             arm.setState(Constants.States.ArmState.AMP);
 
@@ -108,6 +110,7 @@ public class CMD_Shoot extends Command{
         }else{ 
         
         }
+        return 1;
     }
 
     private void checkConveyor(){
@@ -125,14 +128,15 @@ public class CMD_Shoot extends Command{
             
         // Auto shoot with RPM check
         }else{ 
-            if(shooter.inputs.isUpToSpeed){ 
+           if(shooter.isUptoSpeed() && arm.isAtSetpoint()){
+                System.out.println("Conveyor should run");
                 hasShootBeenCalled = true;
                 if(mode == ShooterMode.AMP){
                     conveyor.setState(Constants.States.ConveyorState.AMP);
                 }else{
                     conveyor.setState(Constants.States.ConveyorState.SHOOT);
                 }
-            }
+           }
         }
     }
 
@@ -140,8 +144,9 @@ public class CMD_Shoot extends Command{
 
         // Once operator has pressed shoot button and the donut leaves the conveyor end the command
         if(hasShootBeenCalled){
-            if(conveyor.inputs.indexerFinalSensorState){
+            if(conveyor.inputs.indexerFinalSensorState && conveyor.getShooterFlag()){
                 isCommandDone = true;
+                conveyor.inputs.shooterFlag = false;
             }
         }
     }

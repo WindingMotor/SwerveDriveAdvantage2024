@@ -49,7 +49,7 @@ public class CommandRegistrar{
     public void register(){
 
         // Intake command
-        NamedCommands.registerCommand("Intake", new PrintCommand("de"));
+        NamedCommands.registerCommand("Intake", new CMD_Intake(conveyor, arm,  () -> false));
 
         // Eject command
         NamedCommands.registerCommand("Eject", new CMD_Eject(conveyor, arm, () -> false));

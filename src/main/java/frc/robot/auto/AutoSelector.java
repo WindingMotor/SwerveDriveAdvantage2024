@@ -21,6 +21,7 @@ public class AutoSelector{
         shuffleboardTab = Shuffleboard.getTab("Auto Selector");
     
         autoSelector = AutoBuilder.buildAutoChooser("A1_D1_SM");
+        autoSelector.addOption("A1_D1_SM", getSelectedAuto());
         
         shuffleboardTab.add(autoSelector);
     }    
