@@ -151,28 +151,56 @@ public class IO_VisionReal implements IO_VisionBase{
         }
     }
 
-    public Matrix<N3, N1> getEstimationStdDevs(Pose2d estimatedPose){
+    /**
+     * Calculate the estimation standard deviations based on the estimated pose.
+     * @param  estimatedPose   The estimated pose for calculation
+     * @return                 The calculated standard deviations
+    */
+    public Matrix<N3, N1> getEstimationStdDevs(Pose2d estimatedPose, Camera camera){
+        // Initialize standard deviations with the default values for a single tag
         var estStdDevs = Vision.SINGLE_TAG_STD_DEVS;
-        var targets = leftCamera.getLatestResult().getTargets();
-        int numTags = 0;
-        double avgDist = 0;
+
+        // Retrieve the latest targets from the specified camera
+        var targets = rightCamera.getLatestResult().getTargets();
+        if(camera == Constants.Vision.Camera.LEFT_CAMERA){
+            targets = leftCamera.getLatestResult().getTargets();
+        }
+
+        int numTags =  0;
+        double avgDist =  0;
+    
+        // Iterate over each target to calculate the average distance from the estimated pose
         for(var tgt : targets){
-            
-            var tagPose = leftPoseEstimator.getFieldTags().getTagPose(tgt.getFiducialId());
+            // Get the pose of the tag from the field tags
+            var tagPose = rightPoseEstimator.getFieldTags().getTagPose(tgt.getFiducialId());
+            if(camera == Constants.Vision.Camera.LEFT_CAMERA){
+                tagPose = leftPoseEstimator.getFieldTags().getTagPose(tgt.getFiducialId());
+            }
             if (tagPose.isEmpty()) continue;
             numTags++;
-            avgDist +=
-                    tagPose.get().toPose2d().getTranslation().getDistance(estimatedPose.getTranslation());
+            // Add the distance from the estimated pose to the tag's pose to the average distance
+            avgDist += tagPose.get().toPose2d().getTranslation().getDistance(estimatedPose.getTranslation());
         }
-        if(numTags == 0) return estStdDevs;
+    
+        // If no tags were detected, return the default standard deviations
+        if(numTags ==  0) return estStdDevs;
+    
+        // Calculate the average distance
         avgDist /= numTags;
-        // Decrease std devs if multiple targets are visible
-        if(numTags > 1) estStdDevs = Vision.MULTI_TAG_STD_DEVS;
-        // Increase std devs based on (average) distance
-        if(numTags == 1 && avgDist > 4)
+    
+        // If multiple tags are detected, use the standard deviations for multiple tags
+        if(numTags >  1) estStdDevs = Vision.MULTI_TAG_STD_DEVS;
+    
+        // If only one tag is detected and the average distance is greater than  4 meters, set high standard deviations
+        if(numTags ==  1 && avgDist >  4) {
             estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
-        else estStdDevs = estStdDevs.times(1 + (avgDist * avgDist / 30));
-
+        } else {
+            // Otherwise, scale the standard deviations based on the square of the average distance
+            estStdDevs = estStdDevs.times(1 + (avgDist * avgDist /  30));
+        }
+    
+        // Return the calculated standard deviations
         return estStdDevs;
     }
+
 }

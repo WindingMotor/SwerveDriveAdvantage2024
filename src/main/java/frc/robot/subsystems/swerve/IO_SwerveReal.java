@@ -61,10 +61,11 @@ public class IO_SwerveReal implements IO_SwerveBase{
         inputs.pose = swerveDrive.getPose();
         inputs.yaw = swerveDrive.getYaw();
         inputs.odometryHeading = swerveDrive.getOdometryHeading();
-        inputs.states = swerveDrive.getStates();
         inputs.positions = swerveDrive.getModulePositions();
         inputs.estimatedLeftPose = localEstimatedLeftPose;
         inputs.estimatedRightPose = localEstimatedRightPose;
+        inputs.realStates = swerveDrive.getStates();
+        inputs.desiredStates = SwerveDriveTelemetry.desiredStates;
     }
 
     public void setupPathPlanner(SUB_Swerve subsystem){

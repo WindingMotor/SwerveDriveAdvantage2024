@@ -18,14 +18,14 @@ public class IO_ConveyorReal implements IO_ConveyorBase{
     private IRBeamBreak indexerFinalSensor;
     
     public IO_ConveyorReal(){
-        intakeMotor = Builder.createNeo(Constants.Robot.INTAKE_MOTOR_ID, false, 60);
-        indexerMotor = Builder.createNeo(Constants.Robot.INDEXER_MOTOR_ID, false, 45);
+        intakeMotor = Builder.createNeo(Constants.Maestro.INTAKE_MOTOR_ID, false, 60);
+        indexerMotor = Builder.createNeo(Constants.Maestro.INDEXER_MOTOR_ID, false, 45);
 
-        intakeInitalSensor = new IRBeamBreak(Constants.Robot.INTAKE_INITAL_SENSOR_ID);
-        intakeFinalSensor = new IRBeamBreak(Constants.Robot.INTAKE_FINAL_SENSOR_ID);
+        intakeInitalSensor = new IRBeamBreak(Constants.Maestro.INTAKE_INITAL_SENSOR_ID);
+        intakeFinalSensor = new IRBeamBreak(Constants.Maestro.INTAKE_FINAL_SENSOR_ID);
 
-        idexerInitalSensor = new IRBeamBreak(Constants.Robot.INDEXER_INITAL_SENSOR_ID);
-        indexerFinalSensor = new IRBeamBreak(Constants.Robot.INDEXER_FINAL_SENSOR_ID);
+        idexerInitalSensor = new IRBeamBreak(Constants.Maestro.INDEXER_INITAL_SENSOR_ID);
+        indexerFinalSensor = new IRBeamBreak(Constants.Maestro.INDEXER_FINAL_SENSOR_ID);
     }
 
     /**

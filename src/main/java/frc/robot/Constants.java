@@ -69,7 +69,7 @@ public class Constants{
 
     }
 
-    public static class Vision {
+    public static class Vision{
 
         // The standard deviations of our vision estimated poses, which affect correction rate
         // (Fake values. Experiment and determine estimation noise on an actual robot.)
@@ -82,41 +82,37 @@ public class Constants{
         /*
             Robot Space
             3d Cartesian Coordinate System with (0,0,0) located at the center of the robot’s frame projected down to the floor.
-
             X+ → Pointing forward (Forward Vector)
-
             Y+ → Pointing toward the robot’s right (Right Vector)
-
             Z+ → Pointing upward (Up Vector)
         */
 
         // Camera enum, contains name and position of the camera relative to the robot.
         public enum Camera{
-        LEFT_CAMERA("OV9281_02", "leftCamera", new Transform3d(
-            new Translation3d(Units.inchesToMeters(12.0), Units.inchesToMeters(-9.125), Units.inchesToMeters(8.625)), // Camera mounted 12in forward, 9.125in left, 8.625 up.
-            new Rotation3d(0,Units.degreesToRadians(15),Units.degreesToRadians(133)))  // No roll, Pitch on 15 degrees from robot frame, and yaw of 133 degrees from robot frame.
-        ),
+            LEFT_CAMERA("OV9281_02", "leftCamera", new Transform3d(
+                new Translation3d(Units.inchesToMeters(12.0), Units.inchesToMeters(-9.125), Units.inchesToMeters(8.625)), // Camera mounted 12in forward, 9.125in left, 8.625 up.
+                new Rotation3d(0,Units.degreesToRadians(15),Units.degreesToRadians(133)))  // No roll, Pitch on 15 degrees from robot frame, and yaw of 133 degrees from robot frame.
+            ),
 
-        RIGHT_CAMERA("OV9281_01", "rightCamera", new Transform3d(
-            new Translation3d(Units.inchesToMeters(12.0), Units.inchesToMeters(9.125), Units.inchesToMeters(8.625)), // Camera mounted 12in forward, 9.125in right, 8.625 up.
-            new Rotation3d(0,Units.degreesToRadians(15),Units.degreesToRadians(47))) // No roll, Pitch on 15 degrees from robot frame, and yaw of 47 degrees from robot frame.
-        );
+            RIGHT_CAMERA("OV9281_01", "rightCamera", new Transform3d(
+                new Translation3d(Units.inchesToMeters(12.0), Units.inchesToMeters(9.125), Units.inchesToMeters(8.625)), // Camera mounted 12in forward, 9.125in right, 8.625 up.
+                new Rotation3d(0,Units.degreesToRadians(15),Units.degreesToRadians(47))) // No roll, Pitch on 15 degrees from robot frame, and yaw of 47 degrees from robot frame.
+            );
 
-        public final String PHOTON_NAME;
-        public final String CAMERA_NAME;
+            public final String PHOTON_NAME;
+            public final String CAMERA_NAME;
 
-        public final Transform3d ROBOT_TO_CAMERA;
+            public final Transform3d ROBOT_TO_CAMERA;
 
-        Camera(String photonName, String cameraName, Transform3d robotToCamera) {
-            this.PHOTON_NAME = photonName;
-            this.CAMERA_NAME = cameraName;
-            this.ROBOT_TO_CAMERA = robotToCamera;
-        }
+            Camera(String photonName, String cameraName, Transform3d robotToCamera){
+                this.PHOTON_NAME = photonName;
+                this.CAMERA_NAME = cameraName;
+                this.ROBOT_TO_CAMERA = robotToCamera;
+            }
+        }    
     }
-        
-    }
 
-    public static class Robot{
+    public static class Maestro{
 
         // Arm
         public static final int ARM_MOTOR_LEAD_ID = 9;
@@ -304,7 +300,7 @@ public class Constants{
                 this.pose = pose;
             }
         }
-        
+
         public enum NotePoses{
             BLU_TOP(new Pose2d(2.9, 7.0, Rotation2d.fromDegrees(0))),
             BLU_MIDDLE(new Pose2d(2.9, 5.5, Rotation2d.fromDegrees(0))),
