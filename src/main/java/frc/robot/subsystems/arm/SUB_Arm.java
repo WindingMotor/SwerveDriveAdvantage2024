@@ -35,4 +35,9 @@ public class SUB_Arm extends SubsystemBase{
     public void stop(){
         io.stop();
     }
+
+    public boolean isAtSetpoint(){
+        return inputs.isAtSetpoint;
+    }
+
 }

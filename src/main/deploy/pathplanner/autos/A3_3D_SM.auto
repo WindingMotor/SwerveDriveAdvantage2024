@@ -14,37 +14,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot_Speaker"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.3
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "A1_P1"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Intake"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "A1_P2"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "A1_P3"
+            "name": "Idle"
           }
         },
         {
@@ -56,73 +26,39 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.3
+            "waitTime": 1.0
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "A2_P1"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Intake"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "A2_P2"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "A2_P3"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.3
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "A3_P1"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Intake"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "A3_P2"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "A3_P3"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot_Speaker"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.3
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "A1_P1"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "A1_P2"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
           }
         }
       ]

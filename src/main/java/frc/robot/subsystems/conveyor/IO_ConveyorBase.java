@@ -19,6 +19,8 @@ public interface IO_ConveyorBase{
 
         public boolean indexerInitalSensorState = false;
         public boolean indexerFinalSensorState = false;
+
+        public boolean shooterFlag;
     }
 
     /**

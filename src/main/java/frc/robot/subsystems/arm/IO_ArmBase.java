@@ -32,6 +32,7 @@ public interface IO_ArmBase {
 
     void setAngle(double angle);
 
+
 }
     
 

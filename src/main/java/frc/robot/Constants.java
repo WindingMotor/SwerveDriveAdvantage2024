@@ -67,6 +67,51 @@ public class Constants{
 
     public static class Vision {
 
+
+    /*
+
+cameraPoses =
+
+// ROLL, PITCH, YAW
+            new Pose3d[] {
+              // Front left (forward facing, camera 6)
+              new Pose3d(
+                  Units.inchesToMeters(9.875),
+                  Units.inchesToMeters(9.55),
+                  Units.inchesToMeters(6.752) + Module.getWheelRadius(),
+                  new Rotation3d(0.0, Units.degreesToRadians(-28.125), 0.0) // 0 roll, pitch -28, dont have yaw -> apply a rotation of yaw by -35 deg
+                      .rotateBy(new Rotation3d(0.0, 0.0, Units.degreesToRadians(-35.0)))),
+
+              // Back right (right facing, camera 4)
+              new Pose3d(
+                  Units.inchesToMeters(-10.375),
+                  Units.inchesToMeters(-10.242),
+                  Units.inchesToMeters(7.252) + Module.getWheelRadius(),
+                  new Rotation3d(0.0, Units.degreesToRadians(-28.125), 0.0)
+                      .rotateBy(new Rotation3d(0.0, 0.0, Units.degreesToRadians(-82.829)))),
+
+              // Back left (left facing, camera 5)
+              new Pose3d(
+                  Units.inchesToMeters(-10.15),
+                  Units.inchesToMeters(9.7),
+                  Units.inchesToMeters(5.752) + Module.getWheelRadius(),
+                  new Rotation3d(0.0, Units.degreesToRadians(-28.125), 0.0)
+                      .rotateBy(new Rotation3d(0.0, 0.0, Units.degreesToRadians(82.829)))),
+
+              // Back right (back facing, camera 3)
+              new Pose3d(
+                  Units.inchesToMeters(-10.5),
+                  Units.inchesToMeters(-9.25),
+                  Units.inchesToMeters(6.252) + Module.getWheelRadius(),
+                  new Rotation3d(0.0, Units.degreesToRadians(-28.125), 0.0)
+                      .rotateBy(new Rotation3d(0.0, 0.0, Units.degreesToRadians(145.0))))
+            };
+
+
+
+    */
+
+
         // Latency warning trigger threshold in miliseconds
         public static final double LATENCY_THRESHOLD_MILI_SEC = 30.0;
 
@@ -84,13 +129,30 @@ public class Constants{
         // Camera enum, contains name and position of the camera relative to the robot.
         public enum Camera{
         LEFT_CAMERA("OV9281_02", "leftCamera", new Transform3d(
-            new Translation3d(Units.inchesToMeters(12.0), Units.inchesToMeters(-9.125), Units.inchesToMeters(8.625)), // Camera mounted 12in forward, 9.125in left, 8.625 up.
-            new Rotation3d(0,Units.degreesToRadians(15),Units.degreesToRadians(133)))  // No roll, Pitch on 15 degrees from robot frame, and yaw of 133 degrees from robot frame.
+           // new Translation3d(Units.inchesToMeters(9.558), Units.inchesToMeters(10.9795), Units.inchesToMeters(9.314)), // Camera mounted 12in forward, 9.125in left, 8.625 up.
+            new Translation3d(Units.inchesToMeters(4.558), Units.inchesToMeters(21), Units.inchesToMeters(9.314)), // Camera mounted 12in forward, 9.125in left, 8.625 up.
+
+
+            new Rotation3d( 0,
+                            Units.degreesToRadians(-29),
+                            0.0).rotateBy(new Rotation3d(0.0,0.0,Units.degreesToRadians(-35.5))
+                            ) // No roll, Pitch on 15 degrees from robot frame, and yaw of 133 degrees from robot frame.
+        
+                            )
         ),
 
         RIGHT_CAMERA("OV9281_01", "rightCamera", new Transform3d(
-            new Translation3d(Units.inchesToMeters(12.0), Units.inchesToMeters(9.125), Units.inchesToMeters(8.625)), // Camera mounted 12in forward, 9.125in right, 8.625 up.
-            new Rotation3d(0,Units.degreesToRadians(15),Units.degreesToRadians(47))) // No roll, Pitch on 15 degrees from robot frame, and yaw of 47 degrees from robot frame.
+            new Translation3d(Units.inchesToMeters(4.558), Units.inchesToMeters(-21), Units.inchesToMeters(9.314)), // Camera mounted 12in forward, 9.125in right, 8.625 up.
+
+            new Rotation3d(
+                0.0, // Roll 0
+                Units.degreesToRadians(-29.0), // Pitch FACING UPWARDS
+                0.0).rotateBy(
+                    new Rotation3d(0.0, 0.0, Units.degreesToRadians(44.5)) // YAW ROTATING RIGHT IS NEGATIVE
+                )
+
+                )
+            //new Rotation3d(0,Units.degreesToRadians(29),Units.degreesToRadians(37.5))) // No roll, Pitch on 15 degrees from robot frame, and yaw of 47 degrees from robot frame.
         );
 
         public final String PHOTON_NAME;

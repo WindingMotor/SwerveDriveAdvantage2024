@@ -41,4 +41,8 @@ public class SUB_Shooter extends SubsystemBase{
         io.invertMotors(inverted);
     }
 
+    public boolean isUptoSpeed(){
+        return io.isUpToSpeed();
+    }
+
 }

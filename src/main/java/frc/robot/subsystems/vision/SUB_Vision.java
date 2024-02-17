@@ -140,4 +140,25 @@ public class SUB_Vision extends SubsystemBase {
         return inches * 0.0254;
     }
 
+    public Double getAmbiguity(int id){
+
+        List<PhotonTrackedTarget> leftTargets = io.getTargets(Constants.Vision.Camera.LEFT_CAMERA);
+        List<PhotonTrackedTarget> rightTargets = io.getTargets(Constants.Vision.Camera.RIGHT_CAMERA);
+
+        for(PhotonTrackedTarget tar: leftTargets){
+
+            if(tar.getFiducialId() == id){
+               return tar.getPoseAmbiguity();
+            }
+        }
+
+        for(PhotonTrackedTarget tar: rightTargets){
+
+            if(tar.getFiducialId() == id){
+               return tar.getPoseAmbiguity();
+            }
+        }
+        return 1.0;
+    }
+
 }

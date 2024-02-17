@@ -134,20 +134,26 @@ public class IO_VisionReal implements IO_VisionBase{
 
         if(camera == Camera.LEFT_CAMERA){
             var visionEst = leftPoseEstimator.update();
-            double latestTimestamp = leftCamera.getLatestResult().getTimestampSeconds();
-            boolean newResult = Math.abs(latestTimestamp - lastEstTimestamp) > 1e-5;
+            if(!visionEst.isEmpty()){
+                 double latestTimestamp = leftCamera.getLatestResult().getTimestampSeconds();
+                boolean newResult = Math.abs(latestTimestamp - lastEstTimestamp) < 1e-2;
 
-            if (newResult) lastEstTimestamp = latestTimestamp;
-            return visionEst;
+                 if (newResult) lastEstTimestamp = latestTimestamp;
+                 return visionEst;
+        }
+    }
 
-        }else{
+        else{
             var visionEst = rightPoseEstimator.update();
+            if(!visionEst.isEmpty()){
             double latestTimestamp = rightCamera.getLatestResult().getTimestampSeconds();
             boolean newResult = Math.abs(latestTimestamp - lastEstTimestamp) > 1e-5;
 
             if (newResult) lastEstTimestamp = latestTimestamp;
             return visionEst;
+            }
         }
+        return null;
 
     }
 

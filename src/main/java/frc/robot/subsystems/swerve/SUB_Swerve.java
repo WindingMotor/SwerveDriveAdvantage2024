@@ -4,6 +4,8 @@ package frc.robot.subsystems.swerve;
 import java.util.Optional;
 import java.util.function.DoubleSupplier;
 import org.littletonrobotics.junction.Logger;
+import org.photonvision.targeting.PhotonTrackedTarget;
+
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
@@ -39,30 +41,51 @@ public class SUB_Swerve extends SubsystemBase{
 
  
        var leftVisionEst = vision.io.getEstimatedGlobalPose(Camera.LEFT_CAMERA);
+       if(leftVisionEst != null){
        leftVisionEst.ifPresent(
                est -> {
+                boolean isAmbiguous = false;
+                
                    var estPose = est.estimatedPose.toPose2d();
+                    for(PhotonTrackedTarget tar : est.targetsUsed){
+                        if(tar.getPoseAmbiguity() > 0.2){
+                            isAmbiguous = true;
+                        }
+                    }
                    // Change our trust in the measurement based on the tags we can see
                    var estStdDevs = vision.io.getEstimationStdDevs(estPose);
 
+                   if(!isAmbiguous){
                    io.addVisionMeasurement(
                            est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
                     Logger.recordOutput("Estimated Left Pose", est.estimatedPose.toPose2d());
+                 }
                });
-
+            }
  
        var rightVisionEst = vision.io.getEstimatedGlobalPose(Camera.RIGHT_CAMERA);
+       if(rightVisionEst != null){
        rightVisionEst.ifPresent(
                est -> {
+                   boolean isAmbiguous = false;
+
                    var estPose = est.estimatedPose.toPose2d();
+                    for(PhotonTrackedTarget tar : est.targetsUsed){
+                        if(tar.getPoseAmbiguity() > 0.2){
+                            isAmbiguous = true;
+                        }
+                    }
                    // Change our trust in the measurement based on the tags we can see
                    var estStdDevs = vision.io.getEstimationStdDevs(estPose);
 
+                if(!isAmbiguous){
                    io.addVisionMeasurement(
                            est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
                     Logger.recordOutput("Estimated Right Pose", est.estimatedPose.toPose2d());
-               });
-
+                }
+                });
+            
+            }
         io.updateOdometry();
         io.updateInputs(inputs);
         Logger.processInputs("Swerve", inputs);

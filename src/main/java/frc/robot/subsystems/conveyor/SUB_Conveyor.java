@@ -37,6 +37,10 @@ public class SUB_Conveyor extends SubsystemBase{
         return state;
     }
 
+    public boolean getShooterFlag(){
+        return inputs.shooterFlag;
+    }
+
     public void stop(){
         io.stop();
     }

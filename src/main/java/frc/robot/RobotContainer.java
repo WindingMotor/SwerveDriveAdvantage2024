@@ -51,6 +51,7 @@ public class RobotContainer{
         commandRegistrar.register();
 
         autoSelector = new AutoSelector();
+        
 
         configureBindings();
 
