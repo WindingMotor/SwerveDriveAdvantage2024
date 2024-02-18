@@ -14,7 +14,7 @@ public class AddressableLedStrip extends SubsystemBase{
     private final int length;
 
     public enum LEDState{
-        RAINBOW, GREEN, BLUE, RED, PINK, WHITE, ORANGE, FLAME, ALLIANCE
+        RAINBOW, GREEN, BLUE, RED, WHITE, ORANGE, FLAME, ALLIANCE
     }
 
     private LEDState state;
@@ -43,7 +43,7 @@ public class AddressableLedStrip extends SubsystemBase{
 
         if(DriverStation.isDisabled()){
             //solid(Color.kPurple);
-            everyOther(Color.kRed, Color.kGreen);
+            solid(Color.kRed);
             //everyOther(Color.kGreen, Color.kBlue);
         }else{
 
@@ -134,6 +134,13 @@ public class AddressableLedStrip extends SubsystemBase{
             }
             segmentStart += 2 * sectionLength;
         }
+    }
+
+    public void laser(Color color){
+        for(var i =  0; i < length; i++){
+            ledBuffer.setLED(i, color);
+        }
+        ledStrip.setData(ledBuffer);
     }
 
     private void flame(){

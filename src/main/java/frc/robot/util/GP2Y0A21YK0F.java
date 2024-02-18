@@ -7,7 +7,6 @@ import frc.robot.Constants;
 public class GP2Y0A21YK0F{
 
     private final AnalogInput analogInput;
-    private long lastTime;
 
     /**
      * Creates a new GP2Y0A21YK0F analog sensor object.
@@ -15,7 +14,6 @@ public class GP2Y0A21YK0F{
     */
     public GP2Y0A21YK0F(int channel){
         analogInput = new AnalogInput(channel);
-        lastTime = System.currentTimeMillis();
     }
 
     /**

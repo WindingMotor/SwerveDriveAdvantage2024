@@ -4,8 +4,6 @@ package frc.robot.subsystems.swerve;
 import java.util.Optional;
 import java.util.function.DoubleSupplier;
 import org.littletonrobotics.junction.Logger;
-import org.photonvision.targeting.PhotonTrackedTarget;
-
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
@@ -18,7 +16,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.Constants.Vision.Camera;
 import frc.robot.subsystems.vision.SUB_Vision;
 
 public class SUB_Swerve extends SubsystemBase{
@@ -40,9 +37,10 @@ public class SUB_Swerve extends SubsystemBase{
     public void periodic(){
 
         
-        // Updatethe pose estimations 
-        io.updateEstimations(vision);
-    
+        if(Constants.SWERVE_VISION_ODOMETRY_ENABLED) {
+            // Updates the pose estimations 
+            io.updateEstimations(vision);      
+        }
         // ISAAC: I MOVED THE PREVIOUS CODE HERE TO THE updateEstimations METHOD!
 
         io.updateOdometry();

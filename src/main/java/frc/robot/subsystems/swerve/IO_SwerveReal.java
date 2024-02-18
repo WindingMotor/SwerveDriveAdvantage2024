@@ -3,8 +3,6 @@
 package frc.robot.subsystems.swerve;
 import java.io.File;
 import java.io.IOException;
-
-import org.littletonrobotics.junction.Logger;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;

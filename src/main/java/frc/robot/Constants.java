@@ -29,6 +29,9 @@ public class Constants{
     // Enables auto driving to a pose with pathplanner during teletop. Be very careful when activated!
     public static final boolean TELEOP_AUTO_DRIVE_ENABLED = false;
 
+    // Enables vision based odometry for swerve drive.
+    public static final boolean SWERVE_VISION_ODOMETRY_ENABLED = true;
+
     // Current robot mode
     public enum RobotMode {
         REAL,   // Running on a real robot

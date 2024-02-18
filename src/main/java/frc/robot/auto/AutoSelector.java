@@ -1,11 +1,8 @@
 // Written by WindingMotor, 2024, Crescendo
 
 package frc.robot.auto;
-import org.littletonrobotics.junction.Logger;
-
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -22,11 +19,13 @@ public class AutoSelector{
 
         shuffleboardTab = Shuffleboard.getTab("Auto Selector");
     
+        // Build the auto selector from PathPlanner auto files and set the default auto to A1_D1_SM
         autoSelector = AutoBuilder.buildAutoChooser("A1_D1_SM");
-        autoSelector.addOption("A1_D1_SM", getSelectedAuto());
+
+        // Not sure why this is needed, the auto selector should apply all PathPlannerAuto's options by default
+        //autoSelector.addOption("A1_D1_SM", getSelectedAuto());
         
         shuffleboardTab.add(autoSelector);
-
     }    
 
     /**

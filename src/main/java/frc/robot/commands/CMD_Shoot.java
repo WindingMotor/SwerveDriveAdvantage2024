@@ -3,10 +3,8 @@
 package frc.robot.commands;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
 import frc.robot.Constants.States.ShooterMode;
-import frc.robot.subsystems.arm.IO_ArmReal;
 import frc.robot.subsystems.arm.SUB_Arm;
 import frc.robot.subsystems.conveyor.SUB_Conveyor;
 import frc.robot.subsystems.shooter.SUB_Shooter;

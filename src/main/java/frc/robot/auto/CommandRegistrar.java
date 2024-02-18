@@ -1,10 +1,7 @@
 // Written by WindingMotor, 2024, Crescendo
 
 package frc.robot.auto;
-import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
-
-import edu.wpi.first.wpilibj2.command.PrintCommand;
 import frc.robot.Constants.States.ShooterMode;
 import frc.robot.commands.CMDGR_Shoot;
 import frc.robot.commands.CMD_Eject;
