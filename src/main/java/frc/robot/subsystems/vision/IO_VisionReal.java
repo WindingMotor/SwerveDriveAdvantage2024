@@ -131,6 +131,11 @@ public class IO_VisionReal implements IO_VisionBase{
         }
     }
 
+    /**
+     * Retrieves the estimated global pose from the specified camera.
+     * @param  camera  The camera from which to retrieve the estimated pose
+     * @return         An optional containing the estimated robot pose, or empty if the camera is not valid
+    */
     public Optional<EstimatedRobotPose> getEstimatedGlobalPose(Camera camera){
 
         if(camera == Camera.LEFT_CAMERA){
@@ -154,6 +159,7 @@ public class IO_VisionReal implements IO_VisionBase{
     /**
      * Calculate the estimation standard deviations based on the estimated pose.
      * @param  estimatedPose   The estimated pose for calculation
+     * @param  camera          The camera to calculate the standard deviations for
      * @return                 The calculated standard deviations
     */
     public Matrix<N3, N1> getEstimationStdDevs(Pose2d estimatedPose, Camera camera){

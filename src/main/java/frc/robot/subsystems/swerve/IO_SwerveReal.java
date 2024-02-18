@@ -3,6 +3,8 @@
 package frc.robot.subsystems.swerve;
 import java.io.File;
 import java.io.IOException;
+
+import org.littletonrobotics.junction.Logger;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
@@ -130,39 +132,58 @@ public class IO_SwerveReal implements IO_SwerveBase{
     }
 
     /**
-     * Update estimations based on vision measurements from left and right cameras.
+     * Updates the swerve drive's estimations based on vision measurements from the specified camera.
+     * Only adds the measurement if it's not ambiguous.
+     * @param vision The vision subsystem providing the measurements.
     */
     @Override
     public void updateEstimations(SUB_Vision vision){
 
-       var leftVisionEst = vision.getEstimatedGlobalPose(Camera.LEFT_CAMERA);
-       leftVisionEst.ifPresent(
-               est -> {
-                   var estPose = est.estimatedPose.toPose2d();
-                   // Change our trust in the measurement based on the tags we can see
-                   var estStdDevs = vision.getEstimationStdDevs(estPose, Camera.LEFT_CAMERA);
+        // Get the estimated global pose from the left camera
+        var leftVisionEst = vision.getEstimatedGlobalPose(Camera.LEFT_CAMERA);
 
-                   swerveDrive.addVisionMeasurement(
-                           est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
-                    localEstimatedLeftPose = est.estimatedPose.toPose2d();
-               });
- 
-       var rightVisionEst = vision.getEstimatedGlobalPose(Camera.RIGHT_CAMERA);
-       rightVisionEst.ifPresent(
-               est -> {
-                   var estPose = est.estimatedPose.toPose2d();
-                   // Change our trust in the measurement based on the tags we can see
-                   var estStdDevs = vision.getEstimationStdDevs(estPose, Camera.RIGHT_CAMERA);
+        if (leftVisionEst != null){
+            leftVisionEst.ifPresent(est ->{
 
-                   swerveDrive.addVisionMeasurement(
-                           est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
-                    localEstimatedRightPose = est.estimatedPose.toPose2d();
-               });
+                // Check if the pose estimation is ambiguous
+                boolean isAmbiguous = est.targetsUsed.stream()
+                        .anyMatch(tar -> tar.getPoseAmbiguity() >  0.2);
+
+                // If the pose is not ambiguous, add the vision measurement to the swerve drive
+                if (!isAmbiguous){
+                    var estPose = est.estimatedPose.toPose2d();
+                    var estStdDevs = vision.getEstimationStdDevs(estPose, Camera.LEFT_CAMERA);
+                    swerveDrive.addVisionMeasurement(estPose, est.timestampSeconds, estStdDevs);
+                    localEstimatedLeftPose = estPose;
+                }
+            });
+        }
+
+        // Get the estimated global pose from the right camera
+        var rightVisionEst = vision.getEstimatedGlobalPose(Camera.RIGHT_CAMERA);
+
+        if (rightVisionEst != null){
+            rightVisionEst.ifPresent(est -> {
+
+                // Check if the pose estimation is ambiguous
+                boolean isAmbiguous = est.targetsUsed.stream()
+                        .anyMatch(tar -> tar.getPoseAmbiguity() >  0.2);
+
+                // If the pose is not ambiguous, add the vision measurement to the swerve drive
+                if (!isAmbiguous){
+                    var estPose = est.estimatedPose.toPose2d();
+                    var estStdDevs = vision.getEstimationStdDevs(estPose, Camera.RIGHT_CAMERA);
+                    swerveDrive.addVisionMeasurement(estPose, est.timestampSeconds, estStdDevs);
+                    localEstimatedRightPose = estPose;
+                }
+            });
+        }
     }
 
     @Override
     public void updateOdometry(){
         swerveDrive.updateOdometry();
     }
+    
 
 }

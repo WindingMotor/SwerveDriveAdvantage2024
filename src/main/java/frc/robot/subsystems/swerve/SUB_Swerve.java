@@ -38,61 +38,17 @@ public class SUB_Swerve extends SubsystemBase{
     }
 
     public void periodic(){
+
+        
+        // Updatethe pose estimations 
         io.updateEstimations(vision);
+    
+        // ISAAC: I MOVED THE PREVIOUS CODE HERE TO THE updateEstimations METHOD!
 
- 
-       var leftVisionEst = vision.getEstimatedGlobalPose(Camera.LEFT_CAMERA);
-       if(leftVisionEst != null){
-       leftVisionEst.ifPresent(
-               est -> {
-                boolean isAmbiguous = false;
-                
-                   var estPose = est.estimatedPose.toPose2d();
-                    for(PhotonTrackedTarget tar : est.targetsUsed){
-                        if(tar.getPoseAmbiguity() > 0.2){
-                            isAmbiguous = true;
-                        }
-                    }
-                   // Change our trust in the measurement based on the tags we can see
-                   var estStdDevs = vision.getEstimationStdDevs(estPose, Camera.LEFT_CAMERA);
-
-                   if(!isAmbiguous){
-                   io.addVisionMeasurement(
-                           est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
-                    Logger.recordOutput("Estimated Left Pose", est.estimatedPose.toPose2d());
-                 }
-               });
-            }
- 
-       var rightVisionEst = vision.io.getEstimatedGlobalPose(Camera.RIGHT_CAMERA);
-       if(rightVisionEst != null){
-       rightVisionEst.ifPresent(
-               est -> {
-                   boolean isAmbiguous = false;
-
-                   var estPose = est.estimatedPose.toPose2d();
-                    for(PhotonTrackedTarget tar : est.targetsUsed){
-                        if(tar.getPoseAmbiguity() > 0.2){
-                            isAmbiguous = true;
-                        }
-                    }
-                   // Change our trust in the measurement based on the tags we can see
-                   var estStdDevs = vision.io.getEstimationStdDevs(estPose);
-
-                if(!isAmbiguous){
-                   io.addVisionMeasurement(
-                           est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
-                    Logger.recordOutput("Estimated Right Pose", est.estimatedPose.toPose2d());
-                }
-                });
-            
-            }
         io.updateOdometry();
         io.updateInputs(inputs);
         Logger.processInputs("Swerve", inputs);
     }
-
-
 
     /**
      * Drives the robot, in field-relative, based of the specified inputs.
