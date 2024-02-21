@@ -1,7 +1,7 @@
 // Written by WindingMotor, 2024, Crescendo
 
 package frc.robot.subsystems.conveyor;
-import com.revrobotics.*;
+import com.revrobotics.CANSparkMax;
 import frc.robot.Constants;
 import frc.robot.util.Builder;
 import frc.robot.util.IRBeamBreak;
@@ -11,10 +11,9 @@ public class IO_ConveyorReal implements IO_ConveyorBase{
     private CANSparkMax intakeMotor;       
     private CANSparkMax indexerMotor;  
     
-    private IRBeamBreak intakeInitalSensor;
-    private IRBeamBreak intakeFinalSensor;
+    private IRBeamBreak intakeSensor;
 
-    private IRBeamBreak idexerInitalSensor;
+    private IRBeamBreak indexerInitalSensor;
     private IRBeamBreak indexerFinalSensor;
     private boolean shooterFlag = false;
     
@@ -22,10 +21,9 @@ public class IO_ConveyorReal implements IO_ConveyorBase{
         intakeMotor = Builder.createNeo(Constants.Maestro.INTAKE_MOTOR_ID, false, 60);
         indexerMotor = Builder.createNeo(Constants.Maestro.INDEXER_MOTOR_ID, false, 45);
 
-        intakeInitalSensor = new IRBeamBreak(Constants.Maestro.INTAKE_INITAL_SENSOR_ID);
-        intakeFinalSensor = new IRBeamBreak(Constants.Maestro.INTAKE_FINAL_SENSOR_ID);
+        intakeSensor = new IRBeamBreak(Constants.Maestro.INTAKE_SENSOR_ID);
 
-        idexerInitalSensor = new IRBeamBreak(Constants.Maestro.INDEXER_INITAL_SENSOR_ID);
+        indexerInitalSensor = new IRBeamBreak(Constants.Maestro.INDEXER_INITAL_SENSOR_ID);
         indexerFinalSensor = new IRBeamBreak(Constants.Maestro.INDEXER_FINAL_SENSOR_ID);
     }
 
@@ -40,9 +38,8 @@ public class IO_ConveyorReal implements IO_ConveyorBase{
         inputs.indexerMotorSpeed = indexerMotor.getEncoder().getVelocity();
         inputs.indexerMotorCurrent = indexerMotor.getOutputCurrent();
 
-        inputs.intakeInitalSensorState = intakeInitalSensor.getState();
-        inputs.intakeFinalSensorState = intakeFinalSensor.getState();
-        inputs.indexerInitalSensorState = idexerInitalSensor.getState();
+        inputs.intakeSensorState = intakeSensor.getState();
+        inputs.indexerInitalSensorState = indexerInitalSensor.getState();
         inputs.indexerFinalSensorState = indexerFinalSensor.getState();
         if(!inputs.indexerFinalSensorState){shooterFlag = true;}
     }

@@ -31,7 +31,7 @@ public class CMD_Eject extends Command{
         this.conveyor = conveyor;
         this.arm = arm;
         this.manualCancel = manualCancel;
-        debouncer = new Debouncer(0.5, Debouncer.DebounceType.kFalling);
+        debouncer = new Debouncer(0.65, Debouncer.DebounceType.kFalling);
 
         addRequirements(conveyor, arm);
     }
@@ -45,7 +45,6 @@ public class CMD_Eject extends Command{
         isCommandDone = false;
         DriverStation.reportWarning("[init] CMD_Eject running", false);
         conveyor.setState(Constants.States.ConveyorState.EJECT);
-        arm.setState(Constants.States.ArmState.INTAKE);
     }
 
     /**
@@ -53,11 +52,7 @@ public class CMD_Eject extends Command{
      * leaves the intake set the isCommandDone flag to true.
     */
     @Override
-    public void execute(){
-        if(debouncer.calculate(!conveyor.inputs.intakeInitalSensorState)){
-            isCommandDone = true;
-        }
-    }
+    public void execute(){}
 
     /**
      * Sets conveyor and arm states to IDLE when command ends.

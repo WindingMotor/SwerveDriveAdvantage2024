@@ -10,6 +10,7 @@ import frc.robot.auto.AutoSelector;
 import frc.robot.auto.CommandRegistrar;
 import frc.robot.commands.CMDGR_DrivePose;
 import frc.robot.commands.CMDGR_Shoot;
+import frc.robot.commands.CMD_Eject;
 import frc.robot.commands.CMD_Idle;
 import frc.robot.commands.CMD_Intake;
 import frc.robot.subsystems.arm.IO_ArmReal;
@@ -85,16 +86,16 @@ public class RobotContainer{
         operatorController.a().onTrue(new CMD_Intake(conveyor, arm, () -> operatorController.b().getAsBoolean()));
         
         // Eject command
-        operatorController.leftBumper().onTrue(new CMD_IndexerManual(conveyor, false));
+        operatorController.rightBumper().onTrue(new CMD_Eject(conveyor, arm, () -> operatorController.b().getAsBoolean()));
 
         // Idle command
         operatorController.b().onTrue(new CMD_Idle(conveyor, arm, shooter));
 
         // Drive to speaker command
-        operatorController.povRight().debounce(0.25).onTrue(new CMDGR_DrivePose(swerve, Constants.Auto.DriveScoringPoseState.SPEAKER, () -> operatorController.b().getAsBoolean()));
+        //operatorController.povRight().debounce(0.25).onTrue(new CMDGR_DrivePose(swerve, Constants.Auto.DriveScoringPoseState.SPEAKER, () -> operatorController.b().getAsBoolean()));
 
         // Drive to amp command
-        operatorController.povLeft().debounce(0.25).onTrue(new CMDGR_DrivePose(swerve, Constants.Auto.DriveScoringPoseState.AMP, () -> operatorController.b().getAsBoolean()));
+        //operatorController.povLeft().debounce(0.25).onTrue(new CMDGR_DrivePose(swerve, Constants.Auto.DriveScoringPoseState.AMP, () -> operatorController.b().getAsBoolean()));
     }
 
     private void logMetadata(){

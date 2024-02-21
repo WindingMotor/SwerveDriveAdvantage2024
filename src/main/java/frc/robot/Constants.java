@@ -140,7 +140,7 @@ public class Constants{
         public static final boolean ARM_MOTOR_LEAD_INVERTED = false;
         public static final boolean ARM_MOTOR_FOLLOWER_INVERTED = false;
 
-        public static final double ARM_P = 0.45; // Volts 
+        public static final double ARM_P = 0.135; // Volts 0.45 0.18
         public static final double ARM_I = 0.0;
         public static final double ARM_D = 0.00012;
 
@@ -149,11 +149,9 @@ public class Constants{
         public static final double ARM_KV = 1.86;
         public static final double ARM_KA = 0.06;
 
-        public static final double ARM_MAX_VELOCITY = 180; // Deg/sec
-        public static final double ARM_MAX_ACCELERATION = 200; // Deg/sec/sec
+        public static final double ARM_MAX_VELOCITY = 460; // Deg/sec
+        public static final double ARM_MAX_ACCELERATION = 3000; // Deg/sec/sec
 
-        public static final double ARM_SLEW_RATE = 15.0; // Smaller slower -> Deg/sec
-        
         public static final double ARM_VOLTAGE_CLAMPING = 11.9;
 
         public static final double ARM_TOLERANCE_DEGREES = 0.12;
@@ -182,8 +180,7 @@ public class Constants{
         public static final int INTAKE_MOTOR_ID = 14;
 
         // Sensor IDs
-        public static final int INTAKE_INITAL_SENSOR_ID = 4;
-        public static final int INTAKE_FINAL_SENSOR_ID = 5;
+        public static final int INTAKE_SENSOR_ID = 6;
 
         public static final int INDEXER_INITAL_SENSOR_ID = 2;
         public static final int INDEXER_FINAL_SENSOR_ID = 1;

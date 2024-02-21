@@ -102,17 +102,18 @@ public class IO_ShooterReal implements IO_ShooterBase {
      * @return True if both velocities are within the acceptable tolerance, false otherwise
     */
     @Override
-    public boolean isUpToSpeed() {
+    public boolean isUpToSpeed(){
         double topMotorVelocity = topMotorEncoder.getVelocity();
         double bottomMotorVelocity = bottomMotorEncoder.getVelocity();
     
-        boolean isLeftUpToSpeed = topMotorVelocity >= setpointRPM - Constants.Maestro.SHOOTER_TOLERANCE_RPM
-                && topMotorVelocity <= setpointRPM + Constants.Maestro.SHOOTER_TOLERANCE_RPM;
-    
-        boolean isRightUpToSpeed = bottomMotorVelocity >= setpointRPM - Constants.Maestro.SHOOTER_TOLERANCE_RPM
-                && bottomMotorVelocity <= setpointRPM + Constants.Maestro.SHOOTER_TOLERANCE_RPM;
-    
-        return isLeftUpToSpeed && isRightUpToSpeed;
+        if(
+                topMotorVelocity > setpointRPM - Constants.Maestro.SHOOTER_TOLERANCE_RPM
+                && topMotorVelocity < setpointRPM + Constants.Maestro.SHOOTER_TOLERANCE_RPM
+                && bottomMotorVelocity > setpointRPM - Constants.Maestro.SHOOTER_TOLERANCE_RPM
+                && bottomMotorVelocity < setpointRPM + Constants.Maestro.SHOOTER_TOLERANCE_RPM){
+            return true;
+        }
+        return false;
     }
     
     @Override

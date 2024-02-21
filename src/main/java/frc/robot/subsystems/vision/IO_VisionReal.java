@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.littletonrobotics.junction.Logger;
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
@@ -30,6 +31,8 @@ public class IO_VisionReal implements IO_VisionBase{
     // Initialize cameras
     PhotonCamera leftCamera = new PhotonCamera("OV9281_02");
     PhotonCamera rightCamera = new PhotonCamera("OV9281_01");
+
+    PhotonCamera lifecam = new PhotonCamera("Microsoft_LifeCam_HD-3000");
 
     double lastEstTimestamp = 0.0;
 
@@ -80,6 +83,27 @@ public class IO_VisionReal implements IO_VisionBase{
 
         inputs.leftCameraLatency = leftCamera.getLatestResult().getLatencyMillis();
         inputs.rightCameraLatency = rightCamera.getLatestResult().getLatencyMillis();
+
+        if(lifecam.getLatestResult().hasTargets()){
+            double targetYaw = lifecam.getLatestResult().getBestTarget().getYaw();
+            
+            double targetPitch = lifecam.getLatestResult().getBestTarget().getPitch();
+
+            double cameraPitchAngle = 7.0;
+            double cameraHeightMeters = 0.3;
+
+            double rDistanceMeters = 1.0 / Math.tan(Math.toRadians(cameraPitchAngle) + Math.toRadians(targetPitch)) * cameraHeightMeters;
+
+            double xDistanceMeters = Math.cos(Math.toRadians(targetYaw)) * rDistanceMeters;
+            double yDistanceMeters = Math.sin(Math.toRadians(targetYaw)) * rDistanceMeters;
+
+            Logger.recordOutput("LIFECAM R" , rDistanceMeters);
+
+            Logger.recordOutput("LIFECAM X", xDistanceMeters);
+
+            Logger.recordOutput("LIFECAM Y", yDistanceMeters);
+        }
+    
     }
 
     /**

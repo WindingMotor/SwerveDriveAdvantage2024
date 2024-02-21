@@ -5,7 +5,6 @@ import com.revrobotics.CANSparkMax;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -20,8 +19,6 @@ public class IO_ArmReal implements IO_ArmBase{
     private ProfiledPIDController pid;
 
     private ArmFeedforward feedforward;
-
-    private SlewRateLimiter slew;
 
     private double setpointPosition;
 
@@ -51,8 +48,7 @@ public class IO_ArmReal implements IO_ArmBase{
         );
 
         feedforward = new ArmFeedforward(Constants.Maestro.ARM_KS, Constants.Maestro.ARM_KG, Constants.Maestro.ARM_KV, Constants.Maestro.ARM_KA);
-        
-        slew = new SlewRateLimiter(Constants.Maestro.ARM_SLEW_RATE);
+    
 
         armEncoder = new Encoder(7, 8, true, Encoder.EncodingType.k2X);
         armEncoder.setDistancePerPulse(0.1);
@@ -110,7 +106,7 @@ public class IO_ArmReal implements IO_ArmBase{
         }
 
         motorOne.setVoltage(
-            slew.calculate(pidOutputVolts + ffOutputVolts)
+            pidOutputVolts + ffOutputVolts
         );
     }
 

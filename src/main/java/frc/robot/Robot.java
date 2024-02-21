@@ -7,8 +7,12 @@ import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.urcl.URCL;
+
+import edu.wpi.first.wpilibj.PowerDistribution;
+import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.util.PDH;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -20,6 +24,7 @@ public class Robot extends LoggedRobot {
   private Command m_autonomousCommand;
 
   private RobotContainer m_robotContainer;
+  private PDH m_pdh;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -30,6 +35,8 @@ public class Robot extends LoggedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
+
+    m_pdh = new PDH();
 
     Logger.recordMetadata("ProjectName", "AdvantageJava2024"); // Set a metadata value
 
@@ -47,6 +54,8 @@ public class Robot extends LoggedRobot {
     Logger.start(); // Start logging! No more data receivers, replay sources, or metadata values may be added.
 
     //Pathfinding.setPathfinder(new LocalADStarAK());
+    
+    m_pdh.setSwitchableChannel(false);
   }
 
   /**
@@ -67,7 +76,9 @@ public class Robot extends LoggedRobot {
 
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+    m_pdh.setSwitchableChannel(false);
+  }
 
   @Override
   public void disabledPeriodic() {}
@@ -96,7 +107,8 @@ public class Robot extends LoggedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
-    
+
+    m_pdh.setSwitchableChannel(true);
   }
 
   /** This function is called periodically during operator control. */

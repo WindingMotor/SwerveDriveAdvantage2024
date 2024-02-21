@@ -14,8 +14,7 @@ public interface IO_ConveyorBase{
         public double intakeMotorCurrent = 0.0;
         public double indexerMotorCurrent = 0.0;
 
-        public boolean intakeInitalSensorState = false;
-        public boolean intakeFinalSensorState = false;
+        public boolean intakeSensorState = false;
 
         public boolean indexerInitalSensorState = false;
         public boolean indexerFinalSensorState = false;

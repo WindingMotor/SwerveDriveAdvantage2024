@@ -115,6 +115,11 @@ public class CMD_Shoot extends Command{
 
         // Manual operator shoot
         if(!autoShoot){
+
+           if(shooter.isUptoSpeed() && arm.isAtSetpoint()){
+                led.setState(LEDState.GREEN);
+           }
+
             if(shoot.get()){
                 hasShootBeenCalled = true;
                 if(mode == ShooterMode.AMP){
@@ -127,7 +132,7 @@ public class CMD_Shoot extends Command{
         // Auto shoot with RPM check
         }else{ 
            if(shooter.isUptoSpeed() && arm.isAtSetpoint()){
-                System.out.println("Conveyor should run");
+                led.setState(LEDState.GREEN);
                 hasShootBeenCalled = true;
                 if(mode == ShooterMode.AMP){
                     conveyor.setState(Constants.States.ConveyorState.AMP);
