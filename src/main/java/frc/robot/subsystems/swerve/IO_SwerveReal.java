@@ -3,11 +3,16 @@
 package frc.robot.subsystems.swerve;
 import java.io.File;
 import java.io.IOException;
+import org.littletonrobotics.junction.Logger;
+import org.photonvision.targeting.PhotonTrackedTarget;
+import java.util.ArrayList;
+import java.util.List;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -141,16 +146,20 @@ public class IO_SwerveReal implements IO_SwerveBase{
         var leftVisionEst = vision.getEstimatedGlobalPose(Camera.LEFT_CAMERA);
 
         if (leftVisionEst != null){
+
+            List<PhotonTrackedTarget> newTargets = new ArrayList<>(); 
+
             leftVisionEst.ifPresent(est ->{
 
-                // Check if the pose estimation is ambiguous
-                boolean isAmbiguous = est.targetsUsed.stream()
-                        .anyMatch(tar -> tar.getPoseAmbiguity() >  0.2);
+                for(PhotonTrackedTarget tar : est.targetsUsed){
+                    if(tar.getPoseAmbiguity() < 0.2){
+                        newTargets.add(tar);
+                    }
+                }
 
-                // If the pose is not ambiguous, add the vision measurement to the swerve drive
-                if (!isAmbiguous){
+                if(!newTargets.isEmpty()){
                     var estPose = est.estimatedPose.toPose2d();
-                    var estStdDevs = vision.getEstimationStdDevs(estPose, Camera.LEFT_CAMERA);
+                    var estStdDevs = vision.getEstimationStdDevs(estPose, Camera.LEFT_CAMERA, newTargets);
                     swerveDrive.addVisionMeasurement(estPose, est.timestampSeconds, estStdDevs);
                     localEstimatedLeftPose = estPose;
                 }
@@ -161,21 +170,27 @@ public class IO_SwerveReal implements IO_SwerveBase{
         var rightVisionEst = vision.getEstimatedGlobalPose(Camera.RIGHT_CAMERA);
 
         if (rightVisionEst != null){
-            rightVisionEst.ifPresent(est -> {
 
-                // Check if the pose estimation is ambiguous
-                boolean isAmbiguous = est.targetsUsed.stream()
-                        .anyMatch(tar -> tar.getPoseAmbiguity() >  0.2);
+            List<PhotonTrackedTarget> newTargets = new ArrayList<>(); 
 
-                // If the pose is not ambiguous, add the vision measurement to the swerve drive
-                if (!isAmbiguous){
+            rightVisionEst.ifPresent(est ->{
+
+                for(PhotonTrackedTarget tar : est.targetsUsed){
+                    if(tar.getPoseAmbiguity() < 0.2){
+                        newTargets.add(tar);
+                    }
+                }
+
+                if(!newTargets.isEmpty()){
                     var estPose = est.estimatedPose.toPose2d();
-                    var estStdDevs = vision.getEstimationStdDevs(estPose, Camera.RIGHT_CAMERA);
+                    var estStdDevs = vision.getEstimationStdDevs(estPose, Camera.RIGHT_CAMERA, newTargets);
                     swerveDrive.addVisionMeasurement(estPose, est.timestampSeconds, estStdDevs);
                     localEstimatedRightPose = estPose;
                 }
             });
+
         }
+        
     }
 
     @Override

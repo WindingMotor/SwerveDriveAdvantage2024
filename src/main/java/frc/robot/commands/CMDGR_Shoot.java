@@ -5,6 +5,7 @@ import java.util.function.Supplier;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.States.ShooterMode;
+import frc.robot.Constants.States.ShooterState;
 import frc.robot.subsystems.arm.SUB_Arm;
 import frc.robot.subsystems.conveyor.SUB_Conveyor;
 import frc.robot.subsystems.shooter.SUB_Shooter;
@@ -27,16 +28,4 @@ public class CMDGR_Shoot extends SequentialCommandGroup{
       );
   }
 
-  public CMDGR_Shoot(SUB_Conveyor conveyor, SUB_Arm arm, SUB_Shooter shooter, SUB_Vision vision, AddressableLedStrip led, ShooterMode mode, Supplier<Boolean> manualCancel, Supplier<Boolean> shoot, boolean autoShoot){
-    addRequirements(conveyor, arm, shooter);
-      // Call the shoot command, then wait 0.5 seconds, then call the idle command
-      addCommands(
-        new CMD_Led(led, LEDState.BLUE),
-        new WaitCommand(0.5),
-        new CMD_Shoot(conveyor, arm, shooter, vision, led, mode, manualCancel, shoot, autoShoot),
-        new WaitCommand(1), // Delay to allow dount to leave the robot
-        new CMD_Idle(conveyor, arm, shooter),
-        new CMD_Led(led, LEDState.RAINBOW)
-      );
-  }
 }

@@ -2,12 +2,18 @@
 
 package frc.robot.auto;
 import com.pathplanner.lib.auto.NamedCommands;
+
+import edu.wpi.first.wpilibj2.command.PrintCommand;
+import frc.robot.Constants.States.ArmState;
 import frc.robot.Constants.States.ShooterMode;
+import frc.robot.Constants.States.ShooterState;
 import frc.robot.commands.CMDGR_Shoot;
 import frc.robot.commands.CMD_Eject;
 import frc.robot.commands.CMD_Idle;
 import frc.robot.commands.CMD_Intake;
+import frc.robot.commands.CMD_IntakeAuto;
 import frc.robot.commands.CMD_Led;
+import frc.robot.commands.CMD_Shoot;
 import frc.robot.subsystems.arm.SUB_Arm;
 import frc.robot.subsystems.conveyor.SUB_Conveyor;
 import frc.robot.subsystems.shooter.SUB_Shooter;
@@ -46,16 +52,24 @@ public class CommandRegistrar{
     public void register(){
 
         // Intake command
-        NamedCommands.registerCommand("Intake", new CMD_Intake(conveyor, arm,  () -> false));
+        NamedCommands.registerCommand("Intake", new CMD_IntakeAuto(conveyor, arm,  () -> false));
 
         // Eject command
         NamedCommands.registerCommand("Eject", new CMD_Eject(conveyor, arm, () -> false));
         
-        // Speaker shoot command, with auto shoot 
-        NamedCommands.registerCommand("Shoot_Speaker", new CMDGR_Shoot(conveyor, arm, shooter, vision, led, ShooterMode.SPEAKER, () -> false, () -> false, true));
+        NamedCommands.registerCommand("Shoot_Speaker", new PrintCommand("NULL"));
+        NamedCommands.registerCommand("Shoot_Command", new PrintCommand("NULL"));
+        NamedCommands.registerCommand("Shoot_Command2M", new PrintCommand("NULL"));
+        NamedCommands.registerCommand("Intake_Auto", new PrintCommand("NULL"));
 
+        // Speaker shoot command, with auto shoot 
+        NamedCommands.registerCommand("Shoot_Speaker1M", new CMD_Shoot(conveyor, arm, shooter, vision, led, ShooterMode.SPEAKER, () -> false, () -> false, true, ShooterState.SPEAKER_1M, ArmState.SPEAKER_1M));
+        NamedCommands.registerCommand("Shoot_Speaker2M", new CMD_Shoot(conveyor, arm, shooter, vision, led, ShooterMode.SPEAKER, () -> false, () -> false, true, ShooterState.SPEAKER_2M, ArmState.SPEAKER_2M));
+        NamedCommands.registerCommand("Shoot_Speaker3M", new CMD_Shoot(conveyor, arm, shooter, vision, led, ShooterMode.SPEAKER, () -> false, () -> false, true, ShooterState.SPEAKER_3M, ArmState.SPEAKER_3M));
+
+        
         // Amp shoot command, with auto shoot 
-        NamedCommands.registerCommand("Shoot_Amp", new CMDGR_Shoot(conveyor, arm, shooter, vision, led, ShooterMode.AMP, () -> false, () -> false, true));
+        NamedCommands.registerCommand("Shoot_Amp", new CMD_Shoot(conveyor, arm, shooter, vision, led, ShooterMode.AMP, () -> false, () -> false, true, ShooterState.AMP, ArmState.AMP));
 
         // Idle command
         NamedCommands.registerCommand("Idle", new CMD_Idle(conveyor, arm, shooter));

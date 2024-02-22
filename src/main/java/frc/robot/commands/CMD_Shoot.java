@@ -4,7 +4,9 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
+import frc.robot.Constants.States.ArmState;
 import frc.robot.Constants.States.ShooterMode;
+import frc.robot.Constants.States.ShooterState;
 import frc.robot.subsystems.arm.SUB_Arm;
 import frc.robot.subsystems.conveyor.SUB_Conveyor;
 import frc.robot.subsystems.shooter.SUB_Shooter;
@@ -29,6 +31,9 @@ public class CMD_Shoot extends Command{
     private boolean isCommandDone = false;
     private boolean hasShootBeenCalled = false;
     private boolean autoShoot = false;
+    private int timer = 0;
+    private ShooterState autoShooterState;
+    private ArmState autoArmState;
 
     /**
      * Constructor for the CMD_Shoot command.
@@ -50,12 +55,14 @@ public class CMD_Shoot extends Command{
         this.mode = mode;
         this.shoot = shoot;
         this.manualCancel = manualCancel;
+        this.autoShooterState = null;
+        this.autoArmState = null;
 
         addRequirements(conveyor, arm, shooter);
     }
 
     // Auto Shoot Contructor
-    public CMD_Shoot(SUB_Conveyor conveyor, SUB_Arm arm, SUB_Shooter shooter, SUB_Vision vision, AddressableLedStrip led, ShooterMode mode, Supplier<Boolean> manualCancel, Supplier<Boolean> shoot, boolean autoShoot){
+    public CMD_Shoot(SUB_Conveyor conveyor, SUB_Arm arm, SUB_Shooter shooter, SUB_Vision vision, AddressableLedStrip led, ShooterMode mode, Supplier<Boolean> manualCancel, Supplier<Boolean> shoot, boolean autoShoot, ShooterState autoShooterState, ArmState autoArmState){
         this.conveyor = conveyor;
         this.arm = arm;
         this.shooter = shooter;
@@ -65,6 +72,9 @@ public class CMD_Shoot extends Command{
         this.shoot = shoot;
         this.autoShoot = true;
         this.manualCancel = manualCancel;
+        this.autoShooterState = autoShooterState;
+        this.autoArmState = autoArmState;
+
 
         addRequirements(conveyor, arm, shooter);
     }
@@ -75,6 +85,7 @@ public class CMD_Shoot extends Command{
     */
     @Override
     public void initialize(){
+        timer = 0;
         isCommandDone = false;
         hasShootBeenCalled = false; 
 
@@ -95,8 +106,13 @@ public class CMD_Shoot extends Command{
         // SPEAKER mode
         if(mode == ShooterMode.SPEAKER){ 
             shooter.invertMotors(true);
-            shooter.setState(Constants.States.ShooterState.SPEAKER_1M);
-            arm.setState(Constants.States.ArmState.SPEAKER_1M);
+            if(autoShoot){
+                shooter.setState(autoShooterState);
+                arm.setState(autoArmState);
+            }else{
+                shooter.setState(Constants.States.ShooterState.SPEAKER_1M);
+                arm.setState(Constants.States.ArmState.SPEAKER_1M);
+            }
 
         // AMP mode
         }else if(mode == ShooterMode.AMP){ 
@@ -112,6 +128,8 @@ public class CMD_Shoot extends Command{
     }
 
     private void checkConveyor(){
+
+        timer ++;
 
         // Manual operator shoot
         if(!autoShoot){
@@ -131,7 +149,7 @@ public class CMD_Shoot extends Command{
             
         // Auto shoot with RPM check
         }else{ 
-           if(shooter.isUptoSpeed() && arm.isAtSetpoint()){
+           if(shooter.isUptoSpeed() && arm.isAtSetpoint() && timer > 50){
                 led.setState(LEDState.GREEN);
                 hasShootBeenCalled = true;
                 if(mode == ShooterMode.AMP){
@@ -147,9 +165,8 @@ public class CMD_Shoot extends Command{
 
         // Once operator has pressed shoot button and the donut leaves the conveyor end the command
         if(hasShootBeenCalled){
-            if(conveyor.inputs.indexerFinalSensorState && conveyor.getShooterFlag()){
+            if(conveyor.inputs.indexerFinalSensorState){
                 isCommandDone = true;
-                conveyor.inputs.shooterFlag = false;
             }
         }
     }

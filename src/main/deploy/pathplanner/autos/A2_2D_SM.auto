@@ -38,13 +38,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "A1_P2"
+            "pathName": null
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "A1_P3"
+            "pathName": "A1_P2"
           }
         },
         {

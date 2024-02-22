@@ -137,8 +137,8 @@ public class SUB_Vision extends SubsystemBase {
      * @param  estimatedPose   The estimated pose for which to retrieve standard deviations
      * @return                 The estimation standard deviations for the given estimated pose
      */
-    public Matrix<N3, N1> getEstimationStdDevs(Pose2d estimatedPose, Camera camera){
-        return io.getEstimationStdDevs(estimatedPose, camera);
+    public Matrix<N3, N1> getEstimationStdDevs(Pose2d estimatedPose, Camera camera, List<PhotonTrackedTarget> targets){
+        return io.getEstimationStdDevs(estimatedPose, camera, targets);
     }
 
     public Double getAmbiguity(int id){

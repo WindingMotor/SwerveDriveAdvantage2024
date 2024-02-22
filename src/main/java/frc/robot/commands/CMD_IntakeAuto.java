@@ -12,7 +12,7 @@ import java.util.function.Supplier;
 /**
  * Command to control the intake process.
 */
-public class CMD_Intake extends Command{
+public class CMD_IntakeAuto extends Command{
 
     private final SUB_Conveyor conveyor;
     private final SUB_Arm arm;
@@ -21,12 +21,12 @@ public class CMD_Intake extends Command{
     private Debouncer debouncer;
 
     /**
-     * Constructs a new CMD_Intake command.
+     * Constructs a new CMD_IntakeAuto command.
      * @param conveyor       The conveyor subsystem.
      * @param arm            The arm subsystem.
      * @param manualCancel   The supplier to determine if the command should be manually cancelled.
     */
-    public CMD_Intake(SUB_Conveyor conveyor, SUB_Arm arm, Supplier<Boolean> manualCancel){
+    public CMD_IntakeAuto(SUB_Conveyor conveyor, SUB_Arm arm, Supplier<Boolean> manualCancel){
         this.conveyor = conveyor;
         this.arm = arm;
         this.manualCancel = manualCancel;
@@ -66,7 +66,6 @@ public class CMD_Intake extends Command{
     @Override
     public void end(boolean interrupted){
         conveyor.setState(Constants.States.ConveyorState.OFF);
-        arm.setState(Constants.States.ArmState.IDLE);
     }
 
     @Override

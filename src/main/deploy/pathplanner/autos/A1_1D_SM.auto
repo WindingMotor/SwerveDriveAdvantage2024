@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.2476576271388777,
-      "y": 5.37
+      "x": 1.5444903066371387,
+      "y": 5.558955073799368
     },
     "rotation": 179.36729894743056
   },
@@ -14,7 +14,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot_Speaker"
+            "name": "Shoot_Speaker1M"
           }
         },
         {
@@ -24,21 +24,53 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "A1_P1"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "A1_P1"
+                }
+              }
+            ]
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Intake"
+            "name": "Shoot_Speaker3M"
           }
         },
         {
-          "type": "path",
+          "type": "wait",
           "data": {
-            "pathName": "A1_P2"
+            "waitTime": 0.3
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "A1_P2"
+                }
+              }
+            ]
           }
         },
         {
@@ -50,13 +82,19 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot_Speaker"
+            "name": "Shoot_Speaker2M"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.3
+            "waitTime": 0.45
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Idle"
           }
         }
       ]

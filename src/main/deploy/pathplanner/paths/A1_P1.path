@@ -3,37 +3,37 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.5,
-        "y": 5.37
+        "x": 1.5444903066371387,
+        "y": 5.558955073799368
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.03615860392057,
-        "y": 5.325759521580799
+        "x": 1.9143994788445347,
+        "y": 5.558955073799368
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.19,
+        "x": 2.632906654236729,
         "y": 5.558955073799368
       },
       "prevControl": {
-        "x": 1.5713577686814526,
-        "y": 5.6657019503880495
+        "x": 2.1412604014629757,
+        "y": 5.558955073799368
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "A1_P1_END"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 1.5,
+    "maxAcceleration": 2.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
@@ -45,7 +45,7 @@
   "reversed": false,
   "folder": "A1_PATHS",
   "previewStartingState": {
-    "rotation": 179.12366449569353,
+    "rotation": 179.46644138939254,
     "velocity": 0
   },
   "useDefaultConstraints": true

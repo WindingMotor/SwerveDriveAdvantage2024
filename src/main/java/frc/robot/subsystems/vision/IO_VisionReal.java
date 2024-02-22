@@ -186,15 +186,9 @@ public class IO_VisionReal implements IO_VisionBase{
      * @param  camera          The camera to calculate the standard deviations for
      * @return                 The calculated standard deviations
     */
-    public Matrix<N3, N1> getEstimationStdDevs(Pose2d estimatedPose, Camera camera){
+    public Matrix<N3, N1> getEstimationStdDevs(Pose2d estimatedPose, Camera camera, List<PhotonTrackedTarget> targets){
         // Initialize standard deviations with the default values for a single tag
         var estStdDevs = Vision.SINGLE_TAG_STD_DEVS;
-
-        // Retrieve the latest targets from the specified camera
-        var targets = rightCamera.getLatestResult().getTargets();
-        if(camera == Constants.Vision.Camera.LEFT_CAMERA){
-            targets = leftCamera.getLatestResult().getTargets();
-        }
 
         int numTags =  0;
         double avgDist =  0;

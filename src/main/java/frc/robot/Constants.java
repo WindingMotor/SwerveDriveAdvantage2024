@@ -75,8 +75,12 @@ public class Constants{
     public static class Vision {
 // The standard deviations of our vision estimated poses, which affect correction rate
         // (Fake values. Experiment and determine estimation noise on an actual robot.)
+        // X, Y, Theta
+        //public static final Matrix<N3, N1> SINGLE_TAG_STD_DEVS = VecBuilder.fill(4, 4, 8);
+        //public static final Matrix<N3, N1> MULTI_TAG_STD_DEVS = VecBuilder.fill(0.5, 0.5, 1);
+
         public static final Matrix<N3, N1> SINGLE_TAG_STD_DEVS = VecBuilder.fill(4, 4, 8);
-        public static final Matrix<N3, N1> MULTI_TAG_STD_DEVS = VecBuilder.fill(0.5, 0.5, 1);
+        public static final Matrix<N3, N1> MULTI_TAG_STD_DEVS = VecBuilder.fill(0.8, 0.8, 1.25);
 
         // Latency warning trigger threshold in miliseconds
         public static final double LATENCY_THRESHOLD_MILI_SEC = 30.0;
@@ -154,7 +158,7 @@ public class Constants{
 
         public static final double ARM_VOLTAGE_CLAMPING = 11.9;
 
-        public static final double ARM_TOLERANCE_DEGREES = 0.12;
+        public static final double ARM_TOLERANCE_DEGREES = 1.0; // 3.0
         public static final double ARM_OFFSET_DEGREES = 4.85;
 
         // Shooter
@@ -171,7 +175,7 @@ public class Constants{
         public static final double SHOOTER_MOTORS_IZ = 0.0005;
         public static final double SHOOTER_MOTORS_FF = 0.00018; 
 
-        public static final double SHOOTER_TOLERANCE_RPM = 3.0;
+        public static final double SHOOTER_TOLERANCE_RPM = 150;
 
         // Intake
         public static final int INDEXER_MOTOR_ID = 11;
@@ -259,7 +263,7 @@ public class Constants{
             IDLE(-4, 0.0),
 
             SPEAKER_1M(55.0, 1.0),
-            SPEAKER_2M(43.0, 2.0),
+            SPEAKER_2M(42.0, 2.0), //43deg
             SPEAKER_3M(39.0, 3.0),
             SPEAKER_4M(34.15, 4.0),
 
@@ -293,7 +297,7 @@ public class Constants{
 
     public static class Auto{
 
-        public static final PIDConstants AUTO_PID = new PIDConstants(1.5, 0.0, 0.0005);
+        public static final PIDConstants AUTO_PID = new PIDConstants(1.5, 0.0, 0.05);
 
         public static final double MAX_VELOCITY_MPS = 1.5;
         public static final double MAX_ACCELERATION_MPS_SQ = 2.0;
