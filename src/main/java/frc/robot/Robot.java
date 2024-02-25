@@ -1,18 +1,21 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
+// Copyright (c) 2024 FRC 6328
+// http://github.com/Mechanical-Advantage
+//
+// Use of this source code is governed by an MIT-style
+// license that can be found in the LICENSE file at
+// the root directory of this project.
 
 package frc.robot;
+
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.util.LocalADStarAK;
+
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
-import org.littletonrobotics.urcl.URCL;
 
-import edu.wpi.first.wpilibj.PowerDistribution;
-import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.util.PDH;
+import com.pathplanner.lib.pathfinding.Pathfinding;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -24,7 +27,8 @@ public class Robot extends LoggedRobot {
   private Command m_autonomousCommand;
 
   private RobotContainer m_robotContainer;
- // private PDH m_pdh;
+
+  // private PDH m_pdh;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -36,26 +40,27 @@ public class Robot extends LoggedRobot {
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
 
-   // m_pdh = new PDH();
+    // m_pdh = new PDH();
 
-    Logger.recordMetadata("ProjectName", "AdvantageJava2024"); // Set a metadata value
 
-    if (Constants.CURRENT_MODE == Constants.RobotMode.REAL){
-        //Logger.addDataReceiver(new WPILOGWriter("/U")); // Log to a USB stick
-        //Logger.addDataReceiver(new NT4Publisher()); // Publish data to NetworkTables
-        //new PowerDistribution(1, ModuleType.kRev); // Enables power distribution logging
-        Logger.addDataReceiver(new NT4Publisher());
-    }else{
-        Logger.addDataReceiver(new NT4Publisher());
+    if (Constants.CURRENT_MODE == Constants.RobotMode.REAL) {
+      //Logger.addDataReceiver(new WPILOGWriter("U/logs"));
+      Logger.addDataReceiver(new NT4Publisher()); // Publish data to NetworkTables
+      // new PowerDistribution(1, ModuleType.kRev); // Enables power distribution logging
+      //Logger.addDataReceiver(new NT4Publisher());
+    } else {
+      //Logger.addDataReceiver(new NT4Publisher());
     }
 
-    // Logger.disableDeterministicTimestamps() // See "Deterministic Timestamps" in the "Understanding Data Flow" page
-    Logger.registerURCL(URCL.startExternal());
-    Logger.start(); // Start logging! No more data receivers, replay sources, or metadata values may be added.
-
+    // Logger.disableDeterministicTimestamps() // See "Deterministic Timestamps" in the
+    // "Understanding Data Flow" page
+    // Logger.registerURCL(URCL.startExternal());
+    Logger.start(); // Start logging! No more data receivers, replay sources, or metadata values may
+    // be added.
     //Pathfinding.setPathfinder(new LocalADStarAK());
-    
-   // m_pdh.setSwitchableChannel(false);
+
+
+    // m_pdh.setSwitchableChannel(false);
   }
 
   /**
@@ -77,7 +82,7 @@ public class Robot extends LoggedRobot {
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
   public void disabledInit() {
-   // m_pdh.setSwitchableChannel(false);
+    // m_pdh.setSwitchableChannel(false);
   }
 
   @Override
@@ -108,7 +113,7 @@ public class Robot extends LoggedRobot {
       m_autonomousCommand.cancel();
     }
 
-   // m_pdh.setSwitchableChannel(true);
+    // m_pdh.setSwitchableChannel(true);
   }
 
   /** This function is called periodically during operator control. */

@@ -10,12 +10,14 @@ import frc.robot.auto.AutoSelector;
 import frc.robot.auto.CommandRegistrar;
 import frc.robot.commands.CMDGR_DrivePose;
 import frc.robot.commands.CMDGR_Shoot;
+import frc.robot.commands.CMD_Climb;
 import frc.robot.commands.CMD_Eject;
 import frc.robot.commands.CMD_Idle;
 import frc.robot.commands.CMD_Intake;
 import frc.robot.subsystems.arm.IO_ArmReal;
 import frc.robot.subsystems.arm.SUB_Arm;
-import frc.robot.subsystems.conveyor.CMD_IndexerManual;
+import frc.robot.subsystems.climb.IO_ClimbReal;
+import frc.robot.subsystems.climb.SUB_Climb;
 import frc.robot.subsystems.conveyor.IO_ConveyorReal;
 import frc.robot.subsystems.conveyor.SUB_Conveyor;
 import frc.robot.subsystems.shooter.IO_ShooterReal;
@@ -45,6 +47,8 @@ public class RobotContainer{
 
     private final SUB_Swerve swerve = new SUB_Swerve( new IO_SwerveReal(), vision );  
 
+    private final SUB_Climb climb = new SUB_Climb( new IO_ClimbReal() );
+    
     private final CommandRegistrar commandRegistrar = new CommandRegistrar(vision, swerve, conveyor, arm, shooter, led);
 
     private final AutoSelector autoSelector;
@@ -69,7 +73,7 @@ public class RobotContainer{
 
         // Default drive command
         swerve.setDefaultCommand( 
-            swerve.driveJoystick(() -> driverController.getRawAxis(1) , () -> -driverController.getRawAxis(0) , () -> -driverController.getRawAxis(3))
+            swerve.driveJoystick(() -> -driverController.getRawAxis(1) , () -> driverController.getRawAxis(0) , () -> -driverController.getRawAxis(3))
         );
 
         // Shoot command
@@ -82,6 +86,11 @@ public class RobotContainer{
             ShooterMode.AMP, () -> operatorController.b().getAsBoolean(), () -> operatorController.y().getAsBoolean()
         ));
 
+        // Trap command
+        operatorController.rightStick().onTrue(new CMDGR_Shoot(conveyor, arm, shooter, vision, led,
+            ShooterMode.TRAP, () -> operatorController.b().getAsBoolean(), () -> operatorController.rightStick().getAsBoolean()
+        ));
+
         // Intake command
         operatorController.a().onTrue(new CMD_Intake(conveyor, arm, () -> operatorController.b().getAsBoolean()));
         
@@ -92,24 +101,17 @@ public class RobotContainer{
         operatorController.b().onTrue(new CMD_Idle(conveyor, arm, shooter));
 
         // Drive to speaker command
-        //operatorController.povRight().debounce(0.25).onTrue(new CMDGR_DrivePose(swerve, Constants.Auto.DriveScoringPoseState.SPEAKER, () -> operatorController.b().getAsBoolean()));
+        operatorController.leftStick().debounce(0.1).onTrue(new CMDGR_DrivePose(swerve, Constants.Auto.DriveScoringPoseState.SPEAKER, () -> operatorController.b().getAsBoolean()));
 
+       operatorController.leftBumper().onTrue(new CMD_Climb(led, climb, () -> 0.1));
+        operatorController.leftBumper().onFalse(new CMD_Climb(led, climb, () -> 0.0));
+
+       // operatorController.rightTrigger(0.1).onTrue(new CMD_Climb(led, climb, () -> -0.1));
         // Drive to amp command
         //operatorController.povLeft().debounce(0.25).onTrue(new CMDGR_DrivePose(swerve, Constants.Auto.DriveScoringPoseState.AMP, () -> operatorController.b().getAsBoolean()));
     }
 
     private void logMetadata(){
-        Logger.recordMetadata("Robot Mode",  Constants.CURRENT_MODE + "");
-        DriverStation.reportWarning("[sys init] Robot Mode: " + Constants.CURRENT_MODE, false);
-
-        Logger.recordMetadata("PID Test Mode",  Constants.PID_TEST_MODE + "");
-        DriverStation.reportWarning("[sys init] PID Test Mode: " + Constants.PID_TEST_MODE, false);
-
-        Logger.recordMetadata("Teleop Auto Drive",  Constants.TELEOP_AUTO_DRIVE_ENABLED + "");
-        DriverStation.reportWarning("[sys init] Teleop Auto Drive: " + Constants.TELEOP_AUTO_DRIVE_ENABLED, false);
-        
-        Logger.recordMetadata("Swerve Drive Simulation", SwerveDriveTelemetry.isSimulation + "");
-        DriverStation.reportWarning("[sys init] Swerve Drive Simulation: " + SwerveDriveTelemetry.isSimulation, false);
     }
 
     // TEST INSERT

@@ -1,16 +1,19 @@
-// Written by WindingMotor, 2024, Crescendo
+// Copyright (c) 2024 FRC 6328
+// http://github.com/Mechanical-Advantage
+//
+// Use of this source code is governed by an MIT-style
+// license that can be found in the LICENSE file at
+// the root directory of this project.
 
 package frc.robot.auto;
-import com.pathplanner.lib.auto.NamedCommands;
 
+import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import frc.robot.Constants.States.ArmState;
 import frc.robot.Constants.States.ShooterMode;
 import frc.robot.Constants.States.ShooterState;
-import frc.robot.commands.CMDGR_Shoot;
 import frc.robot.commands.CMD_Eject;
 import frc.robot.commands.CMD_Idle;
-import frc.robot.commands.CMD_Intake;
 import frc.robot.commands.CMD_IntakeAuto;
 import frc.robot.commands.CMD_Led;
 import frc.robot.commands.CMD_Shoot;
@@ -22,62 +25,133 @@ import frc.robot.subsystems.vision.SUB_Vision;
 import frc.robot.util.AddressableLedStrip;
 import frc.robot.util.AddressableLedStrip.LEDState;
 
-public class CommandRegistrar{
-    
-    private final SUB_Vision vision;
-    
-    private final SUB_Swerve swerve;
+public class CommandRegistrar {
 
-    private final SUB_Conveyor conveyor;
+  private final SUB_Vision vision;
 
-    private final SUB_Arm arm;
+  private final SUB_Swerve swerve;
 
-    private final SUB_Shooter shooter;
+  private final SUB_Conveyor conveyor;
 
-    private final AddressableLedStrip led;
+  private final SUB_Arm arm;
 
-    public CommandRegistrar(SUB_Vision vision, SUB_Swerve swerve, SUB_Conveyor conveyor, SUB_Arm arm, SUB_Shooter shooter, AddressableLedStrip led){ 
-        this.vision = vision;
-        this.swerve = swerve;
-        this.conveyor = conveyor;
-        this.arm = arm;
-        this.shooter = shooter;
-        this.led = led;
-    }
+  private final SUB_Shooter shooter;
 
-    /* 
-     * Register all commands for autonomous to be called with pathplanner. 
-     * Any manual disabling of commands has been turned off by default.
-    */
-    public void register(){
+  private final AddressableLedStrip led;
 
-        // Intake command
-        NamedCommands.registerCommand("Intake", new CMD_IntakeAuto(conveyor, arm,  () -> false));
+  public CommandRegistrar(
+      SUB_Vision vision,
+      SUB_Swerve swerve,
+      SUB_Conveyor conveyor,
+      SUB_Arm arm,
+      SUB_Shooter shooter,
+      AddressableLedStrip led) {
+    this.vision = vision;
+    this.swerve = swerve;
+    this.conveyor = conveyor;
+    this.arm = arm;
+    this.shooter = shooter;
+    this.led = led;
+  }
 
-        // Eject command
-        NamedCommands.registerCommand("Eject", new CMD_Eject(conveyor, arm, () -> false));
-        
-        NamedCommands.registerCommand("Shoot_Speaker", new PrintCommand("NULL"));
-        NamedCommands.registerCommand("Shoot_Command", new PrintCommand("NULL"));
-        NamedCommands.registerCommand("Shoot_Command2M", new PrintCommand("NULL"));
-        NamedCommands.registerCommand("Intake_Auto", new PrintCommand("NULL"));
+  /*
+   * Register all commands for autonomous to be called with pathplanner.
+   * Any manual disabling of commands has been turned off by default.
+   */
+  public void register() {
 
-        // Speaker shoot command, with auto shoot 
-        NamedCommands.registerCommand("Shoot_Speaker1M", new CMD_Shoot(conveyor, arm, shooter, vision, led, ShooterMode.SPEAKER, () -> false, () -> false, true, ShooterState.SPEAKER_1M, ArmState.SPEAKER_1M));
-        NamedCommands.registerCommand("Shoot_Speaker2M", new CMD_Shoot(conveyor, arm, shooter, vision, led, ShooterMode.SPEAKER, () -> false, () -> false, true, ShooterState.SPEAKER_2M, ArmState.SPEAKER_2M));
-        NamedCommands.registerCommand("Shoot_Speaker3M", new CMD_Shoot(conveyor, arm, shooter, vision, led, ShooterMode.SPEAKER, () -> false, () -> false, true, ShooterState.SPEAKER_3M, ArmState.SPEAKER_3M));
+    // Intake command
+    NamedCommands.registerCommand("Intake", new CMD_IntakeAuto(conveyor, arm, () -> false));
 
-        
-        // Amp shoot command, with auto shoot 
-        NamedCommands.registerCommand("Shoot_Amp", new CMD_Shoot(conveyor, arm, shooter, vision, led, ShooterMode.AMP, () -> false, () -> false, true, ShooterState.AMP, ArmState.AMP));
+    // Eject command
+    NamedCommands.registerCommand("Eject", new CMD_Eject(conveyor, arm, () -> false));
 
-        // Idle command
-        NamedCommands.registerCommand("Idle", new CMD_Idle(conveyor, arm, shooter));
+    NamedCommands.registerCommand("Shoot_Speaker", new PrintCommand("NULL"));
+    NamedCommands.registerCommand("Shoot_Command", new PrintCommand("NULL"));
+    NamedCommands.registerCommand("Shoot_Command2M", new PrintCommand("NULL"));
+    NamedCommands.registerCommand("Intake_Auto", new PrintCommand("NULL"));
 
-        // LED commands
-        NamedCommands.registerCommand("Led_Rainbow", new CMD_Led(led, LEDState.RAINBOW));
-        NamedCommands.registerCommand("Led_Green", new CMD_Led(led, LEDState.GREEN));
-        NamedCommands.registerCommand("Led_Red", new CMD_Led(led, LEDState.RED));
-        NamedCommands.registerCommand("Led_Blue", new CMD_Led(led, LEDState.BLUE));
-    }
+    // Speaker shoot command, with auto shoot
+    NamedCommands.registerCommand(
+        "Shoot_Speaker1M",
+        new CMD_Shoot(
+            conveyor,
+            arm,
+            shooter,
+            vision,
+            led,
+            ShooterMode.SPEAKER,
+            () -> false,
+            () -> false,
+            true,
+            ShooterState.SPEAKER_1M,
+            ArmState.SPEAKER_1M));
+    NamedCommands.registerCommand(
+        "Shoot_Speaker2M",
+        new CMD_Shoot(
+            conveyor,
+            arm,
+            shooter,
+            vision,
+            led,
+            ShooterMode.SPEAKER,
+            () -> false,
+            () -> false,
+            true,
+            ShooterState.SPEAKER_2M,
+            ArmState.SPEAKER_2M));
+    NamedCommands.registerCommand(
+        "Shoot_Speaker2_5M",
+        new CMD_Shoot(
+            conveyor,
+            arm,
+            shooter,
+            vision,
+            led,
+            ShooterMode.SPEAKER,
+            () -> false,
+            () -> false,
+            true,
+            ShooterState.SPEAKER_2_5M,
+            ArmState.SPEAKER_2_5M));
+    NamedCommands.registerCommand(
+        "Shoot_Speaker3M",
+        new CMD_Shoot(
+            conveyor,
+            arm,
+            shooter,
+            vision,
+            led,
+            ShooterMode.SPEAKER,
+            () -> false,
+            () -> false,
+            true,
+            ShooterState.SPEAKER_3M,
+            ArmState.SPEAKER_3M));
+
+    // Amp shoot command, with auto shoot
+    NamedCommands.registerCommand(
+        "Shoot_Amp",
+        new CMD_Shoot(
+            conveyor,
+            arm,
+            shooter,
+            vision,
+            led,
+            ShooterMode.AMP,
+            () -> false,
+            () -> false,
+            true,
+            ShooterState.AMP,
+            ArmState.AMP));
+
+    // Idle command
+    NamedCommands.registerCommand("Idle", new CMD_Idle(conveyor, arm, shooter));
+
+    // LED commands
+    NamedCommands.registerCommand("Led_Rainbow", new CMD_Led(led, LEDState.RAINBOW));
+    NamedCommands.registerCommand("Led_Green", new CMD_Led(led, LEDState.GREEN));
+    NamedCommands.registerCommand("Led_Red", new CMD_Led(led, LEDState.RED));
+    NamedCommands.registerCommand("Led_Blue", new CMD_Led(led, LEDState.BLUE));
+  }
 }

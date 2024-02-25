@@ -1,51 +1,64 @@
-// Written by WindingMotor, 2024, Crescendo
+// Copyright (c) 2024 FRC 6328
+// http://github.com/Mechanical-Advantage
+//
+// Use of this source code is governed by an MIT-style
+// license that can be found in the LICENSE file at
+// the root directory of this project.
 
 package frc.robot.subsystems.swerve;
-import org.littletonrobotics.junction.AutoLog;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import frc.robot.subsystems.vision.SUB_Vision;
+import swervelib.parser.SwerveDriveConfiguration;
 
-public interface IO_SwerveBase{
+import org.littletonrobotics.junction.AutoLog;
 
-    @AutoLog
-    public static class SwerveInputs{
-        public Pose2d pose = new Pose2d();
-        public Rotation2d yaw = new Rotation2d();
-        public Rotation2d odometryHeading = new Rotation2d();
-        public SwerveModulePosition[] positions = new SwerveModulePosition[4];
-        public Pose2d estimatedLeftPose = new Pose2d();
-        public Pose2d estimatedRightPose = new Pose2d();
-        
-        public SwerveModuleState[] realStates = new SwerveModuleState[4];
-        public double[] desiredStates = new double[4];
-    }
+import com.pathplanner.lib.util.PIDConstants;
 
-    /**
-     * Updates the inputs with the current values.
-     * @param inputs The inputs to update.
-    */
-    void updateInputs(SwerveInputs inputs);
+public interface IO_SwerveBase {
 
-    void drive(Translation2d translation, double rotation, boolean isFieldRelative, boolean isOpenLoop);
+  @AutoLog
+  public static class SwerveInputs {
+    public Pose2d pose = new Pose2d();
+    public Rotation2d yaw = new Rotation2d();
+    public Rotation2d odometryHeading = new Rotation2d();
+  }
 
-    double getMaximumVelocity();
+  /**
+   * Updates the inputs with the current values.
+   *
+   * @param inputs The inputs to update.
+   */
+  void updateInputs(SwerveInputs inputs);
 
-    double getMaximumAngularVelocity();
+  void drive(
+      Translation2d translation, double rotation, boolean isFieldRelative, boolean isOpenLoop);
 
-    void updateEstimations(SUB_Vision vision);
+  double getMaximumVelocity();
 
-    void updateOdometry();
+  double getMaximumAngularVelocity();
 
-    void setupPathPlanner(SUB_Swerve subsystem);
+  void updateEstimations(SUB_Vision vision);
 
-    void resetOdometry(Pose2d pose);
+  void updateOdometry();
 
-    Rotation2d getHeading();
+  void resetOdometry(Pose2d pose);
 
+  Pose2d getPose();
 
+  Rotation2d getHeading();
+
+  ChassisSpeeds getRobotVelocity();
+
+  void setChassisSpeeds(ChassisSpeeds chassisSpeeds);
+
+  PIDConstants getHeadingPID();
+
+  double getConfigurationRadius();
 
 }

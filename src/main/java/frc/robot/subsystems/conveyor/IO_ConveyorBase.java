@@ -1,38 +1,41 @@
-// Written by WindingMotor, 2024, Crescendo
+// Copyright (c) 2024 FRC 6328
+// http://github.com/Mechanical-Advantage
+//
+// Use of this source code is governed by an MIT-style
+// license that can be found in the LICENSE file at
+// the root directory of this project.
 
 package frc.robot.subsystems.conveyor;
+
 import org.littletonrobotics.junction.AutoLog;
 
-public interface IO_ConveyorBase{
-    
-    @AutoLog
-    public static class ConveyorInputs{
+public interface IO_ConveyorBase {
 
-        public double intakeMotorSpeed = 0.0;
-        public double indexerMotorSpeed = 0.0;
-        
-        public double intakeMotorCurrent = 0.0;
-        public double indexerMotorCurrent = 0.0;
+  @AutoLog
+  public static class ConveyorInputs {
 
-        public boolean intakeSensorState = false;
+    public double intakeMotorSpeed = 0.0;
+    public double indexerMotorSpeed = 0.0;
 
-        public boolean indexerInitalSensorState = false;
-        public boolean indexerFinalSensorState = false;
+    public double intakeMotorCurrent = 0.0;
+    public double indexerMotorCurrent = 0.0;
 
-        public boolean shooterFlag;
-    }
+    public boolean intakeSensorState = false;
 
-    /**
-     * Updates the inputs with the current values.
-     * @param inputs The inputs to update.
-    */
-    void updateInputs(ConveyorInputs inputs);
+    public boolean indexerInitalSensorState = false;
+    public boolean indexerFinalSensorState = false;
 
-    void update(double intakeSpeed, double indexerSpeed);
-    
-    void stop();
+    public boolean shooterFlag;
+  }
 
+  /**
+   * Updates the inputs with the current values.
+   *
+   * @param inputs The inputs to update.
+   */
+  void updateInputs(ConveyorInputs inputs);
+
+  void update(double intakeSpeed, double indexerSpeed);
+
+  void stop();
 }
-    
-
-

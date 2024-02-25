@@ -5,26 +5,24 @@
 // license that can be found in the LICENSE file at
 // the root directory of this project.
 
-package frc.robot.subsystems.shooter;
-
+package frc.robot.subsystems.climb;
 import org.littletonrobotics.junction.AutoLog;
 
 /**
  * Base interface for the shooter, abstracts to the real and simulation classes. Provides methods
  * for updating inputs.
  */
-public interface IO_ShooterBase {
+public interface IO_ClimbBase {
 
   /**
    * Represents the inputs for a gyroscope. It contains fields for yaw, pitch, and roll positions.
    */
   @AutoLog
-  public static class ShooterInputs {
+  public static class ClimbInputs {
     // RPM = Rotation/Minute
-    public double motorOneRPM = 0.0;
-    public double motorTwoRPM = 0.0;
-    public double setpointRPM = 0.0;
-    public boolean isUpToSpeed = false;
+    public double leftMotorPosition = 0.0;
+    public double rightMotorPosition = 0.0;
+    public boolean isAtClimbPosition = false;
   }
 
   /**
@@ -32,15 +30,9 @@ public interface IO_ShooterBase {
    *
    * @param inputs The inputs to update.
    */
-  void updateInputs(ShooterInputs inputs);
-
-  void updatePID(double setpointRPM);
+  void updateInputs(ClimbInputs inputs);
 
   void stop();
 
-  void setRPM(double rpm);
-
-  boolean isUpToSpeed();
-
-  void invertMotors(boolean inverted);
+  void set(double speed);
 }

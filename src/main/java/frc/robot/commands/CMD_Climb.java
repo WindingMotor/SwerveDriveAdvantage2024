@@ -7,25 +7,36 @@
 
 package frc.robot.commands;
 
+import java.util.function.Supplier;
+
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.climb.SUB_Climb;
 import frc.robot.util.AddressableLedStrip;
 import frc.robot.util.AddressableLedStrip.LEDState;
 
-public class CMD_Led extends Command {
+public class CMD_Climb extends Command {
 
   private final AddressableLedStrip led;
-  private final LEDState state;
+  private final SUB_Climb climb;
+  Supplier<Double> speed;
 
-  public CMD_Led(AddressableLedStrip led, LEDState state) {
+  public CMD_Climb(AddressableLedStrip led, SUB_Climb climb, Supplier<Double> speed) {
     this.led = led;
-    this.state = state;
+    this.climb = climb;
+    this.speed = speed;
     addRequirements(led);
   }
 
   // Print a message to the driver station and set the LED state
   @Override
   public void initialize() {
-    led.setState(state);
+    if(speed.get() > 0.05){
+      climb.set(speed.get());
+      led.setState(LEDState.BLUE);
+    }else{
+      climb.stop();
+      led.setState(LEDState.RAINBOW);
+    }
   }
 
   // Command ends immediately

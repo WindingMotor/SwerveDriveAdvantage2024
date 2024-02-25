@@ -1,48 +1,53 @@
-// Written by WindingMotor, 2024, Crescendo
+// Copyright (c) 2024 FRC 6328
+// http://github.com/Mechanical-Advantage
+//
+// Use of this source code is governed by an MIT-style
+// license that can be found in the LICENSE file at
+// the root directory of this project.
 
 package frc.robot.subsystems.conveyor;
-import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.States.ConveyorState;
+import org.littletonrobotics.junction.Logger;
 
-public class SUB_Conveyor extends SubsystemBase{
+public class SUB_Conveyor extends SubsystemBase {
 
-    private final IO_ConveyorBase io;
+  private final IO_ConveyorBase io;
 
-    public final ConveyorInputsAutoLogged inputs = new ConveyorInputsAutoLogged();
+  public final ConveyorInputsAutoLogged inputs = new ConveyorInputsAutoLogged();
 
-    private ConveyorState state;
+  private ConveyorState state;
 
-    public SUB_Conveyor(IO_ConveyorBase io){
-        this.io = io;
-        state = ConveyorState.OFF;
-    }
+  public SUB_Conveyor(IO_ConveyorBase io) {
+    this.io = io;
+    state = ConveyorState.OFF;
+  }
 
-    @Override
-    public void periodic(){
-        // Update the inputs.
-        io.updateInputs(inputs);
+  @Override
+  public void periodic() {
+    // Update the inputs.
+    io.updateInputs(inputs);
 
-        // Process inputs and send to logger.
-        Logger.processInputs("Conveyor", inputs);
+    // Process inputs and send to logger.
+    Logger.processInputs("Conveyor", inputs);
 
-        io.update(state.intakeSpeed, state.indexerSpeed);
-    }
+    io.update(state.intakeSpeed, state.indexerSpeed);
+  }
 
-    public void setState(ConveyorState newState){
-        state = newState;
-    }
+  public void setState(ConveyorState newState) {
+    state = newState;
+  }
 
-    public ConveyorState getState(){
-        return state;
-    }
+  public ConveyorState getState() {
+    return state;
+  }
 
-    public boolean getShooterFlag(){
-        return inputs.shooterFlag;
-    }
+  public boolean getShooterFlag() {
+    return inputs.shooterFlag;
+  }
 
-    public void stop(){
-        io.stop();
-    }
-
+  public void stop() {
+    io.stop();
+  }
 }
