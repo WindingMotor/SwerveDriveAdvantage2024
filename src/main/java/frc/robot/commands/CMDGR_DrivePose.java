@@ -1,6 +1,7 @@
-// Copyright (c) 2024 FRC 6328
-// http://github.com/Mechanical-Advantage
-//
+// Copyright (c) 2024 : FRC 2106 : The Junkyard Dogs
+// https://github.com/WindingMotor
+// https://www.team2106.org
+
 // Use of this source code is governed by an MIT-style
 // license that can be found in the LICENSE file at
 // the root directory of this project.
@@ -11,9 +12,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
-import edu.wpi.first.wpilibj2.command.PrintCommand;
 import frc.robot.Constants;
 import frc.robot.Constants.Auto.DriveScoringPoseState;
 import frc.robot.subsystems.swerve.SUB_Swerve;
@@ -41,7 +40,7 @@ public class CMDGR_DrivePose extends ParallelRaceGroup {
       }
     }
 
-      /* 
+    /*
       // Get the drive command depending on the drivePoseState
       Command driveCommand;
       if (drivePoseState == DriveScoringPoseState.SPEAKER) {
@@ -58,9 +57,6 @@ public class CMDGR_DrivePose extends ParallelRaceGroup {
       addCommands(new PrintCommand("[error] TELEOP_AUTO_DRIVE_ENABLED is disabled"));
     }
     */
-    addCommands( swerve.driveToPose(new Pose2d(1.5, 5.5, Rotation2d.fromDegrees(180))) );
+    addCommands(swerve.driveToPose(new Pose2d(1.5, 5.5, Rotation2d.fromDegrees(180))));
   }
 }
-
-
-

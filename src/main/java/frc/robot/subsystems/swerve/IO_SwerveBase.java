@@ -1,24 +1,20 @@
-// Copyright (c) 2024 FRC 6328
-// http://github.com/Mechanical-Advantage
-//
+// Copyright (c) 2024 : FRC 2106 : The Junkyard Dogs
+// https://github.com/WindingMotor
+// https://www.team2106.org
+
 // Use of this source code is governed by an MIT-style
 // license that can be found in the LICENSE file at
 // the root directory of this project.
 
 package frc.robot.subsystems.swerve;
 
+import com.pathplanner.lib.util.PIDConstants;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.kinematics.SwerveModulePosition;
-import edu.wpi.first.math.kinematics.SwerveModuleState;
 import frc.robot.subsystems.vision.SUB_Vision;
-import swervelib.parser.SwerveDriveConfiguration;
-
 import org.littletonrobotics.junction.AutoLog;
-
-import com.pathplanner.lib.util.PIDConstants;
 
 public interface IO_SwerveBase {
 
@@ -60,5 +56,4 @@ public interface IO_SwerveBase {
   PIDConstants getHeadingPID();
 
   double getConfigurationRadius();
-
 }

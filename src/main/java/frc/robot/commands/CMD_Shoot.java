@@ -1,6 +1,7 @@
-// Copyright (c) 2024 FRC 6328
-// http://github.com/Mechanical-Advantage
-//
+// Copyright (c) 2024 : FRC 2106 : The Junkyard Dogs
+// https://github.com/WindingMotor
+// https://www.team2106.org
+
 // Use of this source code is governed by an MIT-style
 // license that can be found in the LICENSE file at
 // the root directory of this project.
@@ -135,25 +136,24 @@ public class CMD_Shoot extends Command {
       arm.setState(Constants.States.ArmState.AMP);
 
       // Trap Mode
-    } else if(mode == ShooterMode.TRAP){
+    } else if (mode == ShooterMode.TRAP) {
 
-    if (mode == ShooterMode.TRAP) {
-      shooter.invertMotors(true);
-      if (autoShoot) {
-        shooter.setState(autoShooterState);
-        arm.setState(autoArmState);
-      } else {
-        shooter.setState(Constants.States.ShooterState.TRAP);
-        arm.setState(Constants.States.ArmState.TRAP);
+      if (mode == ShooterMode.TRAP) {
+        shooter.invertMotors(true);
+        if (autoShoot) {
+          shooter.setState(autoShooterState);
+          arm.setState(autoArmState);
+        } else {
+          shooter.setState(Constants.States.ShooterState.TRAP);
+          arm.setState(Constants.States.ArmState.TRAP);
+        }
       }
+
+      // Dyanmic
+    } else {
+
     }
 
-    // Dyanmic
-    }else{
-
-    }
-
-    
     return 1;
   }
 

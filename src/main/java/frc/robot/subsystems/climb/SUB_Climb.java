@@ -1,13 +1,14 @@
-// Copyright (c) 2024 FRC 6328
-// http://github.com/Mechanical-Advantage
-//
+// Copyright (c) 2024 : FRC 2106 : The Junkyard Dogs
+// https://github.com/WindingMotor
+// https://www.team2106.org
+
 // Use of this source code is governed by an MIT-style
 // license that can be found in the LICENSE file at
 // the root directory of this project.
 
 package frc.robot.subsystems.climb;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.States.ShooterState;
 import org.littletonrobotics.junction.Logger;
 
 public class SUB_Climb extends SubsystemBase {
@@ -30,7 +31,7 @@ public class SUB_Climb extends SubsystemBase {
     io.stop();
   }
 
-  public void set(double speed){
+  public void set(double speed) {
     io.set(speed);
   }
 }

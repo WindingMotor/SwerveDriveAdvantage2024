@@ -3,6 +3,7 @@
 plugins {
     id "java"
     id "edu.wpi.first.GradleRIO" version "2024.3.1"
+    id "com.diffplug.spotless" version "6.12.0"
 }
 
 java {
@@ -142,3 +143,19 @@ javadoc{
 // Tells compiler to create javadoc on build
 //build.dependsOn javadoc
 
+// Spotless formatting
+project.compileJava.dependsOn(spotlessApply)
+spotless {
+    java {
+        target fileTree(".") {
+            include "**/*.java"
+            exclude "**/build/**", "**/build-*/**"
+        }
+        toggleOffOn()
+        googleJavaFormat()
+        removeUnusedImports()
+        trimTrailingWhitespace()
+        endWithNewline()
+        licenseHeader("// Copyright (c) 2024 : FRC 2106 : The Junkyard Dogs\n// https://github.com/WindingMotor\n// https://www.team2106.org\n\n// Use of this source code is governed by an MIT-style\n// license that can be found in the LICENSE file at\n// the root directory of this project.\n\n")
+    }
+}

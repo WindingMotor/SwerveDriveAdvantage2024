@@ -1,17 +1,15 @@
-// Copyright (c) 2024 FRC 6328
-// http://github.com/Mechanical-Advantage
-//
+// Copyright (c) 2024 : FRC 2106 : The Junkyard Dogs
+// https://github.com/WindingMotor
+// https://www.team2106.org
+
 // Use of this source code is governed by an MIT-style
 // license that can be found in the LICENSE file at
 // the root directory of this project.
 
 package frc.robot.subsystems.climb;
-import com.pathplanner.lib.util.PIDConstants;
-import com.revrobotics.CANSparkFlex;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkPIDController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.util.Builder;
 
@@ -32,9 +30,7 @@ public class IO_ClimbReal implements IO_ClimbBase {
 
     leftMotor =
         Builder.createNeo(
-            Constants.Maestro.LEFT_CLIMB_MOTOR_ID,
-            Constants.Maestro.LEFT_CLIMB_MOTOR_INVERTED,
-            40);
+            Constants.Maestro.LEFT_CLIMB_MOTOR_ID, Constants.Maestro.LEFT_CLIMB_MOTOR_INVERTED, 40);
     rightMotor =
         Builder.createNeo(
             Constants.Maestro.RIGHT_CLIMB_MOTOR_ID,
@@ -70,9 +66,8 @@ public class IO_ClimbReal implements IO_ClimbBase {
 
   /** Sets the setpoint RPM. */
   @Override
-  public void set(double speed){
+  public void set(double speed) {
     leftMotor.set(speed);
     rightMotor.set(speed);
   }
-
 }

@@ -1,6 +1,7 @@
-// Copyright (c) 2024 FRC 6328
-// http://github.com/Mechanical-Advantage
-//
+// Copyright (c) 2024 : FRC 2106 : The Junkyard Dogs
+// https://github.com/WindingMotor
+// https://www.team2106.org
+
 // Use of this source code is governed by an MIT-style
 // license that can be found in the LICENSE file at
 // the root directory of this project.
@@ -55,7 +56,6 @@ public class AddressableLedStrip extends SubsystemBase {
   @Override
   public void periodic() {
 
-    
     if (DriverStation.isDisabled()) {
       solid(Color.kPurple);
       // everyOther(Color.kGreen, Color.kBlue);
@@ -105,7 +105,6 @@ public class AddressableLedStrip extends SubsystemBase {
     }
 
     ledStrip.setData(ledBuffer);
-    
   }
 
   public void setState(LEDState state) {

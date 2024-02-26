@@ -1,6 +1,7 @@
-// Copyright (c) 2024 FRC 6328
-// http://github.com/Mechanical-Advantage
-//
+// Copyright (c) 2024 : FRC 2106 : The Junkyard Dogs
+// https://github.com/WindingMotor
+// https://www.team2106.org
+
 // Use of this source code is governed by an MIT-style
 // license that can be found in the LICENSE file at
 // the root directory of this project.
@@ -22,7 +23,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import org.littletonrobotics.junction.Logger;
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
@@ -36,7 +36,7 @@ public class IO_VisionReal implements IO_VisionBase {
   PhotonCamera leftCamera = new PhotonCamera("OV9281_02");
   PhotonCamera rightCamera = new PhotonCamera("OV9281_01");
 
-//  PhotonCamera limelightCamera = new PhotonCamera("limelight");
+  //  PhotonCamera limelightCamera = new PhotonCamera("limelight");
 
   PhotonCamera lifecam = new PhotonCamera("Microsoft_LifeCam_HD-3000");
 
@@ -48,7 +48,7 @@ public class IO_VisionReal implements IO_VisionBase {
   // Initialize pose estimators
   PhotonPoseEstimator leftPoseEstimator;
   PhotonPoseEstimator rightPoseEstimator;
-  //PhotonPoseEstimator limelightPoseEstimator;
+  // PhotonPoseEstimator limelightPoseEstimator;
 
   List<PhotonTrackedTarget> targets;
 
@@ -59,7 +59,7 @@ public class IO_VisionReal implements IO_VisionBase {
     // Disable driver mode for the cameras
     leftCamera.setDriverMode(false);
     rightCamera.setDriverMode(false);
-   // limelightCamera.setDriverMode(false);
+    // limelightCamera.setDriverMode(false);
 
     // Try loading AprilTag field layout
 
@@ -83,20 +83,19 @@ public class IO_VisionReal implements IO_VisionBase {
             PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
             rightCamera,
             Constants.Vision.Camera.RIGHT_CAMERA.ROBOT_TO_CAMERA);
-            /* 
-    limelightPoseEstimator =
-        new PhotonPoseEstimator(
-            fieldLayout,
-            PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
-            rightCamera,
-            Constants.Vision.Camera.LIMELIGHT.ROBOT_TO_CAMERA);
-*/
-      
+    /*
+        limelightPoseEstimator =
+            new PhotonPoseEstimator(
+                fieldLayout,
+                PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
+                rightCamera,
+                Constants.Vision.Camera.LIMELIGHT.ROBOT_TO_CAMERA);
+    */
 
     // Set fallback strategies
     leftPoseEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
     rightPoseEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
-   // limelightPoseEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
+    // limelightPoseEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
   }
 
   /**
@@ -115,10 +114,10 @@ public class IO_VisionReal implements IO_VisionBase {
     inputs.leftCameraLatency = leftCamera.getLatestResult().getLatencyMillis();
     inputs.rightCameraLatency = rightCamera.getLatestResult().getLatencyMillis();
 
-   // inputs.limelightCameraIsOn = limelightCamera.isConnected();
-   // inputs.limelightCameraHasTargets = limelightCamera.getLatestResult().hasTargets();
+    // inputs.limelightCameraIsOn = limelightCamera.isConnected();
+    // inputs.limelightCameraHasTargets = limelightCamera.getLatestResult().hasTargets();
 
-    /* 
+    /*
     if (lifecam.getLatestResult().hasTargets()) {
       double targetYaw = lifecam.getLatestResult().getBestTarget().getYaw();
 
@@ -134,7 +133,7 @@ public class IO_VisionReal implements IO_VisionBase {
 
       double xDistanceMeters = Math.cos(Math.toRadians(targetYaw)) * rDistanceMeters;
       double yDistanceMeters = Math.sin(Math.toRadians(targetYaw)) * rDistanceMeters;
-   
+
     }
        */
   }
@@ -149,11 +148,11 @@ public class IO_VisionReal implements IO_VisionBase {
   public PhotonPipelineResult getResult(Camera camera) {
     if (camera == Constants.Vision.Camera.LEFT_CAMERA) {
       return leftCamera.getLatestResult();
-    }else if(camera == Constants.Vision.Camera.RIGHT_CAMERA){
+    } else if (camera == Constants.Vision.Camera.RIGHT_CAMERA) {
       return rightCamera.getLatestResult();
-    }else{
-     // return limelightCamera.getLatestResult();
-     return null;
+    } else {
+      // return limelightCamera.getLatestResult();
+      return null;
     }
   }
 
@@ -188,13 +187,13 @@ public class IO_VisionReal implements IO_VisionBase {
    */
   @Override
   public PhotonPoseEstimator getPoseEstimator(Camera camera) {
-    if(camera == Constants.Vision.Camera.LEFT_CAMERA) {
+    if (camera == Constants.Vision.Camera.LEFT_CAMERA) {
       return leftPoseEstimator;
-    }else if(camera == Constants.Vision.Camera.RIGHT_CAMERA){
+    } else if (camera == Constants.Vision.Camera.RIGHT_CAMERA) {
       return rightPoseEstimator;
-    }else{
-     // return limelightPoseEstimator;
-     return null;
+    } else {
+      // return limelightPoseEstimator;
+      return null;
     }
   }
 
@@ -214,15 +213,15 @@ public class IO_VisionReal implements IO_VisionBase {
       if (newResult) lastEstTimestamp = latestTimestamp;
       return visionEst;
 
-    } else if(camera == Camera.RIGHT_CAMERA) {
+    } else if (camera == Camera.RIGHT_CAMERA) {
       var visionEst = rightPoseEstimator.update();
       double latestTimestamp = rightCamera.getLatestResult().getTimestampSeconds();
       boolean newResult = Math.abs(latestTimestamp - lastEstTimestamp) > 1e-5;
 
       if (newResult) lastEstTimestamp = latestTimestamp;
       return visionEst;
-    }else{
-      /* 
+    } else {
+      /*
       var visionEst = limelightPoseEstimator.update();
       double latestTimestamp = limelightCamera.getLatestResult().getTimestampSeconds();
       boolean newResult = Math.abs(latestTimestamp - lastEstTimestamp) > 1e-5;

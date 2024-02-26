@@ -1,6 +1,7 @@
-// Copyright (c) 2024 FRC 6328
-// http://github.com/Mechanical-Advantage
-//
+// Copyright (c) 2024 : FRC 2106 : The Junkyard Dogs
+// https://github.com/WindingMotor
+// https://www.team2106.org
+
 // Use of this source code is governed by an MIT-style
 // license that can be found in the LICENSE file at
 // the root directory of this project.
@@ -9,13 +10,9 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.util.LocalADStarAK;
-
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
-
-import com.pathplanner.lib.pathfinding.Pathfinding;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -42,14 +39,13 @@ public class Robot extends LoggedRobot {
 
     // m_pdh = new PDH();
 
-
     if (Constants.CURRENT_MODE == Constants.RobotMode.REAL) {
-      //Logger.addDataReceiver(new WPILOGWriter("U/logs"));
+      // Logger.addDataReceiver(new WPILOGWriter("U/logs"));
       Logger.addDataReceiver(new NT4Publisher()); // Publish data to NetworkTables
       // new PowerDistribution(1, ModuleType.kRev); // Enables power distribution logging
-      //Logger.addDataReceiver(new NT4Publisher());
+      // Logger.addDataReceiver(new NT4Publisher());
     } else {
-      //Logger.addDataReceiver(new NT4Publisher());
+      // Logger.addDataReceiver(new NT4Publisher());
     }
 
     // Logger.disableDeterministicTimestamps() // See "Deterministic Timestamps" in the
@@ -57,8 +53,7 @@ public class Robot extends LoggedRobot {
     // Logger.registerURCL(URCL.startExternal());
     Logger.start(); // Start logging! No more data receivers, replay sources, or metadata values may
     // be added.
-    //Pathfinding.setPathfinder(new LocalADStarAK());
-
+    // Pathfinding.setPathfinder(new LocalADStarAK());
 
     // m_pdh.setSwitchableChannel(false);
   }

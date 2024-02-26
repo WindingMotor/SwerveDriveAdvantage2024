@@ -1,6 +1,7 @@
-// Copyright (c) 2024 FRC 6328
-// http://github.com/Mechanical-Advantage
-//
+// Copyright (c) 2024 : FRC 2106 : The Junkyard Dogs
+// https://github.com/WindingMotor
+// https://www.team2106.org
+
 // Use of this source code is governed by an MIT-style
 // license that can be found in the LICENSE file at
 // the root directory of this project.
@@ -8,14 +9,11 @@
 package frc.robot.subsystems.swerve;
 
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
-import com.pathplanner.lib.path.PathPlannerTrajectory;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
@@ -48,32 +46,32 @@ public class SUB_Swerve extends SubsystemBase {
     this.vision = vision;
 
     /*
-     * {
-  "drive": {
-    "p": 0.0020645,
-    "i": 0,
-    "d": 0,
-    "f": 0,
-    "iz": 0
-  },
-  "angle": {
-    "p": 0.01,
-    "i": 0,
-    "d": 0,
-    "f": 0,
-    "iz": 0
-  }
-}
+         * {
+      "drive": {
+        "p": 0.0020645,
+        "i": 0,
+        "d": 0,
+        "f": 0,
+        "iz": 0
+      },
+      "angle": {
+        "p": 0.01,
+        "i": 0,
+        "d": 0,
+        "f": 0,
+        "iz": 0
+      }
+    }
 
-     */
+         */
     AutoBuilder.configureHolonomic(
         io::getPose, // Gets current robot pose
         io::resetOdometry, // Resets robot odometry if path has starter pose
         io::getRobotVelocity, // Gets chassis speed in robot relative
         io::setChassisSpeeds, // Drives the robot in robot realative chassis speeds
         new HolonomicPathFollowerConfig(
-            //new PIDConstants(0.3,1.5,2.0, 0.25), // Translation
-            //new PIDConstants(0.3, 5, 1.2, 0.05),
+            // new PIDConstants(0.3,1.5,2.0, 0.25), // Translation
+            // new PIDConstants(0.3, 5, 1.2, 0.05),
             new PIDConstants(0.5, 0.0, 0.0),
             new PIDConstants(2.0, 0.0, 0.01), // Heading
             Constants.Auto.MAX_MODULE_SPEED_MPS,
@@ -87,10 +85,10 @@ public class SUB_Swerve extends SubsystemBase {
         },
         this);
 
-        /*
-         *          new PIDConstants(5.0,0.25,0.02), // Translation
-            new PIDConstants(0.6, 0.12, 0.001), 
-         */
+    /*
+    *          new PIDConstants(5.0,0.25,0.02), // Translation
+       new PIDConstants(0.6, 0.12, 0.001),
+    */
   }
 
   public void periodic() {

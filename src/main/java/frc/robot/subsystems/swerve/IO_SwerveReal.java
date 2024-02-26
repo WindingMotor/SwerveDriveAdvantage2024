@@ -1,25 +1,21 @@
-// Copyright (c) 2024 FRC 6328
-// http://github.com/Mechanical-Advantage
-//
+// Copyright (c) 2024 : FRC 2106 : The Junkyard Dogs
+// https://github.com/WindingMotor
+// https://www.team2106.org
+
 // Use of this source code is governed by an MIT-style
 // license that can be found in the LICENSE file at
 // the root directory of this project.
 
 package frc.robot.subsystems.swerve;
 
-import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
-import com.pathplanner.lib.util.ReplanningConfig;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
-import frc.robot.Constants;
 import frc.robot.Constants.Vision;
 import frc.robot.Constants.Vision.Camera;
 import frc.robot.subsystems.vision.SUB_Vision;
@@ -27,13 +23,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
-
 import org.littletonrobotics.junction.Logger;
 import org.photonvision.targeting.PhotonTrackedTarget;
 import swervelib.SwerveDrive;
-import swervelib.parser.SwerveDriveConfiguration;
 import swervelib.parser.SwerveParser;
 import swervelib.telemetry.SwerveDriveTelemetry;
 import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
@@ -105,18 +97,16 @@ public class IO_SwerveReal implements IO_SwerveBase {
   }
 
   @Override
-  public PIDConstants getHeadingPID(){
+  public PIDConstants getHeadingPID() {
 
     return new PIDConstants(
-      swerveDrive.swerveController.config.headingPIDF.p, // Rotation PID
-      swerveDrive.swerveController.config.headingPIDF.i,
-      swerveDrive.swerveController.config.headingPIDF.d);
-
-
+        swerveDrive.swerveController.config.headingPIDF.p, // Rotation PID
+        swerveDrive.swerveController.config.headingPIDF.i,
+        swerveDrive.swerveController.config.headingPIDF.d);
   }
 
   @Override
-  public double getConfigurationRadius(){
+  public double getConfigurationRadius() {
     return swerveDrive.swerveDriveConfiguration.getDriveBaseRadiusMeters();
   }
 
@@ -147,7 +137,7 @@ public class IO_SwerveReal implements IO_SwerveBase {
     // Update estimations for cameras.
     updateEstimationsForCamera(vision, Camera.LEFT_CAMERA);
     updateEstimationsForCamera(vision, Camera.RIGHT_CAMERA);
-    //updateEstimationsForCamera(vision, Camera.LIMELIGHT);
+    // updateEstimationsForCamera(vision, Camera.LIMELIGHT);
   }
 
   private void updateEstimationsForCamera(SUB_Vision vision, Camera camera) {
@@ -182,18 +172,18 @@ public class IO_SwerveReal implements IO_SwerveBase {
             }
 
             // If the new targets array is not empty
-            if (!newTargets.isEmpty()){
+            if (!newTargets.isEmpty()) {
               // Get the estimated pose and standard deviations and send them to the swerve drive
               // pose estimator
               var estPose = visionEst.get().estimatedPose.toPose2d();
               var estStdDevs = vision.getEstimationStdDevs(estPose, camera, newTargets);
               swerveDrive.addVisionMeasurement(
                   estPose, visionEst.get().timestampSeconds, estStdDevs);
-              if(camera == Camera.LEFT_CAMERA){
+              if (camera == Camera.LEFT_CAMERA) {
                 Logger.recordOutput("Left Vision Est", estPose);
-              }else if(camera == Camera.RIGHT_CAMERA){
+              } else if (camera == Camera.RIGHT_CAMERA) {
                 Logger.recordOutput("Right Vision Est", estPose);
-              }else{
+              } else {
                 Logger.recordOutput("Limelight Vision Est", estPose);
               }
             }
