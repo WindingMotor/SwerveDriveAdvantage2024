@@ -114,6 +114,7 @@ public class Robot extends LoggedRobot {
     }
 
     // m_pdh.setSwitchableChannel(true);
+    m_robotContainer.configDriving();
   }
 
   /** This function is called periodically during operator control. */

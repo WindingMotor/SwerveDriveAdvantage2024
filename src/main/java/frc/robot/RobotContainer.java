@@ -2,7 +2,9 @@
 package frc.robot;
 import org.littletonrobotics.junction.Logger;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.States.ShooterMode;
@@ -66,15 +68,36 @@ public class RobotContainer{
         logMetadata();
     }
 
-    /**
-     * Configure the bindings for the controller buttons to specific commands.
-    */
-    private void configureBindings(){
+
+    public void configDriving(){
+
+      var alliance = DriverStation.getAlliance();
+
+      // Get the pose for the correct alliance and set the pose variables
+      if (alliance.isPresent()){
+        if (alliance.get() == Alliance.Red) {
 
         // Default drive command
         swerve.setDefaultCommand( 
             swerve.driveJoystick(() -> -driverController.getRawAxis(1) , () -> driverController.getRawAxis(0) , () -> -driverController.getRawAxis(3))
         );
+
+
+        }else if(alliance.get() == Alliance.Blue){
+ 
+        // Default drive command
+        swerve.setDefaultCommand( 
+            swerve.driveJoystick(() -> driverController.getRawAxis(1) , () -> -driverController.getRawAxis(0) , () -> -driverController.getRawAxis(3))
+        );
+
+        }
+      }
+
+    }
+    /**
+     * Configure the bindings for the controller buttons to specific commands.
+    */
+    private void configureBindings(){
 
         // Shoot command
         operatorController.x().onTrue(new CMDGR_Shoot(conveyor, arm, shooter, vision, led,
