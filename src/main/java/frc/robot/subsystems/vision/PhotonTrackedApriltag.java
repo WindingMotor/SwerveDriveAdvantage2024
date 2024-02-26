@@ -19,60 +19,60 @@ import org.photonvision.targeting.PhotonTrackedTarget;
  */
 public class PhotonTrackedApriltag {
 
-  int id;
-  Camera camera;
+	int id;
+	Camera camera;
 
-  Translation3d translation3d;
-  Rotation3d rotation3d;
+	Translation3d translation3d;
+	Rotation3d rotation3d;
 
-  /**
-   * Constructs a new PhotonTrackedApriltag object.
-   *
-   * @param apriltag The PhotonTrackedTarget object representing the detected AprilTag.
-   * @param camera The camera that detected the AprilTag.
-   */
-  public PhotonTrackedApriltag(PhotonTrackedTarget apriltag, Camera camera) {
+	/**
+	 * Constructs a new PhotonTrackedApriltag object.
+	 *
+	 * @param apriltag The PhotonTrackedTarget object representing the detected AprilTag.
+	 * @param camera The camera that detected the AprilTag.
+	 */
+	public PhotonTrackedApriltag(PhotonTrackedTarget apriltag, Camera camera) {
 
-    id = apriltag.getFiducialId();
-    this.camera = camera;
+		id = apriltag.getFiducialId();
+		this.camera = camera;
 
-    translation3d = apriltag.getBestCameraToTarget().getTranslation();
-    rotation3d = apriltag.getBestCameraToTarget().getRotation();
-  }
+		translation3d = apriltag.getBestCameraToTarget().getTranslation();
+		rotation3d = apriltag.getBestCameraToTarget().getRotation();
+	}
 
-  /**
-   * Returns the fiducial ID of the AprilTag.
-   *
-   * @return The field fiducial ID of the AprilTag.
-   */
-  public int getId() {
-    return id;
-  }
+	/**
+	 * Returns the fiducial ID of the AprilTag.
+	 *
+	 * @return The field fiducial ID of the AprilTag.
+	 */
+	public int getId() {
+		return id;
+	}
 
-  /**
-   * Returns the camera that detected the AprilTag.
-   *
-   * @return The camera that detected the AprilTag.
-   */
-  public Camera getCamera() {
-    return camera;
-  }
+	/**
+	 * Returns the camera that detected the AprilTag.
+	 *
+	 * @return The camera that detected the AprilTag.
+	 */
+	public Camera getCamera() {
+		return camera;
+	}
 
-  /**
-   * Returns the 3D translation of the AprilTag relative to the camera.
-   *
-   * @return The 3D translation of the AprilTag relative to the camera in meters.
-   */
-  public Translation3d getTranslationMeters() {
-    return translation3d;
-  }
+	/**
+	 * Returns the 3D translation of the AprilTag relative to the camera.
+	 *
+	 * @return The 3D translation of the AprilTag relative to the camera in meters.
+	 */
+	public Translation3d getTranslationMeters() {
+		return translation3d;
+	}
 
-  /**
-   * Returns the 3D rotation of the AprilTag relative to the camera.
-   *
-   * @return The 3D rotation of the AprilTag relative to the camera in radians.
-   */
-  public Rotation3d getRotationRadians() {
-    return rotation3d;
-  }
+	/**
+	 * Returns the 3D rotation of the AprilTag relative to the camera.
+	 *
+	 * @return The 3D rotation of the AprilTag relative to the camera in radians.
+	 */
+	public Rotation3d getRotationRadians() {
+		return rotation3d;
+	}
 }

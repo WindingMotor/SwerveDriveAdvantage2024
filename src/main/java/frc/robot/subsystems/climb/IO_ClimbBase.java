@@ -16,25 +16,25 @@ import org.littletonrobotics.junction.AutoLog;
  */
 public interface IO_ClimbBase {
 
-  /**
-   * Represents the inputs for a gyroscope. It contains fields for yaw, pitch, and roll positions.
-   */
-  @AutoLog
-  public static class ClimbInputs {
-    // RPM = Rotation/Minute
-    public double leftMotorPosition = 0.0;
-    public double rightMotorPosition = 0.0;
-    public boolean isAtClimbPosition = false;
-  }
+	/**
+	 * Represents the inputs for a gyroscope. It contains fields for yaw, pitch, and roll positions.
+	 */
+	@AutoLog
+	public static class ClimbInputs {
+		// RPM = Rotation/Minute
+		public double leftMotorPosition = 0.0;
+		public double rightMotorPosition = 0.0;
+		public boolean isAtClimbPosition = false;
+	}
 
-  /**
-   * Updates the inputs with the current values.
-   *
-   * @param inputs The inputs to update.
-   */
-  void updateInputs(ClimbInputs inputs);
+	/**
+	 * Updates the inputs with the current values.
+	 *
+	 * @param inputs The inputs to update.
+	 */
+	void updateInputs(ClimbInputs inputs);
 
-  void stop();
+	void stop();
 
-  void set(double speed);
+	void set(double speed);
 }

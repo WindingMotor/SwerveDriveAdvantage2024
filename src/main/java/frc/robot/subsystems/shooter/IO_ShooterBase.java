@@ -16,32 +16,32 @@ import org.littletonrobotics.junction.AutoLog;
  */
 public interface IO_ShooterBase {
 
-  /**
-   * Represents the inputs for a gyroscope. It contains fields for yaw, pitch, and roll positions.
-   */
-  @AutoLog
-  public static class ShooterInputs {
-    // RPM = Rotation/Minute
-    public double motorOneRPM = 0.0;
-    public double motorTwoRPM = 0.0;
-    public double setpointRPM = 0.0;
-    public boolean isUpToSpeed = false;
-  }
+	/**
+	 * Represents the inputs for a gyroscope. It contains fields for yaw, pitch, and roll positions.
+	 */
+	@AutoLog
+	public static class ShooterInputs {
+		// RPM = Rotation/Minute
+		public double motorOneRPM = 0.0;
+		public double motorTwoRPM = 0.0;
+		public double setpointRPM = 0.0;
+		public boolean isUpToSpeed = false;
+	}
 
-  /**
-   * Updates the inputs with the current values.
-   *
-   * @param inputs The inputs to update.
-   */
-  void updateInputs(ShooterInputs inputs);
+	/**
+	 * Updates the inputs with the current values.
+	 *
+	 * @param inputs The inputs to update.
+	 */
+	void updateInputs(ShooterInputs inputs);
 
-  void updatePID(double setpointRPM);
+	void updatePID(double setpointRPM);
 
-  void stop();
+	void stop();
 
-  void setRPM(double rpm);
+	void setRPM(double rpm);
 
-  boolean isUpToSpeed();
+	boolean isUpToSpeed();
 
-  void invertMotors(boolean inverted);
+	void invertMotors(boolean inverted);
 }

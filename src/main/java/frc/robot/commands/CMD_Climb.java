@@ -16,32 +16,32 @@ import java.util.function.Supplier;
 
 public class CMD_Climb extends Command {
 
-  private final AddressableLedStrip led;
-  private final SUB_Climb climb;
-  Supplier<Double> speed;
+	private final AddressableLedStrip led;
+	private final SUB_Climb climb;
+	Supplier<Double> speed;
 
-  public CMD_Climb(AddressableLedStrip led, SUB_Climb climb, Supplier<Double> speed) {
-    this.led = led;
-    this.climb = climb;
-    this.speed = speed;
-    addRequirements(led);
-  }
+	public CMD_Climb(AddressableLedStrip led, SUB_Climb climb, Supplier<Double> speed) {
+		this.led = led;
+		this.climb = climb;
+		this.speed = speed;
+		addRequirements(led);
+	}
 
-  // Print a message to the driver station and set the LED state
-  @Override
-  public void initialize() {
-    if (speed.get() > 0.05) {
-      climb.set(speed.get());
-      led.setState(LEDState.BLUE);
-    } else {
-      climb.stop();
-      led.setState(LEDState.RAINBOW);
-    }
-  }
+	// Print a message to the driver station and set the LED state
+	@Override
+	public void initialize() {
+		if (speed.get() > 0.05) {
+			climb.set(speed.get());
+			led.setState(LEDState.BLUE);
+		} else {
+			climb.stop();
+			led.setState(LEDState.RAINBOW);
+		}
+	}
 
-  // Command ends immediately
-  @Override
-  public boolean isFinished() {
-    return true;
-  }
+	// Command ends immediately
+	@Override
+	public boolean isFinished() {
+		return true;
+	}
 }

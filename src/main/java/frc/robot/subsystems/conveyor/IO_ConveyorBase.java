@@ -12,31 +12,31 @@ import org.littletonrobotics.junction.AutoLog;
 
 public interface IO_ConveyorBase {
 
-  @AutoLog
-  public static class ConveyorInputs {
+	@AutoLog
+	public static class ConveyorInputs {
 
-    public double intakeMotorSpeed = 0.0;
-    public double indexerMotorSpeed = 0.0;
+		public double intakeMotorSpeed = 0.0;
+		public double indexerMotorSpeed = 0.0;
 
-    public double intakeMotorCurrent = 0.0;
-    public double indexerMotorCurrent = 0.0;
+		public double intakeMotorCurrent = 0.0;
+		public double indexerMotorCurrent = 0.0;
 
-    public boolean intakeSensorState = false;
+		public boolean intakeSensorState = false;
 
-    public boolean indexerInitalSensorState = false;
-    public boolean indexerFinalSensorState = false;
+		public boolean indexerInitalSensorState = false;
+		public boolean indexerFinalSensorState = false;
 
-    public boolean shooterFlag;
-  }
+		public boolean shooterFlag;
+	}
 
-  /**
-   * Updates the inputs with the current values.
-   *
-   * @param inputs The inputs to update.
-   */
-  void updateInputs(ConveyorInputs inputs);
+	/**
+	 * Updates the inputs with the current values.
+	 *
+	 * @param inputs The inputs to update.
+	 */
+	void updateInputs(ConveyorInputs inputs);
 
-  void update(double intakeSpeed, double indexerSpeed);
+	void update(double intakeSpeed, double indexerSpeed);
 
-  void stop();
+	void stop();
 }

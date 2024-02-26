@@ -21,23 +21,23 @@ import java.util.function.Supplier;
 
 public class CMDGR_Shoot extends SequentialCommandGroup {
 
-  public CMDGR_Shoot(
-      SUB_Conveyor conveyor,
-      SUB_Arm arm,
-      SUB_Shooter shooter,
-      SUB_Vision vision,
-      AddressableLedStrip led,
-      ShooterMode mode,
-      Supplier<Boolean> manualCancel,
-      Supplier<Boolean> shoot) {
-    addRequirements(conveyor, arm, shooter);
-    // Call the shoot command, then wait 0.5 seconds, then call the idle command
-    addCommands(
-        new CMD_Led(led, LEDState.BLUE),
-        new WaitCommand(0.25),
-        new CMD_Shoot(conveyor, arm, shooter, vision, led, mode, manualCancel, shoot),
-        new WaitCommand(5), // Delay to allow dount to leave the robot
-        new CMD_Idle(conveyor, arm, shooter),
-        new CMD_Led(led, LEDState.RAINBOW));
-  }
+	public CMDGR_Shoot(
+			SUB_Conveyor conveyor,
+			SUB_Arm arm,
+			SUB_Shooter shooter,
+			SUB_Vision vision,
+			AddressableLedStrip led,
+			ShooterMode mode,
+			Supplier<Boolean> manualCancel,
+			Supplier<Boolean> shoot) {
+		addRequirements(conveyor, arm, shooter);
+		// Call the shoot command, then wait 0.5 seconds, then call the idle command
+		addCommands(
+				new CMD_Led(led, LEDState.BLUE),
+				new WaitCommand(0.25),
+				new CMD_Shoot(conveyor, arm, shooter, vision, led, mode, manualCancel, shoot),
+				new WaitCommand(5), // Delay to allow dount to leave the robot
+				new CMD_Idle(conveyor, arm, shooter),
+				new CMD_Led(led, LEDState.RAINBOW));
+	}
 }

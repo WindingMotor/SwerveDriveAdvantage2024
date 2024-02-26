@@ -16,58 +16,58 @@ import frc.robot.util.Builder;
 /** Represents a real implementation of the shooter. */
 public class IO_ClimbReal implements IO_ClimbBase {
 
-  private CANSparkMax leftMotor;
-  private CANSparkMax rightMotor;
+	private CANSparkMax leftMotor;
+	private CANSparkMax rightMotor;
 
-  private RelativeEncoder leftMotorEncoder;
-  private RelativeEncoder rightMotorEncoder;
+	private RelativeEncoder leftMotorEncoder;
+	private RelativeEncoder rightMotorEncoder;
 
-  private double setpointRPM;
+	private double setpointRPM;
 
-  public IO_ClimbReal() {
+	public IO_ClimbReal() {
 
-    setpointRPM = 0;
+		setpointRPM = 0;
 
-    leftMotor =
-        Builder.createNeo(
-            Constants.Maestro.LEFT_CLIMB_MOTOR_ID, Constants.Maestro.LEFT_CLIMB_MOTOR_INVERTED, 40);
-    rightMotor =
-        Builder.createNeo(
-            Constants.Maestro.RIGHT_CLIMB_MOTOR_ID,
-            Constants.Maestro.RIGHT_CLIMB_MOTOR_INVERTED,
-            40);
+		leftMotor =
+				Builder.createNeo(
+						Constants.Maestro.LEFT_CLIMB_MOTOR_ID, Constants.Maestro.LEFT_CLIMB_MOTOR_INVERTED, 40);
+		rightMotor =
+				Builder.createNeo(
+						Constants.Maestro.RIGHT_CLIMB_MOTOR_ID,
+						Constants.Maestro.RIGHT_CLIMB_MOTOR_INVERTED,
+						40);
 
-    Builder.configureIdleMode(leftMotor, true);
-    Builder.configureIdleMode(rightMotor, true);
+		Builder.configureIdleMode(leftMotor, true);
+		Builder.configureIdleMode(rightMotor, true);
 
-    leftMotorEncoder = leftMotor.getEncoder();
-    rightMotorEncoder = rightMotor.getEncoder();
-  }
+		leftMotorEncoder = leftMotor.getEncoder();
+		rightMotorEncoder = rightMotor.getEncoder();
+	}
 
-  /**
-   * Updates the inputs with the current values.
-   *
-   * @param inputs The inputs to update
-   */
-  @Override
-  public void updateInputs(ClimbInputs inputs) {
+	/**
+	 * Updates the inputs with the current values.
+	 *
+	 * @param inputs The inputs to update
+	 */
+	@Override
+	public void updateInputs(ClimbInputs inputs) {
 
-    inputs.leftMotorPosition = leftMotorEncoder.getVelocity();
-    inputs.rightMotorPosition = rightMotorEncoder.getVelocity();
-    inputs.isAtClimbPosition = false;
-  }
+		inputs.leftMotorPosition = leftMotorEncoder.getVelocity();
+		inputs.rightMotorPosition = rightMotorEncoder.getVelocity();
+		inputs.isAtClimbPosition = false;
+	}
 
-  /** Stops the shooter by setting the PID setpoint to 0. */
-  @Override
-  public void stop() {
-    leftMotor.set(0);
-    rightMotor.set(0);
-  }
+	/** Stops the shooter by setting the PID setpoint to 0. */
+	@Override
+	public void stop() {
+		leftMotor.set(0);
+		rightMotor.set(0);
+	}
 
-  /** Sets the setpoint RPM. */
-  @Override
-  public void set(double speed) {
-    leftMotor.set(speed);
-    rightMotor.set(speed);
-  }
+	/** Sets the setpoint RPM. */
+	@Override
+	public void set(double speed) {
+		leftMotor.set(speed);
+		rightMotor.set(speed);
+	}
 }

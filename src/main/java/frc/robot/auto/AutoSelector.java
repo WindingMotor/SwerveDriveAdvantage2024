@@ -17,35 +17,35 @@ import edu.wpi.first.wpilibj2.command.Command;
 
 public class AutoSelector {
 
-  private SendableChooser<Command> autoSelector;
+	private SendableChooser<Command> autoSelector;
 
-  public AutoSelector() {
+	public AutoSelector() {
 
-    // Build the auto selector from PathPlanner auto files and set the default auto to A1_D1_SM
-    autoSelector = AutoBuilder.buildAutoChooser("A1_D1_SM");
+		// Build the auto selector from PathPlanner auto files and set the default auto to A1_D1_SM
+		autoSelector = AutoBuilder.buildAutoChooser("A1_D1_SM");
 
-    // Not sure why this is needed, the auto selector should apply all PathPlannerAuto's options by
-    // default
-    // autoSelector.addOption("A1_D1_SM", getSelectedAuto());
+		// Not sure why this is needed, the auto selector should apply all PathPlannerAuto's options by
+		// default
+		// autoSelector.addOption("A1_D1_SM", getSelectedAuto());
 
-    SmartDashboard.putData("Auto", autoSelector);
-  }
+		SmartDashboard.putData("Auto", autoSelector);
+	}
 
-  /**
-   * Gets the command of the selected auto.
-   *
-   * @command The command of the selected auto
-   */
-  public Command getSelectedAuto() {
-    return autoSelector.getSelected();
-  }
+	/**
+	 * Gets the command of the selected auto.
+	 *
+	 * @command The command of the selected auto
+	 */
+	public Command getSelectedAuto() {
+		return autoSelector.getSelected();
+	}
 
-  /**
-   * Gets the starting pose of the selected auto.
-   *
-   * @return The starting pose of the selected auto
-   */
-  public Pose2d getStartingPose() {
-    return PathPlannerAuto.getStaringPoseFromAutoFile(autoSelector.getSelected().getName());
-  }
+	/**
+	 * Gets the starting pose of the selected auto.
+	 *
+	 * @return The starting pose of the selected auto
+	 */
+	public Pose2d getStartingPose() {
+		return PathPlannerAuto.getStaringPoseFromAutoFile(autoSelector.getSelected().getName());
+	}
 }

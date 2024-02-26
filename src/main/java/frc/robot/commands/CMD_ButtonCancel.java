@@ -13,31 +13,31 @@ import java.util.function.Supplier;
 
 public class CMD_ButtonCancel extends Command {
 
-  private final Supplier<Boolean> cancel;
-  private boolean isCommandDone = false;
+	private final Supplier<Boolean> cancel;
+	private boolean isCommandDone = false;
 
-  public CMD_ButtonCancel(Supplier<Boolean> cancel) {
-    this.cancel = cancel;
-  }
+	public CMD_ButtonCancel(Supplier<Boolean> cancel) {
+		this.cancel = cancel;
+	}
 
-  @Override
-  public void initialize() {
-    isCommandDone = false;
-  }
+	@Override
+	public void initialize() {
+		isCommandDone = false;
+	}
 
-  @Override
-  public void execute() {
-    if (cancel.get()) {
-      isCommandDone = true;
-    }
-  }
+	@Override
+	public void execute() {
+		if (cancel.get()) {
+			isCommandDone = true;
+		}
+	}
 
-  @Override
-  public boolean isFinished() {
-    if (isCommandDone) {
-      return true;
-    } else {
-      return false;
-    }
-  }
+	@Override
+	public boolean isFinished() {
+		if (isCommandDone) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 }

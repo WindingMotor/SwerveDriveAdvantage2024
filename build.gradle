@@ -157,5 +157,8 @@ spotless {
         trimTrailingWhitespace()
         endWithNewline()
         licenseHeader("// Copyright (c) 2024 : FRC 2106 : The Junkyard Dogs\n// https://github.com/WindingMotor\n// https://www.team2106.org\n\n// Use of this source code is governed by an MIT-style\n// license that can be found in the LICENSE file at\n// the root directory of this project.\n\n")
+        indentWithTabs(2)
+
+
     }
 }

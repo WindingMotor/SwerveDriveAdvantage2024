@@ -21,116 +21,116 @@ import org.littletonrobotics.junction.networktables.NT4Publisher;
  * project.
  */
 public class Robot extends LoggedRobot {
-  private Command m_autonomousCommand;
+	private Command m_autonomousCommand;
 
-  private RobotContainer m_robotContainer;
+	private RobotContainer m_robotContainer;
 
-  // private PDH m_pdh;
+	// private PDH m_pdh;
 
-  /**
-   * This function is run when the robot is first started up and should be used for any
-   * initialization code.
-   */
-  @Override
-  public void robotInit() {
-    // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
-    // autonomous chooser on the dashboard.
-    m_robotContainer = new RobotContainer();
+	/**
+	 * This function is run when the robot is first started up and should be used for any
+	 * initialization code.
+	 */
+	@Override
+	public void robotInit() {
+		// Instantiate our RobotContainer.  This will perform all our button bindings, and put our
+		// autonomous chooser on the dashboard.
+		m_robotContainer = new RobotContainer();
 
-    // m_pdh = new PDH();
+		// m_pdh = new PDH();
 
-    if (Constants.CURRENT_MODE == Constants.RobotMode.REAL) {
-      // Logger.addDataReceiver(new WPILOGWriter("U/logs"));
-      Logger.addDataReceiver(new NT4Publisher()); // Publish data to NetworkTables
-      // new PowerDistribution(1, ModuleType.kRev); // Enables power distribution logging
-      // Logger.addDataReceiver(new NT4Publisher());
-    } else {
-      // Logger.addDataReceiver(new NT4Publisher());
-    }
+		if (Constants.CURRENT_MODE == Constants.RobotMode.REAL) {
+			// Logger.addDataReceiver(new WPILOGWriter("U/logs"));
+			Logger.addDataReceiver(new NT4Publisher()); // Publish data to NetworkTables
+			// new PowerDistribution(1, ModuleType.kRev); // Enables power distribution logging
+			// Logger.addDataReceiver(new NT4Publisher());
+		} else {
+			// Logger.addDataReceiver(new NT4Publisher());
+		}
 
-    // Logger.disableDeterministicTimestamps() // See "Deterministic Timestamps" in the
-    // "Understanding Data Flow" page
-    // Logger.registerURCL(URCL.startExternal());
-    Logger.start(); // Start logging! No more data receivers, replay sources, or metadata values may
-    // be added.
-    // Pathfinding.setPathfinder(new LocalADStarAK());
+		// Logger.disableDeterministicTimestamps() // See "Deterministic Timestamps" in the
+		// "Understanding Data Flow" page
+		// Logger.registerURCL(URCL.startExternal());
+		Logger.start(); // Start logging! No more data receivers, replay sources, or metadata values may
+		// be added.
+		// Pathfinding.setPathfinder(new LocalADStarAK());
 
-    // m_pdh.setSwitchableChannel(false);
-  }
+		// m_pdh.setSwitchableChannel(false);
+	}
 
-  /**
-   * This function is called every 20 ms, no matter the mode. Use this for items like diagnostics
-   * that you want ran during disabled, autonomous, teleoperated and test.
-   *
-   * <p>This runs after the mode specific periodic functions, but before LiveWindow and
-   * SmartDashboard integrated updating.
-   */
-  @Override
-  public void robotPeriodic() {
-    // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
-    // commands, running already-scheduled commands, removing finished or interrupted commands,
-    // and running subsystem periodic() methods.  This must be called from the robot's periodic
-    // block in order for anything in the Command-based framework to work.
-    CommandScheduler.getInstance().run();
-  }
+	/**
+	 * This function is called every 20 ms, no matter the mode. Use this for items like diagnostics
+	 * that you want ran during disabled, autonomous, teleoperated and test.
+	 *
+	 * <p>This runs after the mode specific periodic functions, but before LiveWindow and
+	 * SmartDashboard integrated updating.
+	 */
+	@Override
+	public void robotPeriodic() {
+		// Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
+		// commands, running already-scheduled commands, removing finished or interrupted commands,
+		// and running subsystem periodic() methods.  This must be called from the robot's periodic
+		// block in order for anything in the Command-based framework to work.
+		CommandScheduler.getInstance().run();
+	}
 
-  /** This function is called once each time the robot enters Disabled mode. */
-  @Override
-  public void disabledInit() {
-    // m_pdh.setSwitchableChannel(false);
-  }
+	/** This function is called once each time the robot enters Disabled mode. */
+	@Override
+	public void disabledInit() {
+		// m_pdh.setSwitchableChannel(false);
+	}
 
-  @Override
-  public void disabledPeriodic() {}
+	@Override
+	public void disabledPeriodic() {}
 
-  /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
-  @Override
-  public void autonomousInit() {
-    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+	/** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
+	@Override
+	public void autonomousInit() {
+		m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
-    // schedule the autonomous command (example)
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.schedule();
-    }
-  }
+		// schedule the autonomous command (example)
+		if (m_autonomousCommand != null) {
+			m_autonomousCommand.schedule();
+		}
+	}
 
-  /** This function is called periodically during autonomous. */
-  @Override
-  public void autonomousPeriodic() {}
+	/** This function is called periodically during autonomous. */
+	@Override
+	public void autonomousPeriodic() {}
 
-  @Override
-  public void teleopInit() {
-    // This makes sure that the autonomous stops running when
-    // teleop starts running. If you want the autonomous to
-    // continue until interrupted by another command, remove
-    // this line or comment it out.
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.cancel();
-    }
+	@Override
+	public void teleopInit() {
+		// This makes sure that the autonomous stops running when
+		// teleop starts running. If you want the autonomous to
+		// continue until interrupted by another command, remove
+		// this line or comment it out.
+		if (m_autonomousCommand != null) {
+			m_autonomousCommand.cancel();
+		}
 
-    // m_pdh.setSwitchableChannel(true);
-    m_robotContainer.configDriving();
-  }
+		// m_pdh.setSwitchableChannel(true);
+		m_robotContainer.configDriving();
+	}
 
-  /** This function is called periodically during operator control. */
-  @Override
-  public void teleopPeriodic() {}
+	/** This function is called periodically during operator control. */
+	@Override
+	public void teleopPeriodic() {}
 
-  @Override
-  public void testInit() {
-    // Cancels all running commands at the start of test mode.
-    CommandScheduler.getInstance().cancelAll();
-  }
+	@Override
+	public void testInit() {
+		// Cancels all running commands at the start of test mode.
+		CommandScheduler.getInstance().cancelAll();
+	}
 
-  /** This function is called periodically during test mode. */
-  @Override
-  public void testPeriodic() {}
+	/** This function is called periodically during test mode. */
+	@Override
+	public void testPeriodic() {}
 
-  /** This function is called once when the robot is first started up. */
-  @Override
-  public void simulationInit() {}
+	/** This function is called once when the robot is first started up. */
+	@Override
+	public void simulationInit() {}
 
-  /** This function is called periodically whilst in simulation. */
-  @Override
-  public void simulationPeriodic() {}
+	/** This function is called periodically whilst in simulation. */
+	@Override
+	public void simulationPeriodic() {}
 }

@@ -22,62 +22,62 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 
 public class SUB_Vision extends SubsystemBase {
 
-  private final IO_VisionBase io;
+	private final IO_VisionBase io;
 
-  public final VisionInputsAutoLogged inputs = new VisionInputsAutoLogged();
+	public final VisionInputsAutoLogged inputs = new VisionInputsAutoLogged();
 
-  public SUB_Vision(IO_VisionBase io) {
-    this.io = io;
-  }
+	public SUB_Vision(IO_VisionBase io) {
+		this.io = io;
+	}
 
-  @Override
-  public void periodic() {
+	@Override
+	public void periodic() {
 
-    // Update the inputs.
-    io.updateInputs(inputs);
-  }
+		// Update the inputs.
+		io.updateInputs(inputs);
+	}
 
-  /**
-   * Retrieves the estimated global pose of the robot using the specified camera and the previous
-   * estimated robot pose.
-   *
-   * @param camera The camera used for estimating the pose
-   * @return An Optional containing the estimated robot pose if the update is successful, otherwise
-   *     an empty Optional
-   */
-  public Optional<EstimatedRobotPose> getEstimatedGlobalPose(Camera camera) {
-    return io.getEstimatedGlobalPose(camera);
-  }
+	/**
+	 * Retrieves the estimated global pose of the robot using the specified camera and the previous
+	 * estimated robot pose.
+	 *
+	 * @param camera The camera used for estimating the pose
+	 * @return An Optional containing the estimated robot pose if the update is successful, otherwise
+	 *     an empty Optional
+	 */
+	public Optional<EstimatedRobotPose> getEstimatedGlobalPose(Camera camera) {
+		return io.getEstimatedGlobalPose(camera);
+	}
 
-  /**
-   * Retrieves the estimation standard deviations for the given estimated pose.
-   *
-   * @param estimatedPose The estimated pose for which to retrieve standard deviations
-   * @return The estimation standard deviations for the given estimated pose
-   */
-  public Matrix<N3, N1> getEstimationStdDevs(
-      Pose2d estimatedPose, Camera camera, List<PhotonTrackedTarget> targets) {
-    return io.getEstimationStdDevs(estimatedPose, camera, targets);
-  }
+	/**
+	 * Retrieves the estimation standard deviations for the given estimated pose.
+	 *
+	 * @param estimatedPose The estimated pose for which to retrieve standard deviations
+	 * @return The estimation standard deviations for the given estimated pose
+	 */
+	public Matrix<N3, N1> getEstimationStdDevs(
+			Pose2d estimatedPose, Camera camera, List<PhotonTrackedTarget> targets) {
+		return io.getEstimationStdDevs(estimatedPose, camera, targets);
+	}
 
-  public Double getAmbiguity(int id) {
+	public Double getAmbiguity(int id) {
 
-    List<PhotonTrackedTarget> leftTargets = io.getTargets(Constants.Vision.Camera.LEFT_CAMERA);
-    List<PhotonTrackedTarget> rightTargets = io.getTargets(Constants.Vision.Camera.RIGHT_CAMERA);
+		List<PhotonTrackedTarget> leftTargets = io.getTargets(Constants.Vision.Camera.LEFT_CAMERA);
+		List<PhotonTrackedTarget> rightTargets = io.getTargets(Constants.Vision.Camera.RIGHT_CAMERA);
 
-    for (PhotonTrackedTarget tar : leftTargets) {
+		for (PhotonTrackedTarget tar : leftTargets) {
 
-      if (tar.getFiducialId() == id) {
-        return tar.getPoseAmbiguity();
-      }
-    }
+			if (tar.getFiducialId() == id) {
+				return tar.getPoseAmbiguity();
+			}
+		}
 
-    for (PhotonTrackedTarget tar : rightTargets) {
+		for (PhotonTrackedTarget tar : rightTargets) {
 
-      if (tar.getFiducialId() == id) {
-        return tar.getPoseAmbiguity();
-      }
-    }
-    return 1.0;
-  }
+			if (tar.getFiducialId() == id) {
+				return tar.getPoseAmbiguity();
+			}
+		}
+		return 1.0;
+	}
 }

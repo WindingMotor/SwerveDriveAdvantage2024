@@ -14,24 +14,24 @@ import frc.robot.util.AddressableLedStrip.LEDState;
 
 public class CMD_Led extends Command {
 
-  private final AddressableLedStrip led;
-  private final LEDState state;
+	private final AddressableLedStrip led;
+	private final LEDState state;
 
-  public CMD_Led(AddressableLedStrip led, LEDState state) {
-    this.led = led;
-    this.state = state;
-    addRequirements(led);
-  }
+	public CMD_Led(AddressableLedStrip led, LEDState state) {
+		this.led = led;
+		this.state = state;
+		addRequirements(led);
+	}
 
-  // Print a message to the driver station and set the LED state
-  @Override
-  public void initialize() {
-    led.setState(state);
-  }
+	// Print a message to the driver station and set the LED state
+	@Override
+	public void initialize() {
+		led.setState(state);
+	}
 
-  // Command ends immediately
-  @Override
-  public boolean isFinished() {
-    return true;
-  }
+	// Command ends immediately
+	@Override
+	public boolean isFinished() {
+		return true;
+	}
 }

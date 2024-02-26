@@ -14,38 +14,38 @@ import org.littletonrobotics.junction.Logger;
 
 public class SUB_Arm extends SubsystemBase {
 
-  private final IO_ArmBase io;
+	private final IO_ArmBase io;
 
-  public final ArmInputsAutoLogged inputs = new ArmInputsAutoLogged();
+	public final ArmInputsAutoLogged inputs = new ArmInputsAutoLogged();
 
-  private ArmState state;
+	private ArmState state;
 
-  public SUB_Arm(IO_ArmBase io) {
-    this.io = io;
-    state = ArmState.OFF;
-    ;
-  }
+	public SUB_Arm(IO_ArmBase io) {
+		this.io = io;
+		state = ArmState.OFF;
+		;
+	}
 
-  @Override
-  public void periodic() {
-    io.updateInputs(inputs);
-    Logger.processInputs("Arm", inputs);
-    io.updatePID(state.position);
-  }
+	@Override
+	public void periodic() {
+		io.updateInputs(inputs);
+		Logger.processInputs("Arm", inputs);
+		io.updatePID(state.position);
+	}
 
-  public void setState(ArmState newState) {
-    state = newState;
-  }
+	public void setState(ArmState newState) {
+		state = newState;
+	}
 
-  public ArmState getState() {
-    return state;
-  }
+	public ArmState getState() {
+		return state;
+	}
 
-  public void stop() {
-    io.stop();
-  }
+	public void stop() {
+		io.stop();
+	}
 
-  public boolean isAtSetpoint() {
-    return inputs.isAtSetpoint;
-  }
+	public boolean isAtSetpoint() {
+		return inputs.isAtSetpoint;
+	}
 }

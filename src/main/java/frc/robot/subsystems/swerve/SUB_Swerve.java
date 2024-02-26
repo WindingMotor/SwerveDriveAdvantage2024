@@ -32,161 +32,161 @@ import org.littletonrobotics.junction.Logger;
 
 public class SUB_Swerve extends SubsystemBase {
 
-  private final IO_SwerveBase io;
+	private final IO_SwerveBase io;
 
-  private final SwerveInputsAutoLogged inputs = new SwerveInputsAutoLogged();
+	private final SwerveInputsAutoLogged inputs = new SwerveInputsAutoLogged();
 
-  private final SUB_Vision vision;
+	private final SUB_Vision vision;
 
-  // Odometry lock, prevents updates while reading data
-  private static final Lock odometryLock = new ReentrantLock();
+	// Odometry lock, prevents updates while reading data
+	private static final Lock odometryLock = new ReentrantLock();
 
-  public SUB_Swerve(IO_SwerveBase io, SUB_Vision vision) {
-    this.io = io;
-    this.vision = vision;
+	public SUB_Swerve(IO_SwerveBase io, SUB_Vision vision) {
+		this.io = io;
+		this.vision = vision;
 
-    /*
-         * {
-      "drive": {
-        "p": 0.0020645,
-        "i": 0,
-        "d": 0,
-        "f": 0,
-        "iz": 0
-      },
-      "angle": {
-        "p": 0.01,
-        "i": 0,
-        "d": 0,
-        "f": 0,
-        "iz": 0
-      }
-    }
+		/*
+				 * {
+		"drive": {
+				"p": 0.0020645,
+				"i": 0,
+				"d": 0,
+				"f": 0,
+				"iz": 0
+		},
+		"angle": {
+				"p": 0.01,
+				"i": 0,
+				"d": 0,
+				"f": 0,
+				"iz": 0
+		}
+		}
 
-         */
-    AutoBuilder.configureHolonomic(
-        io::getPose, // Gets current robot pose
-        io::resetOdometry, // Resets robot odometry if path has starter pose
-        io::getRobotVelocity, // Gets chassis speed in robot relative
-        io::setChassisSpeeds, // Drives the robot in robot realative chassis speeds
-        new HolonomicPathFollowerConfig(
-            // new PIDConstants(0.3,1.5,2.0, 0.25), // Translation
-            // new PIDConstants(0.3, 5, 1.2, 0.05),
-            new PIDConstants(0.5, 0.0, 0.0),
-            new PIDConstants(2.0, 0.0, 0.01), // Heading
-            Constants.Auto.MAX_MODULE_SPEED_MPS,
-            io.getConfigurationRadius(), // Drive base radius in meters
-            new ReplanningConfig() // Replanning config see docs
-            ),
-        () -> {
-          // Auto path flipper for allaince color, always make baths on blue side
-          var alliance = DriverStation.getAlliance();
-          return alliance.isPresent() ? alliance.get() == DriverStation.Alliance.Red : false;
-        },
-        this);
+				 */
+		AutoBuilder.configureHolonomic(
+				io::getPose, // Gets current robot pose
+				io::resetOdometry, // Resets robot odometry if path has starter pose
+				io::getRobotVelocity, // Gets chassis speed in robot relative
+				io::setChassisSpeeds, // Drives the robot in robot realative chassis speeds
+				new HolonomicPathFollowerConfig(
+						// new PIDConstants(0.3,1.5,2.0, 0.25), // Translation
+						// new PIDConstants(0.3, 5, 1.2, 0.05),
+						new PIDConstants(0.5, 0.0, 0.0),
+						new PIDConstants(2.0, 0.0, 0.01), // Heading
+						Constants.Auto.MAX_MODULE_SPEED_MPS,
+						io.getConfigurationRadius(), // Drive base radius in meters
+						new ReplanningConfig() // Replanning config see docs
+						),
+				() -> {
+					// Auto path flipper for allaince color, always make baths on blue side
+					var alliance = DriverStation.getAlliance();
+					return alliance.isPresent() ? alliance.get() == DriverStation.Alliance.Red : false;
+				},
+				this);
 
-    /*
-    *          new PIDConstants(5.0,0.25,0.02), // Translation
-       new PIDConstants(0.6, 0.12, 0.001),
-    */
-  }
+		/*
+		*          new PIDConstants(5.0,0.25,0.02), // Translation
+		new PIDConstants(0.6, 0.12, 0.001),
+		*/
+	}
 
-  public void periodic() {
+	public void periodic() {
 
-    odometryLock.lock();
-    io.updateInputs(inputs);
-    odometryLock.unlock();
+		odometryLock.lock();
+		io.updateInputs(inputs);
+		odometryLock.unlock();
 
-    io.updateEstimations(vision);
+		io.updateEstimations(vision);
 
-    io.updateOdometry();
+		io.updateOdometry();
 
-    Logger.processInputs("Swerve", inputs);
-  }
+		Logger.processInputs("Swerve", inputs);
+	}
 
-  /**
-   * Drives the robot, in field-relative, based of the specified inputs.
-   *
-   * @param translationX A supplier for the X translation
-   * @param translationY A supplier for the Y translation
-   * @param angularRotationX A supplier for the angular rotation
-   * @return The command for driving the swerve drive
-   */
-  public Command driveJoystick(
-      DoubleSupplier translationX, DoubleSupplier translationY, DoubleSupplier angularRotationX) {
-    return run(
-        () -> {
-          io.drive(
-              new Translation2d(
-                  translationX.getAsDouble() * io.getMaximumVelocity(),
-                  translationY.getAsDouble() * io.getMaximumVelocity()),
-              angularRotationX.getAsDouble() * io.getMaximumAngularVelocity(),
-              true,
-              false);
-        });
-  }
+	/**
+	 * Drives the robot, in field-relative, based of the specified inputs.
+	 *
+	 * @param translationX A supplier for the X translation
+	 * @param translationY A supplier for the Y translation
+	 * @param angularRotationX A supplier for the angular rotation
+	 * @return The command for driving the swerve drive
+	 */
+	public Command driveJoystick(
+			DoubleSupplier translationX, DoubleSupplier translationY, DoubleSupplier angularRotationX) {
+		return run(
+				() -> {
+					io.drive(
+							new Translation2d(
+									translationX.getAsDouble() * io.getMaximumVelocity(),
+									translationY.getAsDouble() * io.getMaximumVelocity()),
+							angularRotationX.getAsDouble() * io.getMaximumAngularVelocity(),
+							true,
+							false);
+				});
+	}
 
-  /**
-   * Drives the robot to the specified pose.
-   *
-   * @param pose The target pose to drive to
-   * @return The command to run to drive to the pose.
-   */
-  public Command driveToPose(Pose2d pose) {
-    Command pathfindingCommand =
-        AutoBuilder.pathfindToPose(
-            pose,
-            new PathConstraints(
-                1,
-                6,
-                Units.degreesToRadians(540), // 540 350
-                Units.degreesToRadians(720) // 720 // 540
-                ));
-    return pathfindingCommand;
-  }
+	/**
+	 * Drives the robot to the specified pose.
+	 *
+	 * @param pose The target pose to drive to
+	 * @return The command to run to drive to the pose.
+	 */
+	public Command driveToPose(Pose2d pose) {
+		Command pathfindingCommand =
+				AutoBuilder.pathfindToPose(
+						pose,
+						new PathConstraints(
+								1,
+								6,
+								Units.degreesToRadians(540), // 540 350
+								Units.degreesToRadians(720) // 720 // 540
+								));
+		return pathfindingCommand;
+	}
 
-  /**
-   * Drives the robot to the speaker depending on the alliance.
-   *
-   * @return The command to run to drive to the pose.
-   */
-  public Command driveToSpeaker() {
-    Optional<Alliance> alliance = DriverStation.getAlliance();
-    if (alliance.isPresent() && alliance.get() == Alliance.Blue) {
-      return driveToPose(Constants.Auto.ScoringPoses.BLU_SPEAKER.pose);
-    } else if (alliance.isPresent() && alliance.get() == Alliance.Red) {
-      return driveToPose(Constants.Auto.ScoringPoses.RED_SPEAKER.pose);
-    }
-    return new PrintCommand("[error] [driveToSpeaker] No Alliance Detected!");
-  }
+	/**
+	 * Drives the robot to the speaker depending on the alliance.
+	 *
+	 * @return The command to run to drive to the pose.
+	 */
+	public Command driveToSpeaker() {
+		Optional<Alliance> alliance = DriverStation.getAlliance();
+		if (alliance.isPresent() && alliance.get() == Alliance.Blue) {
+			return driveToPose(Constants.Auto.ScoringPoses.BLU_SPEAKER.pose);
+		} else if (alliance.isPresent() && alliance.get() == Alliance.Red) {
+			return driveToPose(Constants.Auto.ScoringPoses.RED_SPEAKER.pose);
+		}
+		return new PrintCommand("[error] [driveToSpeaker] No Alliance Detected!");
+	}
 
-  /**
-   * Drives the robot to the amp depending on the alliance.
-   *
-   * @return The command to run to drive to the pose.
-   */
-  public Command driveToAmp() {
-    Optional<Alliance> alliance = DriverStation.getAlliance();
-    if (alliance.isPresent() && alliance.get() == Alliance.Blue) {
-      return driveToPose(Constants.Auto.ScoringPoses.BLU_AMP.pose);
-    } else if (alliance.isPresent() && alliance.get() == Alliance.Red) {
-      return driveToPose(Constants.Auto.ScoringPoses.RED_AMP.pose);
-    }
-    return new PrintCommand("[error] [driveToAmp] 'No Alliance Detected!");
-  }
+	/**
+	 * Drives the robot to the amp depending on the alliance.
+	 *
+	 * @return The command to run to drive to the pose.
+	 */
+	public Command driveToAmp() {
+		Optional<Alliance> alliance = DriverStation.getAlliance();
+		if (alliance.isPresent() && alliance.get() == Alliance.Blue) {
+			return driveToPose(Constants.Auto.ScoringPoses.BLU_AMP.pose);
+		} else if (alliance.isPresent() && alliance.get() == Alliance.Red) {
+			return driveToPose(Constants.Auto.ScoringPoses.RED_AMP.pose);
+		}
+		return new PrintCommand("[error] [driveToAmp] 'No Alliance Detected!");
+	}
 
-  /**
-   * Drives the robot on the path specified.
-   *
-   * @param name The name of the path to follow
-   * @param setOdomToStart Whether or not to reset the odometry to the start of the path
-   * @return The command to run to drive the path
-   */
-  public Command drivePath(String name, boolean setOdomToStart) {
-    PathPlannerPath path = PathPlannerPath.fromPathFile(name);
-    if (setOdomToStart) {
-      io.resetOdometry(new Pose2d(path.getPoint(0).position, io.getHeading()));
-    }
-    return AutoBuilder.followPath(path);
-  }
+	/**
+	 * Drives the robot on the path specified.
+	 *
+	 * @param name The name of the path to follow
+	 * @param setOdomToStart Whether or not to reset the odometry to the start of the path
+	 * @return The command to run to drive the path
+	 */
+	public Command drivePath(String name, boolean setOdomToStart) {
+		PathPlannerPath path = PathPlannerPath.fromPathFile(name);
+		if (setOdomToStart) {
+			io.resetOdometry(new Pose2d(path.getPoint(0).position, io.getHeading()));
+		}
+		return AutoBuilder.followPath(path);
+	}
 }

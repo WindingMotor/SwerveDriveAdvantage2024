@@ -18,42 +18,42 @@ import org.littletonrobotics.junction.AutoLog;
 
 public interface IO_SwerveBase {
 
-  @AutoLog
-  public static class SwerveInputs {
-    public Pose2d pose = new Pose2d();
-    public Rotation2d yaw = new Rotation2d();
-    public Rotation2d odometryHeading = new Rotation2d();
-  }
+	@AutoLog
+	public static class SwerveInputs {
+		public Pose2d pose = new Pose2d();
+		public Rotation2d yaw = new Rotation2d();
+		public Rotation2d odometryHeading = new Rotation2d();
+	}
 
-  /**
-   * Updates the inputs with the current values.
-   *
-   * @param inputs The inputs to update.
-   */
-  void updateInputs(SwerveInputs inputs);
+	/**
+	 * Updates the inputs with the current values.
+	 *
+	 * @param inputs The inputs to update.
+	 */
+	void updateInputs(SwerveInputs inputs);
 
-  void drive(
-      Translation2d translation, double rotation, boolean isFieldRelative, boolean isOpenLoop);
+	void drive(
+			Translation2d translation, double rotation, boolean isFieldRelative, boolean isOpenLoop);
 
-  double getMaximumVelocity();
+	double getMaximumVelocity();
 
-  double getMaximumAngularVelocity();
+	double getMaximumAngularVelocity();
 
-  void updateEstimations(SUB_Vision vision);
+	void updateEstimations(SUB_Vision vision);
 
-  void updateOdometry();
+	void updateOdometry();
 
-  void resetOdometry(Pose2d pose);
+	void resetOdometry(Pose2d pose);
 
-  Pose2d getPose();
+	Pose2d getPose();
 
-  Rotation2d getHeading();
+	Rotation2d getHeading();
 
-  ChassisSpeeds getRobotVelocity();
+	ChassisSpeeds getRobotVelocity();
 
-  void setChassisSpeeds(ChassisSpeeds chassisSpeeds);
+	void setChassisSpeeds(ChassisSpeeds chassisSpeeds);
 
-  PIDConstants getHeadingPID();
+	PIDConstants getHeadingPID();
 
-  double getConfigurationRadius();
+	double getConfigurationRadius();
 }
