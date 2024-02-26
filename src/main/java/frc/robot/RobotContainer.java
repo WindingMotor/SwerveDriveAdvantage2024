@@ -8,6 +8,8 @@
 
 package frc.robot;
 
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -97,6 +99,7 @@ public class RobotContainer {
 			}
 		}
 	}
+
 	/** Configure the bindings for the controller buttons to specific commands. */
 	private void configureBindings() {
 
@@ -165,9 +168,11 @@ public class RobotContainer {
 								Constants.Auto.DriveScoringPoseState.SPEAKER,
 								() -> operatorController.b().getAsBoolean()));
 
+		// Climb test command
 		operatorController.leftBumper().onTrue(new CMD_Climb(led, climb, () -> 0.1));
 		operatorController.leftBumper().onFalse(new CMD_Climb(led, climb, () -> 0.0));
 
+		// TODO: Finish and add drive to amp and speaker command
 		// operatorController.rightTrigger(0.1).onTrue(new CMD_Climb(led, climb, () -> -0.1));
 		// Drive to amp command
 		// operatorController.povLeft().debounce(0.25).onTrue(new CMDGR_DrivePose(swerve,
@@ -175,8 +180,6 @@ public class RobotContainer {
 	}
 
 	private void logMetadata() {}
-
-	// TEST INSERT
 
 	/**
 	 * Get the autonomous command.

@@ -26,6 +26,7 @@ import java.util.List;
 import org.littletonrobotics.junction.Logger;
 import org.photonvision.targeting.PhotonTrackedTarget;
 import swervelib.SwerveDrive;
+import swervelib.SwerveModule;
 import swervelib.parser.SwerveParser;
 import swervelib.telemetry.SwerveDriveTelemetry;
 import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
@@ -71,21 +72,41 @@ public class IO_SwerveReal implements IO_SwerveBase {
 		inputs.odometryHeading = swerveDrive.getOdometryHeading();
 	}
 
+	/**
+	 * Retrieves the current pose of the swerve drive.
+	 *
+	 * @return The pose of the swerve drive
+	 */
 	@Override
 	public Pose2d getPose() {
 		return swerveDrive.getPose();
 	}
 
+	/**
+	 * Resets the odometry to the given pose.
+	 *
+	 * @param pose The pose to reset the odometry to
+	 */
 	@Override
 	public void resetOdometry(Pose2d pose) {
 		swerveDrive.resetOdometry(pose);
 	}
 
+	/**
+	 * Gets the robot's velocity.
+	 *
+	 * @return The current swerve drive velocity in chassis speeds
+	 */
 	@Override
 	public ChassisSpeeds getRobotVelocity() {
 		return swerveDrive.getRobotVelocity();
 	}
 
+	/**
+	 * Sets the chassis speeds for the swerve drive.
+	 *
+	 * @param chassisSpeeds The desired chassis speeds in MPS
+	 */
 	@Override
 	public void setChassisSpeeds(ChassisSpeeds chassisSpeeds) {
 		swerveDrive.setChassisSpeeds(chassisSpeeds);
@@ -96,6 +117,11 @@ public class IO_SwerveReal implements IO_SwerveBase {
 		return getPose().getRotation();
 	}
 
+	/**
+	 * Retrieves the current swerve drive heading PID constants.
+	 *
+	 * @return The heading PID constants
+	 */
 	@Override
 	public PIDConstants getHeadingPID() {
 
@@ -105,22 +131,45 @@ public class IO_SwerveReal implements IO_SwerveBase {
 				swerveDrive.swerveController.config.headingPIDF.d);
 	}
 
+	/**
+	 * Retrieves the configuration radius of the swerve drive.
+	 *
+	 * @return the configuration radius in meters
+	 */
 	@Override
 	public double getConfigurationRadius() {
 		return swerveDrive.swerveDriveConfiguration.getDriveBaseRadiusMeters();
 	}
 
+	/**
+	 * Drive the robot using the given translation, rotation, and mode.
+	 *
+	 * @param translation The desired translation of the robot
+	 * @param rotation The desired rotation of the robot
+	 * @param isFieldRelative Whether the driving mode is field relative
+	 * @param isOpenLoop Whether the driving mode is open loop
+	 */
 	@Override
 	public void drive(
 			Translation2d translation, double rotation, boolean isFieldRelative, boolean isOpenLoop) {
 		swerveDrive.drive(translation, rotation, isFieldRelative, isOpenLoop);
 	}
 
+	/**
+	 * Get the maximum swerve velocity.
+	 *
+	 * @return The maximum velocity
+	 */
 	@Override
 	public double getMaximumVelocity() {
 		return swerveDrive.getMaximumVelocity();
 	}
 
+	/**
+	 * Retrieves the maximum swerve angular velocity.
+	 *
+	 * @return The maximum angular velocity
+	 */
 	@Override
 	public double getMaximumAngularVelocity() {
 		return swerveDrive.getMaximumAngularVelocity();
@@ -140,6 +189,12 @@ public class IO_SwerveReal implements IO_SwerveBase {
 		// updateEstimationsForCamera(vision, Camera.LIMELIGHT);
 	}
 
+	/**
+	 * Update estimations for the camera using photon vision data.
+	 *
+	 * @param vision The SUB_Vision instance
+	 * @param camera The Camera instance
+	 */
 	private void updateEstimationsForCamera(SUB_Vision vision, Camera camera) {
 
 		// Get estimated pose of camera from photon vision
@@ -191,8 +246,38 @@ public class IO_SwerveReal implements IO_SwerveBase {
 		}
 	}
 
+	/** Updates the odometry for the swerve drive. */
 	@Override
 	public void updateOdometry() {
 		swerveDrive.updateOdometry();
+	}
+
+	/**
+	 * Sets the brake mode for all swerve modules in the swerve drive configuration.
+	 *
+	 * @param isBrakeMode True to enable brake mode, false to disable
+	 */
+	@Override
+	public void setBrakeMode(boolean isBrakeMode) {
+		for (SwerveModule module : swerveDrive.swerveDriveConfiguration.modules) {
+			module.setMotorBrake(isBrakeMode);
+		}
+	}
+
+	/** Sets the angle of all swerve modules to 0.0. */
+	@Override
+	public void setZero() {
+		for (SwerveModule module : swerveDrive.swerveDriveConfiguration.modules) {
+			module.setAngle(0.0);
+		}
+	}
+
+	/** Sets the lock for the swerve drive by setting the motor brake and angle */
+	@Override
+	public void setLock() {
+		for (SwerveModule module : swerveDrive.swerveDriveConfiguration.modules) {
+			module.setMotorBrake(true);
+			module.setAngle(45);
+		}
 	}
 }

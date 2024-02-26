@@ -56,4 +56,10 @@ public interface IO_SwerveBase {
 	PIDConstants getHeadingPID();
 
 	double getConfigurationRadius();
+
+	void setBrakeMode(boolean isBrakeMode);
+
+	void setZero();
+
+	void setLock();
 }

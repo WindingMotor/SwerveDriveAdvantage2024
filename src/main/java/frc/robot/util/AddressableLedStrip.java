@@ -57,7 +57,7 @@ public class AddressableLedStrip extends SubsystemBase {
 	public void periodic() {
 
 		if (DriverStation.isDisabled()) {
-			solid(Color.kPurple);
+			solid(Color.kRed);
 			// everyOther(Color.kGreen, Color.kBlue);
 		} else {
 

@@ -13,7 +13,6 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 import frc.robot.Constants.Vision.Camera;
 import java.util.List;
 import java.util.Optional;
@@ -60,19 +59,22 @@ public class SUB_Vision extends SubsystemBase {
 		return io.getEstimationStdDevs(estimatedPose, camera, targets);
 	}
 
+	/**
+	 * Retrieves the ambiguity value for the given target ID from the cameras.
+	 *
+	 * @param id the ID of the target
+	 * @return the ambiguity value, or 1.0 if the target ID is not found
+	 */
 	public Double getAmbiguity(int id) {
 
-		List<PhotonTrackedTarget> leftTargets = io.getTargets(Constants.Vision.Camera.LEFT_CAMERA);
-		List<PhotonTrackedTarget> rightTargets = io.getTargets(Constants.Vision.Camera.RIGHT_CAMERA);
-
-		for (PhotonTrackedTarget tar : leftTargets) {
+		for (PhotonTrackedTarget tar : io.getTargets(Camera.LEFT_CAMERA)) {
 
 			if (tar.getFiducialId() == id) {
 				return tar.getPoseAmbiguity();
 			}
 		}
 
-		for (PhotonTrackedTarget tar : rightTargets) {
+		for (PhotonTrackedTarget tar : io.getTargets(Camera.RIGHT_CAMERA)) {
 
 			if (tar.getFiducialId() == id) {
 				return tar.getPoseAmbiguity();
