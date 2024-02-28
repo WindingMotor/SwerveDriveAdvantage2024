@@ -8,7 +8,6 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.arm.SUB_Arm;
@@ -22,7 +21,6 @@ public class CMD_Eject extends Command {
 	private final SUB_Arm arm;
 	private final Supplier<Boolean> manualCancel;
 	private boolean isCommandDone = false;
-	private Debouncer debouncer;
 
 	/**
 	 * Constructs a new CMD_Intake command.
@@ -35,7 +33,6 @@ public class CMD_Eject extends Command {
 		this.conveyor = conveyor;
 		this.arm = arm;
 		this.manualCancel = manualCancel;
-		debouncer = new Debouncer(0.65, Debouncer.DebounceType.kFalling);
 
 		addRequirements(conveyor, arm);
 	}

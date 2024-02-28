@@ -9,7 +9,6 @@
 package frc.robot.auto;
 
 import com.pathplanner.lib.auto.NamedCommands;
-import edu.wpi.first.wpilibj2.command.PrintCommand;
 import frc.robot.Constants.States.ArmState;
 import frc.robot.Constants.States.ShooterMode;
 import frc.robot.Constants.States.ShooterState;
@@ -30,8 +29,6 @@ public class CommandRegistrar {
 
 	private final SUB_Vision vision;
 
-	private final SUB_Swerve swerve;
-
 	private final SUB_Conveyor conveyor;
 
 	private final SUB_Arm arm;
@@ -48,7 +45,6 @@ public class CommandRegistrar {
 			SUB_Shooter shooter,
 			AddressableLedStrip led) {
 		this.vision = vision;
-		this.swerve = swerve;
 		this.conveyor = conveyor;
 		this.arm = arm;
 		this.shooter = shooter;
@@ -67,12 +63,14 @@ public class CommandRegistrar {
 		// Eject command
 		NamedCommands.registerCommand("Eject", new CMD_Eject(conveyor, arm, () -> false));
 
-		NamedCommands.registerCommand("Shoot_Speaker", new PrintCommand("NULL"));
-		NamedCommands.registerCommand("Shoot_Command", new PrintCommand("NULL"));
-		NamedCommands.registerCommand("Shoot_Command2M", new PrintCommand("NULL"));
-		NamedCommands.registerCommand("Intake_Auto", new PrintCommand("NULL"));
+		// Null commands for backwards compatibility
+		// NamedCommands.registerCommand("Shoot_Speaker", new PrintCommand("NULL"));
+		// NamedCommands.registerCommand("Shoot_Command", new PrintCommand("NULL"));
+		// NamedCommands.registerCommand("Shoot_Command2M", new PrintCommand("NULL"));
+		// NamedCommands.registerCommand("Intake_Auto", new PrintCommand("NULL"));
 
-		// Speaker shoot command, with auto shoot
+		// Speaker shoot commands for different distances
+		// One meter
 		NamedCommands.registerCommand(
 				"Shoot_Speaker1M",
 				new CMD_Shoot(
@@ -87,6 +85,8 @@ public class CommandRegistrar {
 						true,
 						ShooterState.SPEAKER_1M,
 						ArmState.SPEAKER_1M));
+
+		// Two Meters
 		NamedCommands.registerCommand(
 				"Shoot_Speaker2M",
 				new CMD_Shoot(
@@ -101,6 +101,8 @@ public class CommandRegistrar {
 						true,
 						ShooterState.SPEAKER_2M,
 						ArmState.SPEAKER_2M));
+
+		// Two and a half meters
 		NamedCommands.registerCommand(
 				"Shoot_Speaker2_5M",
 				new CMD_Shoot(
@@ -115,6 +117,8 @@ public class CommandRegistrar {
 						true,
 						ShooterState.SPEAKER_2_5M,
 						ArmState.SPEAKER_2_5M));
+
+		// Three meters
 		NamedCommands.registerCommand(
 				"Shoot_Speaker3M",
 				new CMD_Shoot(
@@ -130,7 +134,7 @@ public class CommandRegistrar {
 						ShooterState.SPEAKER_3M,
 						ArmState.SPEAKER_3M));
 
-		// Amp shoot command, with auto shoot
+		// Amp command
 		NamedCommands.registerCommand(
 				"Shoot_Amp",
 				new CMD_Shoot(

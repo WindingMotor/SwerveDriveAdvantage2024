@@ -27,7 +27,6 @@ public class CMD_Shoot extends Command {
 	private final SUB_Conveyor conveyor;
 	private final SUB_Arm arm;
 	private final SUB_Shooter shooter;
-	private final SUB_Vision vision;
 	private final AddressableLedStrip led;
 	private ShooterMode mode;
 	private final Supplier<Boolean> manualCancel;
@@ -62,7 +61,6 @@ public class CMD_Shoot extends Command {
 		this.conveyor = conveyor;
 		this.arm = arm;
 		this.shooter = shooter;
-		this.vision = vision;
 		this.led = led;
 		this.mode = mode;
 		this.shoot = shoot;
@@ -89,7 +87,6 @@ public class CMD_Shoot extends Command {
 		this.conveyor = conveyor;
 		this.arm = arm;
 		this.shooter = shooter;
-		this.vision = vision;
 		this.led = led;
 		this.mode = mode;
 		this.shoot = shoot;
