@@ -8,8 +8,6 @@
 
 package frc.robot;
 
-import org.littletonrobotics.junction.Logger;
-
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -17,16 +15,14 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.States.ShooterMode;
 import frc.robot.auto.AutoSelector;
 import frc.robot.auto.CommandRegistrar;
-import frc.robot.commands.CMDGR_DrivePose;
+import frc.robot.commands.CMDGR_Intake;
 import frc.robot.commands.CMDGR_Shoot;
-import frc.robot.commands.CMD_Climb;
+import frc.robot.commands.CMD_ArmClimb;
+import frc.robot.commands.CMD_ArmClimbRaise;
 import frc.robot.commands.CMD_Eject;
 import frc.robot.commands.CMD_Idle;
-import frc.robot.commands.CMD_Intake;
 import frc.robot.subsystems.arm.IO_ArmReal;
 import frc.robot.subsystems.arm.SUB_Arm;
-import frc.robot.subsystems.climb.IO_ClimbReal;
-import frc.robot.subsystems.climb.SUB_Climb;
 import frc.robot.subsystems.conveyor.IO_ConveyorReal;
 import frc.robot.subsystems.conveyor.SUB_Conveyor;
 import frc.robot.subsystems.shooter.IO_ShooterReal;
@@ -55,7 +51,7 @@ public class RobotContainer {
 
 	private final SUB_Swerve swerve = new SUB_Swerve(new IO_SwerveReal(), vision);
 
-	private final SUB_Climb climb = new SUB_Climb(new IO_ClimbReal());
+	// private final SUB_Climb climb = new SUB_Climb(new IO_ClimbReal());
 
 	private final CommandRegistrar commandRegistrar =
 			new CommandRegistrar(vision, swerve, conveyor, arm, shooter, led);
@@ -148,7 +144,7 @@ public class RobotContainer {
 		// Intake command
 		operatorController
 				.a()
-				.onTrue(new CMD_Intake(conveyor, arm, () -> operatorController.b().getAsBoolean()));
+				.onTrue(new CMDGR_Intake(conveyor, arm, led, () -> operatorController.b().getAsBoolean()));
 
 		// Eject command
 		operatorController
@@ -158,6 +154,9 @@ public class RobotContainer {
 		// Idle command
 		operatorController.b().onTrue(new CMD_Idle(conveyor, arm, shooter));
 
+		// operatorController.b().and(operatorController.a()).onFalse(getAutonomousCommand())
+
+		/*
 		// Drive to speaker command
 		operatorController
 				.leftStick()
@@ -168,9 +167,16 @@ public class RobotContainer {
 								Constants.Auto.DriveScoringPoseState.SPEAKER,
 								() -> operatorController.b().getAsBoolean()));
 
+		*/
+
 		// Climb test command
-		operatorController.leftBumper().onTrue(new CMD_Climb(led, climb, () -> 0.1));
-		operatorController.leftBumper().onFalse(new CMD_Climb(led, climb, () -> 0.0));
+		operatorController.leftStick().onTrue(new CMD_ArmClimbRaise(arm, () -> false));
+
+		operatorController.leftBumper().debounce(0.15).onTrue(new CMD_ArmClimb(arm, () -> 0.35));
+
+		operatorController.rightBumper().onTrue(new CMD_ArmClimb(arm, () -> 0.0));
+
+		// operatorController.leftBumper().onFalse(new CMD_Climb(led, climb, () -> 0.0));
 
 		// TODO: Finish and add drive to amp and speaker command
 		// operatorController.rightTrigger(0.1).onTrue(new CMD_Climb(led, climb, () -> -0.1));

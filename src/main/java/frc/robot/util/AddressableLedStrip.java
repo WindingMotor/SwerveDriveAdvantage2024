@@ -29,7 +29,8 @@ public class AddressableLedStrip extends SubsystemBase {
 		WHITE,
 		ORANGE,
 		FLAME,
-		ALLIANCE
+		ALLIANCE,
+		OFF
 	}
 
 	private LEDState state;
@@ -101,6 +102,8 @@ public class AddressableLedStrip extends SubsystemBase {
 						solid(Color.kOrange);
 					}
 					break;
+				case OFF:
+					solid(Color.kBlack);
 			}
 		}
 

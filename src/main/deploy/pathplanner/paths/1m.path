@@ -3,25 +3,41 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.6122618174619747,
-        "y": 6.863330993153258
+        "x": 1.26,
+        "y": 5.55
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.4267182092382162,
-        "y": 6.810570677932719
+        "x": 2.26,
+        "y": 5.55
       },
       "isLocked": false,
-      "linkedName": "A1_P2_END"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.9256148677381395,
-        "y": 6.44905186905957
+        "x": 3.239478446838752,
+        "y": 6.303168102216119
       },
       "prevControl": {
-        "x": 2.136465046078115,
-        "y": 6.586342663790959
+        "x": 2.5896101867873855,
+        "y": 7.063214972203624
+      },
+      "nextControl": {
+        "x": 3.753907321121352,
+        "y": 5.701523000024512
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.5279565964166015,
+        "y": 5.817979398804361
+      },
+      "prevControl": {
+        "x": 3.313816341825318,
+        "y": 5.4569087705012995
       },
       "nextControl": null,
       "isLocked": false,
@@ -39,13 +55,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -152.54349955211606,
+    "rotation": 180.0,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "A1_PATHS",
+  "folder": null,
   "previewStartingState": {
-    "rotation": -158.1063051212988,
+    "rotation": 179.84061377340262,
     "velocity": 0
   },
   "useDefaultConstraints": true

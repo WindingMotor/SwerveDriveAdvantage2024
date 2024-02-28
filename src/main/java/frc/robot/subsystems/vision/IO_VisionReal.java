@@ -35,8 +35,7 @@ public class IO_VisionReal implements IO_VisionBase {
 	// Initialize cameras
 	PhotonCamera leftCamera = new PhotonCamera("OV9281_02");
 	PhotonCamera rightCamera = new PhotonCamera("OV9281_01");
-
-	//  PhotonCamera limelightCamera = new PhotonCamera("limelight");
+	PhotonCamera limelightCamera = new PhotonCamera("limelight");
 
 	PhotonCamera lifecam = new PhotonCamera("Microsoft_LifeCam_HD-3000");
 
@@ -48,7 +47,7 @@ public class IO_VisionReal implements IO_VisionBase {
 	// Initialize pose estimators
 	PhotonPoseEstimator leftPoseEstimator;
 	PhotonPoseEstimator rightPoseEstimator;
-	// PhotonPoseEstimator limelightPoseEstimator;
+	PhotonPoseEstimator limelightPoseEstimator;
 
 	List<PhotonTrackedTarget> targets;
 
@@ -59,7 +58,7 @@ public class IO_VisionReal implements IO_VisionBase {
 		// Disable driver mode for the cameras
 		leftCamera.setDriverMode(false);
 		rightCamera.setDriverMode(false);
-		// limelightCamera.setDriverMode(false);
+		limelightCamera.setDriverMode(false);
 
 		// Try loading AprilTag field layout
 
@@ -83,19 +82,18 @@ public class IO_VisionReal implements IO_VisionBase {
 						PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
 						rightCamera,
 						Constants.Vision.Camera.RIGHT_CAMERA.ROBOT_TO_CAMERA);
-		/*
+
 		limelightPoseEstimator =
 				new PhotonPoseEstimator(
 						fieldLayout,
 						PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
 						rightCamera,
 						Constants.Vision.Camera.LIMELIGHT.ROBOT_TO_CAMERA);
-		*/
 
 		// Set fallback strategies
 		leftPoseEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
 		rightPoseEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
-		// limelightPoseEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
+		limelightPoseEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
 	}
 
 	/**
@@ -114,8 +112,8 @@ public class IO_VisionReal implements IO_VisionBase {
 		inputs.leftCameraLatency = leftCamera.getLatestResult().getLatencyMillis();
 		inputs.rightCameraLatency = rightCamera.getLatestResult().getLatencyMillis();
 
-		// inputs.limelightCameraIsOn = limelightCamera.isConnected();
-		// inputs.limelightCameraHasTargets = limelightCamera.getLatestResult().hasTargets();
+		inputs.limelightCameraIsOn = limelightCamera.isConnected();
+		inputs.limelightCameraHasTargets = limelightCamera.getLatestResult().hasTargets();
 
 		/*
 		if (lifecam.getLatestResult().hasTargets()) {
@@ -151,8 +149,7 @@ public class IO_VisionReal implements IO_VisionBase {
 		} else if (camera == Constants.Vision.Camera.RIGHT_CAMERA) {
 			return rightCamera.getLatestResult();
 		} else {
-			// return limelightCamera.getLatestResult();
-			return null;
+			return limelightCamera.getLatestResult();
 		}
 	}
 
@@ -192,8 +189,7 @@ public class IO_VisionReal implements IO_VisionBase {
 		} else if (camera == Constants.Vision.Camera.RIGHT_CAMERA) {
 			return rightPoseEstimator;
 		} else {
-			// return limelightPoseEstimator;
-			return null;
+			return limelightPoseEstimator;
 		}
 	}
 
@@ -220,16 +216,13 @@ public class IO_VisionReal implements IO_VisionBase {
 
 			if (newResult) lastEstTimestamp = latestTimestamp;
 			return visionEst;
-		} else {
-			/*
+		} else { // Limelight
 			var visionEst = limelightPoseEstimator.update();
 			double latestTimestamp = limelightCamera.getLatestResult().getTimestampSeconds();
 			boolean newResult = Math.abs(latestTimestamp - lastEstTimestamp) > 1e-5;
 
 			if (newResult) lastEstTimestamp = latestTimestamp;
 			return visionEst;
-			*/
-			return null;
 		}
 	}
 
@@ -254,6 +247,9 @@ public class IO_VisionReal implements IO_VisionBase {
 			var tagPose = rightPoseEstimator.getFieldTags().getTagPose(tgt.getFiducialId());
 			if (camera == Constants.Vision.Camera.LEFT_CAMERA) {
 				tagPose = leftPoseEstimator.getFieldTags().getTagPose(tgt.getFiducialId());
+			}
+			if (camera == Constants.Vision.Camera.LIMELIGHT) {
+				tagPose = limelightPoseEstimator.getFieldTags().getTagPose(tgt.getFiducialId());
 			}
 			if (tagPose.isEmpty()) continue;
 			numTags++;

@@ -9,17 +9,17 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants.States.ArmState;
 import frc.robot.subsystems.arm.SUB_Arm;
+import java.util.function.Supplier;
 
-public class CMD_Arm extends Command {
+public class CMD_ArmClimb extends Command {
 
 	private SUB_Arm arm;
-	private ArmState state;
+	private Supplier<Double> speed;
 
-	public CMD_Arm(SUB_Arm arm, ArmState state) {
+	public CMD_ArmClimb(SUB_Arm arm, Supplier<Double> speed) {
 		this.arm = arm;
-		this.state = state;
+		this.speed = speed;
 		addRequirements(arm);
 	}
 
@@ -27,8 +27,8 @@ public class CMD_Arm extends Command {
 	@Override
 	public void initialize() {
 		// Stop and idle the robot subsystems
-		arm.setState(state);
-		arm.setClimbMode(false);
+		arm.setClimbMode(true);
+		arm.setSpeed(speed.get());
 	}
 
 	// Command ends immediately

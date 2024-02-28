@@ -40,4 +40,6 @@ public interface IO_ArmBase {
 	void stop();
 
 	void setAngle(double angle);
+
+	void setSpeed(double speed);
 }

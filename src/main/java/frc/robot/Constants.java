@@ -363,6 +363,7 @@ public class Constants {
 		public static final double MAX_ANGULAR_VELOCITY_RADS_SQ = 540;
 
 		public static final double MAX_MODULE_SPEED_MPS = 4.5;
+		// 4.5
 
 		public enum ScoringPoses {
 			BLU_SPEAKER(new Pose2d(1.5, 5.5, Rotation2d.fromDegrees(180))),

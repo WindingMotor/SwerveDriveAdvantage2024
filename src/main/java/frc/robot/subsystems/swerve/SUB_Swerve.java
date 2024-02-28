@@ -19,7 +19,6 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -39,18 +38,12 @@ public class SUB_Swerve extends SubsystemBase {
 
 	private final SUB_Vision vision;
 
-	private double currentP, currentI, currentD, currentIZ;
-
 	// Odometry lock, prevents updates while reading data
 	private static final Lock odometryLock = new ReentrantLock();
 
 	public SUB_Swerve(IO_SwerveBase io, SUB_Vision vision) {
 		this.io = io;
 		this.vision = vision;
-		currentP = 5.0;
-		currentI = 3.0;
-		currentD = 0.35;
-		currentIZ = 0.05;
 
 		/*
 				 * {
@@ -71,17 +64,21 @@ public class SUB_Swerve extends SubsystemBase {
 		}
 
 				 */
+
 		AutoBuilder.configureHolonomic(
 				io::getPose, // Gets current robot pose
 				io::resetOdometry, // Resets robot odometry if path has starter pose
 				io::getRobotVelocity, // Gets chassis speed in robot relative
 				io::setChassisSpeeds, // Drives the robot in robot realative chassis speeds
 				new HolonomicPathFollowerConfig(
-						// new PIDConstants(0.3,1.5,2.0, 0.25), // Translation
+						// new PIDConstants(0.3, 1.5, 2.0, 0.25), // Translation
 						// new PIDConstants(0.3, 5, 1.2, 0.05),
 						// new PIDConstants(0.5, 0.0, 0.0) WK 0,
-						new PIDConstants(5.0, 3.0, 0.35, 0.05), // Translation
-						new PIDConstants(2.0, 0.0, 0.01), // Heading
+
+						// I 4.9 D 0.45 IZ 0.03
+						// new PIDConstants(3.0, 500.0, 2.0, 0.0), // Translation
+						new PIDConstants(1.5, 0.0, 0.0, 0.0), // weird, but works
+						new PIDConstants(5.0, 0.0, 0.0, 0.0), // Heading
 						Constants.Auto.MAX_MODULE_SPEED_MPS,
 						io.getConfigurationRadius(), // Drive base radius in meters
 						new ReplanningConfig() // Replanning config see docs
@@ -94,54 +91,13 @@ public class SUB_Swerve extends SubsystemBase {
 				this);
 
 		/*
-		*          new PIDConstants(5.0,0.25,0.02), // Translation
+		new PIDConstants(5.0,0.25,0.02), // Translation
 		new PIDConstants(0.6, 0.12, 0.001),
 		*/
-	}
 
-	/**
-	 * Reconfigures the holonomic controller using new PID values for path planner.
-	 *
-	 * @param newP The proportional constant for the PID controller
-	 * @param newI The integral constant for the PID controller
-	 * @param newD The derivative constant for the PID controller
-	 * @param newIZ The integral zone constant for the PID controller
-	 */
-	public void configureHolonomicPIDs(double newP, double newI, double newD, double newIZ) {
-		AutoBuilder.configureHolonomic(
-				io::getPose, // Gets current robot pose
-				io::resetOdometry, // Resets robot odometry if path has starter pose
-				io::getRobotVelocity, // Gets chassis speed in robot relative
-				io::setChassisSpeeds, // Drives the robot in robot realative chassis speeds
-				new HolonomicPathFollowerConfig(
-						new PIDConstants(newP, newI, newD, newIZ), // Imported from method header
-						new PIDConstants(2.0, 0.0, 0.01), // Heading
-						Constants.Auto.MAX_MODULE_SPEED_MPS,
-						io.getConfigurationRadius(), // Drive base radius in meters
-						new ReplanningConfig() // Replanning config see docs
-						),
-				() -> {
-					// Auto path flipper for allaince color, always make paths on blue side
-					var alliance = DriverStation.getAlliance();
-					return alliance.isPresent() ? alliance.get() == DriverStation.Alliance.Red : false;
-				},
-				this);
 	}
 
 	public void periodic() {
-
-		double swrP = SmartDashboard.getNumber("SWR P", 0.0);
-		double swrI = SmartDashboard.getNumber("SWR I", 0.0);
-		double swrD = SmartDashboard.getNumber("SWR D", 0.0);
-		double swrIZ = SmartDashboard.getNumber("SWR IZ", 0.0);
-
-		if(swrP != currentP || swrI != currentI || swrD != currentD || swrIZ != currentIZ) {
-			configureHolonomicPIDs(swrP, swrI, swrD, swrIZ);
-			currentP = swrP;
-			currentI = swrI;
-			currentD = swrD;
-			currentIZ = swrIZ;
-		}
 
 		odometryLock.lock();
 		io.updateInputs(inputs);
@@ -160,7 +116,7 @@ public class SUB_Swerve extends SubsystemBase {
 	 * @param translationX A supplier for the X translation
 	 * @param translationY A supplier for the Y translation
 	 * @param angularRotationX A supplier for the angular rotation
-	 * @return The command for driving the swerve drive
+	 * @return The command for driving the swerve
 	 */
 	public Command driveJoystick(
 			DoubleSupplier translationX, DoubleSupplier translationY, DoubleSupplier angularRotationX) {
@@ -239,5 +195,4 @@ public class SUB_Swerve extends SubsystemBase {
 		}
 		return AutoBuilder.followPath(path);
 	}
-
 }

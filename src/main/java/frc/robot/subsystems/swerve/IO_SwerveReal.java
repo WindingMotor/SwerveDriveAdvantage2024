@@ -112,6 +112,11 @@ public class IO_SwerveReal implements IO_SwerveBase {
 		swerveDrive.setChassisSpeeds(chassisSpeeds);
 	}
 
+	/**
+	 * Retrieves the current headin of the robot from its pose.
+	 *
+	 * @return The current heading in a Rotation2d
+	 */
 	@Override
 	public Rotation2d getHeading() {
 		return getPose().getRotation();

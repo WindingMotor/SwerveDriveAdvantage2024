@@ -44,14 +44,14 @@ public class IO_ArmReal implements IO_ArmBase {
 
 		motorOne =
 				Builder.createNeo(
-						Constants.Maestro.ARM_MOTOR_LEAD_ID, Constants.Maestro.ARM_MOTOR_LEAD_INVERTED, 25);
+						Constants.Maestro.ARM_MOTOR_LEAD_ID, Constants.Maestro.ARM_MOTOR_LEAD_INVERTED, 40);
 		motorTwo =
 				Builder.setNeoFollower(
 						motorOne,
 						Builder.createNeo(
 								Constants.Maestro.ARM_MOTOR_FOLLOWER_ID,
 								Constants.Maestro.ARM_MOTOR_FOLLOWER_INVERTED,
-								25));
+								40));
 
 		Builder.configureIdleMode(motorOne, false);
 		Builder.configureIdleMode(motorTwo, false);
@@ -79,6 +79,9 @@ public class IO_ArmReal implements IO_ArmBase {
 		if (Constants.PID_TEST_MODE) {
 			SmartDashboard.putNumber("armTestAngleInput", 0);
 		}
+
+		Builder.configureIdleMode(motorOne, true);
+		Builder.configureIdleMode(motorTwo, true);
 	}
 
 	/**
@@ -155,5 +158,16 @@ public class IO_ArmReal implements IO_ArmBase {
 	@Override
 	public void setAngle(double newAngle) {
 		setpointPosition = newAngle;
+	}
+
+	/**
+	 * Set the speed of the motors.
+	 *
+	 * @param speed the speed to set for the motors
+	 */
+	@Override
+	public void setSpeed(double speed) {
+		motorOne.set(speed);
+		motorTwo.set(speed);
 	}
 }

@@ -20,6 +20,8 @@ public class SUB_Arm extends SubsystemBase {
 
 	private ArmState state;
 
+	private boolean CLIMB_MODE = false;
+
 	public SUB_Arm(IO_ArmBase io) {
 		this.io = io;
 		state = ArmState.OFF;
@@ -30,7 +32,10 @@ public class SUB_Arm extends SubsystemBase {
 	public void periodic() {
 		io.updateInputs(inputs);
 		Logger.processInputs("Arm", inputs);
-		io.updatePID(state.position);
+
+		if (!CLIMB_MODE) {
+			io.updatePID(state.position);
+		}
 	}
 
 	public void setState(ArmState newState) {
@@ -47,5 +52,13 @@ public class SUB_Arm extends SubsystemBase {
 
 	public boolean isAtSetpoint() {
 		return inputs.isAtSetpoint;
+	}
+
+	public void setClimbMode(boolean newClimbMode) {
+		CLIMB_MODE = newClimbMode;
+	}
+
+	public void setSpeed(double speed) {
+		io.setSpeed(speed);
 	}
 }
