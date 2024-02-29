@@ -180,6 +180,8 @@ public class Constants {
 
 	public static class Maestro {
 
+		public static final double MAX_MODULE_SPEED_MPS = 4.5;
+		
 		// Arm
 		public static final int ARM_MOTOR_LEAD_ID = 9;
 		public static final int ARM_MOTOR_FOLLOWER_ID = 10;
@@ -218,7 +220,7 @@ public class Constants {
 		public static final double SHOOTER_MOTORS_IZ = 0.0005;
 		public static final double SHOOTER_MOTORS_FF = 0.00018;
 
-		public static final double SHOOTER_TOLERANCE_RPM = 300;
+		public static final double SHOOTER_TOLERANCE_RPM = 150;
 
 		// Intake
 		public static final int INDEXER_MOTOR_ID = 11;
@@ -362,7 +364,6 @@ public class Constants {
 		public static final double MAX_ANGULAR_VELOCITY_RADS = 360;
 		public static final double MAX_ANGULAR_VELOCITY_RADS_SQ = 540;
 
-		public static final double MAX_MODULE_SPEED_MPS = 4.5;
 		// 4.5
 
 		public enum ScoringPoses {

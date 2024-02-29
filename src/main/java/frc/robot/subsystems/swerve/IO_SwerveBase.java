@@ -62,4 +62,6 @@ public interface IO_SwerveBase {
 	void setZero();
 
 	void setLock();
+
+	void setDriveMotorCurrentLimit(int currentLimit);
 }

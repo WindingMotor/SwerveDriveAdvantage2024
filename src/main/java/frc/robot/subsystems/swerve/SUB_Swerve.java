@@ -24,6 +24,8 @@ import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.vision.SUB_Vision;
+import swervelib.math.SwerveMath;
+
 import java.util.Optional;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -45,6 +47,8 @@ public class SUB_Swerve extends SubsystemBase {
 		this.io = io;
 		this.vision = vision;
 
+
+		
 		/*
 				 * {
 		"drive": {
@@ -62,8 +66,7 @@ public class SUB_Swerve extends SubsystemBase {
 				"iz": 0
 		}
 		}
-
-				 */
+				*/
 
 		AutoBuilder.configureHolonomic(
 				io::getPose, // Gets current robot pose
@@ -71,15 +74,17 @@ public class SUB_Swerve extends SubsystemBase {
 				io::getRobotVelocity, // Gets chassis speed in robot relative
 				io::setChassisSpeeds, // Drives the robot in robot realative chassis speeds
 				new HolonomicPathFollowerConfig(
-						// new PIDConstants(0.3, 1.5, 2.0, 0.25), // Translation
+						// new PIDConstants(0.3, 1.5, 2.0, 0.25), // JAMES
 						// new PIDConstants(0.3, 5, 1.2, 0.05),
-						// new PIDConstants(0.5, 0.0, 0.0) WK 0,
-
-						// I 4.9 D 0.45 IZ 0.03
-						// new PIDConstants(3.0, 500.0, 2.0, 0.0), // Translation
-						new PIDConstants(1.5, 0.0, 0.0, 0.0), // weird, but works
-						new PIDConstants(5.0, 0.0, 0.0, 0.0), // Heading
-						Constants.Auto.MAX_MODULE_SPEED_MPS,
+						// new PIDConstants(0.5, 0.0, 0.0) WK 0
+						// new PIDConstants(1.5, 5.0, 0.0) WORKING SLOW
+						/* 
+						new PIDConstants(1, 0.0, 0.0, 0.0), // Translation
+						new PIDConstants(7, 0.0, 0.0, 0.0), // Heading
+						*/
+						new PIDConstants(5.0, 0.0, 0.0, 0.0), // Translation
+						new PIDConstants(7.0, 0.0, 0.0, 0.0), // Heading
+						Constants.Maestro.MAX_MODULE_SPEED_MPS,
 						io.getConfigurationRadius(), // Drive base radius in meters
 						new ReplanningConfig() // Replanning config see docs
 						),
@@ -89,12 +94,6 @@ public class SUB_Swerve extends SubsystemBase {
 					return alliance.isPresent() ? alliance.get() == DriverStation.Alliance.Red : false;
 				},
 				this);
-
-		/*
-		new PIDConstants(5.0,0.25,0.02), // Translation
-		new PIDConstants(0.6, 0.12, 0.001),
-		*/
-
 	}
 
 	public void periodic() {

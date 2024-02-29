@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.5,
-      "y": 5.37
+      "x": 1.2556488150979714,
+      "y": 4.6257883810125575
     },
-    "rotation": 179.36729894743056
+    "rotation": 138.23754722887358
   },
   "command": {
     "type": "sequential",
@@ -14,19 +14,13 @@
         {
           "type": "named",
           "data": {
-            "name": "Idle"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot_Speaker"
+            "name": "Shoot_Speaker1M"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 1.0
+            "waitTime": 0.3
           }
         },
         {
@@ -40,25 +34,30 @@
                 }
               },
               {
-                "type": "sequential",
+                "type": "path",
                 "data": {
-                  "commands": [
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "A1_P1"
-                      }
-                    },
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": null
-                      }
-                    }
-                  ]
+                  "pathName": "A1_P14"
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.1
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "A1_P15"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot_Speaker1M"
           }
         }
       ]

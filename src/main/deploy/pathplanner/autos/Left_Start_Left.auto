@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.5444903066371387,
-      "y": 5.558955073799368
+      "x": 1.108765398256754,
+      "y": 6.695873410218982
     },
-    "rotation": 179.36729894743056
+    "rotation": -140.46309668433742
   },
   "command": {
     "type": "sequential",
@@ -36,38 +36,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "A1_P1"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot_Speaker3M"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.3
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake"
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "A1_P5"
+                  "pathName": "A1_P11"
                 }
               }
             ]

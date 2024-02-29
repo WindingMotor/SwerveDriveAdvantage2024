@@ -7,7 +7,6 @@
 // the root directory of this project.
 
 package frc.robot.subsystems.swerve;
-
 import com.pathplanner.lib.util.PIDConstants;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
@@ -16,6 +15,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Filesystem;
+import frc.robot.Constants;
 import frc.robot.Constants.Vision;
 import frc.robot.Constants.Vision.Camera;
 import frc.robot.subsystems.vision.SUB_Vision;
@@ -45,7 +45,7 @@ public class IO_SwerveReal implements IO_SwerveBase {
 
 		// Initialize the swerve drive based of the json file
 		try {
-			swerveDrive = new SwerveParser(jsonDirectory).createSwerveDrive(maxSpeed);
+			swerveDrive = new SwerveParser(jsonDirectory).createSwerveDrive(Constants.Maestro.MAX_MODULE_SPEED_MPS);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -257,6 +257,17 @@ public class IO_SwerveReal implements IO_SwerveBase {
 		swerveDrive.updateOdometry();
 	}
 
+	/**
+	 * Sets the current limit for each drive drive motor in the swerve.
+	 *
+	 * @param currentLimit The new current limit to be set
+	 */
+	@Override
+	public void setDriveMotorCurrentLimit(int currentLimit) {
+		for (SwerveModule module : swerveDrive.getModules()) {
+			module.getDriveMotor().setCurrentLimit(currentLimit);
+		}
+	}
 	/**
 	 * Sets the brake mode for all swerve modules in the swerve drive configuration.
 	 *

@@ -1,0 +1,67 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.3544563055038452,
+      "y": 5.54749870300293
+    },
+    "rotation": 179.90874767107852
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot_Speaker1M"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "LEFT_AUTO.1"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot_Speaker2_5M"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "LEFT_AUTO.2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "LEFT_AUTO.3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot_Speaker1M"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": true
+}
