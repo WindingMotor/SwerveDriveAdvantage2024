@@ -16,6 +16,7 @@ public class CMD_ArmClimb extends Command {
 
 	private SUB_Arm arm;
 	private Supplier<Double> speed;
+	private boolean isCommandDone = false;
 
 	public CMD_ArmClimb(SUB_Arm arm, Supplier<Double> speed) {
 		this.arm = arm;
@@ -28,12 +29,22 @@ public class CMD_ArmClimb extends Command {
 	public void initialize() {
 		// Stop and idle the robot subsystems
 		arm.setClimbMode(true);
+		isCommandDone = false;
 		arm.setSpeed(speed.get());
+	}
+
+	@Override
+	public void execute() {
+		if (arm.inputs.armPositionDegrees < 5.0) {
+			arm.lockArm(true);
+			isCommandDone = true;
+		}
 	}
 
 	// Command ends immediately
 	@Override
 	public boolean isFinished() {
-		return true;
+		arm.setSpeed(0);
+		return isCommandDone;
 	}
 }

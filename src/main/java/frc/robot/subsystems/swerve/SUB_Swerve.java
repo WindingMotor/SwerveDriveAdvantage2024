@@ -24,8 +24,6 @@ import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.vision.SUB_Vision;
-import swervelib.math.SwerveMath;
-
 import java.util.Optional;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -47,8 +45,6 @@ public class SUB_Swerve extends SubsystemBase {
 		this.io = io;
 		this.vision = vision;
 
-
-		
 		/*
 				 * {
 		"drive": {
@@ -78,7 +74,7 @@ public class SUB_Swerve extends SubsystemBase {
 						// new PIDConstants(0.3, 5, 1.2, 0.05),
 						// new PIDConstants(0.5, 0.0, 0.0) WK 0
 						// new PIDConstants(1.5, 5.0, 0.0) WORKING SLOW
-						/* 
+						/*
 						new PIDConstants(1, 0.0, 0.0, 0.0), // Translation
 						new PIDConstants(7, 0.0, 0.0, 0.0), // Heading
 						*/
@@ -100,11 +96,9 @@ public class SUB_Swerve extends SubsystemBase {
 
 		odometryLock.lock();
 		io.updateInputs(inputs);
-		odometryLock.unlock();
-
 		io.updateEstimations(vision);
-
 		io.updateOdometry();
+		odometryLock.unlock();
 
 		Logger.processInputs("Swerve", inputs);
 	}

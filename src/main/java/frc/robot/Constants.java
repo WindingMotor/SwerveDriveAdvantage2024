@@ -181,7 +181,7 @@ public class Constants {
 	public static class Maestro {
 
 		public static final double MAX_MODULE_SPEED_MPS = 4.5;
-		
+
 		// Arm
 		public static final int ARM_MOTOR_LEAD_ID = 9;
 		public static final int ARM_MOTOR_FOLLOWER_ID = 10;
@@ -205,6 +205,8 @@ public class Constants {
 
 		public static final double ARM_TOLERANCE_DEGREES = 1.0; // 3.0
 		public static final double ARM_OFFSET_DEGREES = 4.85;
+
+		public static final int ARM_SERVO_PORT = 9;
 
 		// Shooter
 		public static final int SHOOTER_MOTOR_BOTTOM_ID = 12;

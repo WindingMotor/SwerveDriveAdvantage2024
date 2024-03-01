@@ -26,6 +26,9 @@ public interface IO_ArmBase {
 		public double pidOutputVolts = 0.0;
 		public double ffOutputVolts = 0.0;
 		public double pidError = 0.0;
+
+		public boolean isArmLocked = false;
+		public double servoPosition = 0.0;
 	}
 
 	/**
@@ -42,4 +45,6 @@ public interface IO_ArmBase {
 	void setAngle(double angle);
 
 	void setSpeed(double speed);
+
+	void lockArm(boolean enable);
 }

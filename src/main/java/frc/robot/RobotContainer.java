@@ -18,8 +18,6 @@ import frc.robot.auto.CommandRegistrar;
 import frc.robot.commands.CMDGR_Intake;
 import frc.robot.commands.CMDGR_Shoot;
 import frc.robot.commands.CMD_ArmClimb;
-import frc.robot.commands.CMD_ArmClimbRaise;
-import frc.robot.commands.CMD_Eject;
 import frc.robot.commands.CMD_Idle;
 import frc.robot.subsystems.arm.IO_ArmReal;
 import frc.robot.subsystems.arm.SUB_Arm;
@@ -47,7 +45,7 @@ public class RobotContainer {
 
 	private final SUB_Shooter shooter = new SUB_Shooter(new IO_ShooterReal());
 
-	private final AddressableLedStrip led = new AddressableLedStrip(0, 71);
+	private final AddressableLedStrip led = new AddressableLedStrip(0, 68);
 
 	private final SUB_Swerve swerve = new SUB_Swerve(new IO_SwerveReal(), vision);
 
@@ -128,6 +126,7 @@ public class RobotContainer {
 								() -> operatorController.y().getAsBoolean()));
 
 		// Trap command
+		/*
 		operatorController
 				.rightStick()
 				.onTrue(
@@ -140,6 +139,7 @@ public class RobotContainer {
 								ShooterMode.TRAP,
 								() -> operatorController.b().getAsBoolean(),
 								() -> operatorController.rightStick().getAsBoolean()));
+		*/
 
 		// Intake command
 		operatorController
@@ -147,12 +147,12 @@ public class RobotContainer {
 				.onTrue(new CMDGR_Intake(conveyor, arm, led, () -> operatorController.b().getAsBoolean()));
 
 		// Eject command
-		operatorController
-				.rightBumper()
-				.onTrue(new CMD_Eject(conveyor, arm, () -> operatorController.b().getAsBoolean()));
+		// operatorController
+		//			.rightBumper()
+		//			.onTrue(new CMD_Eject(conveyor, arm, () -> operatorController.b().getAsBoolean()));
 
 		// Idle command
-		operatorController.b().onTrue(new CMD_Idle(conveyor, arm, shooter));
+		//operatorController.b().onTrue(new CMD_Idle(conveyor, arm, shooter));
 
 		// operatorController.b().and(operatorController.a()).onFalse(getAutonomousCommand())
 
@@ -169,12 +169,17 @@ public class RobotContainer {
 
 		*/
 
-		// Climb test command
-		operatorController.leftStick().onTrue(new CMD_ArmClimbRaise(arm, () -> false));
+		// ARM CLIMB RAISE
+		// operatorController.leftStick().onTrue(new CMD_ArmClimbRaise(arm, () -> false));
 
-		operatorController.leftBumper().debounce(0.15).onTrue(new CMD_ArmClimb(arm, () -> 0.35));
+		// ARM CLIMB
+		//operatorController.leftBumper().debounce(0.15).onTrue(new CMD_ArmClimb(arm, () -> 0.45));
 
-		operatorController.rightBumper().onTrue(new CMD_ArmClimb(arm, () -> 0.0));
+		// ARM CLIMB STOP
+		// operatorController.rightBumper().onTrue(new CMD_ArmClimb(arm, () -> 0.0));
+
+		// ARM CLIMB LOCK
+		// operatorController.rightStick().onTrue(new CMD_ArmServo(arm));
 
 		// operatorController.leftBumper().onFalse(new CMD_Climb(led, climb, () -> 0.0));
 

@@ -7,6 +7,7 @@
 // the root directory of this project.
 
 package frc.robot.subsystems.swerve;
+
 import com.pathplanner.lib.util.PIDConstants;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
@@ -45,7 +46,8 @@ public class IO_SwerveReal implements IO_SwerveBase {
 
 		// Initialize the swerve drive based of the json file
 		try {
-			swerveDrive = new SwerveParser(jsonDirectory).createSwerveDrive(Constants.Maestro.MAX_MODULE_SPEED_MPS);
+			swerveDrive =
+					new SwerveParser(jsonDirectory).createSwerveDrive(Constants.Maestro.MAX_MODULE_SPEED_MPS);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

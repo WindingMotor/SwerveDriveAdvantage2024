@@ -14,6 +14,7 @@ import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.util.Builder;
@@ -36,6 +37,8 @@ public class IO_ArmReal implements IO_ArmBase {
 
 	private double pidOutputVolts;
 	private double ffOutputVolts;
+
+	private Servo servo;
 
 	public IO_ArmReal() {
 
@@ -82,6 +85,8 @@ public class IO_ArmReal implements IO_ArmBase {
 
 		Builder.configureIdleMode(motorOne, true);
 		Builder.configureIdleMode(motorTwo, true);
+
+		servo = new Servo(Constants.Maestro.ARM_SERVO_PORT);
 	}
 
 	/**
@@ -105,6 +110,9 @@ public class IO_ArmReal implements IO_ArmBase {
 		inputs.pidOutputVolts = pidOutputVolts;
 		inputs.ffOutputVolts = ffOutputVolts;
 		inputs.pidError = pid.getPositionError();
+
+		inputs.isArmLocked = servo.getPosition() > 0.1;
+		inputs.servoPosition = servo.getPosition();
 	}
 
 	/**
@@ -169,5 +177,19 @@ public class IO_ArmReal implements IO_ArmBase {
 	public void setSpeed(double speed) {
 		motorOne.set(speed);
 		motorTwo.set(speed);
+	}
+
+	/**
+	 * Locks the arm shaft using a servo motor. THIS ACTION IS IRREVERSIBLE.
+	 *
+	 * @param enable Whether or not to lock the arm motors
+	 */
+	@Override
+	public void lockArm(boolean enable) {
+		if (enable) {
+			servo.setSpeed(1);
+		} else {
+			servo.setSpeed(0);
+		}
 	}
 }

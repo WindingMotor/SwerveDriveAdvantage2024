@@ -61,4 +61,8 @@ public class SUB_Arm extends SubsystemBase {
 	public void setSpeed(double speed) {
 		io.setSpeed(speed);
 	}
+
+	public void lockArm(boolean enable) {
+		io.lockArm(enable);
+	}
 }
