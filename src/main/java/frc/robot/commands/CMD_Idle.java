@@ -30,9 +30,9 @@ public class CMD_Idle extends Command {
 	// Print a message to the driver station and idle the robot subsystems
 	@Override
 	public void initialize() {
+		arm.setClimbMode(false);
 		// Stop and idle the robot subsystems
 		conveyor.setState(Constants.States.ConveyorState.OFF);
-		arm.setClimbMode(false);
 		arm.setState(Constants.States.ArmState.IDLE);
 		shooter.setState(Constants.States.ShooterState.IDLE);
 	}

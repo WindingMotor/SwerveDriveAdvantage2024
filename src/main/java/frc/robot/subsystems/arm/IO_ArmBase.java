@@ -47,4 +47,6 @@ public interface IO_ArmBase {
 	void setSpeed(double speed);
 
 	void lockArm(boolean enable);
+
+	double getArmPosition();
 }

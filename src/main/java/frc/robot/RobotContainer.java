@@ -18,7 +18,6 @@ import frc.robot.auto.CommandRegistrar;
 import frc.robot.commands.CMDGR_Intake;
 import frc.robot.commands.CMDGR_Shoot;
 import frc.robot.commands.CMD_ArmClimb;
-import frc.robot.commands.CMD_Idle;
 import frc.robot.subsystems.arm.IO_ArmReal;
 import frc.robot.subsystems.arm.SUB_Arm;
 import frc.robot.subsystems.conveyor.IO_ConveyorReal;
@@ -152,7 +151,7 @@ public class RobotContainer {
 		//			.onTrue(new CMD_Eject(conveyor, arm, () -> operatorController.b().getAsBoolean()));
 
 		// Idle command
-		//operatorController.b().onTrue(new CMD_Idle(conveyor, arm, shooter));
+		// operatorController.b().onTrue(new CMD_Idle(conveyor, arm, shooter));
 
 		// operatorController.b().and(operatorController.a()).onFalse(getAutonomousCommand())
 
@@ -173,7 +172,7 @@ public class RobotContainer {
 		// operatorController.leftStick().onTrue(new CMD_ArmClimbRaise(arm, () -> false));
 
 		// ARM CLIMB
-		//operatorController.leftBumper().debounce(0.15).onTrue(new CMD_ArmClimb(arm, () -> 0.45));
+		operatorController.leftBumper().debounce(0.15).onTrue(new CMD_ArmClimb(arm, () -> 0.45));
 
 		// ARM CLIMB STOP
 		// operatorController.rightBumper().onTrue(new CMD_ArmClimb(arm, () -> 0.0));

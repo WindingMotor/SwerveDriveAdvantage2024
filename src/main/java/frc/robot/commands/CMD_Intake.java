@@ -46,6 +46,7 @@ public class CMD_Intake extends Command {
 	 */
 	@Override
 	public void initialize() {
+		arm.setClimbMode(false);
 		isCommandDone = false;
 		conveyor.setState(Constants.States.ConveyorState.INTAKE);
 		arm.setState(Constants.States.ArmState.INTAKE);

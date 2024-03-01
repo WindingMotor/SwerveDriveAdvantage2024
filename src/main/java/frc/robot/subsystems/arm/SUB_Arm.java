@@ -65,4 +65,8 @@ public class SUB_Arm extends SubsystemBase {
 	public void lockArm(boolean enable) {
 		io.lockArm(enable);
 	}
+
+	public double getArmPosition() {
+		return io.getArmPosition();
+	}
 }

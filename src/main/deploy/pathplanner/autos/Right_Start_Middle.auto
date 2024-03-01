@@ -20,7 +20,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.3
+            "waitTime": 0.25
           }
         },
         {
@@ -45,13 +45,13 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot_Speaker3M"
+            "name": "Shoot_Speaker2M"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.3
+            "waitTime": 0.25
           }
         },
         {
@@ -77,18 +77,6 @@
           "type": "named",
           "data": {
             "name": "Shoot_Speaker3M"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.45
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Idle"
           }
         }
       ]

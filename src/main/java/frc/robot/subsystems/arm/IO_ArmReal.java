@@ -192,4 +192,9 @@ public class IO_ArmReal implements IO_ArmBase {
 			servo.setSpeed(0);
 		}
 	}
+
+	@Override
+	public double getArmPosition() {
+		return armAngle;
+	}
 }

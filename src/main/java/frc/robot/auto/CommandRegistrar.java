@@ -14,6 +14,7 @@ import frc.robot.Constants.States.ShooterMode;
 import frc.robot.Constants.States.ShooterState;
 import frc.robot.commands.CMD_Eject;
 import frc.robot.commands.CMD_Idle;
+import frc.robot.commands.CMD_Intake;
 import frc.robot.commands.CMD_IntakeAuto;
 import frc.robot.commands.CMD_Led;
 import frc.robot.commands.CMD_Shoot;
@@ -60,6 +61,7 @@ public class CommandRegistrar {
 		// Intake command
 		NamedCommands.registerCommand("Intake", new CMD_IntakeAuto(conveyor, arm, () -> false));
 
+		//NamedCommands.registerCommand("Intake_Test", new CMD_Intake(conveyor, arm, () -> false));
 		// Eject command
 		NamedCommands.registerCommand("Eject", new CMD_Eject(conveyor, arm, () -> false));
 
