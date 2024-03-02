@@ -54,19 +54,36 @@ public class SUB_Arm extends SubsystemBase {
 		return inputs.isAtSetpoint;
 	}
 
+	/**
+	 * Enables or disables the climb mode. When in climb mode, the arm will disable the PID
+	 * controller.
+	 *
+	 * @param newClimbMode The new value for climb mode
+	 */
 	public void setClimbMode(boolean newClimbMode) {
 		CLIMB_MODE = newClimbMode;
 	}
 
+	/**
+	 * Sets the speed of arm, can only be used in CLIMB MODE.
+	 *
+	 * @param speed The speed to set
+	 */
 	public void setSpeed(double speed) {
 		io.setSpeed(speed);
 	}
 
-	public void lockArm(boolean enable) {
-		io.lockArm(enable);
+	/** Locks the arm using a the servo motor. THIS ACTION IS IRREVERSIBLE */
+	public void lockArm() {
+		io.lockArm();
 	}
 
-	public double getArmPosition() {
-		return io.getArmPosition();
+	/**
+	 * Retrieves the real-time position of the arm.
+	 *
+	 * @return The real-time position of the arm in degrees
+	 */
+	public double getRealTimeArmPosition() {
+		return io.getRealTimeArmPosition();
 	}
 }

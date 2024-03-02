@@ -10,18 +10,15 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.arm.SUB_Arm;
-import java.util.function.Supplier;
 
 public class CMD_ArmClimb extends Command {
 
 	private SUB_Arm arm;
-	private Supplier<Double> speed;
 	private boolean isCommandDone = false;
 	private int timer = 0;
 
-	public CMD_ArmClimb(SUB_Arm arm, Supplier<Double> speed) {
+	public CMD_ArmClimb(SUB_Arm arm) {
 		this.arm = arm;
-		this.speed = speed;
 		addRequirements(arm);
 	}
 
@@ -37,8 +34,8 @@ public class CMD_ArmClimb extends Command {
 	@Override
 	public void execute() {
 		timer++;
-		if (arm.getArmPosition() < 5.0 && timer > 50) {
-			arm.lockArm(true);
+		if (arm.getRealTimeArmPosition() < 5.0 && timer > 50){
+			arm.lockArm();
 			isCommandDone = true;
 		} else {
 			arm.setSpeed(0.5);

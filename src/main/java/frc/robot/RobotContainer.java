@@ -18,6 +18,7 @@ import frc.robot.auto.CommandRegistrar;
 import frc.robot.commands.CMDGR_Intake;
 import frc.robot.commands.CMDGR_Shoot;
 import frc.robot.commands.CMD_ArmClimb;
+import frc.robot.commands.CMD_Eject;
 import frc.robot.subsystems.arm.IO_ArmReal;
 import frc.robot.subsystems.arm.SUB_Arm;
 import frc.robot.subsystems.conveyor.IO_ConveyorReal;
@@ -29,6 +30,7 @@ import frc.robot.subsystems.swerve.SUB_Swerve;
 import frc.robot.subsystems.vision.IO_VisionReal;
 import frc.robot.subsystems.vision.SUB_Vision;
 import frc.robot.util.AddressableLedStrip;
+import org.littletonrobotics.junction.Logger;
 
 public class RobotContainer {
 
@@ -146,50 +148,34 @@ public class RobotContainer {
 				.onTrue(new CMDGR_Intake(conveyor, arm, led, () -> operatorController.b().getAsBoolean()));
 
 		// Eject command
-		// operatorController
-		//			.rightBumper()
-		//			.onTrue(new CMD_Eject(conveyor, arm, () -> operatorController.b().getAsBoolean()));
+		operatorController
+				.rightBumper()
+				.onTrue(new CMD_Eject(conveyor, arm, () -> operatorController.b().getAsBoolean()));
 
-		// Idle command
-		// operatorController.b().onTrue(new CMD_Idle(conveyor, arm, shooter));
-
-		// operatorController.b().and(operatorController.a()).onFalse(getAutonomousCommand())
+		// Climb command, requires both operator and driver to activate
+		operatorController.leftBumper().debounce(0.15).onTrue(new CMD_ArmClimb(arm));
 
 		/*
 		// Drive to speaker command
 		operatorController
 				.leftStick()
-				.debounce(0.1)
+				.debounce(0.15)
 				.onTrue(
-						new CMDGR_DrivePose(
+						new CMDGR_DriveToScoringPose(
 								swerve,
-								Constants.Auto.DriveScoringPoseState.SPEAKER,
+								DriveScoringPoseState.SPEAKER,
 								() -> operatorController.b().getAsBoolean()));
-
 		*/
-
-		// ARM CLIMB RAISE
-		// operatorController.leftStick().onTrue(new CMD_ArmClimbRaise(arm, () -> false));
-
-		// ARM CLIMB
-		operatorController.leftBumper().debounce(0.15).onTrue(new CMD_ArmClimb(arm, () -> 0.45));
-
-		// ARM CLIMB STOP
-		// operatorController.rightBumper().onTrue(new CMD_ArmClimb(arm, () -> 0.0));
-
-		// ARM CLIMB LOCK
-		// operatorController.rightStick().onTrue(new CMD_ArmServo(arm));
-
-		// operatorController.leftBumper().onFalse(new CMD_Climb(led, climb, () -> 0.0));
-
-		// TODO: Finish and add drive to amp and speaker command
-		// operatorController.rightTrigger(0.1).onTrue(new CMD_Climb(led, climb, () -> -0.1));
-		// Drive to amp command
-		// operatorController.povLeft().debounce(0.25).onTrue(new CMDGR_DrivePose(swerve,
-		// Constants.Auto.DriveScoringPoseState.AMP, () -> operatorController.b().getAsBoolean()));
 	}
 
-	private void logMetadata() {}
+	public void logMetadata() {
+		Logger.recordMetadata("Event Name", DriverStation.getEventName());
+		Logger.recordMetadata("Alliance", DriverStation.getAlliance().get().toString());
+		Logger.recordMetadata("Driver Station Location", DriverStation.getLocation() + "");
+		Logger.recordMetadata("Match Number", DriverStation.getMatchNumber() + "");
+		Logger.recordMetadata("Match Type", DriverStation.getMatchType() + "");
+		Logger.recordMetadata("Replay Number", DriverStation.getReplayNumber() + "");
+	}
 
 	/**
 	 * Get the autonomous command.

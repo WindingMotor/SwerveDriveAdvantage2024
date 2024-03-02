@@ -185,16 +185,12 @@ public class IO_ArmReal implements IO_ArmBase {
 	 * @param enable Whether or not to lock the arm motors
 	 */
 	@Override
-	public void lockArm(boolean enable) {
-		if (enable) {
-			servo.setSpeed(1);
-		} else {
-			servo.setSpeed(0);
-		}
+	public void lockArm() {
+		servo.setSpeed(1);
 	}
 
 	@Override
-	public double getArmPosition() {
+	public double getRealTimeArmPosition() {
 		return armAngle;
 	}
 }

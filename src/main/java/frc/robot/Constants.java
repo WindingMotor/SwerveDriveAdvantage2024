@@ -74,30 +74,30 @@ public class Constants {
 		}
 	}
 
-	public static class InputBindings {}
-
 	public static class Vision {
-		// The standard deviations of our vision estimated poses, which affect correction rate
-		// (Fake values. Experiment and determine estimation noise on an actual robot.)
-		// X, Y, Theta
-		// public static final Matrix<N3, N1> SINGLE_TAG_STD_DEVS = VecBuilder.fill(4, 4, 8);
-		// public static final Matrix<N3, N1> MULTI_TAG_STD_DEVS = VecBuilder.fill(0.5, 0.5, 1);
-
+		/*
+		 * The standard deviations of our vision estimated poses, which affect correction rate
+		 * (Fake values. Experiment and determine estimation noise on an actual robot.)
+		 * X, Y, Theta
+		 * public static final Matrix<N3, N1> SINGLE_TAG_STD_DEVS = VecBuilder.fill(4, 4, 8);
+		 * public static final Matrix<N3, N1> MULTI_TAG_STD_DEVS = VecBuilder.fill(0.5, 0.5, 1);
+		 */
 		public static final Matrix<N3, N1> SINGLE_TAG_STD_DEVS = VecBuilder.fill(4, 4, 8);
 		public static final Matrix<N3, N1> MULTI_TAG_STD_DEVS = VecBuilder.fill(0.8, 0.8, 1.25);
 
+		// Minimum ambiguity for a tag to be used for vision basced odometry
 		public static final double MIN_AMBUGUITY = 0.5;
 
-		// Latency warning trigger threshold in miliseconds
-		public static final double LATENCY_THRESHOLD_MILI_SEC = 30.0;
+		// Vision warning trigger threshold in miliseconds
+		public static final double LATENCY_THRESHOLD_MILI_SEC = 45.0;
 
 		/*
-		Robot Space
-		3d Cartesian Coordinate System with (0,0,0) located at the center of the robot’s frame projected down to the floor.
-		X+ → Pointing forward (Forward Vector)
-		Y+ → Pointing toward the robot’s right (Right Vector)
-		Z+ → Pointing upward (Up Vector)
-		*/
+		 * Robot Space
+		 * 3d Cartesian Coordinate System with (0,0,0) located at the center of the robot’s frame projected down to the floor.
+		 * X+ → Pointing forward (Forward Vector)
+		 * Y+ → Pointing toward the robot’s right (Right Vector)
+		 * Z+ → Pointing upward (Up Vector)
+		 */
 
 		// Camera enum, contains name and position of the camera relative to the robot.
 		public enum Camera {
@@ -144,6 +144,8 @@ public class Constants {
 					// Pitch on 15 degrees from robot frame, and yaw of 47 degrees from robot frame.
 					),
 
+			// TODO: Configure limelight position and rotation. Currently rotation should be 30* or 60*
+			// pitch.
 			LIMELIGHT(
 					"limelight",
 					"limelight",
@@ -178,76 +180,101 @@ public class Constants {
 		}
 	}
 
+	// Robot specific constants for the subsystems
 	public static class Maestro {
+
+		/* -- SWERVE MODULES -- */
 
 		public static final double MAX_MODULE_SPEED_MPS = 4.5;
 
-		// Arm
+		/* -- ARM -- */
+
+		// Arm CAN IDs
 		public static final int ARM_MOTOR_LEAD_ID = 9;
 		public static final int ARM_MOTOR_FOLLOWER_ID = 10;
 
+		// Arm Motor Inversions
 		public static final boolean ARM_MOTOR_LEAD_INVERTED = false;
 		public static final boolean ARM_MOTOR_FOLLOWER_INVERTED = false;
 
+		// Arm PIDs
 		public static final double ARM_P = 0.135; // Volts 0.45 0.18
 		public static final double ARM_I = 0.0;
 		public static final double ARM_D = 0.00012;
 
+		// Arm FF (Feed Forward)
 		public static final double ARM_KS = 0.01; // Volts
 		public static final double ARM_KG = 0.379;
 		public static final double ARM_KV = 1.86;
 		public static final double ARM_KA = 0.06;
 
+		// Arm max speeds
 		public static final double ARM_MAX_VELOCITY = 460; // Deg/sec
 		public static final double ARM_MAX_ACCELERATION = 3000; // Deg/sec/sec
 
+		// Arm max applied voltage
 		public static final double ARM_VOLTAGE_CLAMPING = 11.9;
 
+		// Min tolerance for arm to claim its good
 		public static final double ARM_TOLERANCE_DEGREES = 1.0; // 3.0
+
+		// Arm offset to get zero at horizontal
 		public static final double ARM_OFFSET_DEGREES = 4.85;
 
+		// Arm locking servo RoboRio port
 		public static final int ARM_SERVO_PORT = 9;
 
-		// Shooter
+		/* -- Shooter -- */
+
+		// Shooter motor CAN IDs
 		public static final int SHOOTER_MOTOR_BOTTOM_ID = 12;
 		public static final int SHOOTER_MOTOR_TOP_ID = 13;
 
+		// Shooter motor inversions
 		public static final boolean SHOOTER_MOTOR_BOTTOM_INVERTED = true;
 		public static final boolean SHOOTER_MOTOR_TOP_INVERTED = true; // true normal shoot, false amp
 
-		// 6e-5
+		// Shooter motor PIDs
 		public static final double SHOOTER_MOTORS_P = 0.00068;
 		public static final double SHOOTER_MOTORS_I = 0.0;
 		public static final double SHOOTER_MOTORS_D = 0.00005;
 		public static final double SHOOTER_MOTORS_IZ = 0.0005;
 		public static final double SHOOTER_MOTORS_FF = 0.00018;
 
+		// Shooter tolerence to say that its ready
 		public static final double SHOOTER_TOLERANCE_RPM = 150;
 
-		// Intake
+		/* -- Intake -- */
+
+		// Intake motor CAN ID
 		public static final int INDEXER_MOTOR_ID = 11;
 
-		// Indexer
+		/* -- Indexer -- */
+
+		// Indexer motor CAN ID
 		public static final int INTAKE_MOTOR_ID = 14;
 
-		// Sensor IDs
+		/* -- Sensors -- */
+
+		// Intake sensor ID
 		public static final int INTAKE_SENSOR_ID = 6;
 
+		// Indexer sensor IDs
 		public static final int INDEXER_INITAL_SENSOR_ID = 2;
 		public static final int INDEXER_FINAL_SENSOR_ID = 1;
 
-		public static final int SENSOR_TOLERANCE_MAX_CENTIMETERS = 12;
-		public static final int SENSOR_TOLERANCE_MIN_CENTIMETERS = 8;
+		/* -- Climb -- */
 
-		// Climb
+		// Climb motor IDs
 		public static final int LEFT_CLIMB_MOTOR_ID = 20;
 		public static final int RIGHT_CLIMB_MOTOR_ID = 21;
 
+		// Climb motors inversion
 		public static final boolean LEFT_CLIMB_MOTOR_INVERTED = true;
 		public static final boolean RIGHT_CLIMB_MOTOR_INVERTED = false;
 
 		/*
-		Motor IDs
+		Motor IDS
 		1-8 swerve
 		9-10 arm
 		11 indexer

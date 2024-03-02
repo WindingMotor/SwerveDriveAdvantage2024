@@ -45,41 +45,18 @@ public class SUB_Swerve extends SubsystemBase {
 		this.io = io;
 		this.vision = vision;
 
-		/*
-				 * {
-		"drive": {
-				"p": 0.0020645,
-				"i": 0,
-				"d": 0,
-				"f": 0,
-				"iz": 0
-		},
-		"angle": {
-				"p": 0.01,
-				"i": 0,
-				"d": 0,
-				"f": 0,
-				"iz": 0
-		}
-		}
-				*/
-
 		AutoBuilder.configureHolonomic(
 				io::getPose, // Gets current robot pose
 				io::resetOdometry, // Resets robot odometry if path has starter pose
 				io::getRobotVelocity, // Gets chassis speed in robot relative
 				io::setChassisSpeeds, // Drives the robot in robot realative chassis speeds
 				new HolonomicPathFollowerConfig(
-						// new PIDConstants(0.3, 1.5, 2.0, 0.25), // JAMES
-						// new PIDConstants(0.3, 5, 1.2, 0.05),
-						// new PIDConstants(0.5, 0.0, 0.0) WK 0
-						// new PIDConstants(1.5, 5.0, 0.0) WORKING SLOW
-						/*
-						new PIDConstants(1, 0.0, 0.0, 0.0), // Translation
-						new PIDConstants(7, 0.0, 0.0, 0.0), // Heading
-						*/
 						new PIDConstants(5.0, 0.0, 0.0, 0.0), // Translation
 						new PIDConstants(7.0, 0.0, 0.0, 0.0), // Heading
+						/*
+						 * IMPORTANT NOTE: These auto PIDs only have a relativly small effect. For a larger and better effect use the YAGSL PIDF config.
+						 * When setting these PID values make sure rotation is faster than translation and there is a feedforward on the YAGSL PIDF config.
+						 */
 						Constants.Maestro.MAX_MODULE_SPEED_MPS,
 						io.getConfigurationRadius(), // Drive base radius in meters
 						new ReplanningConfig() // Replanning config see docs

@@ -15,7 +15,6 @@ import frc.robot.Constants.States.ShooterState;
 import frc.robot.commands.CMD_Eject;
 import frc.robot.commands.CMD_Idle;
 import frc.robot.commands.CMD_Intake;
-import frc.robot.commands.CMD_IntakeAuto;
 import frc.robot.commands.CMD_Led;
 import frc.robot.commands.CMD_Shoot;
 import frc.robot.subsystems.arm.SUB_Arm;
@@ -26,6 +25,7 @@ import frc.robot.subsystems.vision.SUB_Vision;
 import frc.robot.util.AddressableLedStrip;
 import frc.robot.util.AddressableLedStrip.LEDState;
 
+// 041215128954433
 public class CommandRegistrar {
 
 	private final SUB_Vision vision;
@@ -59,9 +59,9 @@ public class CommandRegistrar {
 	public void register() {
 
 		// Intake command
-		NamedCommands.registerCommand("Intake", new CMD_IntakeAuto(conveyor, arm, () -> false));
+		NamedCommands.registerCommand("Intake", new CMD_Intake(conveyor, arm, () -> false));
 
-		//NamedCommands.registerCommand("Intake_Test", new CMD_Intake(conveyor, arm, () -> false));
+		// NamedCommands.registerCommand("Intake_Test", new CMD_Intake(conveyor, arm, () -> false));
 		// Eject command
 		NamedCommands.registerCommand("Eject", new CMD_Eject(conveyor, arm, () -> false));
 
