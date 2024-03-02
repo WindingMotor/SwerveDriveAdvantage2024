@@ -2,15 +2,21 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.2658294198561884,
+      "x": 1.3973572133190786,
       "y": 5.558955073799368
     },
-    "rotation": 179.75708806157328
+    "rotation": -90.0
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "A1_P0"
+          }
+        },
         {
           "type": "named",
           "data": {

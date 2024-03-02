@@ -34,7 +34,7 @@ public class CMD_ArmClimb extends Command {
 	@Override
 	public void execute() {
 		timer++;
-		if (arm.getRealTimeArmPosition() < 5.0 && timer > 50){
+		if (arm.getRealTimeArmPosition() < 5.0 && timer > 50) {
 			arm.lockArm();
 			isCommandDone = true;
 		} else {
