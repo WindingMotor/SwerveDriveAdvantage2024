@@ -14,7 +14,6 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Filesystem;
 import frc.robot.Constants;
 import frc.robot.Constants.Vision;
@@ -35,7 +34,6 @@ import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
 /** Represents a real implementation of the shooter. */
 public class IO_SwerveReal implements IO_SwerveBase {
 
-	private static double maxSpeed = Units.feetToMeters(4.5);
 	private static File jsonDirectory = new File(Filesystem.getDeployDirectory(), "swerve");
 	private static SwerveDrive swerveDrive;
 

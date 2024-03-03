@@ -79,6 +79,7 @@ public class RobotContainer {
 
 		// BLU
 
+		// Works for both allainces, robot intake must be facing out to the field.
 		swerve.setDefaultCommand(
 				swerve.driveJoystick(
 						() -> -driverController.getRawAxis(1),

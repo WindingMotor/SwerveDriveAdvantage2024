@@ -22,11 +22,7 @@ public class IO_ClimbReal implements IO_ClimbBase {
 	private RelativeEncoder leftMotorEncoder;
 	private RelativeEncoder rightMotorEncoder;
 
-	private double setpointRPM;
-
 	public IO_ClimbReal() {
-
-		setpointRPM = 0;
 
 		leftMotor =
 				Builder.createNeo(
