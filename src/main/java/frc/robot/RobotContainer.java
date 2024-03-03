@@ -17,8 +17,8 @@ import frc.robot.auto.AutoSelector;
 import frc.robot.auto.CommandRegistrar;
 import frc.robot.commands.CMDGR_Intake;
 import frc.robot.commands.CMDGR_Shoot;
-import frc.robot.commands.CMD_ArmClimb;
 import frc.robot.commands.CMD_Eject;
+import frc.robot.commands.CMD_ResetOdo;
 import frc.robot.subsystems.arm.IO_ArmReal;
 import frc.robot.subsystems.arm.SUB_Arm;
 import frc.robot.subsystems.conveyor.IO_ConveyorReal;
@@ -66,6 +66,24 @@ public class RobotContainer {
 		configureBindings();
 
 		logMetadata();
+
+		// RED
+
+		/*
+				swerve.setDefaultCommand(
+						swerve.driveJoystick(
+								() -> -driverController.getRawAxis(1),
+								() -> driverController.getRawAxis(0),
+								() -> -driverController.getRawAxis(3)));
+		*/
+
+		// BLU
+
+		swerve.setDefaultCommand(
+				swerve.driveJoystick(
+						() -> -driverController.getRawAxis(1),
+						() -> driverController.getRawAxis(0),
+						() -> -driverController.getRawAxis(3)));
 	}
 
 	public void configDriving() {
@@ -148,13 +166,17 @@ public class RobotContainer {
 				.onTrue(new CMDGR_Intake(conveyor, arm, led, () -> operatorController.b().getAsBoolean()));
 
 		// Eject command
+
 		operatorController
 				.rightBumper()
 				.onTrue(new CMD_Eject(conveyor, arm, () -> operatorController.b().getAsBoolean()));
 
-		// Climb command, requires both operator and driver to activate
-		operatorController.leftBumper().debounce(0.15).onTrue(new CMD_ArmClimb(arm));
+		operatorController.rightStick().onTrue(new CMD_ResetOdo(swerve));
 
+		// Climb command, requires both operator and driver to activate
+		// operatorController.leftBumper().debounce(0.15).onTrue(new CMD_ArmClimb(arm));
+
+		// operatorController.rightBumper().onTrue(new CMD_Servo(arm));
 		/*
 		// Drive to speaker command
 		operatorController
@@ -168,9 +190,10 @@ public class RobotContainer {
 		*/
 	}
 
+	// 041215128954433
 	public void logMetadata() {
 		Logger.recordMetadata("Event Name", DriverStation.getEventName());
-		Logger.recordMetadata("Alliance", DriverStation.getAlliance().get().toString());
+		// Logger.recordMetadata("Alliance", DriverStation.getAlliance().get().toString());
 		Logger.recordMetadata("Driver Station Location", DriverStation.getLocation() + "");
 		Logger.recordMetadata("Match Number", DriverStation.getMatchNumber() + "");
 		Logger.recordMetadata("Match Type", DriverStation.getMatchType() + "");

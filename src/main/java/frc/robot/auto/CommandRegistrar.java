@@ -9,6 +9,7 @@
 package frc.robot.auto;
 
 import com.pathplanner.lib.auto.NamedCommands;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import frc.robot.Constants.States.ArmState;
 import frc.robot.Constants.States.ShooterMode;
 import frc.robot.Constants.States.ShooterState;
@@ -61,16 +62,17 @@ public class CommandRegistrar {
 		// Intake command
 		NamedCommands.registerCommand("Intake", new CMD_Intake(conveyor, arm, () -> false));
 
-		// NamedCommands.registerCommand("Intake_Test", new CMD_Intake(conveyor, arm, () -> false));
+		NamedCommands.registerCommand("Intake_Test", new CMD_Intake(conveyor, arm, () -> false));
 		// Eject command
 		NamedCommands.registerCommand("Eject", new CMD_Eject(conveyor, arm, () -> false));
 
 		// Null commands for backwards compatibility
-		// NamedCommands.registerCommand("Shoot_Speaker", new PrintCommand("NULL"));
-		// NamedCommands.registerCommand("Shoot_Command", new PrintCommand("NULL"));
-		// NamedCommands.registerCommand("Shoot_Command2M", new PrintCommand("NULL"));
-		// NamedCommands.registerCommand("Intake_Auto", new PrintCommand("NULL"));
+		NamedCommands.registerCommand("Shoot_Speaker", new PrintCommand("NULL"));
+		NamedCommands.registerCommand("Shoot_Command", new PrintCommand("NULL"));
+		NamedCommands.registerCommand("Shoot_Command2M", new PrintCommand("NULL"));
+		NamedCommands.registerCommand("Intake_Auto", new PrintCommand("NULL"));
 
+		//
 		// Speaker shoot commands for different distances
 		// One meter
 		NamedCommands.registerCommand(

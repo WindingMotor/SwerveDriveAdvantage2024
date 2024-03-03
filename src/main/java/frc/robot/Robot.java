@@ -112,7 +112,7 @@ public class Robot extends LoggedRobot {
 		}
 
 		// m_pdh.setSwitchableChannel(true);
-		m_robotContainer.configDriving();
+		// m_robotContainer.configDriving();
 		m_robotContainer.logMetadata();
 	}
 

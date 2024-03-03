@@ -8,6 +8,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.Constants.States.ArmState;
@@ -112,6 +113,11 @@ public class CMD_Shoot extends Command {
 		setInitalStates();
 		checkConveyor();
 		checkEndCommand();
+
+		if (manualCancel.get()) {
+			isCommandDone = true;
+			SmartDashboard.putBoolean("MANUAL CANCEL VAL", manualCancel.get());
+		}
 	}
 
 	private int setInitalStates() {

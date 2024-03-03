@@ -64,4 +64,6 @@ public interface IO_SwerveBase {
 	void setLock();
 
 	void setDriveMotorCurrentLimit(int currentLimit);
+
+	public Rotation2d getYaw();
 }

@@ -186,7 +186,7 @@ public class IO_ArmReal implements IO_ArmBase {
 	 */
 	@Override
 	public void lockArm() {
-		servo.setSpeed(1);
+		servo.setPosition(50);
 	}
 
 	@Override

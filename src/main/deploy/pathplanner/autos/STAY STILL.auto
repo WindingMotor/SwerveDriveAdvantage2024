@@ -2,24 +2,24 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.3544563055038452,
-      "y": 5.54749870300293
+      "x": 0.8246156027195783,
+      "y": 4.53787583782681
     },
-    "rotation": 179.90874767107852
+    "rotation": 119.74488129694225
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "LEFT_AUTO.1"
+            "name": "Shoot_Speaker1M"
           }
         }
       ]
     }
   },
-  "folder": "CHOR",
-  "choreoAuto": true
+  "folder": "AUTOS",
+  "choreoAuto": false
 }

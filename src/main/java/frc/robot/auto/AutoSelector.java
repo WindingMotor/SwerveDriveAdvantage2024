@@ -26,7 +26,10 @@ public class AutoSelector {
 
 		// Not sure why this is needed, the auto selector should apply all PathPlannerAuto's options by
 		// default
-		// autoSelector.addOption("A1_D1_SM", getSelectedAuto());
+		//	autoSelector.addOption("A1_D1_SM", getSelectedAuto());
+
+		// autoSelector.addOption("NO MOVING", new PrintCommand("NOTHIn"));
+		// autoSelector.addOption("SHOOT", );
 
 		SmartDashboard.putData("Auto", autoSelector);
 	}

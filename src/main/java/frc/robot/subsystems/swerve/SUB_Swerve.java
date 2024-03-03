@@ -98,7 +98,7 @@ public class SUB_Swerve extends SubsystemBase {
 									translationY.getAsDouble() * io.getMaximumVelocity()),
 							angularRotationX.getAsDouble() * io.getMaximumAngularVelocity(),
 							true,
-							false);
+							true);
 				});
 	}
 
@@ -164,5 +164,9 @@ public class SUB_Swerve extends SubsystemBase {
 			io.resetOdometry(new Pose2d(path.getPoint(0).position, io.getHeading()));
 		}
 		return AutoBuilder.followPath(path);
+	}
+
+	public void resetEmergencyOdometry() {
+		io.resetOdometry(new Pose2d(0.0, 0.0, io.getYaw()));
 	}
 }
