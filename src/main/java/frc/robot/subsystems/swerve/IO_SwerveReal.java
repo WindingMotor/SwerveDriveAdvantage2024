@@ -56,7 +56,7 @@ public class IO_SwerveReal implements IO_SwerveBase {
 		targetPoses = new ArrayList<>();
 
 		// Set the telemetry verbosity to high for debugging
-		SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH;
+		SwerveDriveTelemetry.verbosity = TelemetryVerbosity.LOW;
 
 		// Should only be enabled when controlling the robot via angle
 		swerveDrive.setHeadingCorrection(false);
@@ -239,8 +239,10 @@ public class IO_SwerveReal implements IO_SwerveBase {
 							// pose estimator
 							var estPose = visionEst.get().estimatedPose.toPose2d();
 							var estStdDevs = vision.getEstimationStdDevs(estPose, camera, newTargets);
+
 							swerveDrive.addVisionMeasurement(
 									estPose, visionEst.get().timestampSeconds, estStdDevs);
+
 							if (camera == Camera.LEFT_CAMERA) {
 								Logger.recordOutput("Left Vision Est", estPose);
 							} else if (camera == Camera.RIGHT_CAMERA) {

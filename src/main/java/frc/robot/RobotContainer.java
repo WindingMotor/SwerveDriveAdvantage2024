@@ -9,7 +9,6 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.States.ShooterMode;
@@ -17,7 +16,6 @@ import frc.robot.auto.AutoSelector;
 import frc.robot.auto.CommandRegistrar;
 import frc.robot.commands.CMDGR_Intake;
 import frc.robot.commands.CMDGR_Shoot;
-import frc.robot.commands.CMD_ArmClimb;
 import frc.robot.commands.CMD_Eject;
 import frc.robot.subsystems.arm.IO_ArmReal;
 import frc.robot.subsystems.arm.SUB_Arm;
@@ -66,8 +64,15 @@ public class RobotContainer {
 		configureBindings();
 
 		logMetadata();
+
+		swerve.setDefaultCommand(
+				swerve.driveJoystick(
+						() -> -driverController.getRawAxis(1),
+						() -> driverController.getRawAxis(0),
+						() -> -driverController.getRawAxis(3)));
 	}
 
+	/*
 	public void configDriving() {
 
 		var alliance = DriverStation.getAlliance();
@@ -94,6 +99,7 @@ public class RobotContainer {
 			}
 		}
 	}
+	*/
 
 	/** Configure the bindings for the controller buttons to specific commands. */
 	private void configureBindings() {
@@ -153,7 +159,7 @@ public class RobotContainer {
 				.onTrue(new CMD_Eject(conveyor, arm, () -> operatorController.b().getAsBoolean()));
 
 		// Climb command, requires both operator and driver to activate
-		operatorController.leftBumper().debounce(0.15).onTrue(new CMD_ArmClimb(arm));
+		//	operatorController.leftBumper().debounce(0.15).onTrue(new CMD_ArmClimb(arm));
 
 		/*
 		// Drive to speaker command
