@@ -13,7 +13,6 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
-import swervelib.math.SwerveMath;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -74,7 +73,7 @@ public class Robot extends LoggedRobot {
 		// block in order for anything in the Command-based framework to work.
 		CommandScheduler.getInstance().run();
 
-		SwerveMath.calculateMetersPerRotation(defaultPeriodSecs, defaultPeriodSecs);
+		// SwerveMath.calculateMetersPerRotation(defaultPeriodSecs, defaultPeriodSecs);
 	}
 
 	/** This function is called once each time the robot enters Disabled mode. */
