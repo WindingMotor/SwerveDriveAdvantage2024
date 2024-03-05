@@ -49,12 +49,12 @@ public class SUB_Swerve extends SubsystemBase {
 				io::getPose, // Gets current robot pose
 				io::resetOdometry, // Resets robot odometry if path has starter pose
 				io::getRobotVelocity, // Gets chassis speed in robot relative
-				io::setChassisSpeeds, // Drives the robot in robot realative chassis speeds
+				io::setChassisSpeeds, // Drives the robot in robot relative chassis speeds
 				new HolonomicPathFollowerConfig(
 						new PIDConstants(5.0, 0.0, 0.0, 0.0), // Translation
 						new PIDConstants(7.0, 0.0, 0.0, 0.0), // Heading
 						/*
-						 * IMPORTANT NOTE: These auto PIDs only have a relativly small effect. For a larger and better effect use the YAGSL PIDF config.
+						 * IMPORTANT NOTE: These auto PIDs only have a relatively small effect. For a larger and better effect use the YAGSL PIDF config.
 						 * When setting these PID values make sure rotation is faster than translation and there is a feedforward on the YAGSL PIDF config.
 						 */
 						Constants.Maestro.MAX_MODULE_SPEED_MPS,
@@ -62,7 +62,7 @@ public class SUB_Swerve extends SubsystemBase {
 						new ReplanningConfig() // Replanning config see docs
 						),
 				() -> {
-					// Auto path flipper for allaince color, always make paths on blue side
+					// Auto path flipper for alliance color, always make paths on blue side
 					var alliance = DriverStation.getAlliance();
 					return alliance.isPresent() ? alliance.get() == DriverStation.Alliance.Red : false;
 				},
@@ -199,5 +199,9 @@ public class SUB_Swerve extends SubsystemBase {
 
 	public void resetEmergencyOdometry() {
 		io.resetOdometry(new Pose2d(0.0, 0.0, io.getYaw()));
+	}
+
+	public Pose2d getPose() {
+		return io.getPose();
 	}
 }

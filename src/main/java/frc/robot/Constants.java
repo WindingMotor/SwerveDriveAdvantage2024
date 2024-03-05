@@ -15,6 +15,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
@@ -428,6 +429,38 @@ public class Constants {
 		public enum DriveScoringPoseState {
 			SPEAKER,
 			AMP
+		}
+
+		public enum FieldTriangles {
+			BLU_LEFT_SPEAKER(
+					new Translation2d(0, 6.5), new Translation2d(0.85, 6.0), new Translation2d(1.6, 6.8)),
+			BLU_MIDDLE_SPEAKER_LEFT(
+					new Translation2d(12.0, 5.5), new Translation2d(1.5, 5.5), new Translation2d(1.5, 5.5)),
+			BLU_MIDDLE_SPEAKER_RIGHT(
+					new Translation2d(12.0, 5.5), new Translation2d(12.0, 5.5), new Translation2d(1.5, 5.5)),
+			BLU_RIGHT_SPEAKER(
+					new Translation2d(0, 4.7), new Translation2d(0.85, 5.1), new Translation2d(1.6, 4.5));
+
+			public final Translation2d pointOne;
+			public final Translation2d pointTwo;
+			public final Translation2d pointThree;
+
+			FieldTriangles(Translation2d pointOne, Translation2d pointTwo, Translation2d pointThree) {
+				this.pointOne = pointOne;
+				this.pointTwo = pointTwo;
+				this.pointThree = pointThree;
+			}
+		}
+
+		public enum SidekickState {
+			BLU_LEFT_SPEAKER,
+			BLU_MIDDLE_SPEAKER,
+			BLU_RIGHT_SPEAKER,
+			RED_LEFT_SPEAKER,
+			RED_MIDDLE_SPEAKER,
+			RED_RIGHT_SPEAKER,
+			NONE,
+			UNKNOWN
 		}
 	}
 }

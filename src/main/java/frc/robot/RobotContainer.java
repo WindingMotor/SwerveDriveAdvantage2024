@@ -25,6 +25,7 @@ import frc.robot.subsystems.conveyor.IO_ConveyorReal;
 import frc.robot.subsystems.conveyor.SUB_Conveyor;
 import frc.robot.subsystems.shooter.IO_ShooterReal;
 import frc.robot.subsystems.shooter.SUB_Shooter;
+import frc.robot.subsystems.sidekick.SUB_Sidekick;
 import frc.robot.subsystems.swerve.IO_SwerveReal;
 import frc.robot.subsystems.swerve.SUB_Swerve;
 import frc.robot.subsystems.vision.IO_VisionReal;
@@ -54,6 +55,9 @@ public class RobotContainer {
 
 	private final CommandRegistrar commandRegistrar =
 			new CommandRegistrar(vision, swerve, conveyor, arm, shooter, led);
+
+	private final SUB_Sidekick sidekick =
+			new SUB_Sidekick(swerve, vision, arm, conveyor, shooter, led, operatorController);
 
 	private final AutoSelector autoSelector;
 
