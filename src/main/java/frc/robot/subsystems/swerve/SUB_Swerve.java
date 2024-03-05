@@ -90,15 +90,46 @@ public class SUB_Swerve extends SubsystemBase {
 	 */
 	public Command driveJoystick(
 			DoubleSupplier translationX, DoubleSupplier translationY, DoubleSupplier angularRotationX) {
+
 		return run(
 				() -> {
-					io.drive(
-							new Translation2d(
-									translationX.getAsDouble() * io.getMaximumVelocity(),
-									translationY.getAsDouble() * io.getMaximumVelocity()),
-							angularRotationX.getAsDouble() * io.getMaximumAngularVelocity(),
-							true,
-							true);
+					var alli = DriverStation.getAlliance();
+
+					if (alli.get() == Alliance.Blue) {
+
+						io.drive(
+
+								// BLU
+								new Translation2d(
+										translationX.getAsDouble() * io.getMaximumVelocity(),
+										-translationY.getAsDouble() * io.getMaximumVelocity()),
+								-angularRotationX.getAsDouble() * io.getMaximumAngularVelocity(),
+								true,
+								true);
+
+					} else if (alli.get() == Alliance.Red) {
+
+						io.drive(
+								// RED
+								new Translation2d(
+										-translationX.getAsDouble() * io.getMaximumVelocity(),
+										translationY.getAsDouble() * io.getMaximumVelocity()),
+								-angularRotationX.getAsDouble() * io.getMaximumAngularVelocity(),
+								true,
+								true);
+
+					} else {
+						DriverStation.reportError("DRIVE COULD NOT FIND ALLIANCE", false);
+
+						// Default to blue
+						io.drive(
+								new Translation2d(
+										translationX.getAsDouble() * io.getMaximumVelocity(),
+										-translationY.getAsDouble() * io.getMaximumVelocity()),
+								-angularRotationX.getAsDouble() * io.getMaximumAngularVelocity(),
+								true,
+								true);
+					}
 				});
 	}
 

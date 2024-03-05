@@ -247,10 +247,16 @@ public class IO_SwerveReal implements IO_SwerveBase {
 							var estPose = visionEst.get().estimatedPose.toPose2d();
 							var estStdDevs = vision.getEstimationStdDevs(estPose, camera, newTargets);
 
+							/* Without vision rotation, uses gyro
 							swerveDrive.addVisionMeasurement(
 									new Pose2d(estPose.getTranslation(), swerveDrive.getYaw()),
 									visionEst.get().timestampSeconds,
 									estStdDevs);
+							*/
+
+							// With vision rotation
+							swerveDrive.addVisionMeasurement(
+									estPose, visionEst.get().timestampSeconds, estStdDevs);
 
 							if (camera == Camera.LEFT_CAMERA) {
 								Logger.recordOutput("Left Vision Est", estPose);
