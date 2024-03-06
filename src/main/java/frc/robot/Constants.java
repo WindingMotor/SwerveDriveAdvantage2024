@@ -111,9 +111,9 @@ public class Constants {
 							// up.
 							new Translation3d(
 									Units.inchesToMeters(4.558),
-									Units.inchesToMeters(21),
+									Units.inchesToMeters(22),
 									Units.inchesToMeters(
-											9.314)), // Camera mounted 12in forward, 9.125in left, 8.625 up.
+											8.5)), // Camera mounted 12in forward, 9.125in left, 8.625 up.
 							new Rotation3d(0, Units.degreesToRadians(-29), 0.0)
 									.rotateBy(
 											new Rotation3d(
@@ -130,9 +130,9 @@ public class Constants {
 					new Transform3d(
 							new Translation3d(
 									Units.inchesToMeters(4.558),
-									Units.inchesToMeters(-21),
+									Units.inchesToMeters(-22),
 									Units.inchesToMeters(
-											9.314)), // Camera mounted 12in forward, 9.125in right, 8.625 up.
+											8.5)), // Camera mounted 12in forward, 9.125in right, 8.625 up.
 							new Rotation3d(
 											0.0, // Roll 0
 											Units.degreesToRadians(-29.0), // Pitch FACING UPWARDS

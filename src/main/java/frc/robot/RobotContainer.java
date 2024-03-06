@@ -9,7 +9,6 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.States.ShooterMode;
@@ -17,8 +16,8 @@ import frc.robot.auto.AutoSelector;
 import frc.robot.auto.CommandRegistrar;
 import frc.robot.commands.CMDGR_Intake;
 import frc.robot.commands.CMDGR_Shoot;
-import frc.robot.commands.CMD_Eject;
 import frc.robot.commands.CMD_ResetOdo;
+import frc.robot.commands.CMD_Servo;
 import frc.robot.subsystems.arm.IO_ArmReal;
 import frc.robot.subsystems.arm.SUB_Arm;
 import frc.robot.subsystems.conveyor.IO_ConveyorReal;
@@ -71,51 +70,11 @@ public class RobotContainer {
 
 		logMetadata();
 
-		// RED
-
-		/*
-				swerve.setDefaultCommand(
-						swerve.driveJoystick(
-								() -> -driverController.getRawAxis(1),
-								() -> driverController.getRawAxis(0),
-								() -> -driverController.getRawAxis(3)));
-		*/
-
-		// BLU
-
-		// Works for both allainces, robot intake must be facing out to the field.
 		swerve.setDefaultCommand(
 				swerve.driveJoystick(
 						() -> driverController.getRawAxis(1),
 						() -> driverController.getRawAxis(0),
 						() -> driverController.getRawAxis(3)));
-	}
-
-	public void configDriving() {
-
-		var alliance = DriverStation.getAlliance();
-
-		// Get the pose for the correct alliance and set the pose variables
-		if (alliance.isPresent()) {
-			if (alliance.get() == Alliance.Red) {
-
-				// Default drive command
-				swerve.setDefaultCommand(
-						swerve.driveJoystick(
-								() -> -driverController.getRawAxis(1),
-								() -> driverController.getRawAxis(0),
-								() -> -driverController.getRawAxis(3)));
-
-			} else if (alliance.get() == Alliance.Blue) {
-
-				// Default drive command
-				swerve.setDefaultCommand(
-						swerve.driveJoystick(
-								() -> driverController.getRawAxis(1),
-								() -> -driverController.getRawAxis(0),
-								() -> -driverController.getRawAxis(3)));
-			}
-		}
 	}
 
 	/** Configure the bindings for the controller buttons to specific commands. */
@@ -172,16 +131,19 @@ public class RobotContainer {
 
 		// Eject command
 
-		operatorController
-				.rightBumper()
-				.onTrue(new CMD_Eject(conveyor, arm, () -> operatorController.b().getAsBoolean()));
+		/*
+				operatorController
+						.rightBumper()
+						.onTrue(new CMD_Eject(conveyor, arm, () -> operatorController.b().getAsBoolean()));
+		*/
 
 		operatorController.rightStick().onTrue(new CMD_ResetOdo(swerve));
 
 		// Climb command, requires both operator and driver to activate
 		// operatorController.leftBumper().debounce(0.15).onTrue(new CMD_ArmClimb(arm));
 
-		// operatorController.rightBumper().onTrue(new CMD_Servo(arm));
+		operatorController.rightBumper().onTrue(new CMD_Servo(arm));
+
 		/*
 		// Drive to speaker command
 		operatorController

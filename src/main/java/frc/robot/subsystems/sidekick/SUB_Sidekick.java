@@ -25,7 +25,6 @@ import frc.robot.subsystems.swerve.SUB_Swerve;
 import frc.robot.subsystems.vision.SUB_Vision;
 import frc.robot.util.AddressableLedStrip;
 import frc.robot.util.MathCalc;
-import org.littletonrobotics.junction.Logger;
 
 /* The sidekick automatically schedules commands for the robots subsystems depending on where the robot is on the field */
 public class SUB_Sidekick extends SubsystemBase {
@@ -65,10 +64,9 @@ public class SUB_Sidekick extends SubsystemBase {
 	public void periodic() {
 		if (SIDEKICK_ENABLED && DriverStation.isEnabled() && DriverStation.isTeleopEnabled()) {
 
-			Translation2d robotTranslation =
-					new Translation2d(1.0, 6.3 + operatorController.getRawAxis(0) * 2);
+			Translation2d robotTranslation = swerve.getPose().getTranslation();
+
 			var alliance = DriverStation.getAlliance();
-			Logger.recordOutput("TEST F ", robotTranslation);
 
 			// Check if robot is on the blue side or on the red side of the field
 			if (alliance.isPresent() && alliance.get() == Alliance.Blue) {
