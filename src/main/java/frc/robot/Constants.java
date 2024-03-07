@@ -83,7 +83,7 @@ public class Constants {
 		 * public static final Matrix<N3, N1> SINGLE_TAG_STD_DEVS = VecBuilder.fill(4, 4, 8);
 		 * public static final Matrix<N3, N1> MULTI_TAG_STD_DEVS = VecBuilder.fill(0.5, 0.5, 1);
 		 */
-		public static final Matrix<N3, N1> SINGLE_TAG_STD_DEVS = VecBuilder.fill(4, 4, 8);
+		public static final Matrix<N3, N1> SINGLE_TAG_STD_DEVS = VecBuilder.fill(2, 2, 4);
 		public static final Matrix<N3, N1> MULTI_TAG_STD_DEVS = VecBuilder.fill(0.8, 0.8, 1.25);
 
 		// Minimum ambiguity for a tag to be used for vision basced odometry
@@ -110,31 +110,31 @@ public class Constants {
 							// Units.inchesToMeters(9.314)), // Camera mounted 12in forward, 9.125in left, 8.625
 							// up.
 							new Translation3d(
-									Units.inchesToMeters(4.558),
-									Units.inchesToMeters(22),
+									Units.inchesToMeters(4),
+									Units.inchesToMeters(11.25),
 									Units.inchesToMeters(
 											8.5)), // Camera mounted 12in forward, 9.125in left, 8.625 up.
 							new Rotation3d(0, Units.degreesToRadians(-29), 0.0)
 									.rotateBy(
 											new Rotation3d(
-													0.0,
+													Units.degreesToRadians(-5),
 													0.0,
 													Units.degreesToRadians(
 															-35.5))) // No roll, Pitch on 15 degrees from robot frame, and yaw of
 							// 133 degrees from robot frame.
 							)),
-// hyhy
+			// hyhy
 			RIGHT_CAMERA(
 					"OV9281_01",
 					"rightCamera",
 					new Transform3d(
 							new Translation3d(
-									Units.inchesToMeters(4.558),
-									Units.inchesToMeters(-22),
+									Units.inchesToMeters(4),
+									Units.inchesToMeters(-19),
 									Units.inchesToMeters(
 											8.5)), // Camera mounted 12in forward, 9.125in right, 8.625 up.
 							new Rotation3d(
-											0.0, // Roll 0
+											Units.degreesToRadians(5), // Roll 0
 											Units.degreesToRadians(-29.0), // Pitch FACING UPWARDS
 											0.0)
 									.rotateBy(
@@ -146,14 +146,15 @@ public class Constants {
 					),
 
 			// TODO: Configure limelight position and rotation. Currently rotation should be 30* or 60*
-			// pitch.
+			// pitch.\
+
 			LIMELIGHT(
 					"limelight",
 					"limelight",
 					new Transform3d(
 							new Translation3d(
 									Units.inchesToMeters(4.558),
-									Units.inchesToMeters(-21),
+									Units.inchesToMeters(11.25),
 									Units.inchesToMeters(
 											9.314)), // Camera mounted 12in forward, 9.125in right, 8.625 up.
 							new Rotation3d(
@@ -355,7 +356,7 @@ public class Constants {
 
 			AMP(95, 0.0),
 			DYNAMIC(-1.0, 0.0),
-			INTAKE(89.0, 0.0),
+			INTAKE(50, 0.0), // 89
 
 			TRAP(61.0, 0.0);
 

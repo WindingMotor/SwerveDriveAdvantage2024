@@ -8,6 +8,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -16,8 +17,6 @@ import frc.robot.auto.AutoSelector;
 import frc.robot.auto.CommandRegistrar;
 import frc.robot.commands.CMDGR_Intake;
 import frc.robot.commands.CMDGR_Shoot;
-import frc.robot.commands.CMD_ResetOdo;
-import frc.robot.commands.CMD_Servo;
 import frc.robot.subsystems.arm.IO_ArmReal;
 import frc.robot.subsystems.arm.SUB_Arm;
 import frc.robot.subsystems.conveyor.IO_ConveyorReal;
@@ -70,11 +69,19 @@ public class RobotContainer {
 
 		logMetadata();
 
+		/*
 		swerve.setDefaultCommand(
 				swerve.driveJoystick(
 						() -> driverController.getRawAxis(1),
 						() -> driverController.getRawAxis(0),
 						() -> driverController.getRawAxis(3)));
+		*/
+
+		swerve.setDefaultCommand(
+				swerve.driveJoystick(
+						() -> -MathUtil.applyDeadband(operatorController.getRawAxis(5), 0.05),
+						() -> MathUtil.applyDeadband(operatorController.getRawAxis(4), 0.05),
+						() -> MathUtil.applyDeadband(operatorController.getRawAxis(0), 0.05)));
 	}
 
 	/** Configure the bindings for the controller buttons to specific commands. */
@@ -137,12 +144,20 @@ public class RobotContainer {
 						.onTrue(new CMD_Eject(conveyor, arm, () -> operatorController.b().getAsBoolean()));
 		*/
 
-		operatorController.rightStick().onTrue(new CMD_ResetOdo(swerve));
+		// operatorController.rightStick().onTrue(new CMD_ResetOdo(swerve));
 
 		// Climb command, requires both operator and driver to activate
 		// operatorController.leftBumper().debounce(0.15).onTrue(new CMD_ArmClimb(arm));
 
-		operatorController.rightBumper().onTrue(new CMD_Servo(arm));
+		/*
+		operatorController
+				.rightBumper()
+				.onTrue(
+						new CMD_DrivePose(
+								swerve,
+								new Pose2d(3.4, 5.4, new Rotation2d()),
+								() -> operatorController.b().getAsBoolean()));
+		*/
 
 		/*
 		// Drive to speaker command

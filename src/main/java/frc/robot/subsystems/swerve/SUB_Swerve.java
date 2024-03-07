@@ -80,6 +80,19 @@ public class SUB_Swerve extends SubsystemBase {
 		Logger.processInputs("Swerve", inputs);
 	}
 
+	private Pose2d getInputPose() {
+		return inputs.pose;
+	}
+
+	public void driveRaw(Double translationX, Double translationY, Double angularRotationX) {
+		io.drive(
+				new Translation2d(
+						translationX * io.getMaximumVelocity(), translationY * io.getMaximumVelocity()),
+				angularRotationX * io.getMaximumAngularVelocity(),
+				false,
+				true);
+	}
+
 	/**
 	 * Drives the robot, in field-relative, based of the specified inputs.
 	 *

@@ -16,6 +16,7 @@ import frc.robot.Constants.States.ShooterState;
 import frc.robot.commands.CMD_Eject;
 import frc.robot.commands.CMD_Idle;
 import frc.robot.commands.CMD_Intake;
+import frc.robot.commands.CMD_IntakeAuto;
 import frc.robot.commands.CMD_Led;
 import frc.robot.commands.CMD_Shoot;
 import frc.robot.subsystems.arm.SUB_Arm;
@@ -70,7 +71,7 @@ public class CommandRegistrar {
 		NamedCommands.registerCommand("Shoot_Speaker", new PrintCommand("NULL"));
 		NamedCommands.registerCommand("Shoot_Command", new PrintCommand("NULL"));
 		NamedCommands.registerCommand("Shoot_Command2M", new PrintCommand("NULL"));
-		NamedCommands.registerCommand("Intake_Auto", new PrintCommand("NULL"));
+		NamedCommands.registerCommand("Intake_Auto", new CMD_IntakeAuto(conveyor, arm, () -> false));
 
 		//
 		// Speaker shoot commands for different distances
