@@ -20,7 +20,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.2
+            "waitTime": 0.05
           }
         },
         {
@@ -30,13 +30,13 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Intake"
+                  "name": "Intake_Auto"
                 }
               },
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 0.2
+                  "waitTime": 0.05
                 }
               },
               {
@@ -49,15 +49,9 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "ComeBackMiddle"
-          }
-        },
-        {
           "type": "named",
           "data": {
-            "name": "Shoot_Speaker1M"
+            "name": "Shoot_Speaker3M"
           }
         }
       ]

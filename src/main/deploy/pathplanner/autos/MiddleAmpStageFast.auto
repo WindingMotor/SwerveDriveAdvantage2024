@@ -49,15 +49,9 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "ComeBackMiddle"
-          }
-        },
-        {
           "type": "named",
           "data": {
-            "name": "Shoot_Speaker1M"
+            "name": "Shoot_Speaker3M"
           }
         },
         {
@@ -85,22 +79,53 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "GoToStage"
+                  "pathName": "GoToAmpFast"
                 }
               }
             ]
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "ComeBackStage"
+            "name": "Shoot_Speaker3M"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.05
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake_Auto"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 0.05
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "GoToStageFromAmp"
+                }
+              }
+            ]
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Shoot_Speaker1M"
+            "name": "Shoot_Speaker3M"
           }
         }
       ]

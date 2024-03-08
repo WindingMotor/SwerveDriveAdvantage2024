@@ -326,7 +326,7 @@ public class Constants {
 			SPEAKER_1M(3600, 1.0),
 			SPEAKER_2M(3700, 2.0),
 			SPEAKER_2_5M(3700, 2.0),
-			SPEAKER_3M(3200, 3.0),
+			SPEAKER_3M(3700, 3.0),
 			SPEAKER_4M(3700, 4.0),
 			SPEAKER_5M(3700, 5.0),
 
@@ -351,7 +351,7 @@ public class Constants {
 			SPEAKER_1M(55.0, 1.0),
 			SPEAKER_2M(42.0, 2.0), // 43deg
 			SPEAKER_2_5M(40, 2.0),
-			SPEAKER_3M(38.0, 3.0),
+			SPEAKER_3M(38.5, 3.0),
 			SPEAKER_4M(34.15, 4.0),
 
 			AMP(95, 0.0),
