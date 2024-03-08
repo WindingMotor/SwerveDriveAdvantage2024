@@ -27,7 +27,7 @@ public class MathCalc {
 	 * @units RPM & DEG
 	 */
 	public static double calculateInterpolate(double distanceToTarget) {
-		return (-6.55 * (distanceToTarget)) + 59.75;
+		return (50.5739 * Math.exp(-distanceToTarget)) + 36.3442;
 	}
 
 	/**

@@ -16,13 +16,13 @@ import frc.robot.auto.AutoSelector;
 import frc.robot.auto.CommandRegistrar;
 import frc.robot.commands.CMDGR_Intake;
 import frc.robot.commands.CMDGR_Shoot;
+import frc.robot.commands.CMD_ShootDynamicTest;
 import frc.robot.subsystems.arm.IO_ArmReal;
 import frc.robot.subsystems.arm.SUB_Arm;
 import frc.robot.subsystems.conveyor.IO_ConveyorReal;
 import frc.robot.subsystems.conveyor.SUB_Conveyor;
 import frc.robot.subsystems.shooter.IO_ShooterReal;
 import frc.robot.subsystems.shooter.SUB_Shooter;
-import frc.robot.subsystems.sidekick.SUB_Sidekick;
 import frc.robot.subsystems.swerve.IO_SwerveReal;
 import frc.robot.subsystems.swerve.SUB_Swerve;
 import frc.robot.subsystems.vision.IO_VisionReal;
@@ -44,7 +44,7 @@ public class RobotContainer {
 
 	private final SUB_Shooter shooter = new SUB_Shooter(new IO_ShooterReal());
 
-	private final AddressableLedStrip led = new AddressableLedStrip(0, 68);
+	private final AddressableLedStrip led = new AddressableLedStrip(0, 20);
 
 	private final SUB_Swerve swerve = new SUB_Swerve(new IO_SwerveReal(), vision);
 
@@ -53,8 +53,10 @@ public class RobotContainer {
 	private final CommandRegistrar commandRegistrar =
 			new CommandRegistrar(vision, swerve, conveyor, arm, shooter, led);
 
-	private final SUB_Sidekick sidekick =
-			new SUB_Sidekick(swerve, vision, arm, conveyor, shooter, led, operatorController);
+	/*
+		private final SUB_Sidekick sidekick =
+				new SUB_Sidekick(swerve, vision, arm, conveyor, shooter, led, operatorController);
+	*/
 
 	private final AutoSelector autoSelector;
 
@@ -97,9 +99,10 @@ public class RobotContainer {
 								shooter,
 								vision,
 								led,
-								ShooterMode.SPEAKER,
+								ShooterMode.DYNAMIC,
 								() -> operatorController.b().getAsBoolean(),
-								() -> operatorController.x().getAsBoolean()));
+								() -> operatorController.x().getAsBoolean(),
+								() -> swerve.getPose()));
 
 		// Amp command
 		operatorController
@@ -113,7 +116,8 @@ public class RobotContainer {
 								led,
 								ShooterMode.AMP,
 								() -> operatorController.b().getAsBoolean(),
-								() -> operatorController.y().getAsBoolean()));
+								() -> operatorController.y().getAsBoolean(),
+								() -> swerve.getPose()));
 
 		// Trap command
 		/*
@@ -170,6 +174,19 @@ public class RobotContainer {
 								DriveScoringPoseState.SPEAKER,
 								() -> operatorController.b().getAsBoolean()));
 		*/
+
+		operatorController
+				.rightBumper()
+				.onTrue(
+						new CMD_ShootDynamicTest(
+								conveyor,
+								arm,
+								shooter,
+								vision,
+								led,
+								() -> operatorController.b().getAsBoolean(),
+								() -> operatorController.rightBumper().debounce(0.1).getAsBoolean(),
+								() -> swerve.getPose()));
 	}
 
 	// 041215128954433

@@ -8,6 +8,8 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
@@ -20,7 +22,9 @@ import frc.robot.subsystems.shooter.SUB_Shooter;
 import frc.robot.subsystems.vision.SUB_Vision;
 import frc.robot.util.AddressableLedStrip;
 import frc.robot.util.AddressableLedStrip.LEDState;
+import frc.robot.util.MathCalc;
 import java.util.function.Supplier;
+import org.photonvision.PhotonUtils;
 
 /** Class to handle shooting commands. */
 public class CMD_Shoot extends Command {
@@ -38,6 +42,9 @@ public class CMD_Shoot extends Command {
 	private int timer = 0;
 	private ShooterState autoShooterState;
 	private ArmState autoArmState;
+	private Supplier<Pose2d> robotPose;
+
+	private Pose2d SPEAKER_BLU_POSE = new Pose2d(0, 5.5, new Rotation2d());
 
 	/**
 	 * Constructor for the CMD_Shoot command.
@@ -58,7 +65,8 @@ public class CMD_Shoot extends Command {
 			AddressableLedStrip led,
 			ShooterMode mode,
 			Supplier<Boolean> manualCancel,
-			Supplier<Boolean> shoot) {
+			Supplier<Boolean> shoot,
+			Supplier<Pose2d> robotPose) {
 		this.conveyor = conveyor;
 		this.arm = arm;
 		this.shooter = shooter;
@@ -68,6 +76,7 @@ public class CMD_Shoot extends Command {
 		this.manualCancel = manualCancel;
 		this.autoShooterState = null;
 		this.autoArmState = null;
+		this.robotPose = robotPose;
 
 		addRequirements(conveyor, arm, shooter);
 	}
@@ -118,6 +127,17 @@ public class CMD_Shoot extends Command {
 			isCommandDone = true;
 			SmartDashboard.putBoolean("MANUAL CANCEL VAL", manualCancel.get());
 		}
+
+		if (mode == ShooterMode.DYNAMIC) {
+
+			double distanceToSpeaker = PhotonUtils.getDistanceToPose(robotPose.get(), SPEAKER_BLU_POSE);
+
+			double armCalculation = MathCalc.calculateInterpolate(distanceToSpeaker);
+
+			shooter.setState(ShooterState.SPEAKER_1M);
+
+			arm.setDynamicAngle(armCalculation);
+		}
 	}
 
 	private int setInitalStates() {
@@ -155,6 +175,7 @@ public class CMD_Shoot extends Command {
 			// Dyanmic
 		} else {
 
+			// Do nothing
 		}
 
 		return 1;

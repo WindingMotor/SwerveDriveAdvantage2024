@@ -8,6 +8,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.States.ShooterMode;
@@ -29,13 +30,14 @@ public class CMDGR_Shoot extends SequentialCommandGroup {
 			AddressableLedStrip led,
 			ShooterMode mode,
 			Supplier<Boolean> manualCancel,
-			Supplier<Boolean> shoot) {
+			Supplier<Boolean> shoot,
+			Supplier<Pose2d> robotPose) {
 		addRequirements(conveyor, arm, shooter);
 		// Call the shoot command, then wait 0.5 seconds, then call the idle command
 		addCommands(
 				new CMD_Led(led, LEDState.BLUE),
 				new WaitCommand(0.25),
-				new CMD_Shoot(conveyor, arm, shooter, vision, led, mode, manualCancel, shoot),
+				new CMD_Shoot(conveyor, arm, shooter, vision, led, mode, manualCancel, shoot, robotPose),
 				new WaitCommand(1), // Delay to allow dount to leave the robot
 				new CMD_Idle(conveyor, arm, shooter),
 				new CMD_Led(led, LEDState.RAINBOW));

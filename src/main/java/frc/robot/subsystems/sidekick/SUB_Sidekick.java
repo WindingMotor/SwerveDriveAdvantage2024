@@ -8,25 +8,8 @@
 
 package frc.robot.subsystems.sidekick;
 
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.Constants.Auto.FieldTriangles;
-import frc.robot.Constants.Auto.SidekickState;
-import frc.robot.Constants.States.ShooterMode;
-import frc.robot.commands.CMDGR_Shoot;
-import frc.robot.subsystems.arm.SUB_Arm;
-import frc.robot.subsystems.conveyor.SUB_Conveyor;
-import frc.robot.subsystems.shooter.SUB_Shooter;
-import frc.robot.subsystems.swerve.SUB_Swerve;
-import frc.robot.subsystems.vision.SUB_Vision;
-import frc.robot.util.AddressableLedStrip;
-import frc.robot.util.MathCalc;
-
-/* The sidekick automatically schedules commands for the robots subsystems depending on where the robot is on the field */
+/*
+The sidekick automatically schedules commands for the robots subsystems depending on where the robot is on the field
 public class SUB_Sidekick extends SubsystemBase {
 
 	private final SUB_Swerve swerve;
@@ -159,3 +142,5 @@ public class SUB_Sidekick extends SubsystemBase {
 		return state;
 	}
 }
+
+*/

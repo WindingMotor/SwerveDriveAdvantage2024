@@ -20,6 +20,9 @@ public class SUB_Arm extends SubsystemBase {
 
 	private ArmState state;
 
+	private boolean DYNAMIC_MODE = false;
+	private double dynamicAngle = 0;
+
 	private boolean CLIMB_MODE = false;
 
 	public SUB_Arm(IO_ArmBase io) {
@@ -33,13 +36,34 @@ public class SUB_Arm extends SubsystemBase {
 		io.updateInputs(inputs);
 		Logger.processInputs("Arm", inputs);
 
-		if (!CLIMB_MODE) {
+		if (!CLIMB_MODE && !DYNAMIC_MODE) {
 			io.updatePID(state.position);
+		} else if (DYNAMIC_MODE) {
+			io.updatePID(dynamicAngle);
 		}
 	}
 
 	public void setState(ArmState newState) {
+		DYNAMIC_MODE = false;
 		state = newState;
+	}
+
+	/**
+	 * Set the dynamic angle for the arm, dynamic mode will be enabled when this is set.
+	 *
+	 * @param newAngle the new angle to set
+	 * @return void
+	 */
+	public void setDynamicAngle(double newAngle) {
+		CLIMB_MODE = false;
+		DYNAMIC_MODE = true;
+		if (newAngle > 90) {
+			newAngle = 90;
+		}
+		if (newAngle < -4) {
+			newAngle = -4;
+		}
+		dynamicAngle = newAngle;
 	}
 
 	public ArmState getState() {

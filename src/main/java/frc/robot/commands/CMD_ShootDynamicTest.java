@@ -1,0 +1,126 @@
+// Copyright (c) 2024 : FRC 2106 : The Junkyard Dogs
+// https://github.com/WindingMotor
+// https://www.team2106.org
+
+// Use of this source code is governed by an MIT-style
+// license that can be found in the LICENSE file at
+// the root directory of this project.
+
+package frc.robot.commands;
+
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.States.ArmState;
+import frc.robot.Constants.States.ConveyorState;
+import frc.robot.Constants.States.ShooterState;
+import frc.robot.subsystems.arm.SUB_Arm;
+import frc.robot.subsystems.conveyor.SUB_Conveyor;
+import frc.robot.subsystems.shooter.SUB_Shooter;
+import frc.robot.subsystems.vision.SUB_Vision;
+import frc.robot.util.AddressableLedStrip;
+import frc.robot.util.AddressableLedStrip.LEDState;
+import frc.robot.util.MathCalc;
+import java.util.function.Supplier;
+import org.photonvision.PhotonUtils;
+
+/** Class to test dyamic shooter mode */
+public class CMD_ShootDynamicTest extends Command {
+
+	private final SUB_Conveyor conveyor;
+	private final SUB_Arm arm;
+	private final SUB_Shooter shooter;
+	private final AddressableLedStrip led;
+	private final Supplier<Boolean> manualCancel;
+	private final Supplier<Boolean> shoot;
+	private boolean isCommandDone = false;
+	private Supplier<Pose2d> robotPose;
+	private int timer;
+
+	private Pose2d SPEAKER_BLU_POSE = new Pose2d(0, 5.5, new Rotation2d());
+
+	/**
+	 * Constructor for the CMD_Shoot command.
+	 *
+	 * @param conveyor The conveyor subsystem.
+	 * @param arm The arm subsystem.
+	 * @param shooter The shooter subsystem.
+	 * @param vision The vision subsystem.
+	 * @param led The addressable led strip.
+	 * @param mode The shooting mode.
+	 * @param manualCancel The supplier to determine if the command should be manually cancelled.
+	 */
+	public CMD_ShootDynamicTest(
+			SUB_Conveyor conveyor,
+			SUB_Arm arm,
+			SUB_Shooter shooter,
+			SUB_Vision vision,
+			AddressableLedStrip led,
+			Supplier<Boolean> manualCancel,
+			Supplier<Boolean> shoot,
+			Supplier<Pose2d> robotPose) {
+		this.conveyor = conveyor;
+		this.arm = arm;
+		this.shooter = shooter;
+		this.led = led;
+		this.manualCancel = manualCancel;
+		this.robotPose = robotPose;
+		this.shoot = shoot;
+		timer = 0;
+
+		addRequirements(conveyor, arm, shooter);
+	}
+
+	/** Reports to the driver station that the command is running and reset all the flags. */
+	@Override
+	public void initialize() {
+		isCommandDone = false;
+		shooter.invertMotors(true);
+	}
+
+	/** Spool up the shooter to the correct rpm and set arm angle depending on the mode. */
+	@Override
+	public void execute() {
+		timer++;
+
+		double distanceToSpeaker = PhotonUtils.getDistanceToPose(robotPose.get(), SPEAKER_BLU_POSE);
+
+		double armCalculation = MathCalc.calculateInterpolate(distanceToSpeaker);
+
+		shooter.setState(ShooterState.SPEAKER_1M);
+
+		arm.setDynamicAngle(armCalculation);
+
+		if (shoot.get()) {
+			conveyor.setState(ConveyorState.SHOOT);
+			isCommandDone = true;
+		}
+	}
+
+	/**
+	 * Stops and idles the robots subsystems.
+	 *
+	 * @param interrupted Indicates if the command was interrupted
+	 */
+	@Override
+	public void end(boolean interrupted) {
+		led.setState(LEDState.RAINBOW);
+		arm.setState(ArmState.IDLE);
+		shooter.setState(ShooterState.IDLE);
+		conveyor.setState(ConveyorState.OFF);
+	}
+
+	/**
+	 * Checks if the command is finished. Can be overriden by manual cancel.
+	 *
+	 * @return True if the task is finished, false otherwise
+	 */
+	@Override
+	public boolean isFinished() {
+		if (manualCancel.get() || isCommandDone) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+}
