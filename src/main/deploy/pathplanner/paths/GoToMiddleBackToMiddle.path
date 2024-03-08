@@ -20,17 +20,51 @@
         "y": 5.551187918118234
       },
       "prevControl": {
-        "x": 1.6162688461334,
+        "x": 2.175698376441477,
+        "y": 5.448388141856785
+      },
+      "nextControl": {
+        "x": 3.103361155427368,
+        "y": 5.664842790286827
+      },
+      "isLocked": false,
+      "linkedName": "Z_1_END"
+    },
+    {
+      "anchor": {
+        "x": 1.588271083518912,
         "y": 5.551187918118234
+      },
+      "prevControl": {
+        "x": 2.499470188564712,
+        "y": 5.668673376702747
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Z_1_END"
+      "linkedName": "GoToMiddleBackToMiddle_END"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "Intake",
+      "waypointRelativePos": 0.1,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "Intake_Auto"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 1.75,
     "maxAcceleration": 1.5,

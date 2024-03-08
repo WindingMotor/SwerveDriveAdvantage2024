@@ -356,7 +356,7 @@ public class Constants {
 
 			AMP(95, 0.0),
 			DYNAMIC(-1.0, 0.0),
-			INTAKE(50, 0.0), // 89
+			INTAKE(50, 0.0), // 89, 50
 
 			TRAP(61.0, 0.0);
 

@@ -8,7 +8,6 @@
 
 package frc.robot;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -69,19 +68,20 @@ public class RobotContainer {
 
 		logMetadata();
 
-		/*
 		swerve.setDefaultCommand(
 				swerve.driveJoystick(
 						() -> driverController.getRawAxis(1),
 						() -> driverController.getRawAxis(0),
 						() -> driverController.getRawAxis(3)));
-		*/
 
+		/*
 		swerve.setDefaultCommand(
 				swerve.driveJoystick(
 						() -> -MathUtil.applyDeadband(operatorController.getRawAxis(5), 0.05),
 						() -> MathUtil.applyDeadband(operatorController.getRawAxis(4), 0.05),
 						() -> MathUtil.applyDeadband(operatorController.getRawAxis(0), 0.05)));
+			*/
+
 	}
 
 	/** Configure the bindings for the controller buttons to specific commands. */

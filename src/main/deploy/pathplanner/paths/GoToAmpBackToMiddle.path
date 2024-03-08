@@ -1,0 +1,92 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 1.588271083518912,
+        "y": 5.551187918118234
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.588271083518912,
+        "y": 5.551187918118234
+      },
+      "isLocked": false,
+      "linkedName": "GoToMiddleBackToMiddle_END"
+    },
+    {
+      "anchor": {
+        "x": 2.748439987040977,
+        "y": 6.5938713630557855
+      },
+      "prevControl": {
+        "x": 2.5868974814872714,
+        "y": 6.109243846394669
+      },
+      "nextControl": {
+        "x": 2.8966126269139467,
+        "y": 7.038389282674695
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 1.588271083518912,
+        "y": 5.874272929225644
+      },
+      "prevControl": {
+        "x": 2.0582129178569595,
+        "y": 6.3735861282098245
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1.05,
+      "rotationDegrees": -122.51392817103357,
+      "rotateFast": false
+    }
+  ],
+  "constraintZones": [],
+  "eventMarkers": [
+    {
+      "name": "Intake",
+      "waypointRelativePos": 0.5,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "Intake_Auto"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 1.75,
+    "maxAcceleration": 1.5,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 180.0,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "Z_PATHS",
+  "previewStartingState": {
+    "rotation": 180.0,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}
