@@ -23,6 +23,7 @@ public class CMDGR_Intake extends SequentialCommandGroup {
 		// Call intake command and flash leds green
 		addCommands(
 				new CMD_Intake(conveyor, arm, manualCancel),
-				new CMDGR_LedFlash(led, LEDState.GREEN, 5, 0.1));
+				new CMDGR_LedFlash(led, LEDState.GREEN, 5, 0.1),
+				new CMD_Led(led, LEDState.RAINBOW));
 	}
 }

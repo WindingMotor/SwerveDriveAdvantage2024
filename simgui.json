@@ -16,6 +16,8 @@
       "/AdvantageKit/RealOutputs/armMechanism": "Mechanism2d",
       "/FMSInfo": "FMSInfo",
       "/Shuffleboard/Auto Selector/SendableChooser[0]": "String Chooser",
+      "/SmartDashboard/Arm Mech2d": "Mechanism2d",
+      "/SmartDashboard/Arm Sim": "Mechanism2d",
       "/SmartDashboard/Auto": "String Chooser",
       "/SmartDashboard/Field": "Field2d",
       "/SmartDashboard/Pigeon 2 (v6) [1]": "Gyro",

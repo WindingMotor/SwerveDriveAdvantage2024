@@ -22,7 +22,7 @@ public class AutoSelector {
 	public AutoSelector() {
 
 		// Build the auto selector from PathPlanner auto files and set the default auto to A1_D1_SM
-		autoSelector = AutoBuilder.buildAutoChooser("A1_D1_SM");
+		autoSelector = AutoBuilder.buildAutoChooser("Middle");
 
 		// Not sure why this is needed, the auto selector should apply all PathPlannerAuto's options by
 		// default

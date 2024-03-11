@@ -25,6 +25,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.RobotMode;
 import frc.robot.subsystems.vision.SUB_Vision;
 import java.util.Optional;
 import java.util.concurrent.locks.Lock;
@@ -79,7 +80,9 @@ public class SUB_Swerve extends SubsystemBase {
 
 		odometryLock.lock();
 		io.updateInputs(inputs);
-		io.updateEstimations(vision);
+		if (Constants.CURRENT_MODE != RobotMode.SIM) {
+			io.updateEstimations(vision);
+		}
 		io.updateOdometry();
 		odometryLock.unlock();
 

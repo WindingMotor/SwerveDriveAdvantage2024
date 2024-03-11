@@ -196,7 +196,7 @@ public class CMD_Shoot extends Command {
 		if (!autoShoot) {
 
 			if (shooter.isUptoSpeed() && arm.isAtSetpoint()) {
-				led.setState(LEDState.GREEN);
+				led.setState(LEDState.WHITE);
 			}
 
 			if (shoot.get()) {
@@ -210,8 +210,8 @@ public class CMD_Shoot extends Command {
 
 			// Auto shoot with RPM check
 		} else {
-			if (shooter.isUptoSpeed() && arm.isAtSetpoint() && timer > 80) {
-				led.setState(LEDState.GREEN);
+			if (shooter.isUptoSpeed() && arm.isAtSetpoint() && timer > 50) {
+				led.setState(LEDState.WHITE);
 				hasShootBeenCalled = true;
 				if (mode == ShooterMode.AMP) {
 					conveyor.setState(Constants.States.ConveyorState.AMP);
@@ -240,7 +240,6 @@ public class CMD_Shoot extends Command {
 	@Override
 	public void end(boolean interrupted) {
 		led.setState(LEDState.RAINBOW);
-		swerveAlign.setControllerInput(true);
 	}
 
 	/**

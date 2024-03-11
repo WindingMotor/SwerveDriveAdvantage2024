@@ -51,7 +51,7 @@ public class AddressableLedStrip extends SubsystemBase {
 
 		hue = 0;
 
-		ledStrip.stop();
+		ledStrip.start();
 	}
 
 	@Override
@@ -72,7 +72,7 @@ public class AddressableLedStrip extends SubsystemBase {
 					break;
 
 				case BLUE:
-					solid(Color.kGreen);
+					solid(Color.kBlue);
 					break;
 
 				case RED:

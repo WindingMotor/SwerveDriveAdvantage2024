@@ -38,11 +38,11 @@ public class CMDGR_Shoot extends SequentialCommandGroup {
 		// Call the shoot command, then wait 0.5 seconds, then call the idle command
 		addCommands(
 				new CMD_Led(led, LEDState.BLUE),
-				new WaitCommand(1),
-				new CMD_Shoot(
-						conveyor, arm, shooter, vision, led, mode, manualCancel, shoot, robotPose, swerveAlign),
-				new WaitCommand(0.5), // Delay to allow dount to leave the robot
+				new WaitCommand(0.1),
+				new CMD_Shoot(conveyor, arm, shooter, vision, led, mode, manualCancel, shoot, robotPose, swerveAlign),
+				new WaitCommand(0.05), // Delay to allow dount to leave the robot
 				new CMD_Idle(conveyor, arm, shooter),
+				new CMDGR_LedFlash(led, LEDState.GREEN, 5, 0.1),
 				new CMD_Led(led, LEDState.RAINBOW));
 	}
 }
