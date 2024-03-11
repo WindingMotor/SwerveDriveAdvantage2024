@@ -8,6 +8,7 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -17,7 +18,7 @@ import frc.robot.auto.CommandRegistrar;
 import frc.robot.commands.CMDGR_Intake;
 import frc.robot.commands.CMDGR_Shoot;
 import frc.robot.commands.CMD_ShootDynamicTest;
-import frc.robot.subsystems.arm.IO_ArmReal;
+import frc.robot.subsystems.arm.IO_ArmSim;
 import frc.robot.subsystems.arm.SUB_Arm;
 import frc.robot.subsystems.conveyor.IO_ConveyorReal;
 import frc.robot.subsystems.conveyor.SUB_Conveyor;
@@ -40,7 +41,7 @@ public class RobotContainer {
 	// All methods using these subsystems should be called in this order -> conveyor, arm, shooter
 	private final SUB_Conveyor conveyor = new SUB_Conveyor(new IO_ConveyorReal());
 
-	private final SUB_Arm arm = new SUB_Arm(new IO_ArmReal());
+	private final SUB_Arm arm = new SUB_Arm(new IO_ArmSim());
 
 	private final SUB_Shooter shooter = new SUB_Shooter(new IO_ShooterReal());
 
@@ -205,6 +206,7 @@ public class RobotContainer {
 	 * @return The autonomous command
 	 */
 	public Command getAutonomousCommand() {
-		return autoSelector.getSelectedAuto();
+		// return autoSelector.getSelectedAuto();
+		return AutoBuilder.buildAuto("Middle");
 	}
 }

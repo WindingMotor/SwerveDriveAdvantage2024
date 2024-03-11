@@ -159,16 +159,6 @@ public class IO_ArmReal implements IO_ArmBase {
 	}
 
 	/**
-	 * Set the new angle for the arm.
-	 *
-	 * @param newAngle The new angle to set for the arm in degrees.
-	 */
-	@Override
-	public void setAngle(double newAngle) {
-		setpointPosition = newAngle;
-	}
-
-	/**
 	 * Set the speed of the motors.
 	 *
 	 * @param speed the speed to set for the motors
