@@ -231,6 +231,7 @@ public class Constants {
 		// Shooter motor CAN IDs
 		public static final int SHOOTER_MOTOR_BOTTOM_ID = 12;
 		public static final int SHOOTER_MOTOR_TOP_ID = 13;
+		public static final int SHOOTER_MOTOR_CURRENT_LIMIT = 45;
 
 		// Shooter motor inversions
 		public static final boolean SHOOTER_MOTOR_BOTTOM_INVERTED = true;
@@ -401,7 +402,7 @@ public class Constants {
 			BLU_SPEAKER(new Pose2d(1.5, 5.5, Rotation2d.fromDegrees(180))),
 			RED_SPEAKER(new Pose2d(12.0, 5.5, Rotation2d.fromDegrees(180))),
 
-			BLU_AMP(new Pose2d(1.85, 7.75, Rotation2d.fromDegrees(90))),
+			BLU_AMP(new Pose2d(1.95, 7.4, Rotation2d.fromDegrees(-90))),
 			RED_AMP(new Pose2d(15.0, 14.75, Rotation2d.fromDegrees(90)));
 
 			public final Pose2d pose;

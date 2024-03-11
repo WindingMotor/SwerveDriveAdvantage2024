@@ -26,6 +26,7 @@ import frc.robot.subsystems.swerve.SUB_Swerve;
 import frc.robot.subsystems.vision.SUB_Vision;
 import frc.robot.util.AddressableLedStrip;
 import frc.robot.util.AddressableLedStrip.LEDState;
+import frc.robot.util.SwerveAlign;
 
 // 041215128954433
 public class CommandRegistrar {
@@ -40,18 +41,22 @@ public class CommandRegistrar {
 
 	private final AddressableLedStrip led;
 
+	private final SwerveAlign swerveAlign;
+
 	public CommandRegistrar(
 			SUB_Vision vision,
 			SUB_Swerve swerve,
 			SUB_Conveyor conveyor,
 			SUB_Arm arm,
 			SUB_Shooter shooter,
-			AddressableLedStrip led) {
+			AddressableLedStrip led,
+			SwerveAlign swerveAlign) {
 		this.vision = vision;
 		this.conveyor = conveyor;
 		this.arm = arm;
 		this.shooter = shooter;
 		this.led = led;
+		this.swerveAlign = swerveAlign;
 	}
 
 	/*
@@ -89,7 +94,8 @@ public class CommandRegistrar {
 						() -> false,
 						true,
 						ShooterState.SPEAKER_1M,
-						ArmState.SPEAKER_1M));
+						ArmState.SPEAKER_1M,
+						swerveAlign));
 
 		// Two Meters
 		NamedCommands.registerCommand(
@@ -105,7 +111,8 @@ public class CommandRegistrar {
 						() -> false,
 						true,
 						ShooterState.SPEAKER_2M,
-						ArmState.SPEAKER_2M));
+						ArmState.SPEAKER_2M.AMP,
+						swerveAlign));
 
 		// Two and a half meters
 		NamedCommands.registerCommand(
@@ -121,7 +128,8 @@ public class CommandRegistrar {
 						() -> false,
 						true,
 						ShooterState.SPEAKER_2_5M,
-						ArmState.SPEAKER_2_5M));
+						ArmState.SPEAKER_2_5M,
+						swerveAlign));
 
 		// Three meters
 		NamedCommands.registerCommand(
@@ -137,7 +145,8 @@ public class CommandRegistrar {
 						() -> false,
 						true,
 						ShooterState.SPEAKER_3M,
-						ArmState.SPEAKER_3M));
+						ArmState.SPEAKER_3M,
+						swerveAlign));
 
 		// Amp command
 		NamedCommands.registerCommand(
@@ -153,7 +162,8 @@ public class CommandRegistrar {
 						() -> false,
 						true,
 						ShooterState.AMP,
-						ArmState.AMP));
+						ArmState.AMP,
+						swerveAlign));
 
 		// Idle command
 		NamedCommands.registerCommand("Idle", new CMD_Idle(conveyor, arm, shooter));

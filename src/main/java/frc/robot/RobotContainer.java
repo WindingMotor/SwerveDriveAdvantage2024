@@ -11,12 +11,13 @@ package frc.robot;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.Constants.Auto.DriveScoringPoseState;
 import frc.robot.Constants.States.ShooterMode;
 import frc.robot.auto.AutoSelector;
 import frc.robot.auto.CommandRegistrar;
+import frc.robot.commands.CMDGR_DriveToScoringPose;
 import frc.robot.commands.CMDGR_Intake;
 import frc.robot.commands.CMDGR_Shoot;
-import frc.robot.commands.CMD_ShootDynamicTest;
 import frc.robot.subsystems.arm.IO_ArmReal;
 import frc.robot.subsystems.arm.SUB_Arm;
 import frc.robot.subsystems.conveyor.IO_ConveyorReal;
@@ -28,6 +29,7 @@ import frc.robot.subsystems.swerve.SUB_Swerve;
 import frc.robot.subsystems.vision.IO_VisionReal;
 import frc.robot.subsystems.vision.SUB_Vision;
 import frc.robot.util.AddressableLedStrip;
+import frc.robot.util.SwerveAlign;
 import org.littletonrobotics.junction.Logger;
 
 public class RobotContainer {
@@ -50,8 +52,11 @@ public class RobotContainer {
 
 	// private final SUB_Climb climb = new SUB_Climb(new IO_ClimbReal());
 
+	private final SwerveAlign swerveAlign =
+			new SwerveAlign(() -> driverController.getRawAxis(3), () -> swerve.getPose());
+
 	private final CommandRegistrar commandRegistrar =
-			new CommandRegistrar(vision, swerve, conveyor, arm, shooter, led);
+			new CommandRegistrar(vision, swerve, conveyor, arm, shooter, led, swerveAlign);
 
 	/*
 		private final SUB_Sidekick sidekick =
@@ -70,11 +75,13 @@ public class RobotContainer {
 
 		logMetadata();
 
+		swerveAlign.setControllerInput(true);
+
 		swerve.setDefaultCommand(
 				swerve.driveJoystick(
 						() -> driverController.getRawAxis(1),
 						() -> driverController.getRawAxis(0),
-						() -> driverController.getRawAxis(3)));
+						() -> swerveAlign.get()));
 
 		/*
 		swerve.setDefaultCommand(
@@ -102,7 +109,8 @@ public class RobotContainer {
 								ShooterMode.DYNAMIC,
 								() -> operatorController.b().getAsBoolean(),
 								() -> operatorController.x().getAsBoolean(),
-								() -> swerve.getPose()));
+								() -> swerve.getPose(),
+								swerveAlign));
 
 		// Amp command
 		operatorController
@@ -117,7 +125,8 @@ public class RobotContainer {
 								ShooterMode.AMP,
 								() -> operatorController.b().getAsBoolean(),
 								() -> operatorController.y().getAsBoolean(),
-								() -> swerve.getPose()));
+								() -> swerve.getPose(),
+								swerveAlign));
 
 		// Trap command
 		/*
@@ -163,18 +172,15 @@ public class RobotContainer {
 								() -> operatorController.b().getAsBoolean()));
 		*/
 
-		/*
 		// Drive to speaker command
 		operatorController
-				.leftStick()
+				.rightBumper()
 				.debounce(0.15)
 				.onTrue(
 						new CMDGR_DriveToScoringPose(
-								swerve,
-								DriveScoringPoseState.SPEAKER,
-								() -> operatorController.b().getAsBoolean()));
-		*/
+								swerve, DriveScoringPoseState.AMP, () -> operatorController.b().getAsBoolean()));
 
+		/*
 		operatorController
 				.rightBumper()
 				.onTrue(
@@ -187,6 +193,7 @@ public class RobotContainer {
 								() -> operatorController.b().getAsBoolean(),
 								() -> operatorController.rightBumper().debounce(0.1).getAsBoolean(),
 								() -> swerve.getPose()));
+			*/
 	}
 
 	// 041215128954433

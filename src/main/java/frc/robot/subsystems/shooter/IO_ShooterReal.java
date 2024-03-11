@@ -14,6 +14,7 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
+import frc.robot.Constants.Maestro;
 import frc.robot.util.Builder;
 
 /** Represents a real implementation of the shooter. */
@@ -39,12 +40,12 @@ public class IO_ShooterReal implements IO_ShooterBase {
 				Builder.createVortex(
 						Constants.Maestro.SHOOTER_MOTOR_BOTTOM_ID,
 						Constants.Maestro.SHOOTER_MOTOR_BOTTOM_INVERTED,
-						45);
+						Maestro.SHOOTER_MOTOR_CURRENT_LIMIT);
 		topMotor =
 				Builder.createVortex(
 						Constants.Maestro.SHOOTER_MOTOR_TOP_ID,
 						Constants.Maestro.SHOOTER_MOTOR_TOP_INVERTED,
-						45);
+						Maestro.SHOOTER_MOTOR_CURRENT_LIMIT);
 
 		Builder.configureIdleMode(bottomMotor, false);
 		Builder.configureIdleMode(topMotor, false);
@@ -61,6 +62,7 @@ public class IO_ShooterReal implements IO_ShooterBase {
 						Constants.Maestro.SHOOTER_MOTORS_D),
 				Constants.Maestro.SHOOTER_MOTORS_IZ,
 				Constants.Maestro.SHOOTER_MOTORS_FF);
+
 		Builder.configurePIDController(
 				topPID,
 				false,

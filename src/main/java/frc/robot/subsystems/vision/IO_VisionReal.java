@@ -13,6 +13,7 @@ import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -115,26 +116,37 @@ public class IO_VisionReal implements IO_VisionBase {
 
 		// inputs.limelightCameraIsOn = limelightCamera.isConnected();
 		//	inputs.limelightCameraHasTargets = limelightCamera.getLatestResult().hasTargets();
+	}
 
-		/*
+	/**
+	 * Get the pose of the donut based on the latest result from the lifecam and trignometry.
+	 *
+	 * @return The pose of the donut
+	 */
+	public Pose2d getDonutPose() {
 		if (lifecam.getLatestResult().hasTargets()) {
-		double targetYaw = lifecam.getLatestResult().getBestTarget().getYaw();
 
-		double targetPitch = lifecam.getLatestResult().getBestTarget().getPitch();
+			// PhotonUtils.estimateCameraToTargetTranslation(targetDistMeters, targetYaw)
 
-		double cameraPitchAngle = 7.0;
-		double cameraHeightMeters = 0.3;
+			double targetYaw = lifecam.getLatestResult().getBestTarget().getYaw();
 
-		double rDistanceMeters =
-				1.0
-						/ Math.tan(Math.toRadians(cameraPitchAngle) + Math.toRadians(targetPitch))
-						* cameraHeightMeters;
+			double targetPitch = lifecam.getLatestResult().getBestTarget().getPitch();
 
-		double xDistanceMeters = Math.cos(Math.toRadians(targetYaw)) * rDistanceMeters;
-		double yDistanceMeters = Math.sin(Math.toRadians(targetYaw)) * rDistanceMeters;
+			double cameraPitchAngle = 7.0;
+			double cameraHeightMeters = 0.3;
 
+			double rDistanceMeters =
+					1.0
+							/ Math.tan(Math.toRadians(cameraPitchAngle) + Math.toRadians(targetPitch))
+							* cameraHeightMeters;
+
+			double xDistanceMeters = Math.cos(Math.toRadians(targetYaw)) * rDistanceMeters;
+			double yDistanceMeters = Math.sin(Math.toRadians(targetYaw)) * rDistanceMeters;
+
+			return new Pose2d(xDistanceMeters, yDistanceMeters, new Rotation2d());
+		} else {
+			return new Pose2d(-1, -1, new Rotation2d());
 		}
-		*/
 	}
 
 	/**

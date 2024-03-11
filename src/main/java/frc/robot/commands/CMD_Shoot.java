@@ -23,6 +23,7 @@ import frc.robot.subsystems.vision.SUB_Vision;
 import frc.robot.util.AddressableLedStrip;
 import frc.robot.util.AddressableLedStrip.LEDState;
 import frc.robot.util.MathCalc;
+import frc.robot.util.SwerveAlign;
 import java.util.function.Supplier;
 import org.photonvision.PhotonUtils;
 
@@ -43,6 +44,7 @@ public class CMD_Shoot extends Command {
 	private ShooterState autoShooterState;
 	private ArmState autoArmState;
 	private Supplier<Pose2d> robotPose;
+	private SwerveAlign swerveAlign;
 
 	private Pose2d SPEAKER_BLU_POSE = new Pose2d(0, 5.5, new Rotation2d());
 
@@ -66,7 +68,8 @@ public class CMD_Shoot extends Command {
 			ShooterMode mode,
 			Supplier<Boolean> manualCancel,
 			Supplier<Boolean> shoot,
-			Supplier<Pose2d> robotPose) {
+			Supplier<Pose2d> robotPose,
+			SwerveAlign swerveAlign) {
 		this.conveyor = conveyor;
 		this.arm = arm;
 		this.shooter = shooter;
@@ -77,6 +80,7 @@ public class CMD_Shoot extends Command {
 		this.autoShooterState = null;
 		this.autoArmState = null;
 		this.robotPose = robotPose;
+		this.swerveAlign = swerveAlign;
 
 		addRequirements(conveyor, arm, shooter);
 	}
@@ -93,7 +97,8 @@ public class CMD_Shoot extends Command {
 			Supplier<Boolean> shoot,
 			boolean autoShoot,
 			ShooterState autoShooterState,
-			ArmState autoArmState) {
+			ArmState autoArmState,
+			SwerveAlign swerveAlign) {
 		this.conveyor = conveyor;
 		this.arm = arm;
 		this.shooter = shooter;
@@ -104,6 +109,7 @@ public class CMD_Shoot extends Command {
 		this.manualCancel = manualCancel;
 		this.autoShooterState = autoShooterState;
 		this.autoArmState = autoArmState;
+		this.swerveAlign = swerveAlign;
 
 		addRequirements(conveyor, arm, shooter);
 	}
@@ -114,6 +120,7 @@ public class CMD_Shoot extends Command {
 		timer = 0;
 		isCommandDone = false;
 		hasShootBeenCalled = false;
+		swerveAlign.setControllerInput(false);
 	}
 
 	/** Spool up the shooter to the correct rpm and set arm angle depending on the mode. */
@@ -203,7 +210,7 @@ public class CMD_Shoot extends Command {
 
 			// Auto shoot with RPM check
 		} else {
-			if (shooter.isUptoSpeed() && arm.isAtSetpoint() && timer > 50) {
+			if (shooter.isUptoSpeed() && arm.isAtSetpoint() && timer > 80) {
 				led.setState(LEDState.GREEN);
 				hasShootBeenCalled = true;
 				if (mode == ShooterMode.AMP) {
@@ -233,6 +240,7 @@ public class CMD_Shoot extends Command {
 	@Override
 	public void end(boolean interrupted) {
 		led.setState(LEDState.RAINBOW);
+		swerveAlign.setControllerInput(true);
 	}
 
 	/**
