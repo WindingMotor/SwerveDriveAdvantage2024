@@ -85,6 +85,7 @@ public class SUB_Arm extends SubsystemBase {
 	 * @param newClimbMode The new value for climb mode
 	 */
 	public void setClimbMode(boolean newClimbMode) {
+		DYNAMIC_MODE = false;
 		CLIMB_MODE = newClimbMode;
 	}
 

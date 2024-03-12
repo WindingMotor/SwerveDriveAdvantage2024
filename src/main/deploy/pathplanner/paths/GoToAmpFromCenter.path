@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.28,
-        "y": 5.71
+        "x": 7.7106382028977745,
+        "y": 7.436121618226951
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.81615860392057,
-        "y": 5.6657595215807985
+        "x": 5.521626438209607,
+        "y": 7.195052567678953
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "GoToCenterFromAmp_END"
     },
     {
       "anchor": {
-        "x": 2.23,
-        "y": 6.983088068103619
+        "x": 3.4141457878271106,
+        "y": 6.826574938457547
       },
       "prevControl": {
-        "x": 1.6113577686814526,
-        "y": 7.089834944692301
+        "x": 4.969767305097147,
+        "y": 7.1082346297705135
       },
       "nextControl": null,
       "isLocked": false,
@@ -39,13 +39,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 180.0,
+    "rotation": -161.26000501339627,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "A2_PATHS",
+  "folder": "Z_PATHS",
   "previewStartingState": {
-    "rotation": 179.12366449569353,
+    "rotation": 179.17077365280556,
     "velocity": 0
   },
   "useDefaultConstraints": true

@@ -130,7 +130,7 @@ public class Constants {
 					new Transform3d(
 							new Translation3d(
 									Units.inchesToMeters(4),
-									Units.inchesToMeters(-19),
+									Units.inchesToMeters(-19 - 1.5),
 									Units.inchesToMeters(
 											8.5)), // Camera mounted 12in forward, 9.125in right, 8.625 up.
 							new Rotation3d(
@@ -376,6 +376,7 @@ public class Constants {
 			INTAKE(-1.0, -0.5),
 			EJECT(1.0, 0.45),
 			SHOOT(0.0, -1.0),
+			SLOW(0.0, -0.1),
 			AMP(0.0, -0.8);
 			public final double intakeSpeed, indexerSpeed;
 
@@ -396,10 +397,8 @@ public class Constants {
 		public static final double MAX_ANGULAR_VELOCITY_RADS = 360;
 		public static final double MAX_ANGULAR_VELOCITY_RADS_SQ = 540;
 
-		// 4.5
-
 		public enum ScoringPoses {
-			BLU_SPEAKER(new Pose2d(1.5, 5.5, Rotation2d.fromDegrees(180))),
+			BLU_SPEAKER(new Pose2d(0, 5.5, new Rotation2d())),
 			RED_SPEAKER(new Pose2d(12.0, 5.5, Rotation2d.fromDegrees(180))),
 
 			BLU_AMP(new Pose2d(1.95, 7.4, Rotation2d.fromDegrees(-90))),

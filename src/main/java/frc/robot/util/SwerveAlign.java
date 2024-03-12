@@ -10,7 +10,6 @@ package frc.robot.util;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import java.util.function.Supplier;
 
 public class SwerveAlign {
@@ -20,8 +19,6 @@ public class SwerveAlign {
 	PIDController pid;
 
 	private boolean isControllerInput;
-
-	private Pose2d SPEAKER_BLU_POSE = new Pose2d(0, 5.5, new Rotation2d());
 
 	public SwerveAlign(Supplier<Double> controllerInput, Supplier<Pose2d> robotPose) {
 		this.controllerInput = controllerInput;
@@ -36,15 +33,22 @@ public class SwerveAlign {
 		if (isControllerInput) {
 			return controllerInput.get();
 		} else {
+
 			return controllerInput.get();
 
-			/*
+			/* MAYBE WORKS?
 			double xDistanceMeters = robotPose.get().getX();
-			double hDistanceMeters = PhotonUtils.getDistanceToPose(robotPose.get(), SPEAKER_BLU_POSE);
+			double hDistanceMeters =
+					PhotonUtils.getDistanceToPose(robotPose.get(), ScoringPoses.BLU_SPEAKER.pose);
 
+			double yDistanceMeters = robotPose.get().getY();
+			double setpointRadians = 0.0;
+			if (yDistanceMeters > ScoringPoses.BLU_SPEAKER.pose.getY()) {
+				setpointRadians = Math.toRadians(90) - (Math.asin(xDistanceMeters / hDistanceMeters));
+			} else if (yDistanceMeters < ScoringPoses.BLU_SPEAKER.pose.getY()) {
+				setpointRadians = Math.toRadians(90) + (Math.asin(xDistanceMeters / hDistanceMeters));
+			}
 			// 90 amp
-			double setpointRadians = Math.toRadians(90) + (Math.asin(xDistanceMeters / hDistanceMeters));
-
 			Logger.recordOutput("Output H Distance", hDistanceMeters);
 			Logger.recordOutput("Output X Distance", xDistanceMeters);
 			Logger.recordOutput("Output Angle", setpointRadians);

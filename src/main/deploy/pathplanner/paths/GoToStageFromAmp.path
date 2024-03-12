@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.513469069871951,
-        "y": 6.784785233255618
+        "x": 2.6162688461334,
+        "y": 6.799767660316021
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.6750115754256556,
-        "y": 4.772846754995836
+        "x": 2.7778113516871046,
+        "y": 4.787829182056239
       },
       "isLocked": false,
       "linkedName": "GoToAmpFast_END"
     },
     {
       "anchor": {
-        "x": 2.513469069871951,
-        "y": 4.332276285303912
+        "x": 2.6162688461334,
+        "y": 4.262250512906066
       },
       "prevControl": {
-        "x": 1.6323281304881045,
-        "y": 4.523190155503746
+        "x": 1.7351279067495535,
+        "y": 4.4531643831059
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,7 +33,7 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 1.75,
-    "maxAcceleration": 1.5,
+    "maxAcceleration": 1.48,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },

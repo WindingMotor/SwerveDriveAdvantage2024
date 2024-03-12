@@ -15,6 +15,7 @@ import frc.robot.Constants.States.ShooterMode;
 import frc.robot.Constants.States.ShooterState;
 import frc.robot.commands.CMD_Eject;
 import frc.robot.commands.CMD_Idle;
+import frc.robot.commands.CMD_IndexerAdvance;
 import frc.robot.commands.CMD_Intake;
 import frc.robot.commands.CMD_IntakeAuto;
 import frc.robot.commands.CMD_Led;
@@ -39,6 +40,8 @@ public class CommandRegistrar {
 
 	private final SUB_Shooter shooter;
 
+	private final SUB_Swerve swerve;
+
 	private final AddressableLedStrip led;
 
 	private final SwerveAlign swerveAlign;
@@ -57,6 +60,7 @@ public class CommandRegistrar {
 		this.shooter = shooter;
 		this.led = led;
 		this.swerveAlign = swerveAlign;
+		this.swerve = swerve;
 	}
 
 	/*
@@ -111,7 +115,7 @@ public class CommandRegistrar {
 						() -> false,
 						true,
 						ShooterState.SPEAKER_2M,
-						ArmState.SPEAKER_2M.AMP,
+						ArmState.SPEAKER_2M,
 						swerveAlign));
 
 		// Two and a half meters
@@ -148,6 +152,24 @@ public class CommandRegistrar {
 						ArmState.SPEAKER_3M,
 						swerveAlign));
 
+		// Dynamic
+		NamedCommands.registerCommand(
+				"Shoot_Auto",
+				new CMD_Shoot(
+						conveyor,
+						arm,
+						shooter,
+						vision,
+						led,
+						ShooterMode.DYNAMIC,
+						() -> false,
+						() -> false,
+						true,
+						ShooterState.OFF,
+						ArmState.OFF,
+						swerveAlign,
+						() -> swerve.getPose()));
+
 		// Amp command
 		NamedCommands.registerCommand(
 				"Shoot_Amp",
@@ -164,6 +186,8 @@ public class CommandRegistrar {
 						ShooterState.AMP,
 						ArmState.AMP,
 						swerveAlign));
+
+		NamedCommands.registerCommand("Advance", new CMD_IndexerAdvance(conveyor));
 
 		// Idle command
 		NamedCommands.registerCommand("Idle", new CMD_Idle(conveyor, arm, shooter));

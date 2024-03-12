@@ -8,18 +8,17 @@
 
 package frc.robot;
 
-import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.Constants.Auto.DriveScoringPoseState;
+import frc.robot.Constants.RobotMode;
 import frc.robot.Constants.States.ShooterMode;
 import frc.robot.auto.AutoSelector;
 import frc.robot.auto.CommandRegistrar;
-import frc.robot.commands.CMDGR_DriveToScoringPose;
 import frc.robot.commands.CMDGR_Intake;
 import frc.robot.commands.CMDGR_Shoot;
-import frc.robot.commands.CMD_ShootDynamicTest;
+import frc.robot.commands.CMD_Eject;
+import frc.robot.subsystems.arm.IO_ArmReal;
 import frc.robot.subsystems.arm.IO_ArmSim;
 import frc.robot.subsystems.arm.SUB_Arm;
 import frc.robot.subsystems.conveyor.IO_ConveyorReal;
@@ -44,11 +43,14 @@ public class RobotContainer {
 	// All methods using these subsystems should be called in this order -> conveyor, arm, shooter
 	private final SUB_Conveyor conveyor = new SUB_Conveyor(new IO_ConveyorReal());
 
-	private final SUB_Arm arm = new SUB_Arm(new IO_ArmSim());
+	private final SUB_Arm arm =
+			(Constants.CURRENT_MODE == RobotMode.SIM)
+					? new SUB_Arm(new IO_ArmSim())
+					: new SUB_Arm(new IO_ArmReal());
 
 	private final SUB_Shooter shooter = new SUB_Shooter(new IO_ShooterReal());
 
-	private final AddressableLedStrip led = new AddressableLedStrip(0, 20);
+	private final AddressableLedStrip led = new AddressableLedStrip(0, 40);
 
 	private final SUB_Swerve swerve = new SUB_Swerve(new IO_SwerveReal(), vision);
 
@@ -85,14 +87,15 @@ public class RobotContainer {
 						() -> driverController.getRawAxis(0),
 						() -> swerveAlign.get()));
 
+		// conveyor.setDefaultCommand(new CMD_AutoIntake(conveyor));
+
 		/*
 		swerve.setDefaultCommand(
 				swerve.driveJoystick(
 						() -> -MathUtil.applyDeadband(operatorController.getRawAxis(5), 0.05),
 						() -> MathUtil.applyDeadband(operatorController.getRawAxis(4), 0.05),
 						() -> MathUtil.applyDeadband(operatorController.getRawAxis(0), 0.05)));
-			*/
-
+		*/
 	}
 
 	/** Configure the bindings for the controller buttons to specific commands. */
@@ -152,12 +155,9 @@ public class RobotContainer {
 				.onTrue(new CMDGR_Intake(conveyor, arm, led, () -> operatorController.b().getAsBoolean()));
 
 		// Eject command
-
-		/*
-				operatorController
-						.rightBumper()
-						.onTrue(new CMD_Eject(conveyor, arm, () -> operatorController.b().getAsBoolean()));
-		*/
+		operatorController
+				.rightBumper()
+				.onTrue(new CMD_Eject(conveyor, arm, () -> operatorController.b().getAsBoolean()));
 
 		// operatorController.rightStick().onTrue(new CMD_ResetOdo(swerve));
 
@@ -175,6 +175,7 @@ public class RobotContainer {
 		*/
 
 		// Drive to speaker command
+		/*
 		operatorController
 				.rightBumper()
 				.debounce(0.15)
@@ -182,6 +183,7 @@ public class RobotContainer {
 						new CMDGR_DriveToScoringPose(
 								swerve, DriveScoringPoseState.AMP, () -> operatorController.b().getAsBoolean()));
 
+								*/
 		/*
 		operatorController
 				.rightBumper()
@@ -195,7 +197,10 @@ public class RobotContainer {
 								() -> operatorController.b().getAsBoolean(),
 								() -> operatorController.rightBumper().debounce(0.1).getAsBoolean(),
 								() -> swerve.getPose()));
-			*/
+		*/
+
+		// operatorController.rightBumper().onTrue(new CMD_Arm(arm, ArmState.OFF));
+
 	}
 
 	// 041215128954433
@@ -214,7 +219,6 @@ public class RobotContainer {
 	 * @return The autonomous command
 	 */
 	public Command getAutonomousCommand() {
-		// return autoSelector.getSelectedAuto();
-		return AutoBuilder.buildAuto("Middle");
+		return autoSelector.getSelectedAuto();
 	}
 }

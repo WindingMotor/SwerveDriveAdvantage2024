@@ -21,17 +21,9 @@ public class AutoSelector {
 
 	public AutoSelector() {
 
-		// Build the auto selector from PathPlanner auto files and set the default auto to A1_D1_SM
-		autoSelector = AutoBuilder.buildAutoChooser("Middle");
+		autoSelector = AutoBuilder.buildAutoChooser();
 
-		// Not sure why this is needed, the auto selector should apply all PathPlannerAuto's options by
-		// default
-		//	autoSelector.addOption("A1_D1_SM", getSelectedAuto());
-
-		// autoSelector.addOption("NO MOVING", new PrintCommand("NOTHIn"));
-		// autoSelector.addOption("SHOOT", );
-
-		SmartDashboard.putData("Auto", autoSelector);
+		SmartDashboard.putData("Auto Selector", autoSelector);
 	}
 
 	/**

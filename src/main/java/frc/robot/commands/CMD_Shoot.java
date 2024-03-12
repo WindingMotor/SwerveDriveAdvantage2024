@@ -9,10 +9,10 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
+import frc.robot.Constants.Auto.ScoringPoses;
 import frc.robot.Constants.States.ArmState;
 import frc.robot.Constants.States.ShooterMode;
 import frc.robot.Constants.States.ShooterState;
@@ -45,8 +45,6 @@ public class CMD_Shoot extends Command {
 	private ArmState autoArmState;
 	private Supplier<Pose2d> robotPose;
 	private SwerveAlign swerveAlign;
-
-	private Pose2d SPEAKER_BLU_POSE = new Pose2d(0, 5.5, new Rotation2d());
 
 	/**
 	 * Constructor for the CMD_Shoot command.
@@ -114,6 +112,37 @@ public class CMD_Shoot extends Command {
 		addRequirements(conveyor, arm, shooter);
 	}
 
+	// Auto Shoot Contructor
+	public CMD_Shoot(
+			SUB_Conveyor conveyor,
+			SUB_Arm arm,
+			SUB_Shooter shooter,
+			SUB_Vision vision,
+			AddressableLedStrip led,
+			ShooterMode mode,
+			Supplier<Boolean> manualCancel,
+			Supplier<Boolean> shoot,
+			boolean autoShoot,
+			ShooterState autoShooterState,
+			ArmState autoArmState,
+			SwerveAlign swerveAlign,
+			Supplier<Pose2d> robotPose) {
+		this.conveyor = conveyor;
+		this.arm = arm;
+		this.shooter = shooter;
+		this.led = led;
+		this.mode = mode;
+		this.shoot = shoot;
+		this.autoShoot = true;
+		this.manualCancel = manualCancel;
+		this.autoShooterState = autoShooterState;
+		this.autoArmState = autoArmState;
+		this.swerveAlign = swerveAlign;
+		this.robotPose = robotPose;
+
+		addRequirements(conveyor, arm, shooter);
+	}
+
 	/** Reports to the driver station that the command is running and reset all the flags. */
 	@Override
 	public void initialize() {
@@ -137,7 +166,8 @@ public class CMD_Shoot extends Command {
 
 		if (mode == ShooterMode.DYNAMIC) {
 
-			double distanceToSpeaker = PhotonUtils.getDistanceToPose(robotPose.get(), SPEAKER_BLU_POSE);
+			double distanceToSpeaker =
+					PhotonUtils.getDistanceToPose(robotPose.get(), ScoringPoses.BLU_SPEAKER.pose);
 
 			double armCalculation = MathCalc.calculateInterpolate(distanceToSpeaker);
 
@@ -240,6 +270,7 @@ public class CMD_Shoot extends Command {
 	@Override
 	public void end(boolean interrupted) {
 		led.setState(LEDState.RAINBOW);
+		swerveAlign.setControllerInput(true);
 	}
 
 	/**
