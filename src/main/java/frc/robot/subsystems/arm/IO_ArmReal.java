@@ -180,6 +180,11 @@ public class IO_ArmReal implements IO_ArmBase {
 	}
 
 	@Override
+	public void unlockArm() {
+		servo.setPosition(0);
+	}
+
+	@Override
 	public double getRealTimeArmPosition() {
 		return armAngle;
 	}

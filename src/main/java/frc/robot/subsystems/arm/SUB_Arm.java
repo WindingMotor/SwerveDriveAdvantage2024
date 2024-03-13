@@ -103,6 +103,10 @@ public class SUB_Arm extends SubsystemBase {
 		io.lockArm();
 	}
 
+	public void unlockArm() {
+		io.unlockArm();
+	}
+
 	/**
 	 * Retrieves the real-time position of the arm.
 	 *

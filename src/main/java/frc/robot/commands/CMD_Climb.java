@@ -30,6 +30,7 @@ public class CMD_Climb extends Command {
 	// Print a message to the driver station and set the LED state
 	@Override
 	public void initialize() {
+		led.setState(LEDState.ORANGE);
 		if (speed.get() > 0.05) {
 			climb.set(speed.get());
 			led.setState(LEDState.BLUE);

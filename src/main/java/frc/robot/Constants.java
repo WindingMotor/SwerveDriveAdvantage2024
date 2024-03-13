@@ -153,13 +153,13 @@ public class Constants {
 					"limelight",
 					new Transform3d(
 							new Translation3d(
-									Units.inchesToMeters(4.558),
-									Units.inchesToMeters(11.25),
+									Units.inchesToMeters(12.25),
+									Units.inchesToMeters(2.0),
 									Units.inchesToMeters(
-											9.314)), // Camera mounted 12in forward, 9.125in right, 8.625 up.
+											5.3)), // Camera mounted 12in forward, 9.125in right, 8.625 up.
 							new Rotation3d(
 											0.0, // Roll 0
-											Units.degreesToRadians(-29.0), // Pitch FACING UPWARDS
+											Units.degreesToRadians(-60), // Pitch FACING UPWARDS
 											0.0)
 									.rotateBy(
 											new Rotation3d(
@@ -218,7 +218,7 @@ public class Constants {
 		public static final double ARM_VOLTAGE_CLAMPING = 11.9;
 
 		// Min tolerance for arm to claim its good
-		public static final double ARM_TOLERANCE_DEGREES = 1.0; // 3.0
+		public static final double ARM_TOLERANCE_DEGREES = 1.08; // 3.0
 
 		// Arm offset to get zero at horizontal
 		public static final double ARM_OFFSET_DEGREES = 4.85;
@@ -350,6 +350,8 @@ public class Constants {
 			IDLE(-4, 0.0),
 
 			SPEAKER_1M(55.0, 1.0),
+
+			//		SPEAKER_1M(55.0, 1.0),
 			SPEAKER_2M(42.0, 2.0), // 43deg
 			SPEAKER_2_5M(40, 2.0),
 			SPEAKER_3M(38.5, 3.0),

@@ -15,9 +15,10 @@ import frc.robot.Constants.RobotMode;
 import frc.robot.Constants.States.ShooterMode;
 import frc.robot.auto.AutoSelector;
 import frc.robot.auto.CommandRegistrar;
-import frc.robot.commands.CMDGR_Intake;
-import frc.robot.commands.CMDGR_Shoot;
+import frc.robot.commands.CMD_ArmClimb;
 import frc.robot.commands.CMD_Eject;
+import frc.robot.commands.groups.CMDGR_Intake;
+import frc.robot.commands.groups.CMDGR_Shoot;
 import frc.robot.subsystems.arm.IO_ArmReal;
 import frc.robot.subsystems.arm.IO_ArmSim;
 import frc.robot.subsystems.arm.SUB_Arm;
@@ -30,6 +31,7 @@ import frc.robot.subsystems.swerve.SUB_Swerve;
 import frc.robot.subsystems.vision.IO_VisionReal;
 import frc.robot.subsystems.vision.SUB_Vision;
 import frc.robot.util.AddressableLedStrip;
+import frc.robot.util.OperatorRumble;
 import frc.robot.util.SwerveAlign;
 import org.littletonrobotics.junction.Logger;
 
@@ -40,7 +42,6 @@ public class RobotContainer {
 
 	private final SUB_Vision vision = new SUB_Vision(new IO_VisionReal());
 
-	// All methods using these subsystems should be called in this order -> conveyor, arm, shooter
 	private final SUB_Conveyor conveyor = new SUB_Conveyor(new IO_ConveyorReal());
 
 	private final SUB_Arm arm =
@@ -96,12 +97,14 @@ public class RobotContainer {
 						() -> MathUtil.applyDeadband(operatorController.getRawAxis(4), 0.05),
 						() -> MathUtil.applyDeadband(operatorController.getRawAxis(0), 0.05)));
 		*/
+
+		OperatorRumble.rumble(false);
 	}
 
 	/** Configure the bindings for the controller buttons to specific commands. */
 	private void configureBindings() {
 
-		// Shoot command
+		// Shoot command normal
 		operatorController
 				.x()
 				.onTrue(
@@ -111,9 +114,25 @@ public class RobotContainer {
 								shooter,
 								vision,
 								led,
-								ShooterMode.DYNAMIC,
+								ShooterMode.SPEAKER,
 								() -> operatorController.b().getAsBoolean(),
 								() -> operatorController.x().getAsBoolean(),
+								() -> swerve.getPose(),
+								swerveAlign));
+
+		// Shoot command dynamic
+		operatorController
+				.leftBumper()
+				.onTrue(
+						new CMDGR_Shoot(
+								conveyor,
+								arm,
+								shooter,
+								vision,
+								led,
+								ShooterMode.DYNAMIC,
+								() -> operatorController.b().getAsBoolean(),
+								() -> operatorController.leftBumper().getAsBoolean(),
 								() -> swerve.getPose(),
 								swerveAlign));
 
@@ -161,8 +180,11 @@ public class RobotContainer {
 
 		// operatorController.rightStick().onTrue(new CMD_ResetOdo(swerve));
 
-		// Climb command, requires both operator and driver to activate
-		// operatorController.leftBumper().debounce(0.15).onTrue(new CMD_ArmClimb(arm));
+		// Climb command
+		operatorController.leftStick().debounce(0.15).onTrue(new CMD_ArmClimb(arm, led));
+
+		// operatorController.rightStick().debounce(0.1).onTrue(new CMD_Servo(arm, true));
+		// operatorController.rightTrigger().debounce(0.15).onTrue(new CMD_Servo(arm, false));
 
 		/*
 		operatorController

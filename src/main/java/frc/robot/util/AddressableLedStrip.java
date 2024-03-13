@@ -30,6 +30,7 @@ public class AddressableLedStrip extends SubsystemBase {
 		ORANGE,
 		FLAME,
 		ALLIANCE,
+		AMERICAN,
 		OFF
 	}
 
@@ -101,6 +102,9 @@ public class AddressableLedStrip extends SubsystemBase {
 					} else {
 						solid(Color.kOrange);
 					}
+					break;
+				case AMERICAN:
+					everyOther(Color.kBlue, Color.kRed);
 					break;
 				case OFF:
 					solid(Color.kBlack);

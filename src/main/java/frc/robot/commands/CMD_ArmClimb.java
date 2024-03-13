@@ -10,15 +10,19 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.arm.SUB_Arm;
+import frc.robot.util.AddressableLedStrip;
+import frc.robot.util.AddressableLedStrip.LEDState;
 
 public class CMD_ArmClimb extends Command {
 
 	private SUB_Arm arm;
 	private boolean isCommandDone = false;
 	private int timer = 0;
+	private final AddressableLedStrip led;
 
-	public CMD_ArmClimb(SUB_Arm arm) {
+	public CMD_ArmClimb(SUB_Arm arm, AddressableLedStrip led) {
 		this.arm = arm;
+		this.led = led;
 		addRequirements(arm);
 	}
 
@@ -29,16 +33,18 @@ public class CMD_ArmClimb extends Command {
 		arm.setClimbMode(true);
 		isCommandDone = false;
 		timer = 0;
+		led.setState(LEDState.BLUE);
 	}
 
 	@Override
 	public void execute() {
 		timer++;
-		if (arm.getRealTimeArmPosition() < 5.0 && timer > 50) {
+		if (arm.getRealTimeArmPosition() < 0.0 && timer > 50) {
 			arm.lockArm();
 			isCommandDone = true;
+			led.setState(LEDState.AMERICAN);
 		} else {
-			arm.setSpeed(0.5);
+			arm.setSpeed(0.75);
 		}
 	}
 

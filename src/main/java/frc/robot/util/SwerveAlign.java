@@ -10,7 +10,11 @@ package frc.robot.util;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import frc.robot.Constants.Auto.ScoringPoses;
 import java.util.function.Supplier;
+import org.littletonrobotics.junction.Logger;
+import org.photonvision.PhotonUtils;
 
 public class SwerveAlign {
 
@@ -23,7 +27,7 @@ public class SwerveAlign {
 	public SwerveAlign(Supplier<Double> controllerInput, Supplier<Pose2d> robotPose) {
 		this.controllerInput = controllerInput;
 		this.robotPose = robotPose;
-		this.pid = new PIDController(0.01, 0.01, 0.001);
+		this.pid = new PIDController(0.021, 0.018, 0.001);
 		//		this.pid = new PIDController(0.0002, 0.001, 0.0006);
 		this.pid.enableContinuousInput(-Math.PI, Math.PI);
 		isControllerInput = true;
@@ -34,29 +38,33 @@ public class SwerveAlign {
 			return controllerInput.get();
 		} else {
 
-			return controllerInput.get();
+			// return controllerInput.get();
 
-			/* MAYBE WORKS?
+			/*MAYBE WORKS?*/
 			double xDistanceMeters = robotPose.get().getX();
 			double hDistanceMeters =
 					PhotonUtils.getDistanceToPose(robotPose.get(), ScoringPoses.BLU_SPEAKER.pose);
 
 			double yDistanceMeters = robotPose.get().getY();
 			double setpointRadians = 0.0;
-			if (yDistanceMeters > ScoringPoses.BLU_SPEAKER.pose.getY()) {
+
+			if (yDistanceMeters > ScoringPoses.BLU_SPEAKER.pose.getY() + 0.5) {
 				setpointRadians = Math.toRadians(90) - (Math.asin(xDistanceMeters / hDistanceMeters));
-			} else if (yDistanceMeters < ScoringPoses.BLU_SPEAKER.pose.getY()) {
-				setpointRadians = Math.toRadians(90) + (Math.asin(xDistanceMeters / hDistanceMeters));
+			} else if (yDistanceMeters < ScoringPoses.BLU_SPEAKER.pose.getY() - 0.5) {
+				setpointRadians =
+						(Math.toRadians(90) + (Math.asin(xDistanceMeters / hDistanceMeters)))
+								+ Math.toRadians(180);
 			}
-			// 90 amp
+
+			// -90 amp side
 			Logger.recordOutput("Output H Distance", hDistanceMeters);
 			Logger.recordOutput("Output X Distance", xDistanceMeters);
 			Logger.recordOutput("Output Angle", setpointRadians);
 			Logger.recordOutput(
 					"Auto Angle Pose",
 					new Pose2d(robotPose.get().getTranslation(), new Rotation2d(setpointRadians)));
+
 			return pid.calculate(robotPose.get().getRotation().getRadians(), setpointRadians);
-			*/
 		}
 	}
 

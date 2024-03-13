@@ -46,5 +46,7 @@ public interface IO_ArmBase {
 
 	void lockArm();
 
+	public void unlockArm();
+
 	double getRealTimeArmPosition();
 }

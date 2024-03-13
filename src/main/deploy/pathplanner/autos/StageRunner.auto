@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.8435683076802801,
-      "y": 6.681519578030929
+      "x": 0.8386602156110227,
+      "y": 4.43138261056929
     },
-    "rotation": -119.497321149245
+    "rotation": 122.35935885902703
   },
   "command": {
     "type": "sequential",
@@ -24,7 +24,7 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "sequential",
           "data": {
             "commands": [
               {
@@ -36,28 +36,16 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 0.2
+                  "waitTime": 0.1
                 }
               },
               {
                 "type": "path",
                 "data": {
-                  "pathName": "StartGoToAmp"
+                  "pathName": "StartStageRushMiddle"
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot_Auto"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.1
           }
         }
       ]

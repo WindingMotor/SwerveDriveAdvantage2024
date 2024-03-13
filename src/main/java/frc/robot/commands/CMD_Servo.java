@@ -14,9 +14,11 @@ import frc.robot.subsystems.arm.SUB_Arm;
 public class CMD_Servo extends Command {
 
 	private SUB_Arm arm;
+	private boolean lock;
 
-	public CMD_Servo(SUB_Arm arm) {
+	public CMD_Servo(SUB_Arm arm, boolean lock) {
 		this.arm = arm;
+		this.lock = lock;
 		addRequirements(arm);
 	}
 
@@ -25,7 +27,11 @@ public class CMD_Servo extends Command {
 	public void initialize() {
 		// Stop and idle the robot subsystems
 		arm.setClimbMode(true);
-		arm.lockArm();
+		if (lock) {
+			arm.lockArm();
+		} else {
+			arm.unlockArm();
+		}
 	}
 
 	@Override

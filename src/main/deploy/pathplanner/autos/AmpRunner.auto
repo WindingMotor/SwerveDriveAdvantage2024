@@ -59,6 +59,49 @@
           "data": {
             "waitTime": 0.1
           }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 0.2
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "GoToCenterFromAmp"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.05
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "GoToAmpFromCenter"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot_Auto"
+          }
         }
       ]
     }

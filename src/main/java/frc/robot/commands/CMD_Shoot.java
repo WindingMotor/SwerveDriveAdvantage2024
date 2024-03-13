@@ -149,7 +149,12 @@ public class CMD_Shoot extends Command {
 		timer = 0;
 		isCommandDone = false;
 		hasShootBeenCalled = false;
-		swerveAlign.setControllerInput(false);
+
+		if (mode == ShooterMode.DYNAMIC) {
+			swerveAlign.setControllerInput(false);
+		} else {
+			swerveAlign.setControllerInput(true);
+		}
 	}
 
 	/** Spool up the shooter to the correct rpm and set arm angle depending on the mode. */

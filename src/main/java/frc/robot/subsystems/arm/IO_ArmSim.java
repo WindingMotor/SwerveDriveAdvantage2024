@@ -103,6 +103,11 @@ public class IO_ArmSim implements IO_ArmBase {
 	}
 
 	@Override
+	public void unlockArm() {
+		DriverStation.reportWarning("[sim] Unlocking the arm is not implemented", false);
+	}
+
+	@Override
 	public double getRealTimeArmPosition() {
 		return armAngle;
 	}

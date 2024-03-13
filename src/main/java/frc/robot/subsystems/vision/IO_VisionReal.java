@@ -48,7 +48,7 @@ public class IO_VisionReal implements IO_VisionBase {
 	// Initialize pose estimators
 	PhotonPoseEstimator leftPoseEstimator;
 	PhotonPoseEstimator rightPoseEstimator;
-	// PhotonPoseEstimator limelightPoseEstimator;
+	PhotonPoseEstimator limelightPoseEstimator;
 
 	List<PhotonTrackedTarget> targets;
 
@@ -59,7 +59,7 @@ public class IO_VisionReal implements IO_VisionBase {
 		// Disable driver mode for the cameras
 		leftCamera.setDriverMode(false);
 		rightCamera.setDriverMode(false);
-		// limelightCamera.setDriverMode(false);
+		//	limelightCamera.setDriverMode(false);
 
 		// Try loading AprilTag field layout
 
@@ -84,18 +84,17 @@ public class IO_VisionReal implements IO_VisionBase {
 						rightCamera,
 						Constants.Vision.Camera.RIGHT_CAMERA.ROBOT_TO_CAMERA);
 
-		/*
-				limelightPoseEstimator =
-						new PhotonPoseEstimator(
-								fieldLayout,
-								PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
-								rightCamera,
-								Constants.Vision.Camera.LIMELIGHT.ROBOT_TO_CAMERA);
-		*/
+		limelightPoseEstimator =
+				new PhotonPoseEstimator(
+						fieldLayout,
+						PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
+						rightCamera,
+						Constants.Vision.Camera.LIMELIGHT.ROBOT_TO_CAMERA);
+
 		// Set fallback strategies
 		leftPoseEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
 		rightPoseEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
-		// limelightPoseEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
+		//		limelightPoseEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
 	}
 
 	/**
@@ -162,8 +161,8 @@ public class IO_VisionReal implements IO_VisionBase {
 		} else if (camera == Constants.Vision.Camera.RIGHT_CAMERA) {
 			return rightCamera.getLatestResult();
 		} else {
-			return null;
 			// return limelightCamera.getLatestResult();
+			return null;
 		}
 	}
 
@@ -203,8 +202,7 @@ public class IO_VisionReal implements IO_VisionBase {
 		} else if (camera == Constants.Vision.Camera.RIGHT_CAMERA) {
 			return rightPoseEstimator;
 		} else {
-			// return limelightPoseEstimator;
-			return null;
+			return limelightPoseEstimator;
 		}
 	}
 
@@ -258,11 +256,11 @@ public class IO_VisionReal implements IO_VisionBase {
 			if (camera == Constants.Vision.Camera.LEFT_CAMERA) {
 				tagPose = leftPoseEstimator.getFieldTags().getTagPose(tgt.getFiducialId());
 			}
-			/*
-			if (camera == Constants.Vision.Camera.LIMELIGHT) {
-				tagPose = limelightPoseEstimator.getFieldTags().getTagPose(tgt.getFiducialId());
-			}
-			*/
+
+			// if (camera == Constants.Vision.Camera.LIMELIGHT) {
+			//	tagPose = limelightPoseEstimator.getFieldTags().getTagPose(tgt.getFiducialId());
+			// }
+
 			if (tagPose.isEmpty()) continue;
 			numTags++;
 			// Add the distance from the estimated pose to the tag's pose to the average distance
