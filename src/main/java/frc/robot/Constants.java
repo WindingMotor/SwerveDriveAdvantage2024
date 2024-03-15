@@ -111,7 +111,7 @@ public class Constants {
 					new Transform3d(
 							new Translation3d(
 									Units.inchesToMeters(4),
-									Units.inchesToMeters(11.25 + iday ), // X offset to 0in the left of the speaker
+									Units.inchesToMeters(11.25 + 8), // X offset to 0in the left of the speaker
 									Units.inchesToMeters(8.5)),
 							new Rotation3d(0, Units.degreesToRadians(-29), 0.0)
 									.rotateBy(
