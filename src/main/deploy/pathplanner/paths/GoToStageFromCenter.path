@@ -3,41 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.021669132078683838,
-        "y": 5.465555272250658
+        "x": 7.90311232771725,
+        "y": 2.419623882301988
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.8586504783034871,
-        "y": 4.979616868946857
+        "x": 4.825809058666929,
+        "y": 1.002978772593373
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "StartStageRushMiddle_END"
     },
     {
       "anchor": {
-        "x": 0.883358332017496,
-        "y": 7.709983219615554
+        "x": 2.0174797447073396,
+        "y": 3.4639867770668076
       },
       "prevControl": {
-        "x": 0.7761645243475308,
-        "y": 7.586076734704213
-      },
-      "nextControl": {
-        "x": 0.9905521396874613,
-        "y": 7.833889704526896
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 16.54491659094072,
-        "y": 5.465555272250658
-      },
-      "prevControl": {
-        "x": 13.169213825392662,
-        "y": 7.004108868657292
+        "x": 2.7544198032517846,
+        "y": 2.4891229636681627
       },
       "nextControl": null,
       "isLocked": false,
@@ -55,13 +39,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0,
+    "rotation": 127.3602169605108,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Z_PATHS",
   "previewStartingState": {
-    "rotation": 0,
+    "rotation": -179.16631184692807,
     "velocity": 0
   },
   "useDefaultConstraints": true

@@ -3,29 +3,45 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.8386602156110227,
-        "y": 4.43138261056929
+        "x": 0.8516325903131995,
+        "y": 4.446068560898258
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.179480916716565,
-        "y": 2.6139634256876354
+        "x": 4.422273378313133,
+        "y": 2.138208001685508
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 7.911618767334941,
-        "y": 0.8068430306800145
+        "x": 6.22913393889157,
+        "y": 1.9931054678645461
       },
       "prevControl": {
-        "x": 7.064971489860272,
-        "y": 0.6066214191435189
+        "x": 5.905034477557992,
+        "y": 1.7427681375532804
+      },
+      "nextControl": {
+        "x": 6.733851266170452,
+        "y": 2.382953657531199
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 7.90311232771725,
+        "y": 2.419623882301988
+      },
+      "prevControl": {
+        "x": 6.8440281597758865,
+        "y": 2.4079058517506846
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "StartStageRushMiddle_END"
     }
   ],
   "rotationTargets": [],
@@ -39,7 +55,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 180.0,
+    "rotation": -179.39142607976106,
     "rotateFast": false
   },
   "reversed": false,

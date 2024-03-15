@@ -24,19 +24,19 @@
           }
         },
         {
-          "type": "sequential",
+          "type": "parallel",
           "data": {
             "commands": [
               {
                 "type": "named",
                 "data": {
-                  "name": "Intake"
+                  "name": "Intake_Auto"
                 }
               },
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 0.1
+                  "waitTime": 0.05
                 }
               },
               {
@@ -46,6 +46,18 @@
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "GoToStageFromCenter"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot_Auto"
           }
         }
       ]

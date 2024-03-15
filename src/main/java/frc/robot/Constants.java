@@ -111,7 +111,7 @@ public class Constants {
 					new Transform3d(
 							new Translation3d(
 									Units.inchesToMeters(4),
-									Units.inchesToMeters(11.25), // X offset to 0in the left of the speaker
+									Units.inchesToMeters(11.25 + iday ), // X offset to 0in the left of the speaker
 									Units.inchesToMeters(8.5)),
 							new Rotation3d(0, Units.degreesToRadians(-29), 0.0)
 									.rotateBy(
@@ -229,7 +229,7 @@ public class Constants {
 		public static final double SHOOTER_MOTORS_FF = 0.000145;
 
 		// Shooter tolerence to say that its ready
-		public static final double SHOOTER_TOLERANCE_RPM = 350;
+		public static final double SHOOTER_TOLERANCE_RPM = 650;
 
 		/* -- Intake -- */
 
@@ -365,7 +365,7 @@ public class Constants {
 		// Positions of the game elements on the field
 		public enum ScoringPoses {
 			BLU_SPEAKER(new Pose2d(0, 5.5, new Rotation2d())),
-			RED_SPEAKER(new Pose2d(12.0, 5.5, Rotation2d.fromDegrees(180))),
+			RED_SPEAKER(new Pose2d(16.5, 5.5, new Rotation2d())),
 
 			BLU_AMP(new Pose2d(1.95, 7.4, Rotation2d.fromDegrees(-90))),
 			RED_AMP(new Pose2d(15.0, 14.75, Rotation2d.fromDegrees(90)));

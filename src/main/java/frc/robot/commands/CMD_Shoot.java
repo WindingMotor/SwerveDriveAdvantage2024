@@ -9,6 +9,8 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
@@ -171,8 +173,19 @@ public class CMD_Shoot extends Command {
 
 		if (mode == ShooterMode.DYNAMIC) {
 
-			double distanceToSpeaker =
-					PhotonUtils.getDistanceToPose(robotPose.get(), ScoringPoses.BLU_SPEAKER.pose);
+			var alli = DriverStation.getAlliance();
+			Pose2d targetSpeakerPose;
+
+			if (alli.get() == Alliance.Blue) {
+				targetSpeakerPose = ScoringPoses.BLU_SPEAKER.pose;
+			} else if (alli.get() == Alliance.Red) {
+				targetSpeakerPose = ScoringPoses.RED_SPEAKER.pose;
+			} else {
+				targetSpeakerPose = new Pose2d();
+				DriverStation.reportError("[error] Could not find alliance for auto angle", false);
+			}
+
+			double distanceToSpeaker = PhotonUtils.getDistanceToPose(robotPose.get(), targetSpeakerPose);
 
 			double armCalculation = MathCalc.calculateInterpolate(distanceToSpeaker);
 

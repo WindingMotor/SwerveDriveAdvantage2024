@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.7961322140143805,
-        "y": 7.114119074401215
+        "x": 5.147838111426065,
+        "y": 6.698174020221341
       },
       "isLocked": false,
       "linkedName": "StartGoToAmp_END"
     },
     {
       "anchor": {
-        "x": 7.7106382028977745,
-        "y": 7.436121618226951
+        "x": 8.080169592740074,
+        "y": 5.868949048251158
       },
       "prevControl": {
-        "x": 6.431859397540868,
-        "y": 7.3067385416997395
+        "x": 5.553623182066108,
+        "y": 6.845282716740181
       },
       "nextControl": null,
       "isLocked": false,
@@ -39,7 +39,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -179.7130582756737,
+    "rotation": 146.82152905844052,
     "rotateFast": false
   },
   "reversed": false,
