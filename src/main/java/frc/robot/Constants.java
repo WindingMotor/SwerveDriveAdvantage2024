@@ -36,6 +36,9 @@ public class Constants {
 	// Enables vision based odometry for swerve drive.
 	public static final boolean SWERVE_VISION_ODOMETRY_ENABLED = true;
 
+	// Enables snap angle PID for swerve drive.
+	public static final boolean TELEOP_DRIVER_SNAP_ENABLED = false;
+
 	// Current robot mode
 	public enum RobotMode {
 		REAL, // Running on a real robot
@@ -106,48 +109,32 @@ public class Constants {
 					"OV9281_02",
 					"leftCamera",
 					new Transform3d(
-							// new Translation3d(Units.inchesToMeters(9.558), Units.inchesToMeters(10.9795),
-							// Units.inchesToMeters(9.314)), // Camera mounted 12in forward, 9.125in left, 8.625
-							// up.
 							new Translation3d(
 									Units.inchesToMeters(4),
-									Units.inchesToMeters(11.25),
-									Units.inchesToMeters(
-											8.5)), // Camera mounted 12in forward, 9.125in left, 8.625 up.
+									Units.inchesToMeters(11.25), // X offset to 0in the left of the speaker
+									Units.inchesToMeters(8.5)),
 							new Rotation3d(0, Units.degreesToRadians(-29), 0.0)
 									.rotateBy(
 											new Rotation3d(
-													Units.degreesToRadians(-5),
-													0.0,
-													Units.degreesToRadians(
-															-35.5))) // No roll, Pitch on 15 degrees from robot frame, and yaw of
-							// 133 degrees from robot frame.
-							)),
-			// hyhy
+													Units.degreesToRadians(-5), 0.0, Units.degreesToRadians(-35.5))))),
 			RIGHT_CAMERA(
 					"OV9281_01",
 					"rightCamera",
 					new Transform3d(
 							new Translation3d(
 									Units.inchesToMeters(4),
-									Units.inchesToMeters(-19 - 1.5),
-									Units.inchesToMeters(
-											8.5)), // Camera mounted 12in forward, 9.125in right, 8.625 up.
+									Units.inchesToMeters(-19 + 3.5), // X offset to 2in the left of the speaker
+									Units.inchesToMeters(8.5)),
 							new Rotation3d(
-											Units.degreesToRadians(5), // Roll 0
+											Units.degreesToRadians(5),
 											Units.degreesToRadians(-29.0), // Pitch FACING UPWARDS
 											0.0)
 									.rotateBy(
 											new Rotation3d(
 													0.0, 0.0, Units.degreesToRadians(44.5)) // YAW ROTATING RIGHT IS NEGATIVE
-											))
-					// new Rotation3d(0,Units.degreesToRadians(29),Units.degreesToRadians(37.5))) // No roll,
-					// Pitch on 15 degrees from robot frame, and yaw of 47 degrees from robot frame.
-					),
+											))),
 
-			// TODO: Configure limelight position and rotation. Currently rotation should be 30* or 60*
-			// pitch.\
-
+			// TODO: Configure rotation should be 30* or 60* Also test with offsets.
 			LIMELIGHT(
 					"limelight",
 					"limelight",
@@ -164,10 +151,7 @@ public class Constants {
 									.rotateBy(
 											new Rotation3d(
 													0.0, 0.0, Units.degreesToRadians(44.5)) // YAW ROTATING RIGHT IS NEGATIVE
-											))
-					// new Rotation3d(0,Units.degreesToRadians(29),Units.degreesToRadians(37.5))) // No roll,
-					// Pitch on 15 degrees from robot frame, and yaw of 47 degrees from robot frame.
-					);
+											)));
 
 			public final String PHOTON_NAME;
 			public final String CAMERA_NAME;
@@ -242,10 +226,10 @@ public class Constants {
 		public static final double SHOOTER_MOTORS_I = 0.0;
 		public static final double SHOOTER_MOTORS_D = 0.00005;
 		public static final double SHOOTER_MOTORS_IZ = 0.0005;
-		public static final double SHOOTER_MOTORS_FF = 0.00018;
+		public static final double SHOOTER_MOTORS_FF = 0.000145;
 
 		// Shooter tolerence to say that its ready
-		public static final double SHOOTER_TOLERANCE_RPM = 150;
+		public static final double SHOOTER_TOLERANCE_RPM = 350;
 
 		/* -- Intake -- */
 
@@ -286,32 +270,10 @@ public class Constants {
 
 	}
 
-	public static class Arduino {
-
-		public static final double PWM_PORT = 5;
-
-		public enum OutputMapping {
-			HEARTBEAT(1, "Heartbeat"),
-			RED(2, "Red"),
-			GREEN(3, "Green"),
-			BLUE(4, "Blue"),
-			PURPLE(5, "Purple"),
-			YELLOW(6, "Yellow");
-
-			public final int rawPWM;
-			public final String name;
-
-			OutputMapping(int rawPWM, String name) {
-				this.rawPWM = rawPWM;
-				this.name = name;
-			}
-		}
-	}
-
 	// States of the robot subsystems
 	public static class States {
 
-		// Modes of the shooter
+		// States of the shooter
 		public enum ShooterMode {
 			SPEAKER,
 			AMP,
@@ -319,17 +281,17 @@ public class Constants {
 			TRAP
 		}
 
-		// Speeds of the shooter for the various modes
+		// Speeds of the shooter for the various states
 		public enum ShooterState {
 			OFF(0.0, 0.0),
-			IDLE(3700, 0.0),
+			IDLE(4100, 0.0),
 
-			SPEAKER_1M(3600, 1.0),
-			SPEAKER_2M(3700, 2.0),
-			SPEAKER_2_5M(3700, 2.0),
-			SPEAKER_3M(3700, 3.0),
-			SPEAKER_4M(3700, 4.0),
-			SPEAKER_5M(3700, 5.0),
+			SPEAKER_1M(4500, 1.0), // 3600
+			SPEAKER_2M(4500, 2.0),
+			SPEAKER_2_5M(4500, 2.0),
+			SPEAKER_3M(4500, 3.0),
+			SPEAKER_4M(4500, 4.0),
+			SPEAKER_5M(4500, 5.0),
 
 			TRAP(2500, 0.0),
 
@@ -344,14 +306,12 @@ public class Constants {
 			}
 		}
 
-		// Positions of the arm for various modes
+		// Positions of the arm for various states
 		public enum ArmState {
 			OFF(0, 0.0),
 			IDLE(-4, 0.0),
 
 			SPEAKER_1M(55.0, 1.0),
-
-			//		SPEAKER_1M(55.0, 1.0),
 			SPEAKER_2M(42.0, 2.0), // 43deg
 			SPEAKER_2_5M(40, 2.0),
 			SPEAKER_3M(38.5, 3.0),
@@ -372,7 +332,7 @@ public class Constants {
 			}
 		}
 
-		// Speeds of conveyor, intake & indexer, for various modes
+		// Speeds of conveyor, intake & indexer, for various states
 		public enum ConveyorState {
 			OFF(0.0, 0.0),
 			INTAKE(-1.0, -0.5),
@@ -391,14 +351,18 @@ public class Constants {
 
 	public static class Auto {
 
-		public static final PIDConstants AUTO_PID = new PIDConstants(0.4, 0.0, 0.05);
+		// Swerve align PID
+		public static final PIDConstants SWERVE_ALIGN_PID = new PIDConstants(0.021, 0.018, 0.001);
 
+		// Max LINEAR velocity and acceleration of the swerve drive during auto
 		public static final double MAX_VELOCITY_MPS = 1.5;
 		public static final double MAX_ACCELERATION_MPS_SQ = 2.0;
 
+		// Max ANGULAR velocity and acceleration of the swerve drive during auto
 		public static final double MAX_ANGULAR_VELOCITY_RADS = 360;
 		public static final double MAX_ANGULAR_VELOCITY_RADS_SQ = 540;
 
+		// Positions of the game elements on the field
 		public enum ScoringPoses {
 			BLU_SPEAKER(new Pose2d(0, 5.5, new Rotation2d())),
 			RED_SPEAKER(new Pose2d(12.0, 5.5, Rotation2d.fromDegrees(180))),
@@ -413,6 +377,7 @@ public class Constants {
 			}
 		}
 
+		// Positions of the notes / donuts on the field
 		public enum NotePoses {
 			BLU_TOP(new Pose2d(2.9, 7.0, Rotation2d.fromDegrees(0))),
 			BLU_MIDDLE(new Pose2d(2.9, 5.5, Rotation2d.fromDegrees(0))),
@@ -429,11 +394,13 @@ public class Constants {
 			}
 		}
 
+		// Where the robot should drive to on the field
 		public enum DriveScoringPoseState {
 			SPEAKER,
 			AMP
 		}
 
+		// Zones of the field
 		public enum FieldTriangles {
 			BLU_LEFT_SPEAKER(
 					new Translation2d(0, 6.5), new Translation2d(0.85, 6.0), new Translation2d(1.6, 6.8)),
@@ -455,6 +422,7 @@ public class Constants {
 			}
 		}
 
+		// States of the sidekick
 		public enum SidekickState {
 			BLU_LEFT_SPEAKER,
 			BLU_MIDDLE_SPEAKER,

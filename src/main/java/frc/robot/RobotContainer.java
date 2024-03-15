@@ -16,6 +16,7 @@ import frc.robot.Constants.States.ShooterMode;
 import frc.robot.auto.AutoSelector;
 import frc.robot.auto.CommandRegistrar;
 import frc.robot.commands.CMD_ArmClimb;
+import frc.robot.commands.CMD_ArmClimbRaise;
 import frc.robot.commands.CMD_Eject;
 import frc.robot.commands.groups.CMDGR_Intake;
 import frc.robot.commands.groups.CMDGR_Shoot;
@@ -51,7 +52,7 @@ public class RobotContainer {
 
 	private final SUB_Shooter shooter = new SUB_Shooter(new IO_ShooterReal());
 
-	private final AddressableLedStrip led = new AddressableLedStrip(0, 40);
+	private final AddressableLedStrip led = new AddressableLedStrip(0, 150);
 
 	private final SUB_Swerve swerve = new SUB_Swerve(new IO_SwerveReal(), vision);
 
@@ -152,22 +153,6 @@ public class RobotContainer {
 								() -> swerve.getPose(),
 								swerveAlign));
 
-		// Trap command
-		/*
-		operatorController
-				.rightStick()
-				.onTrue(
-						new CMDGR_Shoot(
-								conveyor,
-								arm,
-								shooter,
-								vision,
-								led,
-								ShooterMode.TRAP,
-								() -> operatorController.b().getAsBoolean(),
-								() -> operatorController.rightStick().getAsBoolean()));
-		*/
-
 		// Intake command
 		operatorController
 				.a()
@@ -178,23 +163,16 @@ public class RobotContainer {
 				.rightBumper()
 				.onTrue(new CMD_Eject(conveyor, arm, () -> operatorController.b().getAsBoolean()));
 
-		// operatorController.rightStick().onTrue(new CMD_ResetOdo(swerve));
-
 		// Climb command
 		operatorController.leftStick().debounce(0.15).onTrue(new CMD_ArmClimb(arm, led));
 
+		// Climb raise command
+		operatorController.rightStick().debounce(0.15).onTrue(new CMD_ArmClimbRaise(arm, shooter));
+
+		// operatorController.rightStick().debounce(0.15).onTrue(new CMD_Servo(arm, true));
+		// Servo debug commands
 		// operatorController.rightStick().debounce(0.1).onTrue(new CMD_Servo(arm, true));
 		// operatorController.rightTrigger().debounce(0.15).onTrue(new CMD_Servo(arm, false));
-
-		/*
-		operatorController
-				.rightBumper()
-				.onTrue(
-						new CMD_DrivePose(
-								swerve,
-								new Pose2d(3.4, 5.4, new Rotation2d()),
-								() -> operatorController.b().getAsBoolean()));
-		*/
 
 		// Drive to speaker command
 		/*
@@ -204,31 +182,11 @@ public class RobotContainer {
 				.onTrue(
 						new CMDGR_DriveToScoringPose(
 								swerve, DriveScoringPoseState.AMP, () -> operatorController.b().getAsBoolean()));
-
-								*/
-		/*
-		operatorController
-				.rightBumper()
-				.onTrue(
-						new CMD_ShootDynamicTest(
-								conveyor,
-								arm,
-								shooter,
-								vision,
-								led,
-								() -> operatorController.b().getAsBoolean(),
-								() -> operatorController.rightBumper().debounce(0.1).getAsBoolean(),
-								() -> swerve.getPose()));
 		*/
-
-		// operatorController.rightBumper().onTrue(new CMD_Arm(arm, ArmState.OFF));
-
 	}
 
-	// 041215128954433
 	public void logMetadata() {
 		Logger.recordMetadata("Event Name", DriverStation.getEventName());
-		// Logger.recordMetadata("Alliance", DriverStation.getAlliance().get().toString());
 		Logger.recordMetadata("Driver Station Location", DriverStation.getLocation() + "");
 		Logger.recordMetadata("Match Number", DriverStation.getMatchNumber() + "");
 		Logger.recordMetadata("Match Type", DriverStation.getMatchType() + "");

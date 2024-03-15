@@ -14,7 +14,6 @@ import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -44,8 +43,6 @@ public class SUB_Swerve extends SubsystemBase {
 	// Odometry lock, prevents updates while reading data
 	private static final Lock odometryLock = new ReentrantLock();
 
-	private PIDController snapAnglePID;
-
 	public SUB_Swerve(IO_SwerveBase io, SUB_Vision vision) {
 		this.io = io;
 		this.vision = vision;
@@ -72,8 +69,6 @@ public class SUB_Swerve extends SubsystemBase {
 					return alliance.isPresent() ? alliance.get() == DriverStation.Alliance.Red : false;
 				},
 				this);
-
-		snapAnglePID = new PIDController(1.0, 0.0, 0.0);
 	}
 
 	public void periodic() {
@@ -111,25 +106,6 @@ public class SUB_Swerve extends SubsystemBase {
 
 		return run(
 				() -> {
-					double newAngularRotation = angularRotationX.getAsDouble();
-					if (false) {
-						// Find the closest snap point based off current robot degrees. It should be able to
-						// snap to 0deg, 90deg, 180deg, and 270deg.
-						double currentYaw = io.getYaw().getDegrees();
-						double closestSnapAngle = 0;
-						double minDifference = Math.abs(currentYaw - closestSnapAngle);
-
-						double[] snapAngles = {0, 90, 180, 270};
-						for (double angle : snapAngles) {
-							double difference = Math.abs(currentYaw - angle);
-							if (difference < minDifference) {
-								minDifference = difference;
-								closestSnapAngle = angle;
-							}
-						}
-						newAngularRotation = snapAnglePID.calculate(io.getYaw().getDegrees(), closestSnapAngle);
-					}
-
 					var alli = DriverStation.getAlliance();
 
 					if (alli.get() == Alliance.Blue) {
@@ -140,7 +116,7 @@ public class SUB_Swerve extends SubsystemBase {
 								new Translation2d(
 										translationX.getAsDouble() * io.getMaximumVelocity(),
 										-translationY.getAsDouble() * io.getMaximumVelocity()),
-								-newAngularRotation * io.getMaximumAngularVelocity(),
+								-angularRotationX.getAsDouble() * io.getMaximumAngularVelocity(),
 								true,
 								true);
 
@@ -151,7 +127,7 @@ public class SUB_Swerve extends SubsystemBase {
 								new Translation2d(
 										-translationX.getAsDouble() * io.getMaximumVelocity(),
 										translationY.getAsDouble() * io.getMaximumVelocity()),
-								-newAngularRotation * io.getMaximumAngularVelocity(),
+								-angularRotationX.getAsDouble() * io.getMaximumAngularVelocity(),
 								true,
 								true);
 

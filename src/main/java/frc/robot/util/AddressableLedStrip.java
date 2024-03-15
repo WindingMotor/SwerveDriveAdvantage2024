@@ -29,8 +29,8 @@ public class AddressableLedStrip extends SubsystemBase {
 		WHITE,
 		ORANGE,
 		FLAME,
-		ALLIANCE,
 		AMERICAN,
+		ALLAINCE,
 		OFF
 	}
 
@@ -88,10 +88,10 @@ public class AddressableLedStrip extends SubsystemBase {
 					break;
 
 				case FLAME:
-					// None
+					flame();
 					break;
 
-				case ALLIANCE:
+				case ALLAINCE:
 					var alliance = DriverStation.getAlliance();
 					if (alliance.isPresent()) {
 						if (alliance.get() == Alliance.Red) {
@@ -163,5 +163,14 @@ public class AddressableLedStrip extends SubsystemBase {
 			ledBuffer.setLED(i, color);
 		}
 		ledStrip.setData(ledBuffer);
+	}
+
+	private void flame() {
+		for (var i = 0; i < length; i++) {
+			// Generate a random brightness and hue for the flame effect
+			int brightness = (int) (Math.random() * 128) + 128; // Random brightness between 128 and 255
+			int hue = (int) (Math.random() * 180); // Random hue between 0 and 180
+			ledBuffer.setHSV(i, hue, 255, brightness);
+		}
 	}
 }

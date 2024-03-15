@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.6162688461334,
-        "y": 6.799767660316021
-      },
-      "prevControl": null,
-      "nextControl": {
-        "x": 1.9190880843931182,
-        "y": 5.121807167674567
-      },
-      "isLocked": false,
-      "linkedName": "GoToAmpFast_END"
-    },
-    {
-      "anchor": {
         "x": 2.378016288533996,
         "y": 4.340416978497784
       },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.012032255358842,
+        "y": 5.23117469349809
+      },
+      "isLocked": false,
+      "linkedName": "GoToStageFromAmp_END"
+    },
+    {
+      "anchor": {
+        "x": 1.897132748661528,
+        "y": 5.599488889661245
+      },
       "prevControl": {
-        "x": 1.0373462550625745,
-        "y": 4.885149876593389
+        "x": 2.0498484206721623,
+        "y": 5.0972424597961785
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "GoToStageFromAmp_END"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -39,13 +39,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 150.4786381654184,
+    "rotation": 179.32854357540845,
     "rotateFast": false
   },
   "reversed": false,
   "folder": "Z_PATHS",
   "previewStartingState": {
-    "rotation": -147.05078488340962,
+    "rotation": 145.80998394646122,
     "velocity": 0
   },
   "useDefaultConstraints": true

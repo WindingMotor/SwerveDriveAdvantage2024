@@ -9,22 +9,28 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.swerve.SUB_Swerve;
+import frc.robot.Constants.States.ArmState;
+import frc.robot.Constants.States.ShooterState;
+import frc.robot.subsystems.arm.SUB_Arm;
+import frc.robot.subsystems.shooter.SUB_Shooter;
 
-public class CMD_ResetOdo extends Command {
+public class CMD_ArmClimbRaise extends Command {
 
-	private SUB_Swerve swerve;
+	private SUB_Arm arm;
+	private SUB_Shooter shooter;
 
-	public CMD_ResetOdo(SUB_Swerve swerve) {
-		this.swerve = swerve;
-		addRequirements(swerve);
+	public CMD_ArmClimbRaise(SUB_Arm arm, SUB_Shooter shooter) {
+		this.arm = arm;
+		this.shooter = shooter;
+		addRequirements(arm);
 	}
 
 	// Print a message to the driver station and set the arm state
 	@Override
 	public void initialize() {
-		// Stop and idle the robot subsystems
-		swerve.resetEmergencyOdometry();
+		arm.setState(ArmState.SPEAKER_1M);
+		shooter.setState(ShooterState.OFF);
+		arm.setClimbMode(false);
 	}
 
 	// Command ends immediately

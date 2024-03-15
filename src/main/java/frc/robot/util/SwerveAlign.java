@@ -11,6 +11,7 @@ package frc.robot.util;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import frc.robot.Constants.Auto;
 import frc.robot.Constants.Auto.ScoringPoses;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
@@ -27,8 +28,9 @@ public class SwerveAlign {
 	public SwerveAlign(Supplier<Double> controllerInput, Supplier<Pose2d> robotPose) {
 		this.controllerInput = controllerInput;
 		this.robotPose = robotPose;
-		this.pid = new PIDController(0.021, 0.018, 0.001);
-		//		this.pid = new PIDController(0.0002, 0.001, 0.0006);
+		this.pid =
+				new PIDController(
+						Auto.SWERVE_ALIGN_PID.kP, Auto.SWERVE_ALIGN_PID.kI, Auto.SWERVE_ALIGN_PID.kD);
 		this.pid.enableContinuousInput(-Math.PI, Math.PI);
 		isControllerInput = true;
 	}
@@ -40,7 +42,7 @@ public class SwerveAlign {
 
 			// return controllerInput.get();
 
-			/*MAYBE WORKS?*/
+			/* Works quite well, maybe a bit more tuning though? */
 			double xDistanceMeters = robotPose.get().getX();
 			double hDistanceMeters =
 					PhotonUtils.getDistanceToPose(robotPose.get(), ScoringPoses.BLU_SPEAKER.pose);
@@ -57,9 +59,9 @@ public class SwerveAlign {
 			}
 
 			// -90 amp side
-			Logger.recordOutput("Output H Distance", hDistanceMeters);
-			Logger.recordOutput("Output X Distance", xDistanceMeters);
-			Logger.recordOutput("Output Angle", setpointRadians);
+			// Logger.recordOutput("Output H Distance", hDistanceMeters);
+			// Logger.recordOutput("Output X Distance", xDistanceMeters);
+			// Logger.recordOutput("Output Angle", setpointRadians);
 			Logger.recordOutput(
 					"Auto Angle Pose",
 					new Pose2d(robotPose.get().getTranslation(), new Rotation2d(setpointRadians)));

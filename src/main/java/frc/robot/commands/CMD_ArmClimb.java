@@ -39,12 +39,12 @@ public class CMD_ArmClimb extends Command {
 	@Override
 	public void execute() {
 		timer++;
-		if (arm.getRealTimeArmPosition() < 0.0 && timer > 50) {
+		if (arm.getRealTimeArmPosition() < 8.0 && timer > 25) {
 			arm.lockArm();
 			isCommandDone = true;
 			led.setState(LEDState.AMERICAN);
 		} else {
-			arm.setSpeed(0.75);
+			arm.setSpeed(1.0);
 		}
 	}
 
