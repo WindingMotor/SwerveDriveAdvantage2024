@@ -8,15 +8,19 @@
 
 package frc.robot.util;
 
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import edu.wpi.first.wpilibj.XboxController;
+
 public class OperatorRumble {
 
-	// private static XboxController operatorController = new XboxController(4);
-
 	public static void rumble(boolean rumble) {
-		if (rumble) {
-			// operatorController.setRumble(RumbleType.kBothRumble, 0.6);
+		XboxController tempOperatorController = new XboxController(4);
+
+		if (rumble && !DriverStation.isAutonomous()) {
+			tempOperatorController.setRumble(RumbleType.kBothRumble, 0.6);
 		} else {
-			//	operatorController.setRumble(RumbleType.kBothRumble, 0.0);
+			tempOperatorController.setRumble(RumbleType.kBothRumble, 0.0);
 		}
 	}
 }

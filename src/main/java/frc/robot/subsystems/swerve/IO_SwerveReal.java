@@ -285,6 +285,19 @@ public class IO_SwerveReal implements IO_SwerveBase {
 			module.getDriveMotor().setCurrentLimit(currentLimit);
 		}
 	}
+
+	/**
+	 * Sets the current limit for each turn motor in the swerve.
+	 *
+	 * @param currentLimit The new current limit to be set
+	 */
+	@Override
+	public void setTurnMotorCurrentLimit(int currentLimit) {
+		for (SwerveModule module : swerveDrive.getModules()) {
+			module.getAngleMotor().setCurrentLimit(currentLimit);
+		}
+	}
+
 	/**
 	 * Sets the brake mode for all swerve modules in the swerve drive configuration.
 	 *

@@ -201,4 +201,8 @@ public class RobotContainer {
 	public Command getAutonomousCommand() {
 		return autoSelector.getSelectedAuto();
 	}
+
+	public void setRobotSwerveCurrentLimit(int driveAmps, int turnAmps) {
+		swerve.setSwerveCurrentLimit(driveAmps, turnAmps);
+	}
 }

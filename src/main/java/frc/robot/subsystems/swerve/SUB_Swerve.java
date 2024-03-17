@@ -34,6 +34,9 @@ import org.littletonrobotics.junction.Logger;
 
 public class SUB_Swerve extends SubsystemBase {
 
+	// old old 0.041215128954433
+	// newer old  0.0429348178661
+
 	private final IO_SwerveBase io;
 
 	private final SwerveInputsAutoLogged inputs = new SwerveInputsAutoLogged();
@@ -214,5 +217,10 @@ public class SUB_Swerve extends SubsystemBase {
 
 	public Rotation2d getYaw() {
 		return io.getYaw();
+	}
+
+	public void setSwerveCurrentLimit(int driveAmps, int turnAmps) {
+		io.setDriveMotorCurrentLimit(driveAmps);
+		io.setTurnMotorCurrentLimit(turnAmps);
 	}
 }
