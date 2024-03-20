@@ -95,7 +95,8 @@ public class Robot extends LoggedRobot {
 			m_autonomousCommand.schedule();
 		}
 
-		m_robotContainer.setRobotSwerveCurrentLimit(45, 28);
+		// 45, 28
+		m_robotContainer.setRobotSwerveCurrentLimit(80, 32);
 	}
 
 	/** This function is called periodically during autonomous. */

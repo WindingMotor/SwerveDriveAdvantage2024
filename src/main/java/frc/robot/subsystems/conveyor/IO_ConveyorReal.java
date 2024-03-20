@@ -9,11 +9,9 @@
 package frc.robot.subsystems.conveyor;
 
 import com.revrobotics.CANSparkMax;
-import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.Constants;
 import frc.robot.util.Builder;
 import frc.robot.util.IRBeamBreak;
-import frc.robot.util.OperatorRumble;
 
 public class IO_ConveyorReal implements IO_ConveyorBase {
 
@@ -65,12 +63,6 @@ public class IO_ConveyorReal implements IO_ConveyorBase {
 	public void update(double intakeSpeed, double indexerSpeed) {
 		intakeMotor.set(intakeSpeed);
 		indexerMotor.set(indexerSpeed);
-
-		if (indexerInitalSensor.getState() && DriverStation.isEnabled()) {
-			OperatorRumble.rumble(true);
-		} else {
-			OperatorRumble.rumble(false);
-		}
 	}
 
 	/** Stops the arm motors. */

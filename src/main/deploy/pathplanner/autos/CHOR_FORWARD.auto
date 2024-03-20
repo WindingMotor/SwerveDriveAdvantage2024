@@ -1,0 +1,25 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.354225993156433,
+      "y": 5.560230255126953
+    },
+    "rotation": 179.90874767107852
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "FORWARD"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "CHOR",
+  "choreoAuto": true
+}

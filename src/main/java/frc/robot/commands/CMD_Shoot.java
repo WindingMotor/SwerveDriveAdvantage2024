@@ -11,7 +11,6 @@ package frc.robot.commands;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.Constants.Auto.ScoringPoses;
@@ -166,11 +165,6 @@ public class CMD_Shoot extends Command {
 		checkConveyor();
 		checkEndCommand();
 
-		if (manualCancel.get()) {
-			isCommandDone = true;
-			SmartDashboard.putBoolean("MANUAL CANCEL VAL", manualCancel.get());
-		}
-
 		if (mode == ShooterMode.DYNAMIC) {
 
 			var alli = DriverStation.getAlliance();
@@ -195,7 +189,7 @@ public class CMD_Shoot extends Command {
 		}
 	}
 
-	private int setInitalStates() {
+	private void setInitalStates() {
 		// SPEAKER mode
 		if (mode == ShooterMode.SPEAKER) {
 			shooter.invertMotors(true);
@@ -226,14 +220,7 @@ public class CMD_Shoot extends Command {
 					arm.setState(Constants.States.ArmState.TRAP);
 				}
 			}
-
-			// Dyanmic
-		} else {
-
-			// Do nothing
 		}
-
-		return 1;
 	}
 
 	private void checkConveyor() {

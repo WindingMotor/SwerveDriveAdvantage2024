@@ -42,8 +42,6 @@ public class SwerveAlign {
 			return controllerInput.get();
 		} else {
 
-			// return controllerInput.get();
-
 			var alli = DriverStation.getAlliance();
 			Pose2d targetSpeakerPose;
 
@@ -84,7 +82,6 @@ public class SwerveAlign {
 				}
 			}
 
-			// -90 amp side
 			Logger.recordOutput("Output H Distance", hDistanceMeters);
 			Logger.recordOutput("Output X Distance", xDistanceMeters);
 			Logger.recordOutput("Output Angle", setpointRadians);

@@ -46,6 +46,10 @@ public class SUB_Swerve extends SubsystemBase {
 	// Odometry lock, prevents updates while reading data
 	private static final Lock odometryLock = new ReentrantLock();
 
+	/*
+	* 						new PIDConstants(5.0, 0.0, 0.0, 0.0), // Translation
+					new PIDConstants(7.0, 0.0, 0.0, 0.0), // Heading
+	*/
 	public SUB_Swerve(IO_SwerveBase io, SUB_Vision vision) {
 		this.io = io;
 		this.vision = vision;
@@ -57,7 +61,7 @@ public class SUB_Swerve extends SubsystemBase {
 				io::setChassisSpeeds, // Drives the robot in robot relative chassis speeds
 				new HolonomicPathFollowerConfig(
 						new PIDConstants(5.0, 0.0, 0.0, 0.0), // Translation
-						new PIDConstants(7.0, 0.0, 0.0, 0.0), // Heading
+						new PIDConstants(9.0, 0.0, 0.0, 0.0), // Heading
 						/*
 						 * IMPORTANT NOTE: These auto PIDs only have a relatively small effect. For a larger and better effect use the YAGSL PIDF config.
 						 * When setting these PID values make sure rotation is faster than translation and there is a feedforward on the YAGSL PIDF config.

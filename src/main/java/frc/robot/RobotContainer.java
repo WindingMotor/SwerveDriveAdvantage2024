@@ -27,12 +27,12 @@ import frc.robot.subsystems.conveyor.IO_ConveyorReal;
 import frc.robot.subsystems.conveyor.SUB_Conveyor;
 import frc.robot.subsystems.shooter.IO_ShooterReal;
 import frc.robot.subsystems.shooter.SUB_Shooter;
+import frc.robot.subsystems.sidekick.SUB_Sidekick;
 import frc.robot.subsystems.swerve.IO_SwerveReal;
 import frc.robot.subsystems.swerve.SUB_Swerve;
 import frc.robot.subsystems.vision.IO_VisionReal;
 import frc.robot.subsystems.vision.SUB_Vision;
 import frc.robot.util.AddressableLedStrip;
-import frc.robot.util.OperatorRumble;
 import frc.robot.util.SwerveAlign;
 import org.littletonrobotics.junction.Logger;
 
@@ -64,10 +64,9 @@ public class RobotContainer {
 	private final CommandRegistrar commandRegistrar =
 			new CommandRegistrar(vision, swerve, conveyor, arm, shooter, led, swerveAlign);
 
-	/*
-		private final SUB_Sidekick sidekick =
-				new SUB_Sidekick(swerve, vision, arm, conveyor, shooter, led, operatorController);
-	*/
+	private final SUB_Sidekick sidekick =
+			new SUB_Sidekick(
+					swerve, vision, arm, conveyor, shooter, led, operatorController, swerveAlign);
 
 	private final AutoSelector autoSelector;
 
@@ -99,7 +98,6 @@ public class RobotContainer {
 						() -> MathUtil.applyDeadband(operatorController.getRawAxis(0), 0.05)));
 		*/
 
-		OperatorRumble.rumble(false);
 	}
 
 	/** Configure the bindings for the controller buttons to specific commands. */
@@ -154,9 +152,21 @@ public class RobotContainer {
 								swerveAlign));
 
 		// Intake command
+
 		operatorController
 				.a()
+				.debounce(0.05)
 				.onTrue(new CMDGR_Intake(conveyor, arm, led, () -> operatorController.b().getAsBoolean()));
+
+		// Intake Source command
+
+		/*
+				operatorController
+						.a()
+						.onTrue(
+								new CMD_IntakeSource(
+										conveyor, arm, shooter, () -> operatorController.b().getAsBoolean()));
+		*/
 
 		// Eject command
 		operatorController

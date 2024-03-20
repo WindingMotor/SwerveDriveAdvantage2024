@@ -295,6 +295,8 @@ public class Constants {
 
 			TRAP(2500, 0.0),
 
+			INTAKE_SOURCE(-3000, 0.0),
+
 			AMP(500, 0.0);
 
 			public final double rpm;
@@ -320,6 +322,7 @@ public class Constants {
 			AMP(95, 0.0),
 			DYNAMIC(-1.0, 0.0),
 			INTAKE(50, 0.0), // 89, 50
+			INTAKE_SOURCE(30, 0.0), // 89, 50
 
 			TRAP(61.0, 0.0);
 
@@ -336,6 +339,8 @@ public class Constants {
 		public enum ConveyorState {
 			OFF(0.0, 0.0),
 			INTAKE(-1.0, -0.5),
+			INTAKE_INITAL(-0.75, 0.0),
+			INTAKE_SOURCE(0.0, 0.8),
 			EJECT(1.0, 0.45),
 			SHOOT(0.0, -1.0),
 			SLOW(0.0, -0.1),
