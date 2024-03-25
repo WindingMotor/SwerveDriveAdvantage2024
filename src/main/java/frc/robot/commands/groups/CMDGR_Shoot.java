@@ -21,7 +21,6 @@ import frc.robot.subsystems.shooter.SUB_Shooter;
 import frc.robot.subsystems.vision.SUB_Vision;
 import frc.robot.util.AddressableLedStrip;
 import frc.robot.util.AddressableLedStrip.LEDState;
-import frc.robot.util.SwerveAlign;
 import java.util.function.Supplier;
 
 public class CMDGR_Shoot extends SequentialCommandGroup {
@@ -35,24 +34,13 @@ public class CMDGR_Shoot extends SequentialCommandGroup {
 			ShooterMode mode,
 			Supplier<Boolean> manualCancel,
 			Supplier<Boolean> shoot,
-			Supplier<Pose2d> robotPose,
-			SwerveAlign swerveAlign) {
+			Supplier<Pose2d> robotPose) {
 		addRequirements(conveyor, arm, shooter);
 		// Call the shoot command, then wait 0.5 seconds, then call the idle command
 		addCommands(
 				new CMD_Led(led, LEDState.BLUE),
 				new WaitCommand(0.15),
-				new CMD_Shoot(
-						conveyor,
-						arm,
-						shooter,
-						vision,
-						led,
-						mode,
-						manualCancel,
-						shoot,
-						robotPose,
-						swerveAlign));
+				new CMD_Shoot(conveyor, arm, shooter, vision, led, mode, manualCancel, shoot, robotPose));
 
 		if (mode == ShooterMode.AMP) {
 			addCommands(

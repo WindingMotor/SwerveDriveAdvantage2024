@@ -45,6 +45,7 @@ public class Robot extends LoggedRobot {
 			// new PowerDistribution(1, ModuleType.kRev); // Enables power distribution logging
 			// Logger.addDataReceiver(new NT4Publisher());
 		} else {
+			Logger.addDataReceiver(new NT4Publisher());
 			// Logger.addDataReceiver(new NT4Publisher());
 		}
 

@@ -13,13 +13,18 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import frc.robot.Constants;
+import org.littletonrobotics.junction.Logger;
 
 /** A super bare bone implementation of the arm just for simulation testing. */
 public class IO_ArmSim implements IO_ArmBase {
+
+	private Mechanism2d mechanism;
+	private MechanismRoot2d rootMechanism;
+	private MechanismLigament2d aimMechanism;
+	private MechanismLigament2d hoodMechanism;
 
 	private Double armAngle;
 
@@ -38,7 +43,12 @@ public class IO_ArmSim implements IO_ArmBase {
 
 		armAngle = Constants.Maestro.ARM_OFFSET_DEGREES;
 
-		SmartDashboard.putData("Arm Mechanism", armMechanism);
+		mechanism = new Mechanism2d(2.2, 2.0);
+		rootMechanism = mechanism.getRoot("scoring", 0.6, 0.3);
+		aimMechanism = rootMechanism.append(new MechanismLigament2d("aimer", 0.5, 0.0));
+		hoodMechanism =
+				aimMechanism.append(
+						new MechanismLigament2d("hood", 0.2, 0.0, 10.0, new Color8Bit(0, 200, 50)));
 	}
 
 	/**
@@ -48,6 +58,8 @@ public class IO_ArmSim implements IO_ArmBase {
 	 */
 	@Override
 	public void updateInputs(ArmInputs inputs) {
+
+		Logger.recordOutput("MECH", mechanism);
 
 		inputs.armPositionDegrees = armAngle;
 

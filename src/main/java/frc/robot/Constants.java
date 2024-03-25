@@ -171,7 +171,8 @@ public class Constants {
 
 		/* -- SWERVE MODULES -- */
 
-		public static final double MAX_MODULE_SPEED_MPS = 4.5;
+		// Team 401 -> 5.12 at 12 volts. OLD: 4.5
+		public static final double MAX_MODULE_SPEED_MPS = 5.12;
 
 		/* -- ARM -- */
 

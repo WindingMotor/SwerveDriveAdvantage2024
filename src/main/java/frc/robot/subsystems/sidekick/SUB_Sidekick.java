@@ -22,7 +22,6 @@ import frc.robot.subsystems.shooter.SUB_Shooter;
 import frc.robot.subsystems.swerve.SUB_Swerve;
 import frc.robot.subsystems.vision.SUB_Vision;
 import frc.robot.util.AddressableLedStrip;
-import frc.robot.util.SwerveAlign;
 
 // The sidekick automatically schedules commands for the robots subsystems depending on where the
 // robot is on the field
@@ -35,7 +34,6 @@ public class SUB_Sidekick extends SubsystemBase {
 	private final SUB_Shooter shooter;
 	private final AddressableLedStrip led;
 	private final CommandXboxController operatorController;
-	private final SwerveAlign swerveAlign;
 
 	private final boolean SIDEKICK_ENABLED = true;
 	private SidekickState state;
@@ -48,8 +46,7 @@ public class SUB_Sidekick extends SubsystemBase {
 			SUB_Conveyor conveyor,
 			SUB_Shooter shooter,
 			AddressableLedStrip led,
-			CommandXboxController operatorController,
-			SwerveAlign swerveAlign) {
+			CommandXboxController operatorController) {
 		this.swerve = swerve;
 		this.vision = vision;
 		this.arm = arm;
@@ -57,7 +54,6 @@ public class SUB_Sidekick extends SubsystemBase {
 		this.shooter = shooter;
 		this.led = led;
 		this.operatorController = operatorController;
-		this.swerveAlign = swerveAlign;
 		state = SidekickState.NONE;
 		lastState = SidekickState.UNKNOWN;
 	}

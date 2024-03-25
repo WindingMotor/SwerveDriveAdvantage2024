@@ -24,7 +24,6 @@ import frc.robot.subsystems.vision.SUB_Vision;
 import frc.robot.util.AddressableLedStrip;
 import frc.robot.util.AddressableLedStrip.LEDState;
 import frc.robot.util.MathCalc;
-import frc.robot.util.SwerveAlign;
 import java.util.function.Supplier;
 import org.photonvision.PhotonUtils;
 
@@ -45,19 +44,7 @@ public class CMD_Shoot extends Command {
 	private ShooterState autoShooterState;
 	private ArmState autoArmState;
 	private Supplier<Pose2d> robotPose;
-	private SwerveAlign swerveAlign;
 
-	/**
-	 * Constructor for the CMD_Shoot command.
-	 *
-	 * @param conveyor The conveyor subsystem.
-	 * @param arm The arm subsystem.
-	 * @param shooter The shooter subsystem.
-	 * @param vision The vision subsystem.
-	 * @param led The addressable led strip.
-	 * @param mode The shooting mode.
-	 * @param manualCancel The supplier to determine if the command should be manually cancelled.
-	 */
 	public CMD_Shoot(
 			SUB_Conveyor conveyor,
 			SUB_Arm arm,
@@ -67,8 +54,7 @@ public class CMD_Shoot extends Command {
 			ShooterMode mode,
 			Supplier<Boolean> manualCancel,
 			Supplier<Boolean> shoot,
-			Supplier<Pose2d> robotPose,
-			SwerveAlign swerveAlign) {
+			Supplier<Pose2d> robotPose) {
 		this.conveyor = conveyor;
 		this.arm = arm;
 		this.shooter = shooter;
@@ -79,7 +65,6 @@ public class CMD_Shoot extends Command {
 		this.autoShooterState = null;
 		this.autoArmState = null;
 		this.robotPose = robotPose;
-		this.swerveAlign = swerveAlign;
 
 		addRequirements(conveyor, arm, shooter);
 	}
@@ -96,8 +81,7 @@ public class CMD_Shoot extends Command {
 			Supplier<Boolean> shoot,
 			boolean autoShoot,
 			ShooterState autoShooterState,
-			ArmState autoArmState,
-			SwerveAlign swerveAlign) {
+			ArmState autoArmState) {
 		this.conveyor = conveyor;
 		this.arm = arm;
 		this.shooter = shooter;
@@ -108,7 +92,6 @@ public class CMD_Shoot extends Command {
 		this.manualCancel = manualCancel;
 		this.autoShooterState = autoShooterState;
 		this.autoArmState = autoArmState;
-		this.swerveAlign = swerveAlign;
 
 		addRequirements(conveyor, arm, shooter);
 	}
@@ -126,7 +109,6 @@ public class CMD_Shoot extends Command {
 			boolean autoShoot,
 			ShooterState autoShooterState,
 			ArmState autoArmState,
-			SwerveAlign swerveAlign,
 			Supplier<Pose2d> robotPose) {
 		this.conveyor = conveyor;
 		this.arm = arm;
@@ -138,7 +120,6 @@ public class CMD_Shoot extends Command {
 		this.manualCancel = manualCancel;
 		this.autoShooterState = autoShooterState;
 		this.autoArmState = autoArmState;
-		this.swerveAlign = swerveAlign;
 		this.robotPose = robotPose;
 
 		addRequirements(conveyor, arm, shooter);
@@ -150,12 +131,6 @@ public class CMD_Shoot extends Command {
 		timer = 0;
 		isCommandDone = false;
 		hasShootBeenCalled = false;
-
-		if (mode == ShooterMode.DYNAMIC) {
-			swerveAlign.setControllerInput(false);
-		} else {
-			swerveAlign.setControllerInput(true);
-		}
 	}
 
 	/** Spool up the shooter to the correct rpm and set arm angle depending on the mode. */
@@ -275,7 +250,6 @@ public class CMD_Shoot extends Command {
 	@Override
 	public void end(boolean interrupted) {
 		led.setState(LEDState.RAINBOW);
-		swerveAlign.setControllerInput(true);
 	}
 
 	/**

@@ -21,7 +21,7 @@ public class AutoSelector {
 
 	public AutoSelector() {
 
-		autoSelector = AutoBuilder.buildAutoChooser();
+		autoSelector = AutoBuilder.buildAutoChooser("Middle");
 		SmartDashboard.putData("Auto Selector", autoSelector);
 	}
 

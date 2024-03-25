@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants;
 import frc.robot.Constants.RobotMode;
 import frc.robot.subsystems.vision.SUB_Vision;
@@ -43,6 +44,8 @@ public class SUB_Swerve extends SubsystemBase {
 
 	private final SUB_Vision vision;
 
+	private final CommandXboxController localDriverController;
+
 	// Odometry lock, prevents updates while reading data
 	private static final Lock odometryLock = new ReentrantLock();
 
@@ -50,7 +53,24 @@ public class SUB_Swerve extends SubsystemBase {
 	* 						new PIDConstants(5.0, 0.0, 0.0, 0.0), // Translation
 					new PIDConstants(7.0, 0.0, 0.0, 0.0), // Heading
 	*/
-	public SUB_Swerve(IO_SwerveBase io, SUB_Vision vision) {
+
+	/*
+	 * OLD pid values
+	* 						new PIDConstants(5.0, 0.0, 0.0, 0.0), // Translation
+					new PIDConstants(7.0, 0.0, 0.0, 0.0), // Heading
+
+	 * Team 401 PID values
+	 * TRANSLATION 2, 0, 0
+	 * ROTATION 7.0, 4.5, 0
+	 *
+	 * Team 401 Pathplanner max speeds
+	 *   "globalConstraints": {
+		"maxVelocity": 4.5,
+		"maxAcceleration": 4.0,
+		"maxAngularVelocity": 540.0,
+		"maxAngularAcceleration": 720.0
+	 */
+	public SUB_Swerve(IO_SwerveBase io, SUB_Vision vision, CommandXboxController driverController) {
 		this.io = io;
 		this.vision = vision;
 
@@ -60,8 +80,8 @@ public class SUB_Swerve extends SubsystemBase {
 				io::getRobotVelocity, // Gets chassis speed in robot relative
 				io::setChassisSpeeds, // Drives the robot in robot relative chassis speeds
 				new HolonomicPathFollowerConfig(
-						new PIDConstants(5.0, 0.0, 0.0, 0.0), // Translation
-						new PIDConstants(9.0, 0.0, 0.0, 0.0), // Heading
+						new PIDConstants(2.0, 0.0, 0.0, 0.0), // Translation
+						new PIDConstants(7.0, 4.5, 0.0, 0.0), // Heading
 						/*
 						 * IMPORTANT NOTE: These auto PIDs only have a relatively small effect. For a larger and better effect use the YAGSL PIDF config.
 						 * When setting these PID values make sure rotation is faster than translation and there is a feedforward on the YAGSL PIDF config.
@@ -76,6 +96,8 @@ public class SUB_Swerve extends SubsystemBase {
 					return alliance.isPresent() ? alliance.get() == DriverStation.Alliance.Red : false;
 				},
 				this);
+
+		this.localDriverController = driverController;
 	}
 
 	public void periodic() {

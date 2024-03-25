@@ -9,6 +9,7 @@
 package frc.robot.subsystems.arm;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.States.ArmState;
 import org.littletonrobotics.junction.Logger;
 
@@ -60,8 +61,8 @@ public class SUB_Arm extends SubsystemBase {
 		if (newAngle > 90) {
 			newAngle = 90;
 		}
-		if (newAngle < -4) {
-			newAngle = -4;
+		if (newAngle < -Constants.Maestro.ARM_OFFSET_DEGREES) {
+			newAngle = -Constants.Maestro.ARM_OFFSET_DEGREES;
 		}
 		dynamicAngle = newAngle;
 	}

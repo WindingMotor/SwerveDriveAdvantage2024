@@ -17,7 +17,6 @@ import frc.robot.auto.AutoSelector;
 import frc.robot.auto.CommandRegistrar;
 import frc.robot.commands.CMD_ArmClimb;
 import frc.robot.commands.CMD_ArmClimbRaise;
-import frc.robot.commands.CMD_Eject;
 import frc.robot.commands.groups.CMDGR_Intake;
 import frc.robot.commands.groups.CMDGR_Shoot;
 import frc.robot.subsystems.arm.IO_ArmReal;
@@ -33,7 +32,6 @@ import frc.robot.subsystems.swerve.SUB_Swerve;
 import frc.robot.subsystems.vision.IO_VisionReal;
 import frc.robot.subsystems.vision.SUB_Vision;
 import frc.robot.util.AddressableLedStrip;
-import frc.robot.util.SwerveAlign;
 import org.littletonrobotics.junction.Logger;
 
 public class RobotContainer {
@@ -54,19 +52,20 @@ public class RobotContainer {
 
 	private final AddressableLedStrip led = new AddressableLedStrip(0, 150);
 
-	private final SUB_Swerve swerve = new SUB_Swerve(new IO_SwerveReal(), vision);
+	private final SUB_Swerve swerve = new SUB_Swerve(new IO_SwerveReal(), vision, driverController);
 
 	// private final SUB_Climb climb = new SUB_Climb(new IO_ClimbReal());
 
+	/*
 	private final SwerveAlign swerveAlign =
 			new SwerveAlign(() -> driverController.getRawAxis(3), () -> swerve.getPose());
+		*/
 
 	private final CommandRegistrar commandRegistrar =
-			new CommandRegistrar(vision, swerve, conveyor, arm, shooter, led, swerveAlign);
+			new CommandRegistrar(vision, swerve, conveyor, arm, shooter, led);
 
 	private final SUB_Sidekick sidekick =
-			new SUB_Sidekick(
-					swerve, vision, arm, conveyor, shooter, led, operatorController, swerveAlign);
+			new SUB_Sidekick(swerve, vision, arm, conveyor, shooter, led, operatorController);
 
 	private final AutoSelector autoSelector;
 
@@ -80,13 +79,11 @@ public class RobotContainer {
 
 		logMetadata();
 
-		swerveAlign.setControllerInput(true);
-
 		swerve.setDefaultCommand(
 				swerve.driveJoystick(
 						() -> driverController.getRawAxis(1),
 						() -> driverController.getRawAxis(0),
-						() -> swerveAlign.get()));
+						() -> driverController.getRawAxis(3)));
 
 		// conveyor.setDefaultCommand(new CMD_AutoIntake(conveyor));
 
@@ -98,6 +95,7 @@ public class RobotContainer {
 						() -> MathUtil.applyDeadband(operatorController.getRawAxis(0), 0.05)));
 		*/
 
+		// swerve.setDriveMode(DriveMode.NORMAL);
 	}
 
 	/** Configure the bindings for the controller buttons to specific commands. */
@@ -116,8 +114,7 @@ public class RobotContainer {
 								ShooterMode.SPEAKER,
 								() -> operatorController.b().getAsBoolean(),
 								() -> operatorController.x().getAsBoolean(),
-								() -> swerve.getPose(),
-								swerveAlign));
+								() -> swerve.getPose()));
 
 		// Shoot command dynamic
 		operatorController
@@ -132,8 +129,7 @@ public class RobotContainer {
 								ShooterMode.DYNAMIC,
 								() -> operatorController.b().getAsBoolean(),
 								() -> operatorController.leftBumper().getAsBoolean(),
-								() -> swerve.getPose(),
-								swerveAlign));
+								() -> swerve.getPose()));
 
 		// Amp command
 		operatorController
@@ -148,8 +144,7 @@ public class RobotContainer {
 								ShooterMode.AMP,
 								() -> operatorController.b().getAsBoolean(),
 								() -> operatorController.y().getAsBoolean(),
-								() -> swerve.getPose(),
-								swerveAlign));
+								() -> swerve.getPose()));
 
 		// Intake command
 
@@ -157,6 +152,18 @@ public class RobotContainer {
 				.a()
 				.debounce(0.05)
 				.onTrue(new CMDGR_Intake(conveyor, arm, led, () -> operatorController.b().getAsBoolean()));
+
+		/*
+				operatorController
+						.a()
+						.onTrue(
+								new CMD_DriveAlign(
+										swerve,
+										() -> driverController.getRawAxis(1),
+										() -> driverController.getRawAxis(0),
+										() -> driverController.getRawAxis(3),
+										true));
+		*/
 
 		// Intake Source command
 
@@ -169,9 +176,15 @@ public class RobotContainer {
 		*/
 
 		// Eject command
+		/*
 		operatorController
 				.rightBumper()
 				.onTrue(new CMD_Eject(conveyor, arm, () -> operatorController.b().getAsBoolean()));
+		*/
+
+		// operatorController.rightBumper().onTrue(new CMD_DriveMode(swerve, DriveMode.SPEAKER));
+
+		///	operatorController.rightBumper().on(new CMD_DriveMode(swerve, DriveMode.SPEAKER));
 
 		// Climb command
 		operatorController.leftStick().debounce(0.15).onTrue(new CMD_ArmClimb(arm, led));
