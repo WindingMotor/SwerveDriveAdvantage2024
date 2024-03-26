@@ -17,11 +17,14 @@ import frc.robot.auto.AutoSelector;
 import frc.robot.auto.CommandRegistrar;
 import frc.robot.commands.CMD_ArmClimb;
 import frc.robot.commands.CMD_ArmClimbRaise;
-import frc.robot.commands.groups.CMDGR_Intake;
+import frc.robot.commands.CMD_Climb;
 import frc.robot.commands.groups.CMDGR_Shoot;
+import frc.robot.commands.groups.CMDGR_ShootDynamic;
 import frc.robot.subsystems.arm.IO_ArmReal;
 import frc.robot.subsystems.arm.IO_ArmSim;
 import frc.robot.subsystems.arm.SUB_Arm;
+import frc.robot.subsystems.climb.IO_ClimbReal;
+import frc.robot.subsystems.climb.SUB_Climb;
 import frc.robot.subsystems.conveyor.IO_ConveyorReal;
 import frc.robot.subsystems.conveyor.SUB_Conveyor;
 import frc.robot.subsystems.shooter.IO_ShooterReal;
@@ -54,7 +57,7 @@ public class RobotContainer {
 
 	private final SUB_Swerve swerve = new SUB_Swerve(new IO_SwerveReal(), vision, driverController);
 
-	// private final SUB_Climb climb = new SUB_Climb(new IO_ClimbReal());
+	private final SUB_Climb climb = new SUB_Climb(new IO_ClimbReal());
 
 	/*
 	private final SwerveAlign swerveAlign =
@@ -117,6 +120,7 @@ public class RobotContainer {
 								() -> swerve.getPose()));
 
 		// Shoot command dynamic
+		/*
 		operatorController
 				.leftBumper()
 				.onTrue(
@@ -130,6 +134,11 @@ public class RobotContainer {
 								() -> operatorController.b().getAsBoolean(),
 								() -> operatorController.leftBumper().getAsBoolean(),
 								() -> swerve.getPose()));
+		*/
+
+		operatorController.leftBumper().onTrue(new CMD_Climb(led, climb, () -> -0.35));
+
+		operatorController.leftBumper().onFalse(new CMD_Climb(led, climb, () -> 0.0));
 
 		// Amp command
 		operatorController
@@ -147,23 +156,39 @@ public class RobotContainer {
 								() -> swerve.getPose()));
 
 		// Intake command
-
+		/*
 		operatorController
 				.a()
 				.debounce(0.05)
 				.onTrue(new CMDGR_Intake(conveyor, arm, led, () -> operatorController.b().getAsBoolean()));
+		*/
 
 		/*
-				operatorController
-						.a()
-						.onTrue(
-								new CMD_DriveAlign(
-										swerve,
-										() -> driverController.getRawAxis(1),
-										() -> driverController.getRawAxis(0),
-										() -> driverController.getRawAxis(3),
-										true));
+		operatorController
+				.a()
+				.onTrue(
+						new CMD_Rotate(
+								swerve,
+								() -> driverController.getRawAxis(1),
+								() -> driverController.getRawAxis(0)));
 		*/
+
+		operatorController
+				.a()
+				.onTrue(
+						new CMDGR_ShootDynamic(
+								swerve,
+								() -> driverController.getRawAxis(0),
+								() -> driverController.getRawAxis(1),
+								() -> driverController.getRawAxis(3),
+								conveyor,
+								arm,
+								shooter,
+								vision,
+								led,
+								() -> operatorController.b().getAsBoolean(),
+								() -> operatorController.y().getAsBoolean(),
+								() -> swerve.getPose()));
 
 		// Intake Source command
 

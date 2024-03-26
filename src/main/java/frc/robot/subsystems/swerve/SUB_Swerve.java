@@ -175,6 +175,34 @@ public class SUB_Swerve extends SubsystemBase {
 				});
 	}
 
+	public void driveJoystickHybrid(
+			Double translationX, Double translationY, Double nonModifedAngular) {
+
+		var alli = DriverStation.getAlliance();
+
+		if (alli.get() == Alliance.Blue) {
+
+			io.drive(
+
+					// BLU
+					new Translation2d(
+							translationX * io.getMaximumVelocity(), -translationY * io.getMaximumVelocity()),
+					nonModifedAngular * io.getMaximumAngularVelocity(),
+					true,
+					true);
+
+		} else if (alli.get() == Alliance.Red) {
+
+			io.drive(
+					// RED
+					new Translation2d(
+							-translationX * io.getMaximumVelocity(), translationY * io.getMaximumVelocity()),
+					nonModifedAngular * io.getMaximumAngularVelocity(),
+					true,
+					true);
+		}
+	}
+
 	/**
 	 * Drives the robot to the specified pose.
 	 *

@@ -49,8 +49,8 @@ public class CMD_DriveAlign extends Command {
 		this.pid =
 				new PIDController(
 						Auto.SWERVE_ALIGN_PID.kP, Auto.SWERVE_ALIGN_PID.kI, Auto.SWERVE_ALIGN_PID.kD);
-		this.pid.enableContinuousInput(-Math.PI, Math.PI);
-		this.pid.setTolerance(0.3);
+		this.pid.enableContinuousInput(-180, 180);
+		this.pid.setTolerance(0.5);
 	}
 
 	// Print a message to the driver station and idle the robot subsystems
@@ -92,20 +92,21 @@ public class CMD_DriveAlign extends Command {
 			// Find Y distance for applying top / botton angles of the speaker
 			double yDistanceMeters = swerve.getPose().getY();
 
-			double setpointRadians = 0.0;
+			double setpointRadians = Math.toRadians(180);
 
 			// If the alliance is blue
 			if (alli.get() == Alliance.Blue) {
 
 				// If robot is ABOVE the amp with a middle tolerance of 0.5 meters
 				if (yDistanceMeters > targetSpeakerPose.getY() + 0.5) {
-					setpointRadians = Math.toRadians(90) - (Math.asin(xDistanceMeters / hDistanceMeters));
+					setpointRadians =
+							Math.toRadians(90)
+									- (Math.asin(xDistanceMeters / hDistanceMeters))
+									+ Math.toRadians(180);
 
 					// If robot is BELOW the amp with a middle tolerance of 0.5 meters
 				} else if (yDistanceMeters < targetSpeakerPose.getY() - 0.5) {
-					setpointRadians =
-							(Math.toRadians(90) + (Math.asin(xDistanceMeters / hDistanceMeters)))
-									+ Math.toRadians(180);
+					setpointRadians = (Math.toRadians(90) + (Math.asin(xDistanceMeters / hDistanceMeters)));
 				}
 
 				// If the alliance is red
@@ -132,20 +133,26 @@ public class CMD_DriveAlign extends Command {
 					"DriveAlign Pose",
 					new Pose2d(swerve.getPose().getTranslation(), new Rotation2d(setpointRadians)));
 
-			double output = pid.calculate(swerve.getPose().getRotation().getRadians(), setpointRadians);
+			double output =
+					pid.calculate(
+							swerve.getPose().getRotation().getDegrees(), Math.toDegrees(setpointRadians));
 
-			swerve.driveJoystick(
-					ySpeed, xSpeed, () -> ((MathUtil.applyDeadband(rSpeed.getAsDouble(), 0.1) / 2) + output));
+			swerve.driveJoystickHybrid(
+					ySpeed.getAsDouble(),
+					xSpeed.getAsDouble(),
+					((MathUtil.applyDeadband(rSpeed.getAsDouble(), 0.1) / 2) + output));
 
 		} else { // Amp align
 
 			double output =
 					pid.calculate(
-							swerve.getPose().getRotation().getRadians(),
+							swerve.getPose().getRotation().getDegrees(),
 							Math.toRadians(ScoringPoses.BLU_AMP.pose.getRotation().getDegrees()));
 
-			swerve.driveJoystick(
-					ySpeed, xSpeed, () -> ((MathUtil.applyDeadband(rSpeed.getAsDouble(), 0.1) / 2) + output));
+			swerve.driveJoystickHybrid(
+					ySpeed.getAsDouble(),
+					xSpeed.getAsDouble(),
+					((MathUtil.applyDeadband(rSpeed.getAsDouble(), 0.1) / 2) + output));
 		}
 	}
 

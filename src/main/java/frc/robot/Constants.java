@@ -111,7 +111,7 @@ public class Constants {
 					new Transform3d(
 							new Translation3d(
 									Units.inchesToMeters(4),
-									Units.inchesToMeters(11.25 + 8), // X offset to 0in the left of the speaker
+									Units.inchesToMeters(11.25 - 2.5), // X offset to 0in the left of the speaker
 									Units.inchesToMeters(8.5)),
 							new Rotation3d(0, Units.degreesToRadians(-29), 0.0)
 									.rotateBy(
@@ -122,7 +122,7 @@ public class Constants {
 					"rightCamera",
 					new Transform3d(
 							new Translation3d(
-									Units.inchesToMeters(4),
+									Units.inchesToMeters(4 + 7.5),
 									Units.inchesToMeters(-19 + 3.5), // X offset to 2in the left of the speaker
 									Units.inchesToMeters(8.5)),
 							new Rotation3d(
@@ -240,7 +240,8 @@ public class Constants {
 		/* -- Indexer -- */
 
 		// Indexer motor CAN ID
-		public static final int INTAKE_MOTOR_ID = 14;
+		public static final int INTAKE_MOTOR_ONE_ID = 14;
+		public static final int INTAKE_MOTOR_TWO_ID = 16;
 
 		/* -- Sensors -- */
 
@@ -268,7 +269,6 @@ public class Constants {
 		11 indexer
 		12-13 shooter
 		*/
-
 	}
 
 	// States of the robot subsystems
@@ -298,7 +298,7 @@ public class Constants {
 
 			INTAKE_SOURCE(-3000, 0.0),
 
-			AMP(500, 0.0);
+			AMP(3500, 0.0); // old 500
 
 			public final double rpm;
 			public final double distanceMeters;
@@ -312,7 +312,7 @@ public class Constants {
 		// Positions of the arm for various states
 		public enum ArmState {
 			OFF(0, 0.0),
-			IDLE(-4, 0.0),
+			IDLE(8, 0.0),
 
 			SPEAKER_1M(55.0, 1.0),
 			SPEAKER_2M(42.0, 2.0), // 43deg
@@ -320,9 +320,11 @@ public class Constants {
 			SPEAKER_3M(38.5, 3.0),
 			SPEAKER_4M(34.15, 4.0),
 
-			AMP(95, 0.0),
+			AMP(100, 0.0), // old 95
+
 			DYNAMIC(-1.0, 0.0),
-			INTAKE(50, 0.0), // 89, 50
+			INTAKE(8, 0.0), // 89, old-> 50
+
 			INTAKE_SOURCE(30, 0.0), // 89, 50
 
 			TRAP(61.0, 0.0);
@@ -358,7 +360,7 @@ public class Constants {
 	public static class Auto {
 
 		// Swerve align PID
-		public static final PIDConstants SWERVE_ALIGN_PID = new PIDConstants(0.021, 0.018, 0.001);
+		public static final PIDConstants SWERVE_ALIGN_PID = new PIDConstants(0.015, 0.0, 0.003);
 
 		// Max LINEAR velocity and acceleration of the swerve drive during auto
 		public static final double MAX_VELOCITY_MPS = 1.5;

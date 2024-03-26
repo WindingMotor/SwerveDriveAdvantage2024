@@ -31,13 +31,7 @@ public class CMD_Climb extends Command {
 	@Override
 	public void initialize() {
 		led.setState(LEDState.ORANGE);
-		if (speed.get() > 0.05) {
-			climb.set(speed.get());
-			led.setState(LEDState.BLUE);
-		} else {
-			climb.stop();
-			led.setState(LEDState.RAINBOW);
-		}
+		climb.set(speed.get());
 	}
 
 	// Command ends immediately

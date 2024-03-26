@@ -25,6 +25,7 @@ import frc.robot.util.AddressableLedStrip;
 import frc.robot.util.AddressableLedStrip.LEDState;
 import frc.robot.util.MathCalc;
 import java.util.function.Supplier;
+import org.littletonrobotics.junction.Logger;
 import org.photonvision.PhotonUtils;
 
 /** Class to handle shooting commands. */
@@ -161,6 +162,8 @@ public class CMD_Shoot extends Command {
 			shooter.setState(ShooterState.SPEAKER_1M);
 
 			arm.setDynamicAngle(armCalculation);
+
+			Logger.recordOutput("DYANMIC ARM CALC", armCalculation);
 		}
 	}
 
@@ -178,7 +181,7 @@ public class CMD_Shoot extends Command {
 
 			// AMP mode
 		} else if (mode == ShooterMode.AMP) {
-			shooter.invertMotors(true);
+			shooter.invertMotors(false);
 			shooter.setState(Constants.States.ShooterState.AMP);
 			arm.setState(Constants.States.ArmState.AMP);
 

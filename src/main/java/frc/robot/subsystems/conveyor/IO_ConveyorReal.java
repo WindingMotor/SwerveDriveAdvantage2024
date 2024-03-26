@@ -15,7 +15,9 @@ import frc.robot.util.IRBeamBreak;
 
 public class IO_ConveyorReal implements IO_ConveyorBase {
 
-	private CANSparkMax intakeMotor;
+	private CANSparkMax intakeMotorOne;
+	private CANSparkMax intakeMotorTwo;
+
 	private CANSparkMax indexerMotor;
 
 	private IRBeamBreak intakeSensor;
@@ -25,7 +27,11 @@ public class IO_ConveyorReal implements IO_ConveyorBase {
 	private boolean shooterFlag = false;
 
 	public IO_ConveyorReal() {
-		intakeMotor = Builder.createNeo(Constants.Maestro.INTAKE_MOTOR_ID, false, 60);
+		intakeMotorOne = Builder.createNeo(Constants.Maestro.INTAKE_MOTOR_ONE_ID, false, 60);
+		intakeMotorTwo = Builder.createNeo(Constants.Maestro.INTAKE_MOTOR_TWO_ID, false, 60);
+
+		Builder.setNeoFollower(intakeMotorOne, intakeMotorTwo);
+
 		indexerMotor = Builder.createNeo(Constants.Maestro.INDEXER_MOTOR_ID, false, 45);
 
 		intakeSensor = new IRBeamBreak(Constants.Maestro.INTAKE_SENSOR_ID);
@@ -41,8 +47,8 @@ public class IO_ConveyorReal implements IO_ConveyorBase {
 	 */
 	@Override
 	public void updateInputs(ConveyorInputs inputs) {
-		inputs.intakeMotorSpeed = intakeMotor.getEncoder().getVelocity();
-		inputs.intakeMotorCurrent = intakeMotor.getOutputCurrent();
+		inputs.intakeMotorSpeed = intakeMotorOne.getEncoder().getVelocity();
+		inputs.intakeMotorCurrent = intakeMotorOne.getOutputCurrent();
 		inputs.indexerMotorSpeed = indexerMotor.getEncoder().getVelocity();
 		inputs.indexerMotorCurrent = indexerMotor.getOutputCurrent();
 
@@ -61,7 +67,7 @@ public class IO_ConveyorReal implements IO_ConveyorBase {
 	 */
 	@Override
 	public void update(double intakeSpeed, double indexerSpeed) {
-		intakeMotor.set(intakeSpeed);
+		intakeMotorOne.set(intakeSpeed);
 		indexerMotor.set(indexerSpeed);
 	}
 
