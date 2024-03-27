@@ -185,13 +185,13 @@ public class Constants {
 		public static final boolean ARM_MOTOR_FOLLOWER_INVERTED = false;
 
 		// Arm PIDs
-		public static final double ARM_P = 0.135; // Volts 0.45 0.18
+		public static final double ARM_P = 0.135; // Volts 0.45 0.18 -> old: 0.135
 		public static final double ARM_I = 0.0;
-		public static final double ARM_D = 0.00012;
+		public static final double ARM_D = 0.00012; // old: 0.00012
 
 		// Arm FF (Feed Forward)
-		public static final double ARM_KS = 0.01; // Volts
-		public static final double ARM_KG = 0.379;
+		public static final double ARM_KS = 0.1; // Volts
+		public static final double ARM_KG = 0.379; // old: 0.379
 		public static final double ARM_KV = 1.86;
 		public static final double ARM_KA = 0.06;
 
@@ -285,7 +285,7 @@ public class Constants {
 		// Speeds of the shooter for the various states
 		public enum ShooterState {
 			OFF(0.0, 0.0),
-			IDLE(4100, 0.0),
+			IDLE(4800, 0.0),
 
 			SPEAKER_1M(4500, 1.0), // 3600
 			SPEAKER_2M(4500, 2.0),
@@ -323,7 +323,7 @@ public class Constants {
 			AMP(104, 0.0), // old 95
 
 			DYNAMIC(-1.0, 0.0),
-			INTAKE(12, 0.0), // 89, old-> 50
+			INTAKE(15, 0.0), // 89, old-> 50
 
 			INTAKE_SOURCE(30, 0.0), // 89, 50
 

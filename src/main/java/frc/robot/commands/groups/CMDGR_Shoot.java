@@ -35,7 +35,7 @@ public class CMDGR_Shoot extends SequentialCommandGroup {
 			Supplier<Boolean> manualCancel,
 			Supplier<Boolean> shoot,
 			Supplier<Pose2d> robotPose) {
-		addRequirements(conveyor, arm, shooter);
+		addRequirements(conveyor, arm, shooter, vision, led);
 		addCommands(
 				new CMD_Led(led, LEDState.BLUE),
 				new CMD_Shoot(conveyor, arm, shooter, vision, led, mode, manualCancel, shoot, robotPose));

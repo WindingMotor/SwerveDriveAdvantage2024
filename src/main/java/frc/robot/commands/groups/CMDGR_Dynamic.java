@@ -41,7 +41,7 @@ public class CMDGR_Dynamic extends SequentialCommandGroup {
 			Supplier<Boolean> manualCancel,
 			Supplier<Boolean> shoot,
 			Supplier<Pose2d> robotPose) {
-		addRequirements(conveyor, arm, shooter);
+		addRequirements(swerve, conveyor, arm, shooter, vision, led);
 		addCommands(
 				new CMD_Led(led, LEDState.BLUE),
 				new ParallelCommandGroup( // Parallel group for auto alignment and shooting commands

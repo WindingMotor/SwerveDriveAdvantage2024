@@ -21,7 +21,7 @@ public class CMDGR_Intake extends SequentialCommandGroup {
 
 	public CMDGR_Intake(
 			SUB_Conveyor conveyor, SUB_Arm arm, AddressableLedStrip led, Supplier<Boolean> manualCancel) {
-		addRequirements(arm, conveyor);
+		addRequirements(arm, conveyor, led);
 		// Call intake command and flash leds green
 		addCommands(
 				new CMD_Intake(conveyor, arm, manualCancel),

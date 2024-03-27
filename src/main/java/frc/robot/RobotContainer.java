@@ -16,7 +16,8 @@ import frc.robot.Constants.RobotMode;
 import frc.robot.Constants.States.ShooterMode;
 import frc.robot.auto.AutoSelector;
 import frc.robot.auto.CommandRegistrar;
-import frc.robot.commands.CMD_Climb;
+import frc.robot.commands.CMD_Eject;
+import frc.robot.commands.groups.CMDGR_Dynamic;
 import frc.robot.commands.groups.CMDGR_Intake;
 import frc.robot.commands.groups.CMDGR_Shoot;
 import frc.robot.subsystems.arm.IO_ArmReal;
@@ -136,7 +137,6 @@ public class RobotContainer {
 
 		// Shoot command dynamic
 
-		/*
 		operatorController
 				.leftBumper()
 				.onTrue(
@@ -153,11 +153,10 @@ public class RobotContainer {
 								() -> operatorController.b().getAsBoolean(),
 								() -> operatorController.leftBumper().getAsBoolean(),
 								() -> swerve.getPose()));
-		*/
 
-		operatorController.leftBumper().onTrue(new CMD_Climb(led, climb, () -> 0.35));
+		// operatorController.leftBumper().onTrue(new CMD_Climb(led, climb, () -> 0.35));
 
-		operatorController.leftBumper().onFalse(new CMD_Climb(led, climb, () -> 0.0));
+		// operatorController.leftBumper().onFalse(new CMD_Climb(led, climb, () -> 0.0));
 
 		/*
 		operatorController
@@ -237,11 +236,10 @@ public class RobotContainer {
 		*/
 
 		// Eject command
-		/*
+
 		operatorController
 				.rightBumper()
 				.onTrue(new CMD_Eject(conveyor, arm, () -> operatorController.b().getAsBoolean()));
-		*/
 
 		// operatorController.rightBumper().onTrue(new CMD_DriveMode(swerve, DriveMode.SPEAKER));
 

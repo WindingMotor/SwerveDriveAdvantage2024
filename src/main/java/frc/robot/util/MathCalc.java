@@ -27,7 +27,13 @@ public class MathCalc {
 	 */
 	public static double calculateInterpolate(double distanceToTarget) {
 		// return (50.5739 * Math.exp(-distanceToTarget)) + 36.3442;
-		return (61.9759 * Math.exp(-0.54144 * distanceToTarget)) + 25.5309 + 0.35;
+		return (61.9759 * Math.exp(-0.45144 * distanceToTarget)) + 25.5309 + 0.35;
+
+		/*
+		return 39.3257 * Erf.erf(1.20504 * distanceToTarget)
+				+ 95.1292 * Math.exp(-1.30193 * distanceToTarget);
+				*/
+		// Lower arm angle higher exponet
 	}
 
 	/**

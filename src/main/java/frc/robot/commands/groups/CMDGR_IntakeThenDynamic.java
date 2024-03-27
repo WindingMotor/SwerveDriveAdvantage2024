@@ -9,7 +9,6 @@
 package frc.robot.commands.groups;
 
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.States.ArmState;
@@ -39,26 +38,25 @@ public class CMDGR_IntakeThenDynamic extends SequentialCommandGroup {
 			SUB_Vision vision,
 			AddressableLedStrip led,
 			Supplier<Pose2d> robotPose) {
-		addRequirements(conveyor, arm, shooter);
+		addRequirements(swerve, conveyor, arm, shooter, vision, led);
 		addCommands(
 				new CMD_Led(led, LEDState.BLUE),
-				new ParallelCommandGroup(
-						new CMD_IntakeAuto(conveyor, arm, () -> false), // Intake the donut
-						new CMD_Align(
-								swerve, () -> 0.0, () -> 0.0, () -> 0.0, true, () -> false), // Align with speaker
-						new CMD_Shoot( // Shoot with dynamic
-								conveyor,
-								arm,
-								shooter,
-								vision,
-								led,
-								ShooterMode.DYNAMIC,
-								() -> false,
-								() -> false,
-								true,
-								ShooterState.OFF,
-								ArmState.OFF,
-								() -> swerve.getPose())),
+				new CMD_IntakeAuto(conveyor, arm, () -> false), // Intake the donut
+				new CMD_Align(
+						swerve, () -> 0.0, () -> 0.0, () -> 0.0, true, () -> false), // Align with speaker
+				new CMD_Shoot( // Shoot with dynamic
+						conveyor,
+						arm,
+						shooter,
+						vision,
+						led,
+						ShooterMode.DYNAMIC,
+						() -> false,
+						() -> false,
+						true,
+						ShooterState.OFF,
+						ArmState.OFF,
+						() -> swerve.getPose()),
 				new WaitCommand(0.15), // Delay to allow dount to leave the robot
 				new CMD_Idle(conveyor, arm, shooter),
 				new CMDGR_LedFlash(led, LEDState.GREEN, 5, 0.1),

@@ -144,13 +144,16 @@ public class IO_ArmReal implements IO_ArmBase {
 	}
 
 	private void runPID(double setpointDegrees) {
+		pidOutputVolts = 0;
+
 		pidOutputVolts =
 				MathUtil.clamp(
 						-pid.calculate(armAngle, setpointDegrees),
 						-Constants.Maestro.ARM_VOLTAGE_CLAMPING,
 						Constants.Maestro.ARM_VOLTAGE_CLAMPING);
-		ffOutputVolts = -feedforward.calculate(Math.toRadians(setpointDegrees), 0.0);
-	}
+
+		ffOutputVolts = -feedforward.calculate(Math.toRadians(setpointDegrees - 9), 0.0);
+	} // -4.85
 
 	/** Stops the arm motors. */
 	@Override

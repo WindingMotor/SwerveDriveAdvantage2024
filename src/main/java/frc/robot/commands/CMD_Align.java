@@ -67,13 +67,6 @@ public class CMD_Align extends Command {
 	@Override
 	public void execute() {
 
-		double tolerance = 2.0;
-		// check if robot rose angle is within tolerance of 5 degrees
-		if (MathUtil.isNear(
-				pid.getSetpoint(), swerve.getPose().getRotation().getDegrees(), tolerance)) {
-			isCommandDone = true;
-		}
-
 		// Get allaince
 		var alli = DriverStation.getAlliance();
 		Pose2d targetSpeakerPose;
@@ -122,11 +115,11 @@ public class CMD_Align extends Command {
 				xDistanceMeters = ScoringPoses.RED_SPEAKER.pose.getX() - swerve.getPose().getX();
 
 				// If robot is ABOVE the amp with a middle tolerance of 0.5 meters
-				if (yDistanceMeters > targetSpeakerPose.getY() + 0.5) {
+				if (yDistanceMeters > targetSpeakerPose.getY() + 0.25) {
 					setpointRadians = (Math.asin(xDistanceMeters / hDistanceMeters)) - Math.toRadians(270);
 
 					// If robot is BELOW the amp with a middle tolerance of 0.5 meters
-				} else if (yDistanceMeters < targetSpeakerPose.getY() - 0.5) {
+				} else if (yDistanceMeters < targetSpeakerPose.getY() - 0.25) {
 					setpointRadians = (Math.asin(xDistanceMeters / hDistanceMeters)) + Math.toRadians(135);
 				}
 			}
@@ -141,6 +134,10 @@ public class CMD_Align extends Command {
 			double output =
 					pid.calculate(
 							swerve.getPose().getRotation().getDegrees(), Math.toDegrees(setpointRadians));
+
+			Logger.recordOutput("ALIGN SETPOINT", Math.toDegrees(setpointRadians));
+
+			Logger.recordOutput("REAL ANGLE", swerve.getPose().getRotation().getDegrees());
 
 			/*
 			 * gyro based
@@ -174,6 +171,6 @@ public class CMD_Align extends Command {
 
 	@Override
 	public boolean isFinished() {
-		return manualCancel.get();
+		return manualCancel.get() || isCommandDone;
 	}
 }
