@@ -188,4 +188,10 @@ public class IO_ArmReal implements IO_ArmBase {
 	public double getRealTimeArmPosition() {
 		return armAngle;
 	}
+
+	@Override
+	public void setCurrentLimits(int limit) {
+		motorOne.setSmartCurrentLimit(limit);
+		motorTwo.setSmartCurrentLimit(limit);
+	}
 }

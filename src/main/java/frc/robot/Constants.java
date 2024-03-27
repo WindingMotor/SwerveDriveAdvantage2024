@@ -206,7 +206,7 @@ public class Constants {
 		public static final double ARM_TOLERANCE_DEGREES = 1.08; // 3.0
 
 		// Arm offset to get zero at horizontal
-		public static final double ARM_OFFSET_DEGREES = 4.85;
+		public static final double ARM_OFFSET_DEGREES = 0; // old 4.85
 
 		// Arm locking servo RoboRio port
 		public static final int ARM_SERVO_PORT = 9;
@@ -298,7 +298,7 @@ public class Constants {
 
 			INTAKE_SOURCE(-3000, 0.0),
 
-			AMP(3500, 0.0); // old 500
+			AMP(4500, 0.0); // old 500
 
 			public final double rpm;
 			public final double distanceMeters;
@@ -320,10 +320,10 @@ public class Constants {
 			SPEAKER_3M(38.5, 3.0),
 			SPEAKER_4M(34.15, 4.0),
 
-			AMP(100, 0.0), // old 95
+			AMP(104, 0.0), // old 95
 
 			DYNAMIC(-1.0, 0.0),
-			INTAKE(8, 0.0), // 89, old-> 50
+			INTAKE(12, 0.0), // 89, old-> 50
 
 			INTAKE_SOURCE(30, 0.0), // 89, 50
 

@@ -9,36 +9,35 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants.States.ConveyorState;
-import frc.robot.subsystems.conveyor.SUB_Conveyor;
+import java.util.function.Supplier;
 
-/** Class to handle shooting commands. */
-public class CMD_IndexerAdvance extends Command {
+public class CMD_Cancel extends Command {
 
-	private final SUB_Conveyor conveyor;
+	private final Supplier<Boolean> cancel;
 	private boolean isCommandDone = false;
 
-	public CMD_IndexerAdvance(SUB_Conveyor conveyor) {
-		this.conveyor = conveyor;
-		addRequirements(conveyor);
+	public CMD_Cancel(Supplier<Boolean> cancel) {
+		this.cancel = cancel;
 	}
 
 	@Override
 	public void initialize() {
-		conveyor.setState(ConveyorState.SLOW);
 		isCommandDone = false;
 	}
 
 	@Override
 	public void execute() {
-		if (conveyor.inputs.indexerFinalSensorState) {
-			conveyor.setState(ConveyorState.OFF);
+		if (cancel.get()) {
 			isCommandDone = true;
 		}
 	}
 
 	@Override
 	public boolean isFinished() {
-		return isCommandDone;
+		if (isCommandDone) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 }

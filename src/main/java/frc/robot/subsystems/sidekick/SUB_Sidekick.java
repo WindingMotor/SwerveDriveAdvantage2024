@@ -119,6 +119,8 @@ public class SUB_Sidekick extends SubsystemBase {
 					}
 				}
 			*/
+		} else {
+			operatorController.getHID().setRumble(RumbleType.kBothRumble, 0.0);
 		}
 	}
 

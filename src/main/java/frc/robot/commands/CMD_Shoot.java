@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.Constants.Auto.ScoringPoses;
 import frc.robot.Constants.States.ArmState;
+import frc.robot.Constants.States.ConveyorState;
 import frc.robot.Constants.States.ShooterMode;
 import frc.robot.Constants.States.ShooterState;
 import frc.robot.subsystems.arm.SUB_Arm;
@@ -70,7 +71,6 @@ public class CMD_Shoot extends Command {
 		addRequirements(conveyor, arm, shooter);
 	}
 
-	// Auto Shoot Contructor
 	public CMD_Shoot(
 			SUB_Conveyor conveyor,
 			SUB_Arm arm,
@@ -97,7 +97,6 @@ public class CMD_Shoot extends Command {
 		addRequirements(conveyor, arm, shooter);
 	}
 
-	// Auto Shoot Contructor
 	public CMD_Shoot(
 			SUB_Conveyor conveyor,
 			SUB_Arm arm,
@@ -132,14 +131,16 @@ public class CMD_Shoot extends Command {
 		timer = 0;
 		isCommandDone = false;
 		hasShootBeenCalled = false;
+		setInitalStates();
 	}
 
 	/** Spool up the shooter to the correct rpm and set arm angle depending on the mode. */
 	@Override
 	public void execute() {
-		setInitalStates();
 		checkConveyor();
 		checkEndCommand();
+
+		Logger.recordOutput("[CMD_Shoot] Is Command Done", isCommandDone);
 
 		if (mode == ShooterMode.DYNAMIC) {
 
@@ -163,11 +164,14 @@ public class CMD_Shoot extends Command {
 
 			arm.setDynamicAngle(armCalculation);
 
-			Logger.recordOutput("DYANMIC ARM CALC", armCalculation);
+			Logger.recordOutput("[CMD_Shoot] Dynamic Angle", armCalculation);
 		}
 	}
 
 	private void setInitalStates() {
+
+		conveyor.setState(ConveyorState.OFF);
+
 		// SPEAKER mode
 		if (mode == ShooterMode.SPEAKER) {
 			shooter.invertMotors(true);
@@ -212,7 +216,7 @@ public class CMD_Shoot extends Command {
 				led.setState(LEDState.WHITE);
 			}
 
-			if (shoot.get()) {
+			if (shoot.get() && timer > 30) {
 				hasShootBeenCalled = true;
 				if (mode == ShooterMode.AMP) {
 					conveyor.setState(Constants.States.ConveyorState.AMP);
@@ -239,7 +243,7 @@ public class CMD_Shoot extends Command {
 
 		// Once operator has pressed shoot button and the donut leaves the conveyor end the command
 		if (hasShootBeenCalled) {
-			if (conveyor.inputs.indexerFinalSensorState) {
+			if (conveyor.inputs.indexerFinalSensorState && timer > 1) {
 				isCommandDone = true;
 			}
 		}

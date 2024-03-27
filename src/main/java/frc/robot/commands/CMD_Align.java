@@ -18,56 +18,61 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.Auto;
 import frc.robot.Constants.Auto.ScoringPoses;
 import frc.robot.subsystems.swerve.SUB_Swerve;
-import java.util.function.DoubleSupplier;
+import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
 import org.photonvision.PhotonUtils;
 
-public class CMD_DriveAlign extends Command {
+public class CMD_Align extends Command {
 
 	private final SUB_Swerve swerve;
 	private final PIDController pid;
 
-	private final DoubleSupplier xSpeed;
-	private final DoubleSupplier ySpeed;
-	private final DoubleSupplier rSpeed;
+	private final Supplier<Double> xSpeed;
+	private final Supplier<Double> ySpeed;
+	private final Supplier<Double> rSpeed;
+
+	Supplier<Boolean> manualCancel;
 
 	private boolean isSpeaker;
 	private boolean isCommandDone;
 
-	public CMD_DriveAlign(
+	public CMD_Align(
 			SUB_Swerve swerve,
-			DoubleSupplier xSpeed,
-			DoubleSupplier ySpeed,
-			DoubleSupplier rSpeed,
-			Boolean isSpeaker) {
+			Supplier<Double> xSpeed,
+			Supplier<Double> ySpeed,
+			Supplier<Double> rSpeed,
+			Boolean isSpeaker,
+			Supplier<Boolean> manualCancel) {
 		this.swerve = swerve;
 		this.xSpeed = xSpeed;
 		this.ySpeed = ySpeed;
 		this.rSpeed = rSpeed;
 		this.isSpeaker = isSpeaker;
+		this.manualCancel = manualCancel;
 		addRequirements(swerve);
 		this.pid =
 				new PIDController(
 						Auto.SWERVE_ALIGN_PID.kP, Auto.SWERVE_ALIGN_PID.kI, Auto.SWERVE_ALIGN_PID.kD);
 		this.pid.enableContinuousInput(-180, 180);
-		this.pid.setTolerance(0.5);
+		this.pid.setTolerance(1.0);
 	}
 
 	// Print a message to the driver station and idle the robot subsystems
 	@Override
 	public void initialize() {
 		isCommandDone = false;
+		pid.reset();
 	}
 
 	@Override
 	public void execute() {
 
-		DriverStation.reportError("RUNN CMD", false);
-
-		swerve.driveJoystick(() -> 0.1, xSpeed, rSpeed);
-
-		// Check if pid is within tolerance
-		isCommandDone = pid.atSetpoint();
+		double tolerance = 2.0;
+		// check if robot rose angle is within tolerance of 5 degrees
+		if (MathUtil.isNear(
+				pid.getSetpoint(), swerve.getPose().getRotation().getDegrees(), tolerance)) {
+			isCommandDone = true;
+		}
 
 		// Get allaince
 		var alli = DriverStation.getAlliance();
@@ -126,21 +131,27 @@ public class CMD_DriveAlign extends Command {
 				}
 			}
 
-			Logger.recordOutput("DriveAlign H Distance", hDistanceMeters);
-			Logger.recordOutput("DriveAlign X Distance", xDistanceMeters);
-			Logger.recordOutput("DriveAlign Calculated Angle", setpointRadians);
+			Logger.recordOutput("[CMD_Align] H Distance", hDistanceMeters);
+			Logger.recordOutput("[CMD_Align] X Distance", xDistanceMeters);
+			Logger.recordOutput("[CMD_Align] Calculated Angle", setpointRadians);
 			Logger.recordOutput(
-					"DriveAlign Pose",
+					"[CMD_Align] Desired Pose",
 					new Pose2d(swerve.getPose().getTranslation(), new Rotation2d(setpointRadians)));
 
 			double output =
 					pid.calculate(
 							swerve.getPose().getRotation().getDegrees(), Math.toDegrees(setpointRadians));
 
-			swerve.driveJoystickHybrid(
-					ySpeed.getAsDouble(),
-					xSpeed.getAsDouble(),
-					((MathUtil.applyDeadband(rSpeed.getAsDouble(), 0.1) / 2) + output));
+			/*
+			 * gyro based
+			double output =
+					pid.calculate(
+							swerve.getYaw().getDegrees(), Math.toDegrees(setpointRadians));
+			 */
+
+			swerve.driveJoystickHybrid(ySpeed.get(), xSpeed.get(), output);
+
+			Logger.recordOutput("[CMD_Align] Controller X Debug Output", xSpeed.get());
 
 		} else { // Amp align
 
@@ -149,15 +160,20 @@ public class CMD_DriveAlign extends Command {
 							swerve.getPose().getRotation().getDegrees(),
 							Math.toRadians(ScoringPoses.BLU_AMP.pose.getRotation().getDegrees()));
 
-			swerve.driveJoystickHybrid(
-					ySpeed.getAsDouble(),
-					xSpeed.getAsDouble(),
-					((MathUtil.applyDeadband(rSpeed.getAsDouble(), 0.1) / 2) + output));
+			/*
+			 * gyro based
+			double output =
+					pid.calculate(
+							swerve.getYaw().getDegrees(),
+							Math.toRadians(ScoringPoses.BLU_AMP.pose.getRotation().getDegrees()));
+			 */
+
+			swerve.driveJoystickHybrid(ySpeed.get(), xSpeed.get(), output);
 		}
 	}
 
 	@Override
 	public boolean isFinished() {
-		return false;
+		return manualCancel.get();
 	}
 }

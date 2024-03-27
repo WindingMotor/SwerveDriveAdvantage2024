@@ -9,11 +9,15 @@
 package frc.robot.commands.groups;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.Constants.States.ArmState;
 import frc.robot.Constants.States.ShooterMode;
-import frc.robot.commands.CMD_DriveAlign;
+import frc.robot.Constants.States.ShooterState;
+import frc.robot.commands.CMD_Align;
 import frc.robot.commands.CMD_Idle;
+import frc.robot.commands.CMD_IntakeAuto;
 import frc.robot.commands.CMD_Led;
 import frc.robot.commands.CMD_Shoot;
 import frc.robot.subsystems.arm.SUB_Arm;
@@ -23,46 +27,39 @@ import frc.robot.subsystems.swerve.SUB_Swerve;
 import frc.robot.subsystems.vision.SUB_Vision;
 import frc.robot.util.AddressableLedStrip;
 import frc.robot.util.AddressableLedStrip.LEDState;
-import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
-public class CMDGR_ShootDynamic extends SequentialCommandGroup {
+public class CMDGR_IntakeThenDynamic extends SequentialCommandGroup {
 
-	public CMDGR_ShootDynamic(
+	public CMDGR_IntakeThenDynamic(
 			SUB_Swerve swerve,
-			DoubleSupplier xInput,
-			DoubleSupplier yInput,
-			DoubleSupplier rInput,
 			SUB_Conveyor conveyor,
 			SUB_Arm arm,
 			SUB_Shooter shooter,
 			SUB_Vision vision,
 			AddressableLedStrip led,
-			Supplier<Boolean> manualCancel,
-			Supplier<Boolean> shoot,
 			Supplier<Pose2d> robotPose) {
 		addRequirements(conveyor, arm, shooter);
-		// Call the shoot command, then wait 0.5 seconds, then call the idle command
 		addCommands(
-				new CMD_DriveAlign(swerve, xInput, yInput, rInput, true),
 				new CMD_Led(led, LEDState.BLUE),
-				new WaitCommand(0.15),
-				new CMD_Shoot(
-						conveyor,
-						arm,
-						shooter,
-						vision,
-						led,
-						ShooterMode.DYNAMIC,
-						manualCancel,
-						shoot,
-						robotPose));
-
-		addCommands(
-				new WaitCommand(0.15) // Delay to allow dount to leave the robot
-				);
-
-		addCommands(
+				new ParallelCommandGroup(
+						new CMD_IntakeAuto(conveyor, arm, () -> false), // Intake the donut
+						new CMD_Align(
+								swerve, () -> 0.0, () -> 0.0, () -> 0.0, true, () -> false), // Align with speaker
+						new CMD_Shoot( // Shoot with dynamic
+								conveyor,
+								arm,
+								shooter,
+								vision,
+								led,
+								ShooterMode.DYNAMIC,
+								() -> false,
+								() -> false,
+								true,
+								ShooterState.OFF,
+								ArmState.OFF,
+								() -> swerve.getPose())),
+				new WaitCommand(0.15), // Delay to allow dount to leave the robot
 				new CMD_Idle(conveyor, arm, shooter),
 				new CMDGR_LedFlash(led, LEDState.GREEN, 5, 0.1),
 				new CMD_Led(led, LEDState.RAINBOW));

@@ -80,10 +80,6 @@ public class CMD_Intake extends Command {
 
 	@Override
 	public boolean isFinished() {
-		if (isCommandDone || manualCancel.get()) {
-			return true;
-		} else {
-			return false;
-		}
+		return isCommandDone || manualCancel.get();
 	}
 }

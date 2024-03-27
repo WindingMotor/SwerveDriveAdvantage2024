@@ -49,4 +49,6 @@ public interface IO_ArmBase {
 	public void unlockArm();
 
 	double getRealTimeArmPosition();
+
+	void setCurrentLimits(int limit);
 }

@@ -142,21 +142,6 @@ public class AddressableLedStrip extends SubsystemBase {
 		}
 	}
 
-	private void everyOther(int sectionLength, Color color1, Color color2) {
-		int segmentStart = 0;
-		while (segmentStart < length) {
-			for (var i = segmentStart; i < Math.min(length, segmentStart + sectionLength); i++) {
-				ledBuffer.setLED(i, color1);
-			}
-			for (var i = segmentStart + sectionLength;
-					i < Math.min(length, segmentStart + 2 * sectionLength);
-					i++) {
-				ledBuffer.setLED(i, color2);
-			}
-			segmentStart += 2 * sectionLength;
-		}
-	}
-
 	public void laser(Color color) {
 		for (var i = 0; i < length; i++) {
 			ledBuffer.setLED(i, color);

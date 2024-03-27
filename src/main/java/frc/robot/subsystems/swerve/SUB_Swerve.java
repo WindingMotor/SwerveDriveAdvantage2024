@@ -44,31 +44,19 @@ public class SUB_Swerve extends SubsystemBase {
 
 	private final SUB_Vision vision;
 
-	private final CommandXboxController localDriverController;
-
 	// Odometry lock, prevents updates while reading data
 	private static final Lock odometryLock = new ReentrantLock();
 
 	/*
-	* 						new PIDConstants(5.0, 0.0, 0.0, 0.0), // Translation
-					new PIDConstants(7.0, 0.0, 0.0, 0.0), // Heading
-	*/
-
-	/*
-	 * OLD pid values
-	* 						new PIDConstants(5.0, 0.0, 0.0, 0.0), // Translation
-					new PIDConstants(7.0, 0.0, 0.0, 0.0), // Heading
-
-	 * Team 401 PID values
+	 *
+	 * Old VAGLE PID Values
+	 * new PIDConstants(5.0, 0.0, 0.0, 0.0), // Translation
+	 * new PIDConstants(7.0, 0.0, 0.0, 0.0), // Heading
+	 *
+	 * Team 401 PID values, seem to work smoother at higher speeds
 	 * TRANSLATION 2, 0, 0
 	 * ROTATION 7.0, 4.5, 0
 	 *
-	 * Team 401 Pathplanner max speeds
-	 *   "globalConstraints": {
-		"maxVelocity": 4.5,
-		"maxAcceleration": 4.0,
-		"maxAngularVelocity": 540.0,
-		"maxAngularAcceleration": 720.0
 	 */
 	public SUB_Swerve(IO_SwerveBase io, SUB_Vision vision, CommandXboxController driverController) {
 		this.io = io;
@@ -83,7 +71,7 @@ public class SUB_Swerve extends SubsystemBase {
 						new PIDConstants(2.0, 0.0, 0.0, 0.0), // Translation
 						new PIDConstants(7.0, 4.5, 0.0, 0.0), // Heading
 						/*
-						 * IMPORTANT NOTE: These auto PIDs only have a relatively small effect. For a larger and better effect use the YAGSL PIDF config.
+						 * IMPORTANT NOTE: These auto PIDs only have a relatively small effect. For a larger and better controlled one use the YAGSL PIDF config.
 						 * When setting these PID values make sure rotation is faster than translation and there is a feedforward on the YAGSL PIDF config.
 						 */
 						Constants.Maestro.MAX_MODULE_SPEED_MPS,
@@ -96,8 +84,6 @@ public class SUB_Swerve extends SubsystemBase {
 					return alliance.isPresent() ? alliance.get() == DriverStation.Alliance.Red : false;
 				},
 				this);
-
-		this.localDriverController = driverController;
 	}
 
 	public void periodic() {

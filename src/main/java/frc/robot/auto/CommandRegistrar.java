@@ -15,11 +15,11 @@ import frc.robot.Constants.States.ShooterMode;
 import frc.robot.Constants.States.ShooterState;
 import frc.robot.commands.CMD_Eject;
 import frc.robot.commands.CMD_Idle;
-import frc.robot.commands.CMD_IndexerAdvance;
 import frc.robot.commands.CMD_Intake;
 import frc.robot.commands.CMD_IntakeAuto;
 import frc.robot.commands.CMD_Led;
 import frc.robot.commands.CMD_Shoot;
+import frc.robot.commands.groups.CMDGR_IntakeThenDynamic;
 import frc.robot.subsystems.arm.SUB_Arm;
 import frc.robot.subsystems.conveyor.SUB_Conveyor;
 import frc.robot.subsystems.shooter.SUB_Shooter;
@@ -76,6 +76,7 @@ public class CommandRegistrar {
 		NamedCommands.registerCommand("Shoot_Command", new PrintCommand("NULL"));
 		NamedCommands.registerCommand("Shoot_Command2M", new PrintCommand("NULL"));
 		NamedCommands.registerCommand("Intake_Auto", new CMD_IntakeAuto(conveyor, arm, () -> false));
+		NamedCommands.registerCommand("Advance", new PrintCommand("NULL"));
 
 		//
 		// Speaker shoot commands for different distances
@@ -176,8 +177,6 @@ public class CommandRegistrar {
 						ShooterState.AMP,
 						ArmState.AMP));
 
-		NamedCommands.registerCommand("Advance", new CMD_IndexerAdvance(conveyor));
-
 		// Idle command
 		NamedCommands.registerCommand("Idle", new CMD_Idle(conveyor, arm, shooter));
 
@@ -186,5 +185,10 @@ public class CommandRegistrar {
 		NamedCommands.registerCommand("Led_Green", new CMD_Led(led, LEDState.GREEN));
 		NamedCommands.registerCommand("Led_Red", new CMD_Led(led, LEDState.RED));
 		NamedCommands.registerCommand("Led_Blue", new CMD_Led(led, LEDState.BLUE));
+
+		NamedCommands.registerCommand(
+				"Intake_Shoot_Auto",
+				new CMDGR_IntakeThenDynamic(
+						swerve, conveyor, arm, shooter, vision, led, () -> swerve.getPose()));
 	}
 }

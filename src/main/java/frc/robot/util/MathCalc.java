@@ -12,15 +12,14 @@ import edu.wpi.first.math.geometry.Translation2d;
 
 /**
  * The MathCalc class provides functionality to find the best RPM and angle for a projectile to hit
- * a target based on the horizontal distance to the target. It reads measurements from a CSV file
- * where each row contains RPM, angle, and the maximum horizontal distance the projectile can
- * travel.
+ * a target based on the horizontal distance and other factors. This class also features a few other
+ * random methods that may be of use.
  */
 public class MathCalc {
 
 	/**
-	 * Calculate the angle required for hitting the target based a linear equation and the distance to
-	 * the target https://www.desmos.com/calculator/btpumpltjv
+	 * Calculate the angle required for hitting the target based a exponential equation and the
+	 * distance to the target
 	 *
 	 * @param distanceToTarget The distance to the target
 	 * @return The calculated required angle to hit the target.

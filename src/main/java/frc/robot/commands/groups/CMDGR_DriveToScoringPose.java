@@ -12,14 +12,14 @@ import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import frc.robot.Constants;
 import frc.robot.Constants.Auto.DriveScoringPoseState;
-import frc.robot.commands.CMD_ButtonCancel;
+import frc.robot.commands.CMD_Cancel;
 import frc.robot.subsystems.swerve.SUB_Swerve;
 import java.util.function.Supplier;
 
 public class CMDGR_DriveToScoringPose extends ParallelRaceGroup {
 
 	/*
-	 * Drives the robt to a specified scoring position. This command is a race group and also runs a manual button cancel.
+	 * Drives the robot to a specified scoring position. This command is a race group and also runs a manual button cancel.
 	 */
 	public CMDGR_DriveToScoringPose(
 			SUB_Swerve swerve, DriveScoringPoseState drivePoseState, Supplier<Boolean> cancel) {
@@ -27,9 +27,9 @@ public class CMDGR_DriveToScoringPose extends ParallelRaceGroup {
 		if (Constants.TELEOP_AUTO_DRIVE_ENABLED) {
 
 			if (drivePoseState == DriveScoringPoseState.SPEAKER) {
-				addCommands(swerve.driveToSpeaker(), new CMD_ButtonCancel(cancel));
+				addCommands(swerve.driveToSpeaker(), new CMD_Cancel(cancel));
 			} else if (drivePoseState == DriveScoringPoseState.AMP) {
-				addCommands(swerve.driveToAmp(), new CMD_ButtonCancel(cancel));
+				addCommands(swerve.driveToAmp(), new CMD_Cancel(cancel));
 			} else {
 				addCommands(new PrintCommand("[error] Unknown pose state"));
 			}
