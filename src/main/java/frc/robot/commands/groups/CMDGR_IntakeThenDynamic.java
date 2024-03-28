@@ -14,11 +14,11 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.States.ArmState;
 import frc.robot.Constants.States.ShooterMode;
 import frc.robot.Constants.States.ShooterState;
-import frc.robot.commands.CMD_Align;
-import frc.robot.commands.CMD_Idle;
-import frc.robot.commands.CMD_IntakeAuto;
-import frc.robot.commands.CMD_Led;
-import frc.robot.commands.CMD_Shoot;
+import frc.robot.commands.arm.CMD_Shoot;
+import frc.robot.commands.intake.CMD_IntakeAuto;
+import frc.robot.commands.swerve.CMD_AlignAuto;
+import frc.robot.commands.util.CMD_Idle;
+import frc.robot.commands.util.CMD_Led;
 import frc.robot.subsystems.arm.SUB_Arm;
 import frc.robot.subsystems.conveyor.SUB_Conveyor;
 import frc.robot.subsystems.shooter.SUB_Shooter;
@@ -42,8 +42,7 @@ public class CMDGR_IntakeThenDynamic extends SequentialCommandGroup {
 		addCommands(
 				new CMD_Led(led, LEDState.BLUE),
 				new CMD_IntakeAuto(conveyor, arm, () -> false), // Intake the donut
-				new CMD_Align(
-						swerve, () -> 0.0, () -> 0.0, () -> 0.0, true, () -> false), // Align with speaker
+				new CMD_AlignAuto(swerve), // Align with speaker
 				new CMD_Shoot( // Shoot with dynamic
 						conveyor,
 						arm,

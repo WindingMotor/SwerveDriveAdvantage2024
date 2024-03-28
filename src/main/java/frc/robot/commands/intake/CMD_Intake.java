@@ -6,7 +6,7 @@
 // license that can be found in the LICENSE file at
 // the root directory of this project.
 
-package frc.robot.commands;
+package frc.robot.commands.intake;
 
 import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.wpilibj2.command.Command;

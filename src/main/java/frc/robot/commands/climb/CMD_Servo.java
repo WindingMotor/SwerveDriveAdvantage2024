@@ -6,20 +6,19 @@
 // license that can be found in the LICENSE file at
 // the root directory of this project.
 
-package frc.robot.commands;
+package frc.robot.commands.climb;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants.States.ArmState;
 import frc.robot.subsystems.arm.SUB_Arm;
 
-public class CMD_Arm extends Command {
+public class CMD_Servo extends Command {
 
 	private SUB_Arm arm;
-	private ArmState state;
+	private boolean lock;
 
-	public CMD_Arm(SUB_Arm arm, ArmState state) {
+	public CMD_Servo(SUB_Arm arm, boolean lock) {
 		this.arm = arm;
-		this.state = state;
+		this.lock = lock;
 		addRequirements(arm);
 	}
 
@@ -27,9 +26,19 @@ public class CMD_Arm extends Command {
 	@Override
 	public void initialize() {
 		// Stop and idle the robot subsystems
-		arm.setState(state);
-		arm.setClimbMode(false);
+		arm.setClimbMode(true);
+		if (lock) {
+			arm.lockArm();
+		} else {
+			arm.unlockArm();
+		}
 	}
+
+	@Override
+	public void execute() {}
+
+	@Override
+	public void end(boolean interrupted) {}
 
 	// Command ends immediately
 	@Override

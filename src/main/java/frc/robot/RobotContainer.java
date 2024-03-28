@@ -16,10 +16,10 @@ import frc.robot.Constants.RobotMode;
 import frc.robot.Constants.States.ShooterMode;
 import frc.robot.auto.AutoSelector;
 import frc.robot.auto.CommandRegistrar;
-import frc.robot.commands.CMD_Eject;
 import frc.robot.commands.groups.CMDGR_Dynamic;
 import frc.robot.commands.groups.CMDGR_Intake;
 import frc.robot.commands.groups.CMDGR_Shoot;
+import frc.robot.commands.intake.CMD_Eject;
 import frc.robot.subsystems.arm.IO_ArmReal;
 import frc.robot.subsystems.arm.IO_ArmSim;
 import frc.robot.subsystems.arm.SUB_Arm;
@@ -58,11 +58,6 @@ public class RobotContainer {
 	private final SUB_Swerve swerve = new SUB_Swerve(new IO_SwerveReal(), vision, driverController);
 
 	private final SUB_Climb climb = new SUB_Climb(new IO_ClimbReal());
-
-	/*
-	private final SwerveAlign swerveAlign =
-			new SwerveAlign(() -> driverController.getRawAxis(3), () -> swerve.getPose());
-		*/
 
 	private final CommandRegistrar commandRegistrar =
 			new CommandRegistrar(vision, swerve, conveyor, arm, shooter, led);
@@ -137,7 +132,7 @@ public class RobotContainer {
 
 		// Shoot command dynamic
 
-		operatorController
+		driverController
 				.leftBumper()
 				.onTrue(
 						new CMDGR_Dynamic(

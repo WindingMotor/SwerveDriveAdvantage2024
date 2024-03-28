@@ -8,18 +8,14 @@
 
 package frc.robot.util;
 
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import frc.robot.Constants.Auto;
-import frc.robot.Constants.Auto.ScoringPoses;
-import java.util.function.Supplier;
-import org.littletonrobotics.junction.Logger;
-import org.photonvision.PhotonUtils;
-
 public class SwerveAlign {
+
+	/*
+	 * DEPRECATED: Use CMD_Align instead
+	 */
+	public SwerveAlign() {}
+
+	/*
 
 	Supplier<Double> controllerInput;
 	Supplier<Pose2d> robotPose;
@@ -54,7 +50,7 @@ public class SwerveAlign {
 				DriverStation.reportError("[error] Could not find alliance for auto angle", false);
 			}
 
-			/* Works quite well, maybe a bit more tuning though? */
+			/* Works quite well, maybe a bit more tuning though?
 			double xDistanceMeters = robotPose.get().getX();
 			double hDistanceMeters = PhotonUtils.getDistanceToPose(robotPose.get(), targetSpeakerPose);
 
@@ -96,4 +92,5 @@ public class SwerveAlign {
 	public void setControllerInput(boolean isControllerInput) {
 		this.isControllerInput = isControllerInput;
 	}
+	*/
 }

@@ -6,40 +6,32 @@
 // license that can be found in the LICENSE file at
 // the root directory of this project.
 
-package frc.robot.commands;
+package frc.robot.commands.climb;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants.States.ArmState;
-import frc.robot.subsystems.arm.SUB_Arm;
+import frc.robot.subsystems.climb.SUB_Climb;
 import frc.robot.util.AddressableLedStrip;
+import frc.robot.util.AddressableLedStrip.LEDState;
 import java.util.function.Supplier;
 
-public class CMD_ClimbArm extends Command {
+public class CMD_Climb extends Command {
 
 	private final AddressableLedStrip led;
-	private final SUB_Arm arm;
-	private Supplier<Boolean> activate;
+	private final SUB_Climb climb;
+	Supplier<Double> speed;
 
-	public CMD_ClimbArm(AddressableLedStrip led, SUB_Arm arm, Supplier<Boolean> activate) {
+	public CMD_Climb(AddressableLedStrip led, SUB_Climb climb, Supplier<Double> speed) {
 		this.led = led;
-		this.arm = arm;
-		this.activate = activate;
+		this.climb = climb;
+		this.speed = speed;
 		addRequirements(led);
 	}
 
 	// Print a message to the driver station and set the LED state
 	@Override
 	public void initialize() {
-		arm.setState(ArmState.AMP);
-		arm.setCurrentLimits(65);
-	}
-
-	@Override
-	public void execute() {
-		if (activate.get()) {
-			arm.setClimbMode(true);
-			arm.setSpeed(-1.0);
-		}
+		led.setState(LEDState.ORANGE);
+		climb.set(speed.get());
 	}
 
 	// Command ends immediately

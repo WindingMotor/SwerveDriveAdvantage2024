@@ -6,9 +6,8 @@
 // license that can be found in the LICENSE file at
 // the root directory of this project.
 
-package frc.robot.commands;
+package frc.robot.commands.swerve;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -131,13 +130,15 @@ public class CMD_Align extends Command {
 					"[CMD_Align] Desired Pose",
 					new Pose2d(swerve.getPose().getTranslation(), new Rotation2d(setpointRadians)));
 
+			Logger.recordOutput("[CMD_Align] Real Angle", swerve.getPose().getRotation().getDegrees());
+
+			Logger.recordOutput(
+					"[CMD_Align] Desired vs Real Diffrence",
+					setpointRadians - swerve.getPose().getRotation().getDegrees());
+
 			double output =
 					pid.calculate(
 							swerve.getPose().getRotation().getDegrees(), Math.toDegrees(setpointRadians));
-
-			Logger.recordOutput("ALIGN SETPOINT", Math.toDegrees(setpointRadians));
-
-			Logger.recordOutput("REAL ANGLE", swerve.getPose().getRotation().getDegrees());
 
 			/*
 			 * gyro based

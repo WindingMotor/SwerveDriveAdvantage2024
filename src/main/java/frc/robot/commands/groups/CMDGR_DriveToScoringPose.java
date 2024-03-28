@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import frc.robot.Constants;
 import frc.robot.Constants.Auto.DriveScoringPoseState;
-import frc.robot.commands.CMD_Cancel;
+import frc.robot.commands.util.CMD_Cancel;
 import frc.robot.subsystems.swerve.SUB_Swerve;
 import java.util.function.Supplier;
 

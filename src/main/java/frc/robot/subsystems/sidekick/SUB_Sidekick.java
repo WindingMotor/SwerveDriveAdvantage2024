@@ -11,7 +11,6 @@ package frc.robot.subsystems.sidekick;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.Auto.SidekickState;
@@ -77,48 +76,8 @@ public class SUB_Sidekick extends SubsystemBase {
 			ArmState lastArmState = arm.getState();
 
 			var alli = DriverStation.getAlliance();
-			CommandScheduler commandScheduler = CommandScheduler.getInstance();
+			// CommandScheduler commandScheduler = CommandScheduler.getInstance();
 
-			/*
-				// Blue Alliance
-				if (alli.get() == DriverStation.Alliance.Blue) {
-
-					// Blu Speaker
-					if (isWithinRectangle(robotPose, 0, 7.0, 1.5, 4.0) && lastArmState != ArmState.INTAKE) {
-						commandScheduler.schedule(
-								new CMDGR_Shoot(
-										conveyor,
-										arm,
-										shooter,
-										vision,
-										led,
-										ShooterMode.SPEAKER,
-										() -> operatorController.b().getAsBoolean(),
-										() -> operatorController.x().getAsBoolean(),
-										() -> swerve.getPose(),
-										swerveAlign));
-					}
-
-					// Red Alliance
-				} else if (alli.get() == DriverStation.Alliance.Red) {
-
-					// Red Speaker
-					if (isWithinRectangle(robotPose, 16.5, 7.0, 15.0, 4.0) && lastArmState != ArmState.INTAKE) {
-						commandScheduler.schedule(
-								new CMDGR_Shoot(
-										conveyor,
-										arm,
-										shooter,
-										vision,
-										led,
-										ShooterMode.SPEAKER,
-										() -> operatorController.b().getAsBoolean(),
-										() -> operatorController.x().getAsBoolean(),
-										() -> swerve.getPose(),
-										swerveAlign));
-					}
-				}
-			*/
 		} else {
 			operatorController.getHID().setRumble(RumbleType.kBothRumble, 0.0);
 		}
