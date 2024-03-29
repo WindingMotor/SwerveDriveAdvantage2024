@@ -14,7 +14,8 @@ import frc.robot.Constants.States.ArmState;
 import frc.robot.Constants.States.ShooterMode;
 import frc.robot.Constants.States.ShooterState;
 import frc.robot.commands.arm.CMD_Shoot;
-import frc.robot.commands.groups.CMDGR_IntakeThenDynamic;
+import frc.robot.commands.groups.CMDGR_DynamicAuto;
+import frc.robot.commands.groups.CMDGR_IntakeDynamicAuto;
 import frc.robot.commands.intake.CMD_Eject;
 import frc.robot.commands.intake.CMD_Intake;
 import frc.robot.commands.intake.CMD_IntakeAuto;
@@ -186,9 +187,13 @@ public class CommandRegistrar {
 		NamedCommands.registerCommand("Led_Red", new CMD_Led(led, LEDState.RED));
 		NamedCommands.registerCommand("Led_Blue", new CMD_Led(led, LEDState.BLUE));
 
+		NamedCommands.registerCommand("Intake_Shoot_Auto", new PrintCommand("NUll"));
+
 		NamedCommands.registerCommand(
-				"Intake_Shoot_Auto",
-				new CMDGR_IntakeThenDynamic(
-						swerve, conveyor, arm, shooter, vision, led, () -> swerve.getPose()));
+				"Shoot_Dynamic",
+				new CMDGR_DynamicAuto(swerve, conveyor, arm, shooter, vision, led, () -> swerve.getPose()));
+
+		NamedCommands.registerCommand(
+				"Intake_Dynamic", new CMDGR_IntakeDynamicAuto(conveyor, arm, () -> swerve.getPose()));
 	}
 }

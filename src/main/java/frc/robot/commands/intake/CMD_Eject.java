@@ -14,7 +14,7 @@ import frc.robot.subsystems.arm.SUB_Arm;
 import frc.robot.subsystems.conveyor.SUB_Conveyor;
 import java.util.function.Supplier;
 
-/** Command to control the intake process. */
+/** Command to eject donuts from the robot. */
 public class CMD_Eject extends Command {
 
 	private final SUB_Conveyor conveyor;

@@ -29,7 +29,7 @@ import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
 import org.photonvision.PhotonUtils;
 
-/** Class to handle shooting commands. */
+/** MEGA Class to handle shooting. */
 public class CMD_Shoot extends Command {
 
 	private final SUB_Conveyor conveyor;

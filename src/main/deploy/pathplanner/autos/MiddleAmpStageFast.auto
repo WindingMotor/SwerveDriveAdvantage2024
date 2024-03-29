@@ -20,23 +20,17 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.05
+            "waitTime": 0.15
           }
         },
         {
-          "type": "parallel",
+          "type": "race",
           "data": {
             "commands": [
               {
                 "type": "named",
                 "data": {
-                  "name": "Intake_Auto"
-                }
-              },
-              {
-                "type": "wait",
-                "data": {
-                  "waitTime": 0.05
+                  "name": "Intake_Dynamic"
                 }
               },
               {
@@ -51,29 +45,23 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot_Auto"
+            "name": "Shoot_Dynamic"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.05
+            "waitTime": 0.15
           }
         },
         {
-          "type": "parallel",
+          "type": "race",
           "data": {
             "commands": [
               {
                 "type": "named",
                 "data": {
-                  "name": "Intake_Auto"
-                }
-              },
-              {
-                "type": "wait",
-                "data": {
-                  "waitTime": 0.05
+                  "name": "Intake_Dynamic"
                 }
               },
               {
@@ -88,29 +76,23 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot_Auto"
+            "name": "Shoot_Dynamic"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.05
+            "waitTime": 0.15
           }
         },
         {
-          "type": "parallel",
+          "type": "race",
           "data": {
             "commands": [
               {
                 "type": "named",
                 "data": {
                   "name": "Intake_Auto"
-                }
-              },
-              {
-                "type": "wait",
-                "data": {
-                  "waitTime": 0.05
                 }
               },
               {
@@ -125,7 +107,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot_Speaker3M"
+            "name": "Shoot_Dynamic"
           }
         }
       ]

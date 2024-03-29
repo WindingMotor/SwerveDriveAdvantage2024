@@ -285,9 +285,9 @@ public class Constants {
 		// Speeds of the shooter for the various states
 		public enum ShooterState {
 			OFF(0.0, 0.0),
-			IDLE(4800, 0.0),
+			IDLE(5000, 0.0),
 
-			SPEAKER_1M(4500, 1.0), // 3600
+			SPEAKER_1M(4700, 1.0), // 3600
 			SPEAKER_2M(4500, 2.0),
 			SPEAKER_2_5M(4500, 2.0),
 			SPEAKER_3M(4500, 3.0),

@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.Auto;
 import frc.robot.Constants.Auto.ScoringPoses;
 import frc.robot.subsystems.swerve.SUB_Swerve;
+import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
 import org.photonvision.PhotonUtils;
 
@@ -26,10 +27,22 @@ public class CMD_AlignAuto extends Command {
 	private final PIDController pid;
 
 	private boolean isCommandDone;
-	private int timer;
+	private int timer = 0;
+	private boolean isDriverControlled;
 
-	public CMD_AlignAuto(SUB_Swerve swerve) {
+	private Supplier<Double> xInput;
+	private Supplier<Double> yInput;
+
+	public CMD_AlignAuto(
+			SUB_Swerve swerve,
+			boolean isDriverControlled,
+			Supplier<Double> xInput,
+			Supplier<Double> yInput) {
 		this.swerve = swerve;
+		this.isDriverControlled = isDriverControlled;
+		this.xInput = xInput;
+		this.yInput = yInput;
+
 		addRequirements(swerve);
 		this.pid =
 				new PIDController(
@@ -73,19 +86,23 @@ public class CMD_AlignAuto extends Command {
 
 		double setpointRadians = Math.toRadians(180);
 
+		double optimalEndingAngle = 0;
+
 		// If the alliance is blue
 		if (alli.get() == Alliance.Blue) {
 
 			// If robot is ABOVE the amp with a middle tolerance of 0.5 meters
-			if (yDistanceMeters > targetSpeakerPose.getY() + 0.5) {
+			if (yDistanceMeters > targetSpeakerPose.getY()) {
 				setpointRadians =
 						Math.toRadians(90)
 								- (Math.asin(xDistanceMeters / hDistanceMeters))
 								+ Math.toRadians(180);
+				optimalEndingAngle = swerve.getPose().getRotation().getDegrees() + 360;
 
 				// If robot is BELOW the amp with a middle tolerance of 0.5 meters
-			} else if (yDistanceMeters < targetSpeakerPose.getY() - 0.5) {
+			} else if (yDistanceMeters < targetSpeakerPose.getY()) {
 				setpointRadians = (Math.toRadians(90) + (Math.asin(xDistanceMeters / hDistanceMeters)));
+				optimalEndingAngle = swerve.getPose().getRotation().getDegrees();
 			}
 
 			// If the alliance is red
@@ -95,11 +112,11 @@ public class CMD_AlignAuto extends Command {
 			// side of the field
 			xDistanceMeters = ScoringPoses.RED_SPEAKER.pose.getX() - swerve.getPose().getX();
 
-			// If robot is ABOVE the amp with a middle tolerance of 0.5 meters
+			// If robot is ABOVE the speaker with a middle tolerance of 0.5 meters
 			if (yDistanceMeters > targetSpeakerPose.getY() + 0.25) {
 				setpointRadians = (Math.asin(xDistanceMeters / hDistanceMeters)) - Math.toRadians(270);
 
-				// If robot is BELOW the amp with a middle tolerance of 0.5 meters
+				// If robot is BELOW the speaker with a middle tolerance of 0.5 meters
 			} else if (yDistanceMeters < targetSpeakerPose.getY() - 0.25) {
 				setpointRadians = (Math.asin(xDistanceMeters / hDistanceMeters)) + Math.toRadians(135);
 			}
@@ -112,11 +129,14 @@ public class CMD_AlignAuto extends Command {
 				"[CMD_Align] Desired Pose",
 				new Pose2d(swerve.getPose().getTranslation(), new Rotation2d(setpointRadians)));
 
-		Logger.recordOutput("[CMD_Align] Real Angle", swerve.getPose().getRotation().getDegrees());
+		Logger.recordOutput("[CMD_Align] Real Angle OPTIMAL", optimalEndingAngle);
+		Logger.recordOutput("[CMD_Align] Desired Angle", Math.toDegrees(setpointRadians));
 
 		Logger.recordOutput(
-				"[CMD_Align] Desired vs Real Diffrence",
+				"[CMD_Align] Desired vs Real Difference",
 				setpointRadians - swerve.getPose().getRotation().getDegrees());
+
+		Logger.recordOutput("[CMD_Align] Is Done? ", isCommandDone);
 
 		double output =
 				pid.calculate(swerve.getPose().getRotation().getDegrees(), Math.toDegrees(setpointRadians));
@@ -128,17 +148,26 @@ public class CMD_AlignAuto extends Command {
 						swerve.getYaw().getDegrees(), Math.toDegrees(setpointRadians));
 		 */
 
-		swerve.driveRaw(0.0, 0.0, output);
+		if (isDriverControlled) {
+			swerve.driveJoystickHybrid(xInput.get(), yInput.get(), output);
+		} else {
+			swerve.driveRaw(0.0, 0.0, output);
+		}
 
 		// End command if the robot is aligned and within 3 degrees
-		if (Math.abs(Math.toDegrees(setpointRadians) - swerve.getPose().getRotation().getDegrees())
-				< 3) {
+
+		if (Math.abs(Math.toDegrees(setpointRadians) - optimalEndingAngle) < 4.5) {
 			isCommandDone = true;
 		}
 	}
 
 	@Override
+	public void end(boolean interrupted) {
+		swerve.driveRaw(0.0, 0.0, 0.0);
+	}
+
+	@Override
 	public boolean isFinished() {
-		return isCommandDone || timer > 400;
+		return isCommandDone;
 	}
 }

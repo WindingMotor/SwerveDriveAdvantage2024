@@ -17,7 +17,7 @@ import frc.robot.subsystems.conveyor.SUB_Conveyor;
 import frc.robot.subsystems.shooter.SUB_Shooter;
 import java.util.function.Supplier;
 
-/** Command to control the intake process. */
+/** Command to control the intaking from the source */
 public class CMD_IntakeSource extends Command {
 
 	private final SUB_Conveyor conveyor;

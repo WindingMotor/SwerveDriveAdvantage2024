@@ -15,7 +15,7 @@ import frc.robot.subsystems.arm.SUB_Arm;
 import frc.robot.subsystems.conveyor.SUB_Conveyor;
 import java.util.function.Supplier;
 
-/** Command to control the intake process. */
+/** Command to control the intake process but doesnt lower the arm after intaking */
 public class CMD_IntakeAuto extends Command {
 
 	private final SUB_Conveyor conveyor;

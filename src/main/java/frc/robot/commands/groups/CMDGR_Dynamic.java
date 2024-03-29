@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.States.ShooterMode;
 import frc.robot.commands.arm.CMD_Shoot;
-import frc.robot.commands.swerve.CMD_Align;
+import frc.robot.commands.swerve.CMD_AlignAuto;
 import frc.robot.commands.util.CMD_Idle;
 import frc.robot.commands.util.CMD_Led;
 import frc.robot.subsystems.arm.SUB_Arm;
@@ -45,7 +45,7 @@ public class CMDGR_Dynamic extends SequentialCommandGroup {
 		addCommands(
 				new CMD_Led(led, LEDState.BLUE),
 				new ParallelCommandGroup( // Parallel group for auto alignment and shooting commands
-						new CMD_Align(swerve, xInput, yInput, rInput, true, manualCancel),
+						new CMD_AlignAuto(swerve, false, () -> 0.0, () -> 0.0),
 						new CMD_Shoot(
 								conveyor,
 								arm,
