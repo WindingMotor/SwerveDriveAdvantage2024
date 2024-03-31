@@ -117,6 +117,10 @@ public class SUB_Arm extends SubsystemBase {
 		return io.getRealTimeArmPosition();
 	}
 
+	public double getRealTimeArmSetpoint() {
+		return io.getRealTimeArmSetpoint();
+	}
+
 	public void setCurrentLimits(int limit) {
 		io.setCurrentLimits(limit);
 	}

@@ -203,7 +203,7 @@ public class Constants {
 		public static final double ARM_VOLTAGE_CLAMPING = 11.9;
 
 		// Min tolerance for arm to claim its good
-		public static final double ARM_TOLERANCE_DEGREES = 1.08; // 3.0
+		public static final double ARM_TOLERANCE_DEGREES = 0.25; // 3.0 old: 1.0
 
 		// Arm offset to get zero at horizontal
 		public static final double ARM_OFFSET_DEGREES = 0; // old 4.85
@@ -255,12 +255,10 @@ public class Constants {
 		/* -- Climb -- */
 
 		// Climb motor IDs
-		public static final int LEFT_CLIMB_MOTOR_ID = 20;
-		public static final int RIGHT_CLIMB_MOTOR_ID = 21;
+		public static final int CLIMB_MOTOR_ID = 21;
 
 		// Climb motors inversion
-		public static final boolean LEFT_CLIMB_MOTOR_INVERTED = true;
-		public static final boolean RIGHT_CLIMB_MOTOR_INVERTED = false;
+		public static final boolean CLIMB_MOTOR_INVERTED = false;
 
 		/*
 		Motor IDS
@@ -327,7 +325,7 @@ public class Constants {
 
 			INTAKE_SOURCE(30, 0.0), // 89, 50
 
-			TRAP(61.0, 0.0);
+			CLIMB(80, 0.0);
 
 			public final double position;
 			public final double distanceMeters;

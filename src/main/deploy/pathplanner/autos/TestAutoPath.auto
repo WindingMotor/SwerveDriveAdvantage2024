@@ -2,27 +2,15 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.8386602156110227,
-      "y": 4.43138261056929
+      "x": 1.2510803592250779,
+      "y": 5.535566147748677
     },
-    "rotation": 122.35935885902703
+    "rotation": 179.7098497510911
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot_Speaker1M"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.05
-          }
-        },
         {
           "type": "parallel",
           "data": {
@@ -34,24 +22,12 @@
                 }
               },
               {
-                "type": "wait",
-                "data": {
-                  "waitTime": 0.05
-                }
-              },
-              {
                 "type": "path",
                 "data": {
-                  "pathName": "StartStageRushMiddle"
+                  "pathName": "TestAutoPath"
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "GoToStageFromCenter"
           }
         },
         {

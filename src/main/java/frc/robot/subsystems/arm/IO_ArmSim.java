@@ -125,5 +125,10 @@ public class IO_ArmSim implements IO_ArmBase {
 	}
 
 	@Override
+	public double getRealTimeArmSetpoint() {
+		return armAngle;
+	}
+
+	@Override
 	public void setCurrentLimits(int limit) {}
 }

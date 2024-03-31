@@ -22,8 +22,7 @@ public interface IO_ClimbBase {
 	@AutoLog
 	public static class ClimbInputs {
 		// RPM = Rotation/Minute
-		public double leftMotorPosition = 0.0;
-		public double rightMotorPosition = 0.0;
+		public double motorPosition = 0.0;
 		public boolean isAtClimbPosition = false;
 	}
 

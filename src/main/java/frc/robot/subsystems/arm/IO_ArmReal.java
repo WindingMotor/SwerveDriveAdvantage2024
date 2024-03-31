@@ -193,6 +193,11 @@ public class IO_ArmReal implements IO_ArmBase {
 	}
 
 	@Override
+	public double getRealTimeArmSetpoint() {
+		return setpointPosition;
+	}
+
+	@Override
 	public void setCurrentLimits(int limit) {
 		motorOne.setSmartCurrentLimit(limit);
 		motorTwo.setSmartCurrentLimit(limit);

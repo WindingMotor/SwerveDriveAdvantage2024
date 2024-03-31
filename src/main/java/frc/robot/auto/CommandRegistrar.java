@@ -190,8 +190,7 @@ public class CommandRegistrar {
 		NamedCommands.registerCommand("Intake_Shoot_Auto", new PrintCommand("NUll"));
 
 		NamedCommands.registerCommand(
-				"Shoot_Dynamic",
-				new CMDGR_DynamicAuto(swerve, conveyor, arm, shooter, vision, led, () -> swerve.getPose()));
+				"Shoot_Dynamic", new CMDGR_DynamicAuto(swerve, conveyor, arm, shooter, vision, led));
 
 		NamedCommands.registerCommand(
 				"Intake_Dynamic", new CMDGR_IntakeDynamicAuto(conveyor, arm, () -> swerve.getPose()));

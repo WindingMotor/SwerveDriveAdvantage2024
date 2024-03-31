@@ -16,28 +16,21 @@ import frc.robot.util.Builder;
 /** Represents a real implementation of the shooter. */
 public class IO_ClimbReal implements IO_ClimbBase {
 
-	private CANSparkMax leftMotor;
-	private CANSparkMax rightMotor;
+	private CANSparkMax motor;
 
-	private RelativeEncoder leftMotorEncoder;
-	private RelativeEncoder rightMotorEncoder;
+	private RelativeEncoder motorEncoder;
 
 	public IO_ClimbReal() {
 
-		leftMotor =
+		motor =
 				Builder.createNeo(
-						Constants.Maestro.LEFT_CLIMB_MOTOR_ID, Constants.Maestro.LEFT_CLIMB_MOTOR_INVERTED, 40);
-		rightMotor =
-				Builder.createNeo(
-						Constants.Maestro.RIGHT_CLIMB_MOTOR_ID,
-						Constants.Maestro.RIGHT_CLIMB_MOTOR_INVERTED,
-						40);
+						Constants.Maestro.CLIMB_MOTOR_ID, Constants.Maestro.CLIMB_MOTOR_INVERTED, 40);
 
-		Builder.configureIdleMode(leftMotor, true);
-		Builder.configureIdleMode(rightMotor, true);
+		Builder.configureIdleMode(motor, true);
 
-		leftMotorEncoder = leftMotor.getEncoder();
-		rightMotorEncoder = rightMotor.getEncoder();
+		motorEncoder = motor.getEncoder();
+
+		motorEncoder.setPosition(0.0);
 	}
 
 	/**
@@ -47,23 +40,19 @@ public class IO_ClimbReal implements IO_ClimbBase {
 	 */
 	@Override
 	public void updateInputs(ClimbInputs inputs) {
-
-		inputs.leftMotorPosition = leftMotorEncoder.getVelocity();
-		inputs.rightMotorPosition = rightMotorEncoder.getVelocity();
+		inputs.motorPosition = motorEncoder.getPosition();
 		inputs.isAtClimbPosition = false;
 	}
 
 	/** Stops the shooter by setting the PID setpoint to 0. */
 	@Override
 	public void stop() {
-		leftMotor.set(0);
-		rightMotor.set(0);
+		motor.set(0);
 	}
 
 	/** Sets the setpoint RPM. */
 	@Override
 	public void set(double speed) {
-		leftMotor.set(speed);
-		rightMotor.set(speed);
+		motor.set(speed);
 	}
 }

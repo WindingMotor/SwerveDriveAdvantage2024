@@ -16,10 +16,9 @@ import frc.robot.Constants.RobotMode;
 import frc.robot.Constants.States.ShooterMode;
 import frc.robot.auto.AutoSelector;
 import frc.robot.auto.CommandRegistrar;
-import frc.robot.commands.groups.CMDGR_Dynamic;
+import frc.robot.commands.climb.CMD_Climb;
 import frc.robot.commands.groups.CMDGR_Intake;
 import frc.robot.commands.groups.CMDGR_Shoot;
-import frc.robot.commands.swerve.CMD_AlignAuto;
 import frc.robot.subsystems.arm.IO_ArmReal;
 import frc.robot.subsystems.arm.IO_ArmSim;
 import frc.robot.subsystems.arm.SUB_Arm;
@@ -39,7 +38,7 @@ import org.littletonrobotics.junction.Logger;
 
 public class RobotContainer {
 
-	private final CommandXboxController driverController = new CommandXboxController(0); // old: 3
+	private final CommandXboxController driverController = new CommandXboxController(3); // old: 3
 	private final CommandXboxController operatorController = new CommandXboxController(4);
 
 	private final SUB_Vision vision = new SUB_Vision(new IO_VisionReal());
@@ -79,9 +78,11 @@ public class RobotContainer {
 
 		swerve.setDefaultCommand(
 				swerve.driveJoystick(
-						() -> driverController.getRawAxis(5),
-						() -> driverController.getRawAxis(4),
-						() -> driverController.getRawAxis(0)));
+						() -> driverController.getRawAxis(1),
+						() -> driverController.getRawAxis(0),
+						() -> driverController.getRawAxis(3)));
+
+		// arm.setDefaultCommand(new CMD_ArmDefualt(arm, () -> swerve.getPose()));
 
 		// conveyor.setDefaultCommand(new CMD_AutoIntake(conveyor));
 
@@ -260,16 +261,18 @@ public class RobotContainer {
 				.onTrue(new CMD_Eject(conveyor, arm, () -> operatorController.b().getAsBoolean()));
 		*/
 
-		operatorController.rightBumper().onTrue(new CMD_AlignAuto(swerve, false, () -> 0.0, () -> 0.0));
+		//	operatorController.rightBumper().onTrue(new CMD_AlignAuto(swerve, false, () -> 0.0, () ->
+		// 0.0));
 
+		/*
 		operatorController
 				.leftBumper()
 				.onTrue(
 						new CMDGR_Dynamic(
 								swerve,
-								() -> driverController.getRawAxis(4),
-								() -> driverController.getRawAxis(5),
 								() -> driverController.getRawAxis(0),
+								() -> driverController.getRawAxis(1),
+								() -> driverController.getRawAxis(3),
 								conveyor,
 								arm,
 								shooter,
@@ -278,6 +281,24 @@ public class RobotContainer {
 								() -> operatorController.b().getAsBoolean(),
 								() -> operatorController.leftBumper().getAsBoolean(),
 								() -> swerve.getPose()));
+
+		driverController
+				.button(4)
+				.onTrue(
+						new CMDGR_Dynamic(
+								swerve,
+								() -> driverController.getRawAxis(0),
+								() -> driverController.getRawAxis(1),
+								() -> driverController.getRawAxis(3),
+								conveyor,
+								arm,
+								shooter,
+								vision,
+								led,
+								() -> operatorController.b().getAsBoolean(),
+								() -> operatorController.leftBumper().getAsBoolean(),
+								() -> swerve.getPose()));
+		*/
 
 		// operatorController.rightBumper().onTrue(new CMD_DriveMode(swerve, DriveMode.SPEAKER));
 
@@ -298,6 +319,12 @@ public class RobotContainer {
 						new CMDGR_DriveToScoringPose(
 								swerve, DriveScoringPoseState.AMP, () -> operatorController.b().getAsBoolean()));
 		*/
+
+		operatorController
+				.rightBumper()
+				.onTrue(
+						new CMD_Climb(
+								led, climb, arm, () -> 1.0, () -> operatorController.leftBumper().getAsBoolean()));
 	}
 
 	public void logMetadata() {

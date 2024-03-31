@@ -50,5 +50,7 @@ public interface IO_ArmBase {
 
 	double getRealTimeArmPosition();
 
+	double getRealTimeArmSetpoint();
+
 	void setCurrentLimits(int limit);
 }

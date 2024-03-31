@@ -8,7 +8,6 @@
 
 package frc.robot.commands.groups;
 
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.States.ArmState;
@@ -24,7 +23,6 @@ import frc.robot.subsystems.swerve.SUB_Swerve;
 import frc.robot.subsystems.vision.SUB_Vision;
 import frc.robot.util.AddressableLedStrip;
 import frc.robot.util.AddressableLedStrip.LEDState;
-import java.util.function.Supplier;
 
 public class CMDGR_DynamicAuto extends SequentialCommandGroup {
 
@@ -34,8 +32,7 @@ public class CMDGR_DynamicAuto extends SequentialCommandGroup {
 			SUB_Arm arm,
 			SUB_Shooter shooter,
 			SUB_Vision vision,
-			AddressableLedStrip led,
-			Supplier<Pose2d> robotPose) {
+			AddressableLedStrip led) {
 		addRequirements(swerve, conveyor, arm, shooter, vision, led);
 		addCommands(
 				new CMD_Led(led, LEDState.BLUE),

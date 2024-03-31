@@ -189,18 +189,10 @@ public class CMD_Shoot extends Command {
 
 		conveyor.setState(ConveyorState.OFF);
 
-		switch (mode) {
-			case SPEAKER:
-				setSpeakerState();
-				break;
-
-			case AMP:
-				setAmpState();
-				break;
-
-			default:
-				setSpeakerState();
-				break;
+		if (mode == ShooterMode.SPEAKER) {
+			setSpeakerState();
+		} else if (mode == ShooterMode.AMP) {
+			setAmpState();
 		}
 	}
 
