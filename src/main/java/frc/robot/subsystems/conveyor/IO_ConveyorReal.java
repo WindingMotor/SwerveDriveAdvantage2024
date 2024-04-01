@@ -24,7 +24,6 @@ public class IO_ConveyorReal implements IO_ConveyorBase {
 
 	private IRBeamBreak indexerInitalSensor;
 	private IRBeamBreak indexerFinalSensor;
-	private boolean shooterFlag = false;
 
 	public IO_ConveyorReal() {
 		intakeMotorOne = Builder.createNeo(Constants.Maestro.INTAKE_MOTOR_ONE_ID, false, 60);
@@ -55,9 +54,6 @@ public class IO_ConveyorReal implements IO_ConveyorBase {
 		inputs.intakeSensorState = intakeSensor.getState();
 		inputs.indexerInitalSensorState = indexerInitalSensor.getState();
 		inputs.indexerFinalSensorState = indexerFinalSensor.getState();
-		if (!inputs.indexerFinalSensorState) {
-			shooterFlag = true;
-		}
 	}
 
 	/**
@@ -75,9 +71,5 @@ public class IO_ConveyorReal implements IO_ConveyorBase {
 	@Override
 	public void stop() {
 		update(0.0, 0.0);
-	}
-
-	public boolean getShooterFlag() {
-		return shooterFlag;
 	}
 }

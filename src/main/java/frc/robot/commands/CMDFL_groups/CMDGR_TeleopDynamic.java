@@ -44,6 +44,7 @@ public class CMDGR_TeleopDynamic extends SequentialCommandGroup {
 			Supplier<Pose2d> robotPose) {
 		addRequirements(swerve, conveyor, arm, shooter, vision, led);
 		addCommands(
+				// 						new CMD_TeleopAlign(swerve, xInput, yInput, manualCancel),
 				new CMD_Led(led, LEDState.BLUE),
 				new ParallelCommandGroup( // Parallel group for auto alignment and shooting commands
 						new CMD_TeleopAlign(swerve, xInput, yInput, manualCancel),

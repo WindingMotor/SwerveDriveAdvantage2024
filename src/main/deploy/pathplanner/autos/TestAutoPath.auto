@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.2510803592250779,
-      "y": 5.535566147748677
+      "x": 1.2861009992687344,
+      "y": 5.552750164969452
     },
     "rotation": 179.7098497510911
   },
@@ -12,22 +12,71 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "Shoot_Auto"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Align_Override_Speaker"
+          }
+        },
+        {
           "type": "parallel",
           "data": {
             "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake_Auto"
-                }
-              },
               {
                 "type": "path",
                 "data": {
                   "pathName": "TestAutoPath"
                 }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake_Auto"
+                }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot_Dynamic"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Align_Override_None"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "TestAutoPath_2"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake_Auto"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Align_Override_Speaker"
           }
         },
         {

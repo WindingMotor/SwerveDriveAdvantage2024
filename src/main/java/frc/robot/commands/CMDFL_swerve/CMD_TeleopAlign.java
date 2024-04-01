@@ -16,6 +16,7 @@ import frc.robot.Constants;
 import frc.robot.subsystems.swerve.SUB_Swerve;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
+import org.littletonrobotics.junction.Logger;
 
 public class CMD_TeleopAlign extends Command {
 
@@ -39,7 +40,11 @@ public class CMD_TeleopAlign extends Command {
 
 		addRequirements(swerve);
 
-		this.pid = new PIDController(Constants.Auto.SWERVE_ALIGN_PID.kP, Constants.Auto.SWERVE_ALIGN_PID.kI, Constants.Auto.SWERVE_ALIGN_PID.kD);
+		this.pid =
+				new PIDController(
+						Constants.Auto.SWERVE_ALIGN_PID.kP,
+						Constants.Auto.SWERVE_ALIGN_PID.kI,
+						Constants.Auto.SWERVE_ALIGN_PID.kD);
 
 		this.pid.enableContinuousInput(-180, 180);
 		this.pid.setTolerance(0.5);
@@ -49,20 +54,27 @@ public class CMD_TeleopAlign extends Command {
 	@Override
 	public void initialize() {
 		isCommandDone = false;
+		pid.reset();
 	}
 
 	@Override
 	public void execute() {
 
 		double currentAngleDegrees = swerve.getPose().getRotation().getDegrees();
+
 		Pair<Rotation2d, Double> calculation = swerve.calculateAngleToSpeaker();
 
 		double setpointDegrees = calculation.getFirst().getDegrees();
 		double optimalEndingAngleDegrees = calculation.getSecond();
 
-		double output = pid.calculate(currentAngleDegrees, calculation.getFirst().getDegrees());
+		double output = pid.calculate(currentAngleDegrees, setpointDegrees);
 
-		swerve.drive(xInput, yInput, () -> -output);
+		swerve.driveRaw(0.0, 0.0, output);
+
+		Logger.recordOutput("[CMD_TeleopAlign] Calculation Setpoint Degrees", setpointDegrees);
+		Logger.recordOutput(
+				"[CMD_TeleopAlign] Optimal Ending Angle Degrees  Setpoint", optimalEndingAngleDegrees);
+		Logger.recordOutput("[CMD_TeleopAlign] PID Output", -output);
 
 		if (Math.abs(setpointDegrees - optimalEndingAngleDegrees) < 2.0) {
 			isCommandDone = true;

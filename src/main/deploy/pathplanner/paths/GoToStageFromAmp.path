@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.6162688461334,
-        "y": 6.799767660316021
+        "x": 2.7791157020361967,
+        "y": 6.837319104030392
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.9190880843931182,
-        "y": 5.121807167674567
+        "x": 2.081934940295915,
+        "y": 5.159358611388939
       },
       "isLocked": false,
       "linkedName": "GoToAmpFast_END"
@@ -32,8 +32,8 @@
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 4.0,
-    "maxAcceleration": 2.0,
+    "maxVelocity": 5.5,
+    "maxAcceleration": 4.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },

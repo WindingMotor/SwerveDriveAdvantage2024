@@ -8,14 +8,15 @@
     "A3_PATHS",
     "B1_PATHS",
     "B2_PATHS",
+    "New Folder",
     "Z_PATHS"
   ],
   "autoFolders": [
     "AUTOS",
     "CHOR"
   ],
-  "defaultMaxVel": 4.0,
-  "defaultMaxAccel": 2.0,
+  "defaultMaxVel": 5.5,
+  "defaultMaxAccel": 3.0,
   "defaultMaxAngVel": 540.0,
   "defaultMaxAngAccel": 720.0,
   "maxModuleSpeed": 5.12

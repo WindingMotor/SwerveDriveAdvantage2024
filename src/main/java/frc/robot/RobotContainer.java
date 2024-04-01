@@ -172,10 +172,10 @@ public class RobotContainer {
 
 		// Climb command, requires other climb button to be pressed to send
 		climbController
-				.button(0)
+				.button(1)
 				.onTrue(
 						new CMD_Climb(
-								led, climb, arm, () -> 1.0, () -> climbController.button(1).getAsBoolean()));
+								led, climb, arm, () -> 1.0, () -> climbController.button(2).getAsBoolean()));
 	}
 
 	public void logMetadata() {

@@ -8,35 +8,33 @@
 
 package frc.robot.commands.CMDFL_groups;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.Constants.RotationOverrideState;
 import frc.robot.Constants.States.ArmState;
 import frc.robot.Constants.States.ShooterMode;
 import frc.robot.Constants.States.ShooterState;
 import frc.robot.commands.CMDFL_arm.CMD_Shoot;
-import frc.robot.commands.CMDFL_swerve.CMD_RotationOverride;
 import frc.robot.commands.CMDFL_util.CMD_Led;
 import frc.robot.subsystems.arm.SUB_Arm;
 import frc.robot.subsystems.conveyor.SUB_Conveyor;
 import frc.robot.subsystems.shooter.SUB_Shooter;
-import frc.robot.subsystems.swerve.SUB_Swerve;
 import frc.robot.subsystems.vision.SUB_Vision;
 import frc.robot.util.AddressableLedStrip;
 import frc.robot.util.AddressableLedStrip.LEDState;
+import java.util.function.Supplier;
 
 public class CMDGR_AutoDynamic extends SequentialCommandGroup {
 
 	public CMDGR_AutoDynamic(
-			SUB_Swerve swerve,
+			Supplier<Pose2d> swervePose,
 			SUB_Conveyor conveyor,
 			SUB_Arm arm,
 			SUB_Shooter shooter,
 			SUB_Vision vision,
 			AddressableLedStrip led) {
-		addRequirements(swerve, conveyor, arm, shooter, vision, led);
+		addRequirements(conveyor, arm, shooter, vision, led);
 		addCommands(
 				new CMD_Led(led, LEDState.BLUE),
-				new CMD_RotationOverride(RotationOverrideState.SPEAKER), // Enable auto align with speaker
 				new CMD_Shoot( // Shoot with dynamic
 						conveyor,
 						arm,
@@ -49,7 +47,7 @@ public class CMDGR_AutoDynamic extends SequentialCommandGroup {
 						true,
 						ShooterState.OFF,
 						ArmState.OFF,
-						() -> swerve.getPose()),
+						swervePose),
 				new CMD_Led(led, LEDState.RAINBOW));
 	}
 }

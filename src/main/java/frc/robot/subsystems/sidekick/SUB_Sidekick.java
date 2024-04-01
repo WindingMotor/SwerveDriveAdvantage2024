@@ -14,7 +14,6 @@ import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.Auto.SidekickState;
-import frc.robot.Constants.States.ArmState;
 import frc.robot.subsystems.arm.SUB_Arm;
 import frc.robot.subsystems.conveyor.SUB_Conveyor;
 import frc.robot.subsystems.shooter.SUB_Shooter;
@@ -78,7 +77,8 @@ public class SUB_Sidekick extends SubsystemBase {
 				operatorController.getHID().setRumble(RumbleType.kBothRumble, 0.35);
 			} else {
 				operatorController.getHID().setRumble(RumbleType.kBothRumble, 0.0);
-			};
+			}
+			;
 
 		} else {
 			operatorController.getHID().setRumble(RumbleType.kBothRumble, 0.0);

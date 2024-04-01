@@ -3,32 +3,38 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.6015831638103353,
-        "y": 6.770099550932555
+        "x": 2.633220581918502,
+        "y": 6.78029569043618
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.7508460012609663,
-        "y": 6.7323213633603345
+        "x": 3.0785458770165532,
+        "y": 6.145964098267412
       },
       "isLocked": false,
-      "linkedName": "A1_P11_END"
+      "linkedName": "TestAutoPath_END"
     },
     {
       "anchor": {
-        "x": 0.8363689406842373,
-        "y": 6.549284981093621
+        "x": 2.439610637920037,
+        "y": 5.447864529884869
       },
       "prevControl": {
-        "x": 1.8851405998097497,
-        "y": 6.534036726737241
+        "x": 3.1728482675213874,
+        "y": 6.025815020379008
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": null
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.7,
+      "rotationDegrees": 90.36708541447804,
+      "rotateFast": true
+    }
+  ],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
@@ -39,13 +45,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -120.41358339064259,
+    "rotation": -179.79126806091534,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "A1_PATHS",
+  "folder": null,
   "previewStartingState": {
-    "rotation": -146.14210064637592,
+    "rotation": -143.9180439857626,
     "velocity": 0
   },
   "useDefaultConstraints": true

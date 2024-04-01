@@ -14,13 +14,13 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot_Speaker1M"
+            "name": "Shoot_Auto"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.05
+            "waitTime": 0.1
           }
         },
         {
@@ -31,12 +31,6 @@
                 "type": "named",
                 "data": {
                   "name": "Intake_Auto"
-                }
-              },
-              {
-                "type": "wait",
-                "data": {
-                  "waitTime": 0.05
                 }
               },
               {
@@ -51,13 +45,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot_Speaker3M"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.05
+            "name": "Shoot_Dynamic"
           }
         },
         {
@@ -68,12 +56,6 @@
                 "type": "named",
                 "data": {
                   "name": "Intake_Auto"
-                }
-              },
-              {
-                "type": "wait",
-                "data": {
-                  "waitTime": 0.05
                 }
               },
               {
@@ -88,7 +70,13 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot_Speaker3M"
+            "name": "Align_Override_Speaker"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot_Dynamic"
           }
         }
       ]

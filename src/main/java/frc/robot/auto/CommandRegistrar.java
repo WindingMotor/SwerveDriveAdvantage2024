@@ -10,6 +10,7 @@ package frc.robot.auto;
 
 import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
+import frc.robot.Constants.RotationOverrideState;
 import frc.robot.Constants.States.ArmState;
 import frc.robot.Constants.States.ShooterMode;
 import frc.robot.Constants.States.ShooterState;
@@ -18,6 +19,8 @@ import frc.robot.commands.CMDFL_groups.CMDGR_AutoDynamic;
 import frc.robot.commands.CMDFL_intake.CMD_Eject;
 import frc.robot.commands.CMDFL_intake.CMD_Intake;
 import frc.robot.commands.CMDFL_intake.CMD_IntakeAuto;
+import frc.robot.commands.CMDFL_intake.CMD_StartIntake;
+import frc.robot.commands.CMDFL_swerve.CMD_RotationOverride;
 import frc.robot.commands.CMDFL_util.CMD_Idle;
 import frc.robot.commands.CMDFL_util.CMD_Led;
 import frc.robot.subsystems.arm.SUB_Arm;
@@ -189,6 +192,14 @@ public class CommandRegistrar {
 		NamedCommands.registerCommand("Led_Blue", new CMD_Led(led, LEDState.BLUE));
 
 		NamedCommands.registerCommand(
-				"Shoot_Dynamic", new CMDGR_AutoDynamic(swerve, conveyor, arm, shooter, vision, led));
+				"Align_Override_Speaker", new CMD_RotationOverride(RotationOverrideState.SPEAKER));
+		NamedCommands.registerCommand(
+				"Align_Override_None", new CMD_RotationOverride(RotationOverrideState.OFF));
+
+		NamedCommands.registerCommand(
+				"Shoot_Dynamic",
+				new CMDGR_AutoDynamic(() -> swerve.getPose(), conveyor, arm, shooter, vision, led));
+
+		NamedCommands.registerCommand("Start_Intake", new CMD_StartIntake(conveyor));
 	}
 }

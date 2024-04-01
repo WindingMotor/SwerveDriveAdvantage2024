@@ -29,7 +29,7 @@ public class Constants {
 
 	// Enables commands that could harm people around the robot when debugging. Such as auto angle for
 	// the arm or side kick.
-	public static final boolean ENABLE_DANGEROUS_DEFAULT_COMMANDS = false;
+	public static final boolean ENABLE_DANGEROUS_DEFAULT_COMMANDS = true;
 
 	// Use extreme caution when enabled, manually controls PID setpoints through smart dashboard.
 	public static final boolean PID_TEST_MODE = false;
@@ -123,8 +123,8 @@ public class Constants {
 					"leftCamera",
 					new Transform3d(
 							new Translation3d(
-									Units.inchesToMeters(4),
-									Units.inchesToMeters(11.25 - 2.5), // X offset to 0in the left of the speaker
+									Units.inchesToMeters(4 + 2), // eee
+									Units.inchesToMeters(11.25 + 3), // X offset to 0in the left of the speaker
 									Units.inchesToMeters(8.5)),
 							new Rotation3d(0, Units.degreesToRadians(-29), 0.0)
 									.rotateBy(
@@ -135,8 +135,8 @@ public class Constants {
 					"rightCamera",
 					new Transform3d(
 							new Translation3d(
-									Units.inchesToMeters(4 + 7.5),
-									Units.inchesToMeters(-19 + 3.5), // X offset to 2in the left of the speaker
+									Units.inchesToMeters(8),
+									Units.inchesToMeters(-21), // X offset to 2in the left of the speaker
 									Units.inchesToMeters(8.5)),
 							new Rotation3d(
 											Units.degreesToRadians(5),
@@ -198,7 +198,7 @@ public class Constants {
 		public static final boolean ARM_MOTOR_FOLLOWER_INVERTED = false;
 
 		// Arm PIDs
-		public static final double ARM_P = 0.135; // Volts 0.45 0.18 -> old: 0.135
+		public static final double ARM_P = 0.2; // Volts 0.45 0.18 -> old: 0.135
 		public static final double ARM_I = 0.0;
 		public static final double ARM_D = 0.00012; // old: 0.00012
 
@@ -216,10 +216,10 @@ public class Constants {
 		public static final double ARM_VOLTAGE_CLAMPING = 11.9;
 
 		// Min tolerance for arm to claim its good
-		public static final double ARM_TOLERANCE_DEGREES = 0.25; // 3.0 old: 1.0
+		public static final double ARM_TOLERANCE_DEGREES = 0.55; // 3.0 old: 1.0
 
 		// Arm offset to get zero at horizontal
-		public static final double ARM_OFFSET_DEGREES = 0; // old 4.85
+		public static final double ARM_OFFSET_DEGREES = 8.9; // old 4.85, old 0, old .85
 
 		// Arm locking servo RoboRio port
 		public static final int ARM_SERVO_PORT = 9;
@@ -298,7 +298,8 @@ public class Constants {
 			OFF(0.0, 0.0),
 			IDLE(5000, 0.0),
 
-			SPEAKER_1M(4700, 1.0), // 3600
+			SPEAKER_1M(5900, 1.0), // 3600
+
 			SPEAKER_2M(4500, 2.0),
 			SPEAKER_2_5M(4500, 2.0),
 			SPEAKER_3M(4500, 3.0),
@@ -323,18 +324,19 @@ public class Constants {
 		// Positions of the arm for various states
 		public enum ArmState {
 			OFF(0, 0.0),
-			IDLE(8, 0.0),
 
-			SPEAKER_1M(55.0, 1.0),
+			IDLE(0.0, 0.0),
+
+			SPEAKER_1M(50.0, 1.0),
 			SPEAKER_2M(42.0, 2.0), // 43deg
 			SPEAKER_2_5M(40, 2.0),
 			SPEAKER_3M(38.5, 3.0),
 			SPEAKER_4M(34.15, 4.0),
 
-			AMP(104, 0.0), // old 95
+			AMP(100, 0.0), // old 95
 
 			DYNAMIC(-1.0, 0.0),
-			INTAKE(15, 0.0), // 89, old-> 50
+			INTAKE(3, 0.0), // 89, old-> 50
 
 			INTAKE_SOURCE(30, 0.0), // 89, 50
 

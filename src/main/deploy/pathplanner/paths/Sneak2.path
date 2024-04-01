@@ -1,0 +1,158 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 4.045155474563665,
+        "y": 5.576430626213517
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 5.0809607988502234,
+        "y": 6.377807716868817
+      },
+      "isLocked": false,
+      "linkedName": "Sneak_END"
+    },
+    {
+      "anchor": {
+        "x": 5.72336016736992,
+        "y": 6.733234506609802
+      },
+      "prevControl": {
+        "x": 5.089503358391245,
+        "y": 6.372286953753425
+      },
+      "nextControl": {
+        "x": 6.4833115540126025,
+        "y": 7.165986177670127
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 8.260583873441254,
+        "y": 5.776659705249835
+      },
+      "prevControl": {
+        "x": 7.592074467742544,
+        "y": 6.287595572275806
+      },
+      "nextControl": {
+        "x": 8.509389293311493,
+        "y": 5.586499908187152
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 5.72336016736992,
+        "y": 6.525176477713518
+      },
+      "prevControl": {
+        "x": 6.431753465656937,
+        "y": 6.796060830814523
+      },
+      "nextControl": {
+        "x": 5.014966869082904,
+        "y": 6.254292124612511
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 4.045155474563665,
+        "y": 5.441828844253606
+      },
+      "prevControl": {
+        "x": 5.040837547535934,
+        "y": 6.088395588315754
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1.9,
+      "rotationDegrees": 142.86,
+      "rotateFast": false
+    }
+  ],
+  "constraintZones": [],
+  "eventMarkers": [
+    {
+      "name": "End Auto Angle",
+      "waypointRelativePos": 0.1,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "Align_Override_None"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Intake",
+      "waypointRelativePos": 1.8,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "Intake_Auto"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Auto Angle",
+      "waypointRelativePos": 3.3,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "Align_Override_Speaker"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 5.5,
+    "maxAcceleration": 4.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 178.4608632698412,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": null,
+  "previewStartingState": {
+    "rotation": -179.93513329882285,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}

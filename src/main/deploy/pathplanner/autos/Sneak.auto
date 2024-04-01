@@ -1,0 +1,49 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.7993488305024312,
+      "y": 6.5416144813867865
+    },
+    "rotation": -119.21747613535477
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot_Auto"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Sneak"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot_Dynamic"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Sneak2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot_Dynamic"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}

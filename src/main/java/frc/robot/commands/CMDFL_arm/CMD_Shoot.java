@@ -149,6 +149,7 @@ public class CMD_Shoot extends Command {
 		 * shooter state, and records the output.
 		 */
 		if (mode == ShooterMode.DYNAMIC) {
+			shooter.setState(ShooterState.SPEAKER_1M);
 			arm.setDynamicAngle(MathCalc.calculateArmAngle(robotPose.get()));
 		}
 	}
@@ -156,7 +157,9 @@ public class CMD_Shoot extends Command {
 	/** Set the initial states based on the shooting mode. */
 	private void setInitalStates() {
 
-		conveyor.setState(ConveyorState.OFF);
+		if (mode != ShooterMode.DYNAMIC) {
+			conveyor.setState(ConveyorState.OFF);
+		}
 
 		if (mode == ShooterMode.SPEAKER) {
 			setSpeakerState();
