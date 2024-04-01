@@ -22,6 +22,8 @@ import frc.robot.commands.CMDFL_climb.CMD_Climb;
 import frc.robot.commands.CMDFL_groups.CMDGR_Intake;
 import frc.robot.commands.CMDFL_groups.CMDGR_Shoot;
 import frc.robot.commands.CMDFL_groups.CMDGR_TeleopDynamic;
+import frc.robot.commands.CMDFL_intake.CMD_Eject;
+import frc.robot.commands.CMDFL_intake.CMD_IntakeSource;
 import frc.robot.subsystems.arm.IO_ArmReal;
 import frc.robot.subsystems.arm.IO_ArmSim;
 import frc.robot.subsystems.arm.SUB_Arm;
@@ -76,9 +78,14 @@ public class RobotContainer {
 
 		autoSelector = new AutoSelector();
 
-		configureBindings();
+		configureDefaultCommands();
+		configureOperatorCommands();
+		configureClimbCommands();
 
 		logMetadata();
+	}
+
+	private void configureDefaultCommands() {
 
 		swerve.setDefaultCommand(
 				swerve.drive(
@@ -88,13 +95,13 @@ public class RobotContainer {
 
 		if (Constants.ENABLE_DANGEROUS_DEFAULT_COMMANDS) {
 			arm.setDefaultCommand(new CMD_ArmDefualt(arm, () -> swerve.getPose()));
+			sidekick.start();
 		}
 	}
 
-	/** Configure the bindings for the controller buttons to specific commands. */
-	private void configureBindings() {
+	private void configureOperatorCommands() {
 
-		// Standard shoot lined up with speaker
+		// Standard shoot, for being lined up with speaker
 		operatorController
 				.x()
 				.onTrue(
@@ -109,9 +116,8 @@ public class RobotContainer {
 								() -> operatorController.x().getAsBoolean(),
 								() -> swerve.getPose()));
 
-		// Shoot command dynamic
-
-		driverController
+		// Dynamic shoot, auto angles robot and shooter
+		operatorController
 				.leftBumper()
 				.onTrue(
 						new CMDGR_TeleopDynamic(
@@ -128,37 +134,7 @@ public class RobotContainer {
 								() -> operatorController.leftBumper().getAsBoolean(),
 								() -> swerve.getPose()));
 
-		/*
-		driverController
-				.rightBumper()
-				.onTrue(
-						new CMDGR_Dynamic(
-								swerve,
-								() -> driverController.getRawAxis(0),
-								() -> driverController.getRawAxis(1),
-								() -> driverController.getRawAxis(3),
-								conveyor,
-								arm,
-								shooter,
-								vision,
-								led,
-								() -> operatorController.b().getAsBoolean(),
-								() -> operatorController.leftBumper().getAsBoolean(),
-								() -> swerve.getPose()));
-
-								*/
-
-		// operatorController.leftBumper().onTrue(new CMD_Climb(led, climb, () -> 0.35));
-
-		// operatorController.leftBumper().onFalse(new CMD_Climb(led, climb, () -> 0.0));
-
-		/*
-		operatorController
-				.rightBumper()
-				.onTrue(new CMD_ClimbArm(led, arm, () -> operatorController.rightBumper().getAsBoolean()));
-		*/
-
-		// Amp command
+		// Amp scoring
 		operatorController
 				.y()
 				.onTrue(
@@ -174,133 +150,32 @@ public class RobotContainer {
 										() -> operatorController.y().getAsBoolean(),
 										() -> swerve.getPose())));
 
-		/*
-		* 								new CMD_Align(
-										swerve,
-										() -> driverController.getRawAxis(0),
-										() -> driverController.getRawAxis(1),
-										() -> driverController.getRawAxis(3),
-										false,
-										() -> operatorController.b().getAsBoolean()
-		*/
-		// Intake command
-
+		// Intaking, from ground
 		operatorController
 				.a()
-				.debounce(0.05)
 				.onTrue(new CMDGR_Intake(conveyor, arm, led, () -> operatorController.b().getAsBoolean()));
 
-		/*
+		// Intaking, from source
 		operatorController
-				.a()
+				.leftStick()
 				.onTrue(
-						new CMD_Rotate(
-								swerve,
-								() -> driverController.getRawAxis(1),
-								() -> driverController.getRawAxis(0)));
-		*/
+						new CMD_IntakeSource(
+								conveyor, arm, shooter, () -> operatorController.b().getAsBoolean()));
 
-		/*
-				operatorController
-						.a()
-						.onTrue(
-								new CMDGR_Dynamic(
-										swerve,
-										() -> driverController.getRawAxis(0),
-										() -> driverController.getRawAxis(1),
-										() -> driverController.getRawAxis(3),
-										conveyor,
-										arm,
-										shooter,
-										vision,
-										led,
-										() -> operatorController.b().getAsBoolean(),
-										() -> operatorController.y().getAsBoolean(),
-										() -> swerve.getPose()));
-		*/
-
-		// Intake Source command
-
-		/*
-				operatorController
-						.a()
-						.onTrue(
-								new CMD_IntakeSource(
-										conveyor, arm, shooter, () -> operatorController.b().getAsBoolean()));
-		*/
-
-		// Eject command
-
-		/*
+		// Eject
 		operatorController
 				.rightBumper()
 				.onTrue(new CMD_Eject(conveyor, arm, () -> operatorController.b().getAsBoolean()));
-		*/
+	}
 
-		//	operatorController.rightBumper().onTrue(new CMD_AlignAuto(swerve, false, () -> 0.0, () ->
-		// 0.0));
+	private void configureClimbCommands() {
 
-		/*
-		operatorController
-				.leftBumper()
-				.onTrue(
-						new CMDGR_Dynamic(
-								swerve,
-								() -> driverController.getRawAxis(0),
-								() -> driverController.getRawAxis(1),
-								() -> driverController.getRawAxis(3),
-								conveyor,
-								arm,
-								shooter,
-								vision,
-								led,
-								() -> operatorController.b().getAsBoolean(),
-								() -> operatorController.leftBumper().getAsBoolean(),
-								() -> swerve.getPose()));
-
-		driverController
-				.button(4)
-				.onTrue(
-						new CMDGR_Dynamic(
-								swerve,
-								() -> driverController.getRawAxis(0),
-								() -> driverController.getRawAxis(1),
-								() -> driverController.getRawAxis(3),
-								conveyor,
-								arm,
-								shooter,
-								vision,
-								led,
-								() -> operatorController.b().getAsBoolean(),
-								() -> operatorController.leftBumper().getAsBoolean(),
-								() -> swerve.getPose()));
-		*/
-
-		// operatorController.rightBumper().onTrue(new CMD_DriveMode(swerve, DriveMode.SPEAKER));
-
-		///	operatorController.rightBumper().on(new CMD_DriveMode(swerve, DriveMode.SPEAKER));
-
-		// operatorController.rightStick().debounce(0.15).onTrue(new CMD_Servo(arm, true));
-		// Servo debug commands
-		// operatorController.rightStick().debounce(0.1).onTrue(new CMD_Servo(arm, true));
-		// operatorController.rightTrigger().debounce(0.15).onTrue(new CMD_Servo(arm, false));
-
-		// Drive to speaker command
-
-		/*
-		operatorController
-				.rightBumper()
-				.debounce(0.15)
-				.onTrue(
-						new CMDGR_DriveToScoringPose(
-								swerve, DriveScoringPoseState.AMP, () -> operatorController.b().getAsBoolean()));
-		*/
-
-		operatorController
-				.rightBumper()
+		// Climb command, requires other climb button to be pressed to send
+		climbController
+				.button(0)
 				.onTrue(
 						new CMD_Climb(
-								led, climb, arm, () -> 1.0, () -> operatorController.leftBumper().getAsBoolean()));
+								led, climb, arm, () -> 1.0, () -> climbController.button(1).getAsBoolean()));
 	}
 
 	public void logMetadata() {
@@ -309,6 +184,7 @@ public class RobotContainer {
 		Logger.recordMetadata("Match Number", DriverStation.getMatchNumber() + "");
 		Logger.recordMetadata("Match Type", DriverStation.getMatchType() + "");
 		Logger.recordMetadata("Replay Number", DriverStation.getReplayNumber() + "");
+		Logger.recordMetadata("Robot Mode", "" + Constants.CURRENT_MODE);
 	}
 
 	/**
@@ -318,9 +194,5 @@ public class RobotContainer {
 	 */
 	public Command getAutonomousCommand() {
 		return autoSelector.getSelectedAuto();
-	}
-
-	public void setRobotSwerveCurrentLimit(int driveAmps, int turnAmps) {
-		swerve.setSwerveCurrentLimit(driveAmps, turnAmps);
 	}
 }

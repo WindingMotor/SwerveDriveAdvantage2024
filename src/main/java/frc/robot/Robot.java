@@ -95,9 +95,6 @@ public class Robot extends LoggedRobot {
 		if (m_autonomousCommand != null) {
 			m_autonomousCommand.schedule();
 		}
-
-		// 45, 28
-		m_robotContainer.setRobotSwerveCurrentLimit(80, 32);
 	}
 
 	/** This function is called periodically during autonomous. */
@@ -117,8 +114,6 @@ public class Robot extends LoggedRobot {
 		// m_pdh.setSwitchableChannel(true);
 		// m_robotContainer.configDriving();
 		m_robotContainer.logMetadata();
-
-		m_robotContainer.setRobotSwerveCurrentLimit(65, 32);
 	}
 
 	/** This function is called periodically during operator control. */

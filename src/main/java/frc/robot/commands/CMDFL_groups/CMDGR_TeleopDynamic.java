@@ -46,7 +46,7 @@ public class CMDGR_TeleopDynamic extends SequentialCommandGroup {
 		addCommands(
 				new CMD_Led(led, LEDState.BLUE),
 				new ParallelCommandGroup( // Parallel group for auto alignment and shooting commands
-						new CMD_TeleopAlign(swerve, xInput, yInput),
+						new CMD_TeleopAlign(swerve, xInput, yInput, manualCancel),
 						new CMD_Shoot(
 								conveyor,
 								arm,

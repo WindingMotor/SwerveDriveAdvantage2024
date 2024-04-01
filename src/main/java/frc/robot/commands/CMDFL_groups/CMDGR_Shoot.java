@@ -38,21 +38,8 @@ public class CMDGR_Shoot extends SequentialCommandGroup {
 		addRequirements(conveyor, arm, shooter, vision, led);
 		addCommands(
 				new CMD_Led(led, LEDState.BLUE),
-				new CMD_Shoot(conveyor, arm, shooter, vision, led, mode, manualCancel, shoot, robotPose));
-
-		if (!manualCancel.get()) {
-			if (mode == ShooterMode.AMP) {
-				addCommands(
-						new WaitCommand(1.1) // Longer delay to allow dount to leave the robot
-						);
-			} else {
-				addCommands(
-						new WaitCommand(0.15) // Short delay to allow dount to leave the robot
-						);
-			}
-		}
-
-		addCommands(
+				new CMD_Shoot(conveyor, arm, shooter, vision, led, mode, manualCancel, shoot, robotPose),
+				new WaitCommand(0.15),
 				new CMD_Idle(conveyor, arm, shooter),
 				new CMDGR_LedFlash(led, LEDState.GREEN, 5, 0.1),
 				new CMD_Led(led, LEDState.RAINBOW));

@@ -8,12 +8,14 @@
 
 package frc.robot.commands.CMDFL_swerve;
 
+import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.swerve.SUB_Swerve;
 import java.util.function.DoubleSupplier;
+import java.util.function.Supplier;
 
 public class CMD_TeleopAlign extends Command {
 
@@ -22,44 +24,54 @@ public class CMD_TeleopAlign extends Command {
 
 	private DoubleSupplier xInput;
 	private DoubleSupplier yInput;
-	private double output;
+	private Supplier<Boolean> manualCancel;
+	private boolean isCommandDone = false;
 
-	public CMD_TeleopAlign(SUB_Swerve swerve, DoubleSupplier xInput, DoubleSupplier yInput) {
+	public CMD_TeleopAlign(
+			SUB_Swerve swerve,
+			DoubleSupplier xInput,
+			DoubleSupplier yInput,
+			Supplier<Boolean> manualCancel) {
 		this.swerve = swerve;
 		this.xInput = xInput;
 		this.yInput = yInput;
+		this.manualCancel = manualCancel;
 
 		addRequirements(swerve);
 
-		this.pid = new PIDController(0.015, 0, 0.003);
+		this.pid = new PIDController(Constants.Auto.SWERVE_ALIGN_PID.kP, Constants.Auto.SWERVE_ALIGN_PID.kI, Constants.Auto.SWERVE_ALIGN_PID.kD);
+
 		this.pid.enableContinuousInput(-180, 180);
 		this.pid.setTolerance(0.5);
-
-		this.output = 0.0;
 	}
 
 	// Print a message to the driver station and set the arm state
 	@Override
 	public void initialize() {
-		output = 0.0;
+		isCommandDone = false;
 	}
 
 	@Override
 	public void execute() {
 
-		Rotation2d currentAngle = swerve.getPose().getRotation();
+		double currentAngleDegrees = swerve.getPose().getRotation().getDegrees();
+		Pair<Rotation2d, Double> calculation = swerve.calculateAngleToSpeaker();
 
-		output =
-				pid.calculate(
-						currentAngle.getDegrees(),
-						Constants.Auto.ScoringPoses.BLU_AMP.pose.getRotation().getDegrees());
+		double setpointDegrees = calculation.getFirst().getDegrees();
+		double optimalEndingAngleDegrees = calculation.getSecond();
+
+		double output = pid.calculate(currentAngleDegrees, calculation.getFirst().getDegrees());
 
 		swerve.drive(xInput, yInput, () -> -output);
+
+		if (Math.abs(setpointDegrees - optimalEndingAngleDegrees) < 2.0) {
+			isCommandDone = true;
+		}
 	}
 
 	// Command ends immediately
 	@Override
 	public boolean isFinished() {
-		return false;
+		return isCommandDone || manualCancel.get();
 	}
 }

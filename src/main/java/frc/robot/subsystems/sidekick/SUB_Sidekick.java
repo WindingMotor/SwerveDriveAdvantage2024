@@ -34,7 +34,7 @@ public class SUB_Sidekick extends SubsystemBase {
 	private final AddressableLedStrip led;
 	private final CommandXboxController operatorController;
 
-	private final boolean SIDEKICK_ENABLED = true;
+	private boolean enabled = false;
 	private SidekickState state;
 	private SidekickState lastState;
 
@@ -57,26 +57,28 @@ public class SUB_Sidekick extends SubsystemBase {
 		lastState = SidekickState.UNKNOWN;
 	}
 
+	public void start() {
+		enabled = true;
+	}
+
+	public void stop() {
+		enabled = false;
+	}
+
 	@Override
 	public void periodic() {
 
-		if (SIDEKICK_ENABLED
+		if (enabled
 				&& DriverStation.isEnabled()
 				&& DriverStation.isTeleopEnabled()
 				&& !DriverStation.isAutonomous()) {
 
 			// Operator controller rumble
 			if (conveyor.inputs.indexerInitalSensorState) {
-				operatorController.getHID().setRumble(RumbleType.kBothRumble, 0.6);
+				operatorController.getHID().setRumble(RumbleType.kBothRumble, 0.35);
 			} else {
 				operatorController.getHID().setRumble(RumbleType.kBothRumble, 0.0);
-			}
-
-			Pose2d robotPose = swerve.getPose();
-			ArmState lastArmState = arm.getState();
-
-			var alli = DriverStation.getAlliance();
-			// CommandScheduler commandScheduler = CommandScheduler.getInstance();
+			};
 
 		} else {
 			operatorController.getHID().setRumble(RumbleType.kBothRumble, 0.0);

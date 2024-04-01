@@ -28,7 +28,7 @@ public class Constants {
 	public static final RobotMode CURRENT_MODE = RobotMode.REAL;
 
 	// Enables commands that could harm people around the robot when debugging. Such as auto angle for
-	// the arm.
+	// the arm or side kick.
 	public static final boolean ENABLE_DANGEROUS_DEFAULT_COMMANDS = false;
 
 	// Use extreme caution when enabled, manually controls PID setpoints through smart dashboard.
