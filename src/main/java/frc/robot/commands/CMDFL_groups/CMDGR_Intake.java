@@ -6,11 +6,11 @@
 // license that can be found in the LICENSE file at
 // the root directory of this project.
 
-package frc.robot.commands.groups;
+package frc.robot.commands.CMDFL_groups;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.commands.intake.CMD_Intake;
-import frc.robot.commands.util.CMD_Led;
+import frc.robot.commands.CMDFL_intake.CMD_Intake;
+import frc.robot.commands.CMDFL_util.CMD_Led;
 import frc.robot.subsystems.arm.SUB_Arm;
 import frc.robot.subsystems.conveyor.SUB_Conveyor;
 import frc.robot.util.AddressableLedStrip;

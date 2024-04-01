@@ -6,7 +6,7 @@
 // license that can be found in the LICENSE file at
 // the root directory of this project.
 
-package frc.robot.commands.climb;
+package frc.robot.commands.CMDFL_climb;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -58,7 +58,7 @@ public class CMD_Climb extends Command {
 		if (activate.get() && arm.getRealTimeArmPosition() > 25.0) {
 			send = true;
 		} else {
-			DriverStation.reportWarning("[CMD_Climb] Unable to climb with arm down!", false);
+			DriverStation.reportWarning("[warning] [CMD_Climb] Unable to climb with arm down!", false);
 			climb.set(0.0);
 			isCommandDone = true;
 		}
@@ -86,10 +86,8 @@ public class CMD_Climb extends Command {
 		}
 	}
 
-	// Command ends immediately
 	@Override
 	public boolean isFinished() {
-
-		return false;
+		return isCommandDone;
 	}
 }

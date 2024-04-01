@@ -27,6 +27,10 @@ public class Constants {
 	// Current robot mode and loop period.
 	public static final RobotMode CURRENT_MODE = RobotMode.REAL;
 
+	// Enables commands that could harm people around the robot when debugging. Such as auto angle for
+	// the arm.
+	public static final boolean ENABLE_DANGEROUS_DEFAULT_COMMANDS = false;
+
 	// Use extreme caution when enabled, manually controls PID setpoints through smart dashboard.
 	public static final boolean PID_TEST_MODE = false;
 
@@ -38,6 +42,15 @@ public class Constants {
 
 	// Enables snap angle PID for swerve drive.
 	public static final boolean TELEOP_DRIVER_SNAP_ENABLED = false;
+
+	// A non-static variable that determines the rotation override state of the swerve.
+	public static RotationOverrideState ROTATION_OVERRIDE_STATE = RotationOverrideState.OFF;
+
+	public enum RotationOverrideState {
+		OFF,
+		SPEAKER,
+		AMP
+	}
 
 	// Current robot mode
 	public enum RobotMode {

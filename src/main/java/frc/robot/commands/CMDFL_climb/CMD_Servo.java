@@ -6,7 +6,7 @@
 // license that can be found in the LICENSE file at
 // the root directory of this project.
 
-package frc.robot.commands.climb;
+package frc.robot.commands.CMDFL_climb;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.arm.SUB_Arm;

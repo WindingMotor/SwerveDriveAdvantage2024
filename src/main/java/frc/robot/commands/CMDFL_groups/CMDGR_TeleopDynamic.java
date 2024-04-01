@@ -6,17 +6,17 @@
 // license that can be found in the LICENSE file at
 // the root directory of this project.
 
-package frc.robot.commands.groups;
+package frc.robot.commands.CMDFL_groups;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.States.ShooterMode;
-import frc.robot.commands.arm.CMD_Shoot;
-import frc.robot.commands.swerve.CMD_AlignAuto;
-import frc.robot.commands.util.CMD_Idle;
-import frc.robot.commands.util.CMD_Led;
+import frc.robot.commands.CMDFL_arm.CMD_Shoot;
+import frc.robot.commands.CMDFL_swerve.CMD_TeleopAlign;
+import frc.robot.commands.CMDFL_util.CMD_Idle;
+import frc.robot.commands.CMDFL_util.CMD_Led;
 import frc.robot.subsystems.arm.SUB_Arm;
 import frc.robot.subsystems.conveyor.SUB_Conveyor;
 import frc.robot.subsystems.shooter.SUB_Shooter;
@@ -24,15 +24,16 @@ import frc.robot.subsystems.swerve.SUB_Swerve;
 import frc.robot.subsystems.vision.SUB_Vision;
 import frc.robot.util.AddressableLedStrip;
 import frc.robot.util.AddressableLedStrip.LEDState;
+import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
-public class CMDGR_Dynamic extends SequentialCommandGroup {
+public class CMDGR_TeleopDynamic extends SequentialCommandGroup {
 
-	public CMDGR_Dynamic(
+	public CMDGR_TeleopDynamic(
 			SUB_Swerve swerve,
-			Supplier<Double> xInput,
-			Supplier<Double> yInput,
-			Supplier<Double> rInput,
+			DoubleSupplier xInput,
+			DoubleSupplier yInput,
+			DoubleSupplier rInput,
 			SUB_Conveyor conveyor,
 			SUB_Arm arm,
 			SUB_Shooter shooter,
@@ -45,7 +46,7 @@ public class CMDGR_Dynamic extends SequentialCommandGroup {
 		addCommands(
 				new CMD_Led(led, LEDState.BLUE),
 				new ParallelCommandGroup( // Parallel group for auto alignment and shooting commands
-						new CMD_AlignAuto(swerve, false, () -> 0.0, () -> 0.0),
+						new CMD_TeleopAlign(swerve, xInput, yInput),
 						new CMD_Shoot(
 								conveyor,
 								arm,

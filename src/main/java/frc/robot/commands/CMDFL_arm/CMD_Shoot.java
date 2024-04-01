@@ -6,14 +6,11 @@
 // license that can be found in the LICENSE file at
 // the root directory of this project.
 
-package frc.robot.commands.arm;
+package frc.robot.commands.CMDFL_arm;
 
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
-import frc.robot.Constants.Auto.ScoringPoses;
 import frc.robot.Constants.States.ArmState;
 import frc.robot.Constants.States.ConveyorState;
 import frc.robot.Constants.States.ShooterMode;
@@ -26,8 +23,6 @@ import frc.robot.util.AddressableLedStrip;
 import frc.robot.util.AddressableLedStrip.LEDState;
 import frc.robot.util.MathCalc;
 import java.util.function.Supplier;
-import org.littletonrobotics.junction.Logger;
-import org.photonvision.PhotonUtils;
 
 /** MEGA Class to handle shooting. */
 public class CMD_Shoot extends Command {
@@ -149,39 +144,13 @@ public class CMD_Shoot extends Command {
 			}
 		}
 
-		// Run dynamic mode if needed
+		/**
+		 * Runs the dynamic function to calculate the arm angle based on the alliance color, sets the
+		 * shooter state, and records the output.
+		 */
 		if (mode == ShooterMode.DYNAMIC) {
-			runDynamic();
+			arm.setDynamicAngle(MathCalc.calculateArmAngle(robotPose.get()));
 		}
-	}
-
-	/**
-	 * Runs the dynamic function to calculate the arm angle based on the alliance color, sets the
-	 * shooter state, and records the output.
-	 */
-	private void runDynamic() {
-
-		var alli = DriverStation.getAlliance();
-		Pose2d targetSpeakerPose;
-
-		if (alli.get() == Alliance.Blue) {
-			targetSpeakerPose = ScoringPoses.BLU_SPEAKER.pose;
-		} else if (alli.get() == Alliance.Red) {
-			targetSpeakerPose = ScoringPoses.RED_SPEAKER.pose;
-		} else {
-			targetSpeakerPose = new Pose2d();
-			DriverStation.reportError("[error] Could not find alliance for auto angle", false);
-		}
-
-		double distanceToSpeaker = PhotonUtils.getDistanceToPose(robotPose.get(), targetSpeakerPose);
-
-		double armCalculation = MathCalc.calculateInterpolate(distanceToSpeaker);
-
-		shooter.setState(ShooterState.SPEAKER_1M);
-
-		arm.setDynamicAngle(armCalculation);
-
-		Logger.recordOutput("[CMD_Shoot] Dynamic Angle", armCalculation);
 	}
 
 	/** Set the initial states based on the shooting mode. */

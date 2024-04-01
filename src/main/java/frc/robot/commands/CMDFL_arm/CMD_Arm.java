@@ -6,27 +6,29 @@
 // license that can be found in the LICENSE file at
 // the root directory of this project.
 
-package frc.robot.commands.util;
+package frc.robot.commands.CMDFL_arm;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.util.AddressableLedStrip;
-import frc.robot.util.AddressableLedStrip.LEDState;
+import frc.robot.Constants.States.ArmState;
+import frc.robot.subsystems.arm.SUB_Arm;
 
-public class CMD_Led extends Command {
+public class CMD_Arm extends Command {
 
-	private final AddressableLedStrip led;
-	private final LEDState state;
+	private SUB_Arm arm;
+	private ArmState state;
 
-	public CMD_Led(AddressableLedStrip led, LEDState state) {
-		this.led = led;
+	public CMD_Arm(SUB_Arm arm, ArmState state) {
+		this.arm = arm;
 		this.state = state;
-		addRequirements(led);
+		addRequirements(arm);
 	}
 
-	// Print a message to the driver station and set the LED state
+	// Print a message to the driver station and set the arm state
 	@Override
 	public void initialize() {
-		led.setState(state);
+		// Stop and idle the robot subsystems
+		arm.setState(state);
+		arm.setClimbMode(false);
 	}
 
 	// Command ends immediately

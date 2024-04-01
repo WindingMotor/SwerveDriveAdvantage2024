@@ -6,22 +6,11 @@
 // license that can be found in the LICENSE file at
 // the root directory of this project.
 
-package frc.robot.commands.swerve;
+package frc.robot.commands.CMDFL_swerve;
 
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants.Auto;
-import frc.robot.Constants.Auto.ScoringPoses;
-import frc.robot.subsystems.swerve.SUB_Swerve;
-import java.util.function.Supplier;
-import org.littletonrobotics.junction.Logger;
-import org.photonvision.PhotonUtils;
-
-public class CMD_Align extends Command {
+// Deprecated, will be removed in the future! Use CMD_TeleopAlign instead.
+/*
+public class DEP_CMD_Align extends Command {
 
 	private final SUB_Swerve swerve;
 	private final PIDController pid;
@@ -35,7 +24,7 @@ public class CMD_Align extends Command {
 	private boolean isSpeaker;
 	private boolean isCommandDone;
 
-	public CMD_Align(
+	public DEP_CMD_Align(
 			SUB_Swerve swerve,
 			Supplier<Double> xSpeed,
 			Supplier<Double> ySpeed,
@@ -145,7 +134,7 @@ public class CMD_Align extends Command {
 			double output =
 					pid.calculate(
 							swerve.getYaw().getDegrees(), Math.toDegrees(setpointRadians));
-			 */
+
 
 			swerve.driveJoystickHybrid(ySpeed.get(), xSpeed.get(), output);
 
@@ -164,7 +153,7 @@ public class CMD_Align extends Command {
 					pid.calculate(
 							swerve.getYaw().getDegrees(),
 							Math.toRadians(ScoringPoses.BLU_AMP.pose.getRotation().getDegrees()));
-			 */
+
 
 			swerve.driveJoystickHybrid(ySpeed.get(), xSpeed.get(), output);
 		}
@@ -175,3 +164,4 @@ public class CMD_Align extends Command {
 		return manualCancel.get() || isCommandDone;
 	}
 }
+*/

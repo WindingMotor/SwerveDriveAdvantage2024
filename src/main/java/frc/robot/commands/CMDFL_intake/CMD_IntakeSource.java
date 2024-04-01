@@ -6,34 +6,31 @@
 // license that can be found in the LICENSE file at
 // the root directory of this project.
 
-package frc.robot.commands.intake;
+package frc.robot.commands.CMDFL_intake;
 
 import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
-import frc.robot.Constants.States.ArmState;
+import frc.robot.Constants.States.ShooterState;
 import frc.robot.subsystems.arm.SUB_Arm;
 import frc.robot.subsystems.conveyor.SUB_Conveyor;
+import frc.robot.subsystems.shooter.SUB_Shooter;
 import java.util.function.Supplier;
 
-/** Command to control the intake process. */
-public class CMD_Intake extends Command {
+/** Command to control the intaking from the source */
+public class CMD_IntakeSource extends Command {
 
 	private final SUB_Conveyor conveyor;
 	private final SUB_Arm arm;
+	private final SUB_Shooter shooter;
 	private final Supplier<Boolean> manualCancel;
 	private boolean isCommandDone = false;
 	private Debouncer debouncer;
 
-	/**
-	 * Constructs a new CMD_Intake command.
-	 *
-	 * @param conveyor The conveyor subsystem.
-	 * @param arm The arm subsystem.
-	 * @param manualCancel The supplier to determine if the command should be manually cancelled.
-	 */
-	public CMD_Intake(SUB_Conveyor conveyor, SUB_Arm arm, Supplier<Boolean> manualCancel) {
+	public CMD_IntakeSource(
+			SUB_Conveyor conveyor, SUB_Arm arm, SUB_Shooter shooter, Supplier<Boolean> manualCancel) {
 		this.conveyor = conveyor;
+		this.shooter = shooter;
 		this.arm = arm;
 		this.manualCancel = manualCancel;
 		debouncer = new Debouncer(0.025, Debouncer.DebounceType.kRising);
@@ -47,11 +44,11 @@ public class CMD_Intake extends Command {
 	 */
 	@Override
 	public void initialize() {
-
 		arm.setClimbMode(false);
 		isCommandDone = false;
-		conveyor.setState(Constants.States.ConveyorState.INTAKE);
-		arm.setState(ArmState.INTAKE);
+		conveyor.setState(Constants.States.ConveyorState.INTAKE_SOURCE);
+		arm.setState(Constants.States.ArmState.INTAKE_SOURCE);
+		shooter.setState(ShooterState.INTAKE_SOURCE);
 	}
 
 	/**
@@ -60,7 +57,6 @@ public class CMD_Intake extends Command {
 	 */
 	@Override
 	public void execute() {
-
 		// If the indexer sensor is triggered, end the command
 		if (debouncer.calculate(conveyor.inputs.indexerInitalSensorState)) {
 			isCommandDone = true;
@@ -76,10 +72,15 @@ public class CMD_Intake extends Command {
 	public void end(boolean interrupted) {
 		conveyor.setState(Constants.States.ConveyorState.OFF);
 		arm.setState(Constants.States.ArmState.IDLE);
+		shooter.setState(ShooterState.IDLE);
 	}
 
 	@Override
 	public boolean isFinished() {
-		return isCommandDone || manualCancel.get();
+		if (isCommandDone || manualCancel.get()) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 }

@@ -8,7 +8,13 @@
 
 package frc.robot.util;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import frc.robot.Constants.Auto.ScoringPoses;
+import org.littletonrobotics.junction.Logger;
+import org.photonvision.PhotonUtils;
 
 /**
  * The MathCalc class provides functionality to find the best RPM and angle for a projectile to hit
@@ -25,7 +31,7 @@ public class MathCalc {
 	 * @return The calculated required angle to hit the target.
 	 * @units RPM & DEG
 	 */
-	public static double calculateInterpolate(double distanceToTarget) {
+	private static double calculateInterpolate(double distanceToTarget) {
 		// return (50.5739 * Math.exp(-distanceToTarget)) + 36.3442;
 		return (61.9759 * Math.exp(-0.45144 * distanceToTarget)) + 25.5309 + 0.35;
 
@@ -34,6 +40,32 @@ public class MathCalc {
 				+ 95.1292 * Math.exp(-1.30193 * distanceToTarget);
 				*/
 		// Lower arm angle higher exponet
+	}
+
+	public static double calculateArmAngle(Pose2d robotPose) {
+
+		var alliance = DriverStation.getAlliance();
+		Pose2d targetPose;
+
+		if (alliance.get() == Alliance.Blue) {
+			targetPose = ScoringPoses.BLU_SPEAKER.pose;
+
+		} else if (alliance.get() == Alliance.Red) {
+			targetPose = ScoringPoses.RED_SPEAKER.pose;
+
+		} else {
+			targetPose = new Pose2d();
+			DriverStation.reportError(
+					"[error] [calculateArmAngle] Could not find alliance for auto angle", false);
+		}
+
+		double distanceToSpeaker = PhotonUtils.getDistanceToPose(robotPose, targetPose);
+
+		double armCalculation = MathCalc.calculateInterpolate(distanceToSpeaker);
+
+		Logger.recordOutput("[calculateArmAngle] Dynamic Angle", armCalculation);
+
+		return armCalculation;
 	}
 
 	/**

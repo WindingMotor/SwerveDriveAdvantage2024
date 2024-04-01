@@ -9,11 +9,13 @@
 package frc.robot.subsystems.swerve;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
+import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -25,13 +27,16 @@ import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants;
+import frc.robot.Constants.Auto.ScoringPoses;
 import frc.robot.Constants.RobotMode;
+import frc.robot.Constants.RotationOverrideState;
 import frc.robot.subsystems.vision.SUB_Vision;
 import java.util.Optional;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.DoubleSupplier;
 import org.littletonrobotics.junction.Logger;
+import org.photonvision.PhotonUtils;
 
 public class SUB_Swerve extends SubsystemBase {
 
@@ -85,6 +90,8 @@ public class SUB_Swerve extends SubsystemBase {
 					return alliance.isPresent() ? alliance.get() == DriverStation.Alliance.Red : false;
 				},
 				this);
+
+		PPHolonomicDriveController.setRotationTargetOverride(this::getRotationOverride);
 	}
 
 	public void periodic() {
@@ -100,15 +107,6 @@ public class SUB_Swerve extends SubsystemBase {
 		Logger.processInputs("Swerve", inputs);
 	}
 
-	public void driveRaw(Double translationX, Double translationY, Double angularRotationX) {
-		io.drive(
-				new Translation2d(
-						translationX * io.getMaximumVelocity(), translationY * io.getMaximumVelocity()),
-				angularRotationX * io.getMaximumAngularVelocity(),
-				false,
-				true);
-	}
-
 	/**
 	 * Drives the robot, in field-relative, based of the specified inputs.
 	 *
@@ -117,7 +115,7 @@ public class SUB_Swerve extends SubsystemBase {
 	 * @param angularRotationX A supplier for the angular rotation
 	 * @return The command for driving the swerve
 	 */
-	public Command driveJoystick(
+	public Command drive(
 			DoubleSupplier translationX, DoubleSupplier translationY, DoubleSupplier angularRotationX) {
 
 		return run(
@@ -160,34 +158,6 @@ public class SUB_Swerve extends SubsystemBase {
 								true);
 					}
 				});
-	}
-
-	public void driveJoystickHybrid(
-			Double translationX, Double translationY, Double nonModifedAngular) {
-
-		var alli = DriverStation.getAlliance();
-
-		if (alli.get() == Alliance.Blue) {
-
-			io.drive(
-
-					// BLU
-					new Translation2d(
-							translationX * io.getMaximumVelocity(), -translationY * io.getMaximumVelocity()),
-					nonModifedAngular * io.getMaximumAngularVelocity(),
-					true,
-					true);
-
-		} else if (alli.get() == Alliance.Red) {
-
-			io.drive(
-					// RED
-					new Translation2d(
-							-translationX * io.getMaximumVelocity(), translationY * io.getMaximumVelocity()),
-					nonModifedAngular * io.getMaximumAngularVelocity(),
-					true,
-					true);
-		}
 	}
 
 	/**
@@ -263,5 +233,99 @@ public class SUB_Swerve extends SubsystemBase {
 	public void setSwerveCurrentLimit(int driveAmps, int turnAmps) {
 		io.setDriveMotorCurrentLimit(driveAmps);
 		io.setTurnMotorCurrentLimit(turnAmps);
+	}
+
+	public Pair<Rotation2d, Double> calculateAngleToSpeaker() {
+
+		var alliance = DriverStation.getAlliance();
+
+		Pose2d currentPose = io.getPose();
+		Pose2d targetPose;
+
+		double xDistanceMeters = currentPose.getX();
+		double yDistanceMeters = currentPose.getY();
+		double hDistanceMeters;
+
+		double calculatedAngleRadians = 2.0 * Math.PI;
+
+		// The correct ending angle for the TELEOP PID to check. Does not influence PathPlanner!
+		double PIDOptimalEndingAngleDegrees = 0.0;
+
+		// * --- RED ALLIANCE --- * //
+		if (alliance.get() == Alliance.Blue) {
+			targetPose = Constants.Auto.ScoringPoses.BLU_SPEAKER.pose;
+			hDistanceMeters = PhotonUtils.getDistanceToPose(currentPose, targetPose);
+			// If robot is ABOVE the amp with a middle tolerance of 0.5 meters
+			if (yDistanceMeters > targetPose.getY()) {
+				calculatedAngleRadians =
+						Math.toRadians(90)
+								- (Math.asin(xDistanceMeters / hDistanceMeters))
+								+ Math.toRadians(180);
+				PIDOptimalEndingAngleDegrees = currentPose.getRotation().getDegrees() + 360.0;
+
+				// If robot is BELOW the amp with a middle tolerance of 0.5 meters
+			} else if (yDistanceMeters < targetPose.getY()) {
+				calculatedAngleRadians =
+						(Math.toRadians(90) + (Math.asin(xDistanceMeters / hDistanceMeters)));
+				PIDOptimalEndingAngleDegrees = currentPose.getRotation().getDegrees();
+			}
+
+			// * --- RED ALLIANCE --- * //
+		} else if (alliance.get() == Alliance.Red) {
+			targetPose = Constants.Auto.ScoringPoses.RED_SPEAKER.pose;
+			hDistanceMeters = PhotonUtils.getDistanceToPose(currentPose, targetPose);
+
+			/* Apply offset to the xDistanceMeters beacuse the measurements are taken off the opposite
+			side of the field */
+			xDistanceMeters = ScoringPoses.RED_SPEAKER.pose.getX() - currentPose.getX();
+
+			// If robot is ABOVE the speaker with a middle tolerance of 0.5 meters
+			if (yDistanceMeters > targetPose.getY() + 0.25) {
+				calculatedAngleRadians =
+						(Math.asin(xDistanceMeters / hDistanceMeters)) - Math.toRadians(270);
+				// TODO: Test and correctly implement PIDOptimalEndingAngleDegrees for red alliance
+				PIDOptimalEndingAngleDegrees = 0.0;
+
+				// If robot is BELOW the speaker with a middle tolerance of 0.5 meters
+			} else if (yDistanceMeters < targetPose.getY() - 0.25) {
+				calculatedAngleRadians =
+						(Math.asin(xDistanceMeters / hDistanceMeters)) + Math.toRadians(135);
+				PIDOptimalEndingAngleDegrees = 0.0;
+			}
+			// * --- NO ALLIANCE! --- * //
+		} else {
+			DriverStation.reportError("[error] [getRotationOverride] No Alliance Detected!", false);
+			return new Pair<Rotation2d, Double>(new Rotation2d(), 0.0);
+		}
+
+		Logger.recordOutput("[calculateAngleToSpeaker] H Distance", hDistanceMeters);
+		Logger.recordOutput("[calculateAngleToSpeaker] X Distance", xDistanceMeters);
+		Logger.recordOutput(
+				"[calculateAngleToSpeaker] Calculated Angle Radians", calculatedAngleRadians);
+		Logger.recordOutput(
+				"[calculateAngleToSpeaker] Calculated Angle Degrees",
+				Math.toDegrees(calculatedAngleRadians));
+		Logger.recordOutput(
+				"[calculateAngleToSpeaker] Desired Pose",
+				new Pose2d(currentPose.getTranslation(), new Rotation2d(calculatedAngleRadians)));
+		Logger.recordOutput(
+				"[calculateAngleToSpeaker] PID Optimal Ending Angle Degrees (Only for Teleop!)",
+				PIDOptimalEndingAngleDegrees);
+
+		return new Pair<Rotation2d, Double>(
+				new Rotation2d(calculatedAngleRadians), PIDOptimalEndingAngleDegrees);
+	}
+
+	public Optional<Rotation2d> getRotationOverride() {
+		if (Constants.ROTATION_OVERRIDE_STATE == RotationOverrideState.SPEAKER) {
+			if (!DriverStation.isAutonomous()) {
+				DriverStation.reportWarning(
+						"[warning] Overriding for PathPlanner is only available in autonomous paths!", false);
+			}
+			return Optional.of(calculateAngleToSpeaker().getFirst());
+		} else {
+			// Return an empty for a disabled override
+			return Optional.empty();
+		}
 	}
 }

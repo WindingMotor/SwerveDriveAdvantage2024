@@ -6,22 +6,11 @@
 // license that can be found in the LICENSE file at
 // the root directory of this project.
 
-package frc.robot.commands.swerve;
+package frc.robot.commands.CMDFL_swerve;
 
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants.Auto;
-import frc.robot.Constants.Auto.ScoringPoses;
-import frc.robot.subsystems.swerve.SUB_Swerve;
-import java.util.function.Supplier;
-import org.littletonrobotics.junction.Logger;
-import org.photonvision.PhotonUtils;
-
-public class CMD_AlignAuto extends Command {
+// Deprecated, will be removed in the future! Use CMD_RotationOverride instead.
+/*
+public class DEP_CMD_AlignAuto extends Command {
 
 	private final SUB_Swerve swerve;
 	private final PIDController pid;
@@ -33,7 +22,7 @@ public class CMD_AlignAuto extends Command {
 	private Supplier<Double> xInput;
 	private Supplier<Double> yInput;
 
-	public CMD_AlignAuto(
+	public DEP_CMD_AlignAuto(
 			SUB_Swerve swerve,
 			boolean isDriverControlled,
 			Supplier<Double> xInput,
@@ -146,13 +135,15 @@ public class CMD_AlignAuto extends Command {
 		double output =
 				pid.calculate(
 						swerve.getYaw().getDegrees(), Math.toDegrees(setpointRadians));
-		 */
+
 
 		if (isDriverControlled) {
-			swerve.driveJoystickHybrid(xInput.get(), yInput.get(), output);
+		//	swerve.driveJoystickHybrid(xInput.get(), yInput.get(), output);
 		} else {
-			swerve.driveRaw(0.0, 0.0, output);
+			//swerve.driveRaw(0.0, 0.0, output);
 		}
+
+		swerve.drive(xInput.get(), yInput.get(), output, null, null)
 
 		// End command if the robot is aligned and within 3 degrees
 
@@ -171,3 +162,4 @@ public class CMD_AlignAuto extends Command {
 		return isCommandDone;
 	}
 }
+*/

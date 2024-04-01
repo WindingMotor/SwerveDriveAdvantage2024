@@ -6,7 +6,7 @@
 // license that can be found in the LICENSE file at
 // the root directory of this project.
 
-package frc.robot.commands.swerve;
+package frc.robot.commands.CMDFL_swerve;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -15,17 +15,16 @@ import frc.robot.Constants;
 import frc.robot.subsystems.swerve.SUB_Swerve;
 import java.util.function.DoubleSupplier;
 
-public class CMD_Rotate extends Command {
+public class CMD_TeleopAlign extends Command {
 
 	private SUB_Swerve swerve;
 	private PIDController pid;
 
 	private DoubleSupplier xInput;
 	private DoubleSupplier yInput;
-
 	private double output;
 
-	public CMD_Rotate(SUB_Swerve swerve, DoubleSupplier xInput, DoubleSupplier yInput) {
+	public CMD_TeleopAlign(SUB_Swerve swerve, DoubleSupplier xInput, DoubleSupplier yInput) {
 		this.swerve = swerve;
 		this.xInput = xInput;
 		this.yInput = yInput;
@@ -55,9 +54,7 @@ public class CMD_Rotate extends Command {
 						currentAngle.getDegrees(),
 						Constants.Auto.ScoringPoses.BLU_AMP.pose.getRotation().getDegrees());
 
-		// swerve.driveJoystick(xInput, yInput, () -> output);
-
-		swerve.driveJoystickHybrid(xInput.getAsDouble(), yInput.getAsDouble(), output);
+		swerve.drive(xInput, yInput, () -> -output);
 	}
 
 	// Command ends immediately

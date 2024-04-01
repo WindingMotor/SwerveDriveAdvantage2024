@@ -11,14 +11,17 @@ package frc.robot;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.RobotMode;
 import frc.robot.Constants.States.ShooterMode;
 import frc.robot.auto.AutoSelector;
 import frc.robot.auto.CommandRegistrar;
-import frc.robot.commands.climb.CMD_Climb;
-import frc.robot.commands.groups.CMDGR_Intake;
-import frc.robot.commands.groups.CMDGR_Shoot;
+import frc.robot.commands.CMDFL_arm.CMD_ArmDefualt;
+import frc.robot.commands.CMDFL_climb.CMD_Climb;
+import frc.robot.commands.CMDFL_groups.CMDGR_Intake;
+import frc.robot.commands.CMDFL_groups.CMDGR_Shoot;
+import frc.robot.commands.CMDFL_groups.CMDGR_TeleopDynamic;
 import frc.robot.subsystems.arm.IO_ArmReal;
 import frc.robot.subsystems.arm.IO_ArmSim;
 import frc.robot.subsystems.arm.SUB_Arm;
@@ -38,8 +41,9 @@ import org.littletonrobotics.junction.Logger;
 
 public class RobotContainer {
 
-	private final CommandXboxController driverController = new CommandXboxController(3); // old: 3
-	private final CommandXboxController operatorController = new CommandXboxController(4);
+	private final CommandXboxController driverController = new CommandXboxController(0);
+	private final CommandXboxController operatorController = new CommandXboxController(1);
+	private final CommandGenericHID climbController = new CommandGenericHID(2);
 
 	private final SUB_Vision vision = new SUB_Vision(new IO_VisionReal());
 
@@ -77,30 +81,20 @@ public class RobotContainer {
 		logMetadata();
 
 		swerve.setDefaultCommand(
-				swerve.driveJoystick(
+				swerve.drive(
 						() -> driverController.getRawAxis(1),
 						() -> driverController.getRawAxis(0),
 						() -> driverController.getRawAxis(3)));
 
-		// arm.setDefaultCommand(new CMD_ArmDefualt(arm, () -> swerve.getPose()));
-
-		// conveyor.setDefaultCommand(new CMD_AutoIntake(conveyor));
-
-		/*
-		swerve.setDefaultCommand(
-				swerve.driveJoystick(
-						() -> -MathUtil.applyDeadband(operatorController.getRawAxis(5), 0.05),
-						() -> MathUtil.applyDeadband(operatorController.getRawAxis(4), 0.05),
-						() -> MathUtil.applyDeadband(operatorController.getRawAxis(0), 0.05)));
-		*/
-
-		// swerve.setDriveMode(DriveMode.NORMAL);
+		if (Constants.ENABLE_DANGEROUS_DEFAULT_COMMANDS) {
+			arm.setDefaultCommand(new CMD_ArmDefualt(arm, () -> swerve.getPose()));
+		}
 	}
 
 	/** Configure the bindings for the controller buttons to specific commands. */
 	private void configureBindings() {
 
-		// Shoot command normal
+		// Standard shoot lined up with speaker
 		operatorController
 				.x()
 				.onTrue(
@@ -115,29 +109,12 @@ public class RobotContainer {
 								() -> operatorController.x().getAsBoolean(),
 								() -> swerve.getPose()));
 
-		/*
-				operatorController
-						.x()
-						.onTrue(
-								new CMD_Shoot(
-										conveyor,
-										arm,
-										shooter,
-										vision,
-										led,
-										ShooterMode.SPEAKER,
-										() -> operatorController.b().getAsBoolean(),
-										() -> operatorController.x().getAsBoolean(),
-										() -> swerve.getPose()));
-		*/
-
 		// Shoot command dynamic
 
-		/*
 		driverController
 				.leftBumper()
 				.onTrue(
-						new CMDGR_Dynamic(
+						new CMDGR_TeleopDynamic(
 								swerve,
 								() -> driverController.getRawAxis(0),
 								() -> driverController.getRawAxis(1),
@@ -150,7 +127,6 @@ public class RobotContainer {
 								() -> operatorController.b().getAsBoolean(),
 								() -> operatorController.leftBumper().getAsBoolean(),
 								() -> swerve.getPose()));
-		*/
 
 		/*
 		driverController

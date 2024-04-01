@@ -13,14 +13,13 @@ import edu.wpi.first.wpilibj2.command.PrintCommand;
 import frc.robot.Constants.States.ArmState;
 import frc.robot.Constants.States.ShooterMode;
 import frc.robot.Constants.States.ShooterState;
-import frc.robot.commands.arm.CMD_Shoot;
-import frc.robot.commands.groups.CMDGR_DynamicAuto;
-import frc.robot.commands.groups.CMDGR_IntakeDynamicAuto;
-import frc.robot.commands.intake.CMD_Eject;
-import frc.robot.commands.intake.CMD_Intake;
-import frc.robot.commands.intake.CMD_IntakeAuto;
-import frc.robot.commands.util.CMD_Idle;
-import frc.robot.commands.util.CMD_Led;
+import frc.robot.commands.CMDFL_arm.CMD_Shoot;
+import frc.robot.commands.CMDFL_groups.CMDGR_AutoDynamic;
+import frc.robot.commands.CMDFL_intake.CMD_Eject;
+import frc.robot.commands.CMDFL_intake.CMD_Intake;
+import frc.robot.commands.CMDFL_intake.CMD_IntakeAuto;
+import frc.robot.commands.CMDFL_util.CMD_Idle;
+import frc.robot.commands.CMDFL_util.CMD_Led;
 import frc.robot.subsystems.arm.SUB_Arm;
 import frc.robot.subsystems.conveyor.SUB_Conveyor;
 import frc.robot.subsystems.shooter.SUB_Shooter;
@@ -67,8 +66,8 @@ public class CommandRegistrar {
 
 		// Intake command
 		NamedCommands.registerCommand("Intake", new CMD_Intake(conveyor, arm, () -> false));
+		NamedCommands.registerCommand("Intake_Auto", new CMD_IntakeAuto(conveyor, arm, () -> false));
 
-		NamedCommands.registerCommand("Intake_Test", new CMD_Intake(conveyor, arm, () -> false));
 		// Eject command
 		NamedCommands.registerCommand("Eject", new CMD_Eject(conveyor, arm, () -> false));
 
@@ -76,8 +75,10 @@ public class CommandRegistrar {
 		NamedCommands.registerCommand("Shoot_Speaker", new PrintCommand("NULL"));
 		NamedCommands.registerCommand("Shoot_Command", new PrintCommand("NULL"));
 		NamedCommands.registerCommand("Shoot_Command2M", new PrintCommand("NULL"));
-		NamedCommands.registerCommand("Intake_Auto", new CMD_IntakeAuto(conveyor, arm, () -> false));
 		NamedCommands.registerCommand("Advance", new PrintCommand("NULL"));
+		NamedCommands.registerCommand("Intake_Dynamic", new PrintCommand("NULL"));
+		NamedCommands.registerCommand("Intake_Shoot_Auto", new PrintCommand("NULL"));
+		NamedCommands.registerCommand("Intake_Test", new PrintCommand("NULL"));
 
 		//
 		// Speaker shoot commands for different distances
@@ -187,12 +188,7 @@ public class CommandRegistrar {
 		NamedCommands.registerCommand("Led_Red", new CMD_Led(led, LEDState.RED));
 		NamedCommands.registerCommand("Led_Blue", new CMD_Led(led, LEDState.BLUE));
 
-		NamedCommands.registerCommand("Intake_Shoot_Auto", new PrintCommand("NUll"));
-
 		NamedCommands.registerCommand(
-				"Shoot_Dynamic", new CMDGR_DynamicAuto(swerve, conveyor, arm, shooter, vision, led));
-
-		NamedCommands.registerCommand(
-				"Intake_Dynamic", new CMDGR_IntakeDynamicAuto(conveyor, arm, () -> swerve.getPose()));
+				"Shoot_Dynamic", new CMDGR_AutoDynamic(swerve, conveyor, arm, shooter, vision, led));
 	}
 }
