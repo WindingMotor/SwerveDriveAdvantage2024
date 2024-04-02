@@ -58,7 +58,7 @@ public class CMDGR_TeleopDynamic extends SequentialCommandGroup {
 								manualCancel,
 								shoot,
 								robotPose)),
-				new WaitCommand(0.15), // Delay to allow dount to leave the robot
+				new WaitCommand(0.15), // Delay to allow donut to leave the robot
 				new CMD_Idle(conveyor, arm, shooter),
 				new CMDGR_LedFlash(led, LEDState.GREEN, 5, 0.1),
 				new CMD_Led(led, LEDState.RAINBOW));

@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.6162688461334,
-        "y": 4.225171655689135
+        "x": 2.5,
+        "y": 4.28
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.2502848129582462,
-        "y": 5.115929370689441
+        "x": 2.134015966824846,
+        "y": 5.170757715000306
       },
       "isLocked": false,
       "linkedName": "GoToStageFromAmp_END"
@@ -33,7 +33,7 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 5.5,
-    "maxAcceleration": 4.0,
+    "maxAcceleration": 3.3,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },

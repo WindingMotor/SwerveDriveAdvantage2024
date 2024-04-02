@@ -8,7 +8,6 @@
 
 package frc.robot.commands.CMDFL_climb;
 
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.States.ArmState;
 import frc.robot.subsystems.arm.SUB_Arm;
@@ -39,7 +38,7 @@ public class CMD_Climb extends Command {
 		this.arm = arm;
 		this.speed = speed;
 		this.activate = activate;
-		addRequirements(led);
+		addRequirements(led, climb, arm);
 	}
 
 	// Print a message to the driver station and set the LED state
@@ -55,12 +54,8 @@ public class CMD_Climb extends Command {
 	@Override
 	public void execute() {
 
-		if (activate.get() && arm.getRealTimeArmPosition() > 25.0) {
+		if (activate.get()) {
 			send = true;
-		} else {
-			DriverStation.reportWarning("[warning] [CMD_Climb] Unable to climb with arm down!", false);
-			climb.set(0.0);
-			isCommandDone = true;
 		}
 
 		if (send) {
@@ -68,7 +63,7 @@ public class CMD_Climb extends Command {
 
 			arm.setClimbMode(true);
 			// If arm position is less than 30 stop, if not keep running it
-			if (arm.getRealTimeArmPosition() - 0.25 < 20) {
+			if (arm.getRealTimeArmPosition() < 25) {
 				arm.setSpeed(0.0);
 				arm.lockArm();
 			} else {
@@ -88,6 +83,6 @@ public class CMD_Climb extends Command {
 
 	@Override
 	public boolean isFinished() {
-		return isCommandDone;
+		return false;
 	}
 }

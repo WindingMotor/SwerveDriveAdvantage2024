@@ -9,10 +9,7 @@
 package frc.robot.commands.CMDFL_groups;
 
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
-import edu.wpi.first.wpilibj2.command.PrintCommand;
-import frc.robot.Constants;
 import frc.robot.Constants.Auto.DriveScoringPoseState;
-import frc.robot.commands.CMDFL_util.CMD_Cancel;
 import frc.robot.subsystems.swerve.SUB_Swerve;
 import java.util.function.Supplier;
 
@@ -24,15 +21,17 @@ public class CMDGR_DriveToScoringPose extends ParallelRaceGroup {
 	public CMDGR_DriveToScoringPose(
 			SUB_Swerve swerve, DriveScoringPoseState drivePoseState, Supplier<Boolean> cancel) {
 
+		/*
 		if (Constants.TELEOP_AUTO_DRIVE_ENABLED) {
 
 			if (drivePoseState == DriveScoringPoseState.SPEAKER) {
-				addCommands(swerve.driveToSpeaker(), new CMD_Cancel(cancel));
+				addCommands(new ParallelRaceGroup(swerve.driveToSpeaker(), new CMD_Cancel(cancel)));
 			} else if (drivePoseState == DriveScoringPoseState.AMP) {
-				addCommands(swerve.driveToAmp(), new CMD_Cancel(cancel));
+				addCommands(new ParallelRaceGroup(swerve.driveToAmp(), new CMD_Cancel(cancel)));
 			} else {
 				addCommands(new PrintCommand("[error] Unknown pose state"));
 			}
 		}
+		*/
 	}
 }

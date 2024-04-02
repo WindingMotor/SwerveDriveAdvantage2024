@@ -46,7 +46,9 @@ public class CMD_ArmDefualt extends Command {
 			}
 
 		} else if (alli.get() == Alliance.Red) {
-			withinArea = false;
+			if (robotPose.get().getX() > 13.6) {
+				withinArea = true;
+			}
 		}
 
 		if (withinArea) {

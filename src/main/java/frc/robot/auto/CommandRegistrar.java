@@ -19,6 +19,7 @@ import frc.robot.commands.CMDFL_groups.CMDGR_AutoDynamic;
 import frc.robot.commands.CMDFL_intake.CMD_Eject;
 import frc.robot.commands.CMDFL_intake.CMD_Intake;
 import frc.robot.commands.CMDFL_intake.CMD_IntakeAuto;
+import frc.robot.commands.CMDFL_intake.CMD_IntakeAutoArm;
 import frc.robot.commands.CMDFL_intake.CMD_StartIntake;
 import frc.robot.commands.CMDFL_swerve.CMD_RotationOverride;
 import frc.robot.commands.CMDFL_util.CMD_Idle;
@@ -166,6 +167,21 @@ public class CommandRegistrar {
 						ArmState.OFF,
 						() -> swerve.getPose()));
 
+		NamedCommands.registerCommand(
+				"Shoot_First_Shot",
+				new CMD_Shoot(
+						conveyor,
+						arm,
+						shooter,
+						vision,
+						led,
+						ShooterMode.SPEAKER,
+						() -> false,
+						() -> false,
+						true,
+						ShooterState.SPEAKER_AUTO_FIRST_SHOT,
+						ArmState.SPEAKER_1M));
+
 		// Amp command
 		NamedCommands.registerCommand(
 				"Shoot_Amp",
@@ -201,5 +217,11 @@ public class CommandRegistrar {
 				new CMDGR_AutoDynamic(() -> swerve.getPose(), conveyor, arm, shooter, vision, led));
 
 		NamedCommands.registerCommand("Start_Intake", new CMD_StartIntake(conveyor));
+
+		NamedCommands.registerCommand("Arm_Raise_Race", new PrintCommand("NULL"));
+
+		NamedCommands.registerCommand(
+				"Intake_Auto_Arm",
+				new CMD_IntakeAutoArm(conveyor, arm, () -> false, () -> swerve.getPose()));
 	}
 }

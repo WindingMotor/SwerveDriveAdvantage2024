@@ -298,6 +298,7 @@ public class Constants {
 			OFF(0.0, 0.0),
 			IDLE(5000, 0.0),
 
+			SPEAKER_AUTO_FIRST_SHOT(2400, 1.0),
 			SPEAKER_1M(5900, 1.0), // 3600
 
 			SPEAKER_2M(4500, 2.0),
@@ -337,6 +338,7 @@ public class Constants {
 
 			DYNAMIC(-1.0, 0.0),
 			INTAKE(3, 0.0), // 89, old-> 50
+			INTAKE_AUTO(20, 0.0),
 
 			INTAKE_SOURCE(30, 0.0), // 89, 50
 
@@ -388,8 +390,8 @@ public class Constants {
 			BLU_SPEAKER(new Pose2d(0, 5.5, new Rotation2d())),
 			RED_SPEAKER(new Pose2d(16.5, 5.5, new Rotation2d())),
 
-			BLU_AMP(new Pose2d(1.95, 7.4, Rotation2d.fromDegrees(-90))),
-			RED_AMP(new Pose2d(15.0, 14.75, Rotation2d.fromDegrees(90)));
+			BLU_AMP(new Pose2d(1.85, 7.59, Rotation2d.fromDegrees(-90))),
+			RED_AMP(new Pose2d(14.75, 7.59, Rotation2d.fromDegrees(90)));
 
 			public final Pose2d pose;
 

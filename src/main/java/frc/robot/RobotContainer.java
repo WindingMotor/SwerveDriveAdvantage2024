@@ -11,7 +11,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
+import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.RobotMode;
 import frc.robot.Constants.States.ShooterMode;
@@ -45,7 +45,7 @@ public class RobotContainer {
 
 	private final CommandXboxController driverController = new CommandXboxController(0);
 	private final CommandXboxController operatorController = new CommandXboxController(1);
-	private final CommandGenericHID climbController = new CommandGenericHID(2);
+	private final CommandJoystick climbController = new CommandJoystick(2);
 
 	private final SUB_Vision vision = new SUB_Vision(new IO_VisionReal());
 
@@ -166,6 +166,13 @@ public class RobotContainer {
 		operatorController
 				.rightBumper()
 				.onTrue(new CMD_Eject(conveyor, arm, () -> operatorController.b().getAsBoolean()));
+
+		/* Drive to BLU amp, look at the method driveToAmp for red alliance stuff. 
+		THIS METHOD IS CAUSING MEMORY CRASHES.
+		operatorController
+				.rightStick()
+				.onTrue(swerve.driveToPose(Constants.Auto.ScoringPoses.BLU_AMP.pose));
+		*/
 	}
 
 	private void configureClimbCommands() {
@@ -176,6 +183,8 @@ public class RobotContainer {
 				.onTrue(
 						new CMD_Climb(
 								led, climb, arm, () -> 1.0, () -> climbController.button(2).getAsBoolean()));
+
+		// operatorController.rightStick().onTrue(new CMD_Servo(arm, true));
 	}
 
 	public void logMetadata() {

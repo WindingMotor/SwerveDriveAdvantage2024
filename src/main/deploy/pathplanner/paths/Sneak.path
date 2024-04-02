@@ -16,16 +16,16 @@
     },
     {
       "anchor": {
-        "x": 2.6,
-        "y": 7.7
+        "x": 2.18,
+        "y": 7.72
       },
       "prevControl": {
-        "x": 1.6381670188145894,
-        "y": 7.668357743678045
+        "x": 1.219970460265289,
+        "y": 7.653162892657467
       },
       "nextControl": {
-        "x": 3.5994593039213405,
-        "y": 7.732880082193756
+        "x": 3.3107975388759363,
+        "y": 7.7987259489009135
       },
       "isLocked": false,
       "linkedName": null
@@ -33,31 +33,31 @@
     {
       "anchor": {
         "x": 6.16438961791027,
-        "y": 7.679276168715759
+        "y": 7.69
       },
       "prevControl": {
         "x": 5.340901940710882,
-        "y": 7.758209416525633
+        "y": 7.768933247809874
       },
       "nextControl": {
         "x": 6.987877295109659,
-        "y": 7.600342920905886
+        "y": 7.611066752190127
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 8.249757945831675,
-        "y": 7.410715129317423
+        "x": 7.85,
+        "y": 7.35
       },
       "prevControl": {
-        "x": 7.942891874538243,
-        "y": 7.499783945681346
+        "x": 7.543133928706568,
+        "y": 7.439068816363923
       },
       "nextControl": {
-        "x": 8.803604241354703,
-        "y": 7.249959546981933
+        "x": 8.403846295523032,
+        "y": 7.18924441766451
       },
       "isLocked": false,
       "linkedName": null
@@ -80,12 +80,12 @@
     },
     {
       "anchor": {
-        "x": 4.045155474563665,
-        "y": 5.576430626213517
+        "x": 3.9232945728861055,
+        "y": 5.580559282764361
       },
       "prevControl": {
-        "x": 4.960611314462521,
-        "y": 5.8654645432458965
+        "x": 4.613521642070119,
+        "y": 6.300157716594502
       },
       "nextControl": null,
       "isLocked": false,
@@ -108,7 +108,7 @@
   "eventMarkers": [
     {
       "name": "Intake",
-      "waypointRelativePos": 2.55,
+      "waypointRelativePos": 1.45,
       "command": {
         "type": "parallel",
         "data": {
@@ -116,24 +116,7 @@
             {
               "type": "named",
               "data": {
-                "name": "Intake_Auto"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "name": "AutoAlign",
-      "waypointRelativePos": 3.9000000000000004,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "Align_Override_Speaker"
+                "name": "Intake_Auto_Arm"
               }
             }
           ]
@@ -143,13 +126,13 @@
   ],
   "globalConstraints": {
     "maxVelocity": 5.5,
-    "maxAcceleration": 4.0,
+    "maxAcceleration": 3.3,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 179.5634939261363,
+    "rotation": 179.5691571157617,
     "rotateFast": false
   },
   "reversed": false,

@@ -92,6 +92,7 @@ public class SUB_Swerve extends SubsystemBase {
 				this);
 
 		PPHolonomicDriveController.setRotationTargetOverride(this::getRotationOverride);
+
 	}
 
 	public void periodic() {
@@ -127,6 +128,7 @@ public class SUB_Swerve extends SubsystemBase {
 						io.drive(
 
 								// BLU
+
 								new Translation2d(
 										translationX.getAsDouble() * io.getMaximumVelocity(),
 										-translationY.getAsDouble() * io.getMaximumVelocity()),
@@ -171,8 +173,8 @@ public class SUB_Swerve extends SubsystemBase {
 				AutoBuilder.pathfindToPose(
 						pose,
 						new PathConstraints(
-								1,
-								6,
+								4.0, // autos in PathPlanner is 5.5
+								3.0, // autos in PathPlanner is 3.3
 								Units.degreesToRadians(540), // 540 350
 								Units.degreesToRadians(720) // 720 // 540
 								));
@@ -185,6 +187,9 @@ public class SUB_Swerve extends SubsystemBase {
 	 * @return The command to run to drive to the pose.
 	 */
 	public Command driveToSpeaker() {
+
+		return new PrintCommand("[driveToSpeaker] No function!");
+		/*
 		Optional<Alliance> alliance = DriverStation.getAlliance();
 		if (alliance.isPresent() && alliance.get() == Alliance.Blue) {
 			return driveToPose(Constants.Auto.ScoringPoses.BLU_SPEAKER.pose);
@@ -192,6 +197,7 @@ public class SUB_Swerve extends SubsystemBase {
 			return driveToPose(Constants.Auto.ScoringPoses.RED_SPEAKER.pose);
 		}
 		return new PrintCommand("[error] [driveToSpeaker] No Alliance Detected!");
+		*/
 	}
 
 	/**
@@ -200,7 +206,15 @@ public class SUB_Swerve extends SubsystemBase {
 	 * @return The command to run to drive to the pose.
 	 */
 	public Command driveToAmp() {
-		return driveToPose(Constants.Auto.ScoringPoses.BLU_AMP.pose);
+
+		Optional<Alliance> alliance = DriverStation.getAlliance();
+		
+		if (alliance.get() == Alliance.Blue) {
+			return driveToPose(Constants.Auto.ScoringPoses.BLU_AMP.pose);
+		} else if (alliance.get() == Alliance.Red) {
+			return driveToPose(Constants.Auto.ScoringPoses.RED_AMP.pose);
+		}
+		return new PrintCommand("[error] [driveToAmp] No Alliance Detected!");
 	}
 
 	/**
@@ -282,19 +296,21 @@ public class SUB_Swerve extends SubsystemBase {
 			// If robot is ABOVE the speaker with a middle tolerance of 0.5 meters
 			if (yDistanceMeters > targetPose.getY() + 0.25) {
 				calculatedAngleRadians =
-						(Math.asin(xDistanceMeters / hDistanceMeters)) - Math.toRadians(270);
+						(Math.asin(xDistanceMeters / hDistanceMeters)) - Math.toRadians(90);
+
 				// TODO: Test and correctly implement PIDOptimalEndingAngleDegrees for red alliance
-				PIDOptimalEndingAngleDegrees = 0.0;
+				PIDOptimalEndingAngleDegrees = currentPose.getRotation().getDegrees();
 
 				// If robot is BELOW the speaker with a middle tolerance of 0.5 meters
 			} else if (yDistanceMeters < targetPose.getY() - 0.25) {
 				calculatedAngleRadians =
-						(Math.asin(xDistanceMeters / hDistanceMeters)) + Math.toRadians(135);
-				PIDOptimalEndingAngleDegrees = 0.0;
+						(Math.asin(xDistanceMeters / hDistanceMeters)) + Math.toRadians(135 + 180);
+
+				PIDOptimalEndingAngleDegrees = currentPose.getRotation().getDegrees();
 			}
 			// * --- NO ALLIANCE! --- * //
 		} else {
-			DriverStation.reportError("[error] [getRotationOverride] No Alliance Detected!", false);
+			DriverStation.reportError("[error] [calculateAngleToSpeaker] No Alliance Detected!", false);
 			return new Pair<Rotation2d, Double>(new Rotation2d(), 0.0);
 		}
 

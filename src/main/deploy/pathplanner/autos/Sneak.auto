@@ -14,13 +14,26 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot_Auto"
+            "name": "Shoot_First_Shot"
           }
         },
         {
-          "type": "path",
+          "type": "wait",
           "data": {
-            "pathName": "Sneak"
+            "waitTime": 0.08
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Sneak"
+                }
+              }
+            ]
           }
         },
         {
@@ -30,9 +43,28 @@
           }
         },
         {
-          "type": "path",
+          "type": "wait",
           "data": {
-            "pathName": "Sneak2"
+            "waitTime": 0.05
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake_Auto_Arm"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Sneak2"
+                }
+              }
+            ]
           }
         },
         {

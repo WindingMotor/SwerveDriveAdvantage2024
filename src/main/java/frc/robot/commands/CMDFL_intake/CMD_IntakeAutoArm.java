@@ -9,20 +9,23 @@
 package frc.robot.commands.CMDFL_intake;
 
 import edu.wpi.first.math.filter.Debouncer;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.arm.SUB_Arm;
 import frc.robot.subsystems.conveyor.SUB_Conveyor;
+import frc.robot.util.MathCalc;
 import java.util.function.Supplier;
 
 /** Command to control the intake process but doesnt lower the arm after intaking */
-public class CMD_IntakeAuto extends Command {
+public class CMD_IntakeAutoArm extends Command {
 
 	private final SUB_Conveyor conveyor;
 	private final SUB_Arm arm;
 	private final Supplier<Boolean> manualCancel;
 	private boolean isCommandDone = false;
 	private Debouncer debouncer;
+	private Supplier<Pose2d> robotPose;
 
 	/**
 	 * Constructs a new CMD_Intake command.
@@ -31,10 +34,15 @@ public class CMD_IntakeAuto extends Command {
 	 * @param arm The arm subsystem.
 	 * @param manualCancel The supplier to determine if the command should be manually cancelled.
 	 */
-	public CMD_IntakeAuto(SUB_Conveyor conveyor, SUB_Arm arm, Supplier<Boolean> manualCancel) {
+	public CMD_IntakeAutoArm(
+			SUB_Conveyor conveyor,
+			SUB_Arm arm,
+			Supplier<Boolean> manualCancel,
+			Supplier<Pose2d> robotPose) {
 		this.conveyor = conveyor;
 		this.arm = arm;
 		this.manualCancel = manualCancel;
+		this.robotPose = robotPose;
 		debouncer = new Debouncer(0.025, Debouncer.DebounceType.kRising);
 
 		addRequirements(conveyor, arm);
@@ -49,7 +57,7 @@ public class CMD_IntakeAuto extends Command {
 		arm.setClimbMode(false);
 		isCommandDone = false;
 		conveyor.setState(Constants.States.ConveyorState.INTAKE);
-		arm.setState(Constants.States.ArmState.INTAKE_AUTO);
+		arm.setDynamicAngle(MathCalc.calculateArmAngle(robotPose.get()));
 	}
 
 	/**
@@ -60,7 +68,7 @@ public class CMD_IntakeAuto extends Command {
 	public void execute() {
 		// If the indexer sensor is triggered, end the command
 		if (debouncer.calculate(conveyor.inputs.indexerInitalSensorState)) {
-			isCommandDone = true;
+			conveyor.setState(Constants.States.ConveyorState.OFF);
 		}
 	}
 
@@ -70,16 +78,10 @@ public class CMD_IntakeAuto extends Command {
 	 * @param interrupted Whether the command was interrupted
 	 */
 	@Override
-	public void end(boolean interrupted) {
-		conveyor.setState(Constants.States.ConveyorState.OFF);
-	}
+	public void end(boolean interrupted) {}
 
 	@Override
 	public boolean isFinished() {
-		if (isCommandDone || manualCancel.get()) {
-			return true;
-		} else {
-			return false;
-		}
+		return false;
 	}
 }
