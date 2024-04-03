@@ -58,7 +58,7 @@ public class RobotContainer {
 
 	private final SUB_Shooter shooter = new SUB_Shooter(new IO_ShooterReal());
 
-	private final AddressableLedStrip led = new AddressableLedStrip(0, 150);
+	private final AddressableLedStrip led = new AddressableLedStrip(1, 30);
 
 	private final SUB_Swerve swerve = new SUB_Swerve(new IO_SwerveReal(), vision, driverController);
 
@@ -167,7 +167,7 @@ public class RobotContainer {
 				.rightBumper()
 				.onTrue(new CMD_Eject(conveyor, arm, () -> operatorController.b().getAsBoolean()));
 
-		/* Drive to BLU amp, look at the method driveToAmp for red alliance stuff. 
+		/* Drive to BLU amp, look at the method driveToAmp for red alliance stuff.
 		THIS METHOD IS CAUSING MEMORY CRASHES.
 		operatorController
 				.rightStick()

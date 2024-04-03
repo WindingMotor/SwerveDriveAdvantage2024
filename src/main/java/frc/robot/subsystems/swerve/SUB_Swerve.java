@@ -92,7 +92,6 @@ public class SUB_Swerve extends SubsystemBase {
 				this);
 
 		PPHolonomicDriveController.setRotationTargetOverride(this::getRotationOverride);
-
 	}
 
 	public void periodic() {
@@ -208,7 +207,7 @@ public class SUB_Swerve extends SubsystemBase {
 	public Command driveToAmp() {
 
 		Optional<Alliance> alliance = DriverStation.getAlliance();
-		
+
 		if (alliance.get() == Alliance.Blue) {
 			return driveToPose(Constants.Auto.ScoringPoses.BLU_AMP.pose);
 		} else if (alliance.get() == Alliance.Red) {
