@@ -58,7 +58,7 @@ public class RobotContainer {
 
 	private final SUB_Shooter shooter = new SUB_Shooter(new IO_ShooterReal());
 
-	private final AddressableLedStrip led = new AddressableLedStrip(1, 30);
+	private final AddressableLedStrip led = new AddressableLedStrip(1, 64);
 
 	private final SUB_Swerve swerve = new SUB_Swerve(new IO_SwerveReal(), vision, driverController);
 

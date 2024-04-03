@@ -149,6 +149,7 @@ public class CMD_Shoot extends Command {
 		 * shooter state, and records the output.
 		 */
 		if (mode == ShooterMode.DYNAMIC) {
+			shooter.invertMotors(true);
 			shooter.setState(ShooterState.SPEAKER_1M);
 			arm.setDynamicAngle(MathCalc.calculateArmAngle(robotPose.get()));
 		}

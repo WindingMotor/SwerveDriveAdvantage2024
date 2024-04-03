@@ -337,7 +337,7 @@ public class Constants {
 			AMP(100, 0.0), // old 95
 
 			DYNAMIC(-1.0, 0.0),
-			INTAKE(3, 0.0), // 89, old-> 50
+			INTAKE(8, 0.0), // 89, old-> 50
 			INTAKE_AUTO(20, 0.0),
 
 			INTAKE_SOURCE(30, 0.0), // 89, 50
