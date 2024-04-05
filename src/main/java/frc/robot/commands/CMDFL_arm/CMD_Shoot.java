@@ -178,7 +178,7 @@ public class CMD_Shoot extends Command {
 
 	/** Set the AMP state for the shooter and arm. */
 	private void setAmpState() {
-		shooter.invertMotors(false);
+		shooter.invertMotors(true); // False for shooting out side of arm.
 		shooter.setState(Constants.States.ShooterState.AMP);
 		arm.setState(Constants.States.ArmState.AMP);
 	}

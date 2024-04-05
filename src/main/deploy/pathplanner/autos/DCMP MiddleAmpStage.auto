@@ -1,0 +1,85 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.2945574370576298,
+      "y": 5.53650223579517
+    },
+    "rotation": 180.0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot_First_Shot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Start_Intake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "DCMP_Middle"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot_First_Shot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Start_Intake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "DCMP_Middle_To_Amp"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot_First_Shot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Start_Intake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "DCMP_Middle_To_Stage"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot_First_Shot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "DCMP_Leave"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}

@@ -334,7 +334,7 @@ public class Constants {
 			SPEAKER_3M(38.5, 3.0),
 			SPEAKER_4M(34.15, 4.0),
 
-			AMP(100, 0.0), // old 95
+			AMP(90, 0.0), // old 95, then 100
 
 			DYNAMIC(-1.0, 0.0),
 			INTAKE(8, 0.0), // 89, old-> 50
