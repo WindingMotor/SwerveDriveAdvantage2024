@@ -36,11 +36,11 @@ public class MathCalc {
 		// return (50.5739 * Math.exp(-distanceToTarget)) + 36.3442;
 
 		if (distanceToTarget > 3.3) {
-			return ((61.9759 * Math.exp(-0.49144 * distanceToTarget)) + 25.5309 + 0.35)
+			return ((61.9759 * Math.exp(-0.46144 * distanceToTarget)) + 25.5309 + 0.35) // Old: -0.49144
 					- Constants.Maestro.ARM_OFFSET_DEGREES;
 
 		} else { // Less than 3.3 meters
-			return ((61.9759 * Math.exp(-0.49144 * distanceToTarget)) + 25.5309 + 0.35)
+			return ((61.9759 * Math.exp(-0.46144 * distanceToTarget)) + 25.5309 + 0.35)
 					- Constants.Maestro.ARM_OFFSET_DEGREES;
 		}
 

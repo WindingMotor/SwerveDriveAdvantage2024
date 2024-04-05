@@ -54,7 +54,7 @@ public class IO_SwerveReal implements IO_SwerveBase {
 		targetPoses = new ArrayList<>();
 
 		// Set the telemetry verbosity to high for debugging
-		SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH;
+		SwerveDriveTelemetry.verbosity = TelemetryVerbosity.LOW;
 
 		// Should only be enabled when controlling the robot via angle
 		swerveDrive.setHeadingCorrection(false);

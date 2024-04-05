@@ -311,7 +311,7 @@ public class Constants {
 
 			INTAKE_SOURCE(-3000, 0.0),
 
-			AMP(4500, 0.0); // old 500
+			AMP(5500, 0.0); // old 500
 
 			public final double rpm;
 			public final double distanceMeters;

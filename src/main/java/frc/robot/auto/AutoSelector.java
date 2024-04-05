@@ -23,6 +23,10 @@ public class AutoSelector {
 
 		autoSelector = AutoBuilder.buildAutoChooser("Middle");
 		SmartDashboard.putData("Auto Selector", autoSelector);
+
+		// autoSelector.addOption("Main 5p", AutoBuilder.buildAuto(null));
+
+		// SmartDashboard.putData("AUTO Selector", autoSelector);
 	}
 
 	/**

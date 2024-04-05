@@ -36,10 +36,18 @@ public class CMDGR_Shoot extends SequentialCommandGroup {
 			Supplier<Boolean> shoot,
 			Supplier<Pose2d> robotPose) {
 		addRequirements(conveyor, arm, shooter, vision, led);
+
 		addCommands(
 				new CMD_Led(led, LEDState.BLUE),
-				new CMD_Shoot(conveyor, arm, shooter, vision, led, mode, manualCancel, shoot, robotPose),
-				new WaitCommand(0.15),
+				new CMD_Shoot(conveyor, arm, shooter, vision, led, mode, manualCancel, shoot, robotPose));
+
+		if (mode == ShooterMode.SPEAKER) {
+			addCommands(new WaitCommand(0.15));
+		} else if (mode == ShooterMode.AMP) {
+			addCommands(new WaitCommand(0.5));
+		}
+
+		addCommands(
 				new CMD_Idle(conveyor, arm, shooter),
 				new CMDGR_LedFlash(led, LEDState.GREEN, 5, 0.1),
 				new CMD_Led(led, LEDState.RAINBOW));
