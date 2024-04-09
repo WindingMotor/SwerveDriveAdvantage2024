@@ -1,7 +1,5 @@
 # Swerve Drive Advantage 2024 - by FRC Team 2106
 
-![Swerve Drive Advantage 2024](./path/to/your/image.png)
-
 ## Overview
 
 Swerve Drive Advantage 2024 is a sophisticated swerve drive base code designed for the 2024 FRC season. It leverages the AdvantageKit framework with YAGSL implementation, providing a robust solution. This project is fully compatible with the latest 2024 builds and is specifically tailored for our 2024 Robot, Maestro.
@@ -20,7 +18,7 @@ Swerve Drive Advantage 2024 is a sophisticated swerve drive base code designed f
 - **SDS MK4i Modules**: Utilizes SDS MK4i Modules
 - **Vortexs**: Includes NEO Vortexs for swerve drive and shooter motors.
 - **Neos**: Employs NEOs for swerve turn and all other subsystem motors.
-- **CANCoders**: Utilizes CANCoders for absolute position sensing and swerve offsets.
+- **Canandcoders**: Utilizes Canandcoders for absolute position sensing and swerve offsets.
 
 ## Getting Started
 
