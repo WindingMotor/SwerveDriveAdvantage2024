@@ -14,7 +14,6 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.States.ShooterMode;
 import frc.robot.commands.CMDFL_arm.CMD_Shoot;
-import frc.robot.commands.CMDFL_swerve.CMD_TeleopAlign;
 import frc.robot.commands.CMDFL_util.CMD_Idle;
 import frc.robot.commands.CMDFL_util.CMD_Led;
 import frc.robot.subsystems.arm.SUB_Arm;
@@ -47,7 +46,7 @@ public class CMDGR_TeleopDynamic extends SequentialCommandGroup {
 				// 						new CMD_TeleopAlign(swerve, xInput, yInput, manualCancel),
 				new CMD_Led(led, LEDState.BLUE),
 				new ParallelCommandGroup( // Parallel group for auto alignment and shooting commands
-						new CMD_TeleopAlign(swerve, xInput, yInput, manualCancel),
+						//	new CMD_TeleopAlign(swerve, xInput, yInput, manualCancel),
 						new CMD_Shoot(
 								conveyor,
 								arm,

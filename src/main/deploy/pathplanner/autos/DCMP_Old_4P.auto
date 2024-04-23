@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.8386602156110227,
-      "y": 4.43138261056929
+      "x": 1.323928801703758,
+      "y": 5.551187918118234
     },
-    "rotation": 122.35935885902703
+    "rotation": 180.0
   },
   "command": {
     "type": "sequential",
@@ -42,22 +42,22 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "StartStageRushMiddle"
+                  "pathName": "GoToMiddle"
                 }
               }
             ]
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "GoToStageFromCenter"
+            "name": "Shoot_Auto"
           }
         },
         {
-          "type": "named",
+          "type": "wait",
           "data": {
-            "name": "Shoot_First_Shot"
+            "waitTime": 0.05
           }
         },
         {
@@ -79,10 +79,71 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "StageRunnrEnd"
+                  "pathName": "GoToAmpFromCenterDynamic"
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot_Auto"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.05
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake_Auto"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 0.05
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "GoToStageFromAmp"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot_Auto"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.05
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Idle"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.0
           }
         }
       ]

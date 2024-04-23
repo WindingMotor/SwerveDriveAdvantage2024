@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.23,
-        "y": 6.98
+        "x": 2.6162688461334,
+        "y": 5.551187918118234
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.23,
-        "y": 6.98
+        "x": 2.1169556471492204,
+        "y": 5.595244965087426
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Z_1_END"
     },
     {
       "anchor": {
-        "x": 3.1,
-        "y": 6.98
+        "x": 2.7190686223948486,
+        "y": 6.93164205648626
       },
       "prevControl": {
-        "x": 2.1,
-        "y": 6.98
+        "x": 1.7105692865858169,
+        "y": 6.513907953949901
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "GoToAmpFromCenterDynamic_END"
     }
   ],
   "rotationTargets": [],
@@ -38,14 +38,14 @@
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
-    "velocity": 0,
-    "rotation": 179.68223732957782,
+    "velocity": 0.0,
+    "rotation": -152.53,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "A2_PATHS",
+  "folder": "Z_PATHS",
   "previewStartingState": {
-    "rotation": -179.57871828855167,
+    "rotation": 180.0,
     "velocity": 0
   },
   "useDefaultConstraints": true

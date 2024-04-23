@@ -13,7 +13,6 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
-import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -42,7 +41,7 @@ public class Robot extends LoggedRobot {
 
 		if (Constants.CURRENT_MODE == Constants.RobotMode.REAL) {
 			// Logger.addDataReceiver(new WPILOGWriter("U/logs"));
-			Logger.addDataReceiver(new WPILOGWriter()); // Write to USB drive on rio
+			//	Logger.addDataReceiver(new WPILOGWriter()); // Write to USB drive on rio
 			Logger.addDataReceiver(new NT4Publisher()); // Publish data to NetworkTables
 			// new PowerDistribution(1, ModuleType.kRev); // Enables power distribution logging
 			// Logger.addDataReceiver(new NT4Publisher());

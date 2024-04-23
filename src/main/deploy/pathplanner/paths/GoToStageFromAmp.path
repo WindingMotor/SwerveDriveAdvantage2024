@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.65,
-        "y": 6.89
+        "x": 2.7190686223948486,
+        "y": 6.93164205648626
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.003829977785179,
-        "y": 5.759202461124063
+        "x": 2.072898600180028,
+        "y": 5.800844517610323
       },
       "isLocked": false,
-      "linkedName": "A1_P2_END"
+      "linkedName": "GoToAmpFromCenterDynamic_END"
     },
     {
       "anchor": {
-        "x": 2.5,
-        "y": 4.28
+        "x": 2.62,
+        "y": 4.23
       },
       "prevControl": {
-        "x": 1.2076599555703587,
-        "y": 4.896798657568693
+        "x": 1.2933181928211377,
+        "y": 4.768979365946024
       },
       "nextControl": null,
       "isLocked": false,
@@ -32,14 +32,14 @@
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 5.5,
-    "maxAcceleration": 3.3,
+    "maxVelocity": 1.35,
+    "maxAcceleration": 1.45,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 154.0,
+    "rotation": 150.48,
     "rotateFast": false
   },
   "reversed": false,

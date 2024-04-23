@@ -12,8 +12,6 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.States.ShooterMode;
-import frc.robot.Constants.States.ShooterState;
-import frc.robot.commands.CMDFL_arm.CMD_SetShooterState;
 import frc.robot.commands.CMDFL_arm.CMD_Shoot;
 import frc.robot.commands.CMDFL_util.CMD_Idle;
 import frc.robot.commands.CMDFL_util.CMD_Led;
@@ -25,9 +23,9 @@ import frc.robot.util.AddressableLedStrip;
 import frc.robot.util.AddressableLedStrip.LEDState;
 import java.util.function.Supplier;
 
-public class CMDGR_Shoot extends SequentialCommandGroup {
+public class CMDGR_ShootOLDAMP extends SequentialCommandGroup {
 
-	public CMDGR_Shoot(
+	public CMDGR_ShootOLDAMP(
 			SUB_Conveyor conveyor,
 			SUB_Arm arm,
 			SUB_Shooter shooter,
@@ -46,8 +44,6 @@ public class CMDGR_Shoot extends SequentialCommandGroup {
 		if (mode == ShooterMode.SPEAKER) {
 			addCommands(new WaitCommand(0.15));
 		} else if (mode == ShooterMode.AMP) {
-			addCommands(new WaitCommand(0.1));
-			addCommands(new CMD_SetShooterState(shooter, ShooterState.AMP_FINAL));
 			addCommands(new WaitCommand(6)); // old: 0.85 to 1.125
 		}
 

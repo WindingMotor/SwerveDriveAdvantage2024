@@ -18,15 +18,22 @@
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "Start_Intake"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "DCMP_Middle"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake_Auto"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "DCMP_Middle"
+                }
+              }
+            ]
           }
         },
         {
@@ -56,7 +63,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Start_Intake"
+            "name": "Intake_Auto"
           }
         },
         {
@@ -69,12 +76,6 @@
           "type": "named",
           "data": {
             "name": "Shoot_First_Shot"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "DCMP_Leave"
           }
         }
       ]

@@ -17,10 +17,10 @@ import frc.robot.Constants.RobotMode;
 import frc.robot.Constants.States.ShooterMode;
 import frc.robot.auto.AutoSelector;
 import frc.robot.auto.CommandRegistrar;
-import frc.robot.commands.CMDFL_arm.CMD_ArmDefualt;
 import frc.robot.commands.CMDFL_climb.CMD_Climb;
 import frc.robot.commands.CMDFL_groups.CMDGR_Intake;
 import frc.robot.commands.CMDFL_groups.CMDGR_Shoot;
+import frc.robot.commands.CMDFL_groups.CMDGR_ShootOLDAMP;
 import frc.robot.commands.CMDFL_groups.CMDGR_TeleopDynamic;
 import frc.robot.commands.CMDFL_intake.CMD_Eject;
 import frc.robot.commands.CMDFL_intake.CMD_IntakeSource;
@@ -94,7 +94,7 @@ public class RobotContainer {
 						() -> driverController.getRawAxis(3)));
 
 		if (Constants.ENABLE_DANGEROUS_DEFAULT_COMMANDS) {
-			arm.setDefaultCommand(new CMD_ArmDefualt(arm, () -> swerve.getPose()));
+			// arm.setDefaultCommand(new CMD_ArmDefualt(arm, () -> swerve.getPose()));
 			sidekick.start();
 		}
 	}
@@ -148,6 +148,22 @@ public class RobotContainer {
 										ShooterMode.AMP,
 										() -> operatorController.b().getAsBoolean(),
 										() -> operatorController.y().getAsBoolean(),
+										() -> swerve.getPose())));
+
+		// AMP OLD
+		operatorController
+				.rightStick()
+				.onTrue(
+						new SequentialCommandGroup(
+								new CMDGR_ShootOLDAMP(
+										conveyor,
+										arm,
+										shooter,
+										vision,
+										led,
+										ShooterMode.AMP,
+										() -> operatorController.b().getAsBoolean(),
+										() -> operatorController.rightStick().getAsBoolean(),
 										() -> swerve.getPose())));
 
 		// Intaking, from ground

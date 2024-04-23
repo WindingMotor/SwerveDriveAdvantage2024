@@ -12,7 +12,6 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import frc.robot.Constants;
 import frc.robot.Constants.Auto.ScoringPoses;
 import org.littletonrobotics.junction.Logger;
 import org.photonvision.PhotonUtils;
@@ -35,14 +34,18 @@ public class MathCalc {
 	private static double calculateInterpolate(double distanceToTarget) {
 		// return (50.5739 * Math.exp(-distanceToTarget)) + 36.3442;
 
+		return (61.9759 * Math.exp(-0.85144 * distanceToTarget)) + 25.5309 + 0.35;
+
+		/*
 		if (distanceToTarget > 3.3) {
-			return ((61.9759 * Math.exp(-0.46144 * distanceToTarget)) + 25.5309 + 0.35) // Old: -0.49144
+			return ((61.9759 * Math.exp(-0.49144 * distanceToTarget)) + 25.5309 + 0.35) // Old: -0.49144
 					- Constants.Maestro.ARM_OFFSET_DEGREES;
 
 		} else { // Less than 3.3 meters
-			return ((61.9759 * Math.exp(-0.46144 * distanceToTarget)) + 25.5309 + 0.35)
+			return ((61.9759 * Math.exp(-0.49144 * distanceToTarget)) + 25.5309 + 0.35)
 					- Constants.Maestro.ARM_OFFSET_DEGREES;
 		}
+		*/
 
 		/*
 		return 39.3257 * Erf.erf(1.20504 * distanceToTarget)

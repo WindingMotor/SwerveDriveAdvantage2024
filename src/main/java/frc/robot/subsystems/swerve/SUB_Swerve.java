@@ -264,11 +264,11 @@ public class SUB_Swerve extends SubsystemBase {
 		// The correct ending angle for the TELEOP PID to check. Does not influence PathPlanner!
 		double PIDOptimalEndingAngleDegrees = 0.0;
 
-		// * --- RED ALLIANCE --- * //
+		// * --- BLUE ALLIANCE --- * //
 		if (alliance.get() == Alliance.Blue) {
 			targetPose = Constants.Auto.ScoringPoses.BLU_SPEAKER.pose;
 			hDistanceMeters = PhotonUtils.getDistanceToPose(currentPose, targetPose);
-			// If robot is ABOVE the amp with a middle tolerance of 0.5 meters
+			// If robot is ABOVE the speaker with a middle tolerance of 0.5 meters
 			if (yDistanceMeters > targetPose.getY()) {
 				calculatedAngleRadians =
 						Math.toRadians(90)
@@ -276,7 +276,7 @@ public class SUB_Swerve extends SubsystemBase {
 								+ Math.toRadians(180);
 				PIDOptimalEndingAngleDegrees = currentPose.getRotation().getDegrees() + 360.0;
 
-				// If robot is BELOW the amp with a middle tolerance of 0.5 meters
+				// If robot is BELOW the speaker with a middle tolerance of 0.5 meters
 			} else if (yDistanceMeters < targetPose.getY()) {
 				calculatedAngleRadians =
 						(Math.toRadians(90) + (Math.asin(xDistanceMeters / hDistanceMeters)));
@@ -293,15 +293,15 @@ public class SUB_Swerve extends SubsystemBase {
 			xDistanceMeters = ScoringPoses.RED_SPEAKER.pose.getX() - currentPose.getX();
 
 			// If robot is ABOVE the speaker with a middle tolerance of 0.5 meters
-			if (yDistanceMeters > targetPose.getY() + 0.25) {
+			if (yDistanceMeters > targetPose.getY()) {
 				calculatedAngleRadians =
 						(Math.asin(xDistanceMeters / hDistanceMeters)) - Math.toRadians(90);
 
 				// TODO: Test and correctly implement PIDOptimalEndingAngleDegrees for red alliance
-				PIDOptimalEndingAngleDegrees = currentPose.getRotation().getDegrees();
+				PIDOptimalEndingAngleDegrees = currentPose.getRotation().getDegrees() - 45.0;
 
 				// If robot is BELOW the speaker with a middle tolerance of 0.5 meters
-			} else if (yDistanceMeters < targetPose.getY() - 0.25) {
+			} else if (yDistanceMeters < targetPose.getY()) {
 				calculatedAngleRadians =
 						(Math.asin(xDistanceMeters / hDistanceMeters)) + Math.toRadians(135 + 180);
 

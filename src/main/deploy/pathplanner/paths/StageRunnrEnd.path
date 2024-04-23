@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.23,
-        "y": 6.98
+        "x": 0.8342802650517582,
+        "y": 4.539924869323423
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.23,
-        "y": 6.98
+        "x": 1.8045844863619553,
+        "y": 3.052729614231159
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "GoToStageFromCenter_ENND"
     },
     {
       "anchor": {
-        "x": 3.1,
-        "y": 6.98
+        "x": 8.04997130566712,
+        "y": 2.2469093954288093
       },
       "prevControl": {
-        "x": 2.1,
-        "y": 6.98
+        "x": 4.640304135455586,
+        "y": -0.4191601472365927
       },
       "nextControl": null,
       "isLocked": false,
@@ -39,13 +39,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 179.68223732957782,
+    "rotation": -144.1623470457217,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "A2_PATHS",
+  "folder": "Z_PATHS",
   "previewStartingState": {
-    "rotation": -179.57871828855167,
+    "rotation": 121.12247019679198,
     "velocity": 0
   },
   "useDefaultConstraints": true

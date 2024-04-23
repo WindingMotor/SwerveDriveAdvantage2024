@@ -3,49 +3,49 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 13.601159223785354,
-        "y": 4.449761743888425
+        "x": 2.62,
+        "y": 4.23
       },
       "prevControl": null,
       "nextControl": {
-        "x": 14.601159223785354,
-        "y": 4.449761743888425
+        "x": 1.9113560946263224,
+        "y": 5.184045860041631
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "GACO_GoToStageFromCenter_END"
     },
     {
       "anchor": {
-        "x": 14.75,
-        "y": 7.59
+        "x": 2.7190686223948486,
+        "y": 6.93164205648626
       },
       "prevControl": {
-        "x": 13.75,
-        "y": 7.59
+        "x": 0.9488136784492747,
+        "y": 6.434198210862176
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "GoToAmpFromCenterDynamic_END"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 5.5,
-    "maxAcceleration": 3.3,
+    "maxVelocity": 1.35,
+    "maxAcceleration": 1.45,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0.0,
-    "rotation": -90.0,
+    "rotation": -152.53,
     "rotateFast": false
   },
   "reversed": false,
   "folder": "Z_PATHS",
   "previewStartingState": {
-    "rotation": 0,
+    "rotation": 149.7561760115527,
     "velocity": 0
   },
   "useDefaultConstraints": true
