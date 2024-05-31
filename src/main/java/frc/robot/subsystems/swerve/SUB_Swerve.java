@@ -118,6 +118,21 @@ public class SUB_Swerve extends SubsystemBase {
 	public Command drive(
 			DoubleSupplier translationX, DoubleSupplier translationY, DoubleSupplier angularRotationX) {
 
+		// NON-FIELD ORIENTD GOOCHLAND DAY
+		/*
+		return run(
+				() -> {
+					io.drive(
+							new Translation2d(
+									translationX.getAsDouble() * io.getMaximumVelocity(),
+									-translationY.getAsDouble() * io.getMaximumVelocity()),
+							-angularRotationX.getAsDouble() * io.getMaximumAngularVelocity(),
+							false,
+							true);
+				});
+
+		*/
+
 		return run(
 				() -> {
 					var alli = DriverStation.getAlliance();

@@ -35,7 +35,7 @@ public class Constants {
 	public static final boolean PID_TEST_MODE = false;
 
 	// Enables auto driving to a pose with pathplanner during teletop. Be very careful when activated!
-	public static final boolean TELEOP_AUTO_DRIVE_ENABLED = true;
+	public static final boolean TELEOP_AUTO_DRIVE_ENABLED = false;
 
 	// Enables vision based odometry for swerve drive.
 	public static final boolean SWERVE_VISION_ODOMETRY_ENABLED = true;
@@ -296,10 +296,11 @@ public class Constants {
 		// Speeds of the shooter for the various states
 		public enum ShooterState {
 			OFF(0.0, 0.0),
-			IDLE(5000, 0.0),
+			IDLE(3000, 0.0), // old 0.0
 
 			SPEAKER_AUTO_FIRST_SHOT(2400, 1.0),
-			SPEAKER_1M(5900, 1.0), // 3600
+
+			SPEAKER_1M(5900, 1.0), // 3600 // old 5900
 
 			SPEAKER_2M(4500, 2.0),
 			SPEAKER_2_5M(4500, 2.0),
@@ -330,7 +331,8 @@ public class Constants {
 
 			IDLE(0.0, 0.0),
 
-			SPEAKER_1M(50.0, 1.0),
+			SPEAKER_1M(46.0, 1.0), // old 55
+
 			SPEAKER_2M(42.0, 2.0), // 43deg
 			SPEAKER_2_5M(40, 2.0),
 			SPEAKER_3M(38.5, 3.0),
@@ -339,7 +341,8 @@ public class Constants {
 			AMP(100, 0.0), // old 95, then 100,
 
 			DYNAMIC(-1.0, 0.0),
-			INTAKE(8, 0.0), // 89, old-> 50
+			INTAKE(8, 0.0), // 89, old-> 50 // old 8
+
 			INTAKE_AUTO(20, 0.0),
 
 			INTAKE_SOURCE(30, 0.0), // 89, 50
@@ -358,9 +361,13 @@ public class Constants {
 		// Speeds of conveyor, intake & indexer, for various states
 		public enum ConveyorState {
 			OFF(0.0, 0.0),
-			INTAKE(-1.0, -0.5),
-			INTAKE_INITAL(-0.75, 0.0),
+
+			INTAKE(-1.0, -0.5), // old -1.0, -0.5
+
+			INTAKE_INITAL(0.0, 0.0), // old -75.0, -0.0
+
 			INTAKE_SOURCE(0.0, 0.8),
+
 			EJECT(1.0, 0.45),
 			SHOOT(0.0, -1.0),
 			SLOW(0.0, -0.1),

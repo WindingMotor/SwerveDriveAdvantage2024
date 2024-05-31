@@ -10,6 +10,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -20,8 +21,6 @@ import frc.robot.auto.CommandRegistrar;
 import frc.robot.commands.CMDFL_climb.CMD_Climb;
 import frc.robot.commands.CMDFL_groups.CMDGR_Intake;
 import frc.robot.commands.CMDFL_groups.CMDGR_Shoot;
-import frc.robot.commands.CMDFL_groups.CMDGR_ShootOLDAMP;
-import frc.robot.commands.CMDFL_groups.CMDGR_TeleopDynamic;
 import frc.robot.commands.CMDFL_intake.CMD_Eject;
 import frc.robot.commands.CMDFL_intake.CMD_IntakeSource;
 import frc.robot.subsystems.arm.IO_ArmReal;
@@ -95,7 +94,7 @@ public class RobotContainer {
 
 		if (Constants.ENABLE_DANGEROUS_DEFAULT_COMMANDS) {
 			// arm.setDefaultCommand(new CMD_ArmDefualt(arm, () -> swerve.getPose()));
-			sidekick.start();
+			// sidekick.start();
 		}
 	}
 
@@ -116,6 +115,7 @@ public class RobotContainer {
 								() -> operatorController.x().getAsBoolean(),
 								() -> swerve.getPose()));
 
+		/*
 		// Dynamic shoot, auto angles robot and shooter
 		operatorController
 				.leftBumper()
@@ -133,6 +133,7 @@ public class RobotContainer {
 								() -> operatorController.b().getAsBoolean(),
 								() -> operatorController.leftBumper().getAsBoolean(),
 								() -> swerve.getPose()));
+		*/
 
 		// Amp scoring
 		operatorController
@@ -150,6 +151,7 @@ public class RobotContainer {
 										() -> operatorController.y().getAsBoolean(),
 										() -> swerve.getPose())));
 
+		/*
 		// AMP OLD
 		operatorController
 				.rightStick()
@@ -165,6 +167,8 @@ public class RobotContainer {
 										() -> operatorController.b().getAsBoolean(),
 										() -> operatorController.rightStick().getAsBoolean(),
 										() -> swerve.getPose())));
+
+		*/
 
 		// Intaking, from ground
 		operatorController
@@ -218,6 +222,6 @@ public class RobotContainer {
 	 * @return The autonomous command
 	 */
 	public Command getAutonomousCommand() {
-		return autoSelector.getSelectedAuto();
+		return new PrintCommand("KID MODE");
 	}
 }
