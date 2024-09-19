@@ -25,7 +25,7 @@ import edu.wpi.first.math.util.Units;
 public class Constants {
 
 	// Current robot mode and loop period.
-	public static final RobotMode CURRENT_MODE = RobotMode.REAL;
+	public static final RobotMode CURRENT_MODE = RobotMode.SIM;
 
 	// Enables commands that could harm people around the robot when debugging. Such as auto angle for
 	// the arm or side kick.
@@ -296,7 +296,7 @@ public class Constants {
 		// Speeds of the shooter for the various states
 		public enum ShooterState {
 			OFF(0.0, 0.0),
-			IDLE(3000, 0.0), // old 0.0
+			IDLE(5000, 0.0), // old 0.0
 
 			SPEAKER_AUTO_FIRST_SHOT(2400, 1.0),
 
@@ -331,7 +331,7 @@ public class Constants {
 
 			IDLE(0.0, 0.0),
 
-			SPEAKER_1M(46.0, 1.0), // old 55
+			SPEAKER_1M(50.0, 1.0), // old 55
 
 			SPEAKER_2M(42.0, 2.0), // 43deg
 			SPEAKER_2_5M(40, 2.0),
@@ -364,7 +364,7 @@ public class Constants {
 
 			INTAKE(-1.0, -0.5), // old -1.0, -0.5
 
-			INTAKE_INITAL(0.0, 0.0), // old -75.0, -0.0
+			INTAKE_INITAL(-0.75, 0.0), // old -75.0, -0.0
 
 			INTAKE_SOURCE(0.0, 0.8),
 

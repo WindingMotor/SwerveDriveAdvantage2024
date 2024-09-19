@@ -8,127 +8,112 @@
 
 package frc.robot.subsystems.arm;
 
-import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
-import edu.wpi.first.wpilibj.util.Color;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import frc.robot.Constants;
 import org.littletonrobotics.junction.Logger;
 
-/** A super bare bone implementation of the arm just for simulation testing. */
 public class IO_ArmSim implements IO_ArmBase {
 
-	private Mechanism2d mechanism;
-	private MechanismRoot2d rootMechanism;
-	private MechanismLigament2d aimMechanism;
-	private MechanismLigament2d hoodMechanism;
+	private final Mechanism2d mech2d;
+	private final MechanismLigament2d armLigament;
 
-	private Double armAngle;
+	private static final double ARM_LENGTH = 0.5; // meters
 
-	private final Mechanism2d armMechanism = new Mechanism2d(2, 2);
-	private final MechanismRoot2d armPivot = armMechanism.getRoot("ArmPivot", 1, 1);
+	private double appliedVolts = 0.0;
+	private double currentAngle = 0.0;
+	private double setpointAngle = 0.0;
+	private double velocity = 0.0;
+	private boolean isLocked = false;
+	private double servoPosition = 0.0;
 
-	private final MechanismLigament2d m_armTower =
-			armPivot.append(new MechanismLigament2d("ArmTower", 1, -90));
-
-	private MechanismLigament2d arm =
-			armPivot.append(
-					new MechanismLigament2d(
-							"Arm", 1, Units.radiansToDegrees(2 * Math.PI), 6, new Color8Bit(Color.kYellow)));
+	private final PIDController pidController;
 
 	public IO_ArmSim() {
+		mech2d = new Mechanism2d(3, 3);
+		MechanismRoot2d root = mech2d.getRoot("ArmRoot", 1.5, 0.5);
+		armLigament =
+				root.append(new MechanismLigament2d("Arm", ARM_LENGTH, 90, 6, new Color8Bit(255, 255, 0)));
 
-		armAngle = Constants.Maestro.ARM_OFFSET_DEGREES;
+		SmartDashboard.putData("Arm Mechanism", mech2d);
 
-		mechanism = new Mechanism2d(2.2, 2.0);
-		rootMechanism = mechanism.getRoot("scoring", 0.6, 0.3);
-		aimMechanism = rootMechanism.append(new MechanismLigament2d("aimer", 0.5, 0.0));
-		hoodMechanism =
-				aimMechanism.append(
-						new MechanismLigament2d("hood", 0.2, 0.0, 10.0, new Color8Bit(0, 200, 50)));
+		pidController =
+				new PIDController(
+						Constants.Maestro.ARM_P, Constants.Maestro.ARM_I, Constants.Maestro.ARM_D);
 	}
 
-	/**
-	 * Updates the inputs with the current values.
-	 *
-	 * @param inputs The inputs to update.
-	 */
 	@Override
 	public void updateInputs(ArmInputs inputs) {
+		currentAngle += velocity * 0.02; // Simple simulation of arm movement
+		currentAngle = Math.min(Math.max(currentAngle, -8.0), 200.0); // Clamp to min/max angles
 
-		Logger.recordOutput("MECH", mechanism);
+		inputs.armPositionDegrees = currentAngle;
+		inputs.motorOneCurrent = Math.abs(appliedVolts) * 0.5; // Simulated current
+		inputs.motorTwoCurrent = Math.abs(appliedVolts) * 0.5; // Simulated current
+		inputs.setpointPosition = setpointAngle;
+		inputs.isAtSetpoint =
+				Math.abs(currentAngle - setpointAngle) < Constants.Maestro.ARM_TOLERANCE_DEGREES;
+		inputs.pidOutputVolts = pidController.calculate(currentAngle, setpointAngle);
+		inputs.ffOutputVolts = 0; // Simplified simulation without feedforward
+		inputs.pidError = setpointAngle - currentAngle;
+		inputs.isArmLocked = isLocked;
+		inputs.servoPosition = servoPosition;
 
-		inputs.armPositionDegrees = armAngle;
-
-		inputs.setpointPosition = armAngle;
-		inputs.isAtSetpoint = true;
-
-		inputs.motorOneCurrent = -1.0;
-		inputs.motorTwoCurrent = -1.0;
-
-		inputs.pidOutputVolts = -1.0;
-		inputs.ffOutputVolts = -1.0;
-		inputs.pidError = -1.0;
-
-		inputs.isArmLocked = false;
-		inputs.servoPosition = -1;
+		armLigament.setAngle(currentAngle);
+		Logger.recordOutput("ArmMechanism", mech2d);
 	}
 
-	/**
-	 * Updates the arm angle with the new setpoint position.
-	 *
-	 * @param newSetpointPosition The new position for the arm.
-	 */
 	@Override
-	public void updatePID(double newSetpointPosition) {
-		this.armAngle = newSetpointPosition;
-		arm.setAngle(armAngle);
+	public void updatePID(double newSetpoint) {
+		setpointAngle = newSetpoint;
+		double pidOutput = pidController.calculate(currentAngle, setpointAngle);
+		setArmVoltage(pidOutput);
 	}
 
-	/** Stops the arm motors. */
 	@Override
 	public void stop() {
-		updatePID(0.0);
+		setArmVoltage(0);
 	}
 
-	/**
-	 * Set the speed of the motors. Not implemented in simulation.
-	 *
-	 * @param speed the speed to set for the motors
-	 */
 	@Override
 	public void setSpeed(double speed) {
-		DriverStation.reportWarning("[sim] Setting the arm speed is not implemented", false);
+		setArmVoltage(speed * 12); // Assuming 12V max
 	}
 
-	/**
-	 * Locks the arm shaft using a servo motor. Not implemented in simulation.
-	 *
-	 * @param enable Whether or not to lock the arm motors
-	 */
 	@Override
 	public void lockArm() {
-		DriverStation.reportWarning("[sim] Locking the arm is not implemented", false);
+		isLocked = true;
+		servoPosition = 50;
 	}
 
 	@Override
 	public void unlockArm() {
-		DriverStation.reportWarning("[sim] Unlocking the arm is not implemented", false);
+		isLocked = false;
+		servoPosition = 0;
 	}
 
 	@Override
 	public double getRealTimeArmPosition() {
-		return armAngle;
+		return currentAngle;
 	}
 
 	@Override
 	public double getRealTimeArmSetpoint() {
-		return armAngle;
+		return setpointAngle;
 	}
 
 	@Override
-	public void setCurrentLimits(int limit) {}
+	public void setCurrentLimits(int limit) {
+		// Not applicable in simulation
+	}
+
+	private void setArmVoltage(double volts) {
+		appliedVolts = volts;
+		// Simplified simulation: update velocity based on applied voltage
+		velocity = volts * 10; // Adjust this factor to control sensitivity
+	}
 }

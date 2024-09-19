@@ -4,6 +4,7 @@ plugins {
     id "java"
     id "edu.wpi.first.GradleRIO" version "2024.3.2"
     id "com.diffplug.spotless" version "6.12.0"
+    id "com.peterabeles.gversion" version "1.10"
 }
 
 java {
@@ -165,4 +166,31 @@ spotless {
 
 
     }
+}
+
+task updateVendordeps(type: Exec) {
+    workingDir "${rootDir}/tools"
+    commandLine './vendor_wizard.sh', 'update', '--gradle'
+    standardOutput = new ByteArrayOutputStream()
+    errorOutput = new ByteArrayOutputStream()
+    ignoreExitValue = true
+
+    doLast {
+        def output = standardOutput.toString()
+        def errorOutput = errorOutput.toString()
+        println output
+        println errorOutput
+    }
+}
+
+tasks.build.dependsOn updateVendordeps
+
+project.compileJava.dependsOn(createVersionFile)
+gversion {
+  srcDir       = "src/main/java/"
+  classPackage = "frc.robot"
+  className    = "BuildConstants"
+  dateFormat   = "yyyy-MM-dd HH:mm:ss z"
+  timeZone     = "America/New_York"
+  indent       = "  "
 }

@@ -37,27 +37,30 @@ public class Robot extends LoggedRobot {
 		// autonomous chooser on the dashboard.
 		m_robotContainer = new RobotContainer();
 
-		// m_pdh = new PDH();
+		Logger.recordMetadata("Maven Name", BuildConstants.MAVEN_NAME);
+		Logger.recordMetadata("Git SHA", BuildConstants.GIT_SHA);
+		Logger.recordMetadata("Build Date", BuildConstants.BUILD_DATE);
 
 		if (Constants.CURRENT_MODE == Constants.RobotMode.REAL) {
 			// Logger.addDataReceiver(new WPILOGWriter("U/logs"));
-			//	Logger.addDataReceiver(new WPILOGWriter()); // Write to USB drive on rio
+			// Logger.addDataReceiver(new WPILOGWriter()); // Write to USB drive on rio
 			Logger.addDataReceiver(new NT4Publisher()); // Publish data to NetworkTables
-			// new PowerDistribution(1, ModuleType.kRev); // Enables power distribution logging
-			// Logger.addDataReceiver(new NT4Publisher());
+
 		} else {
+			setUseTiming(false); // Run as fast as possible
+			/* FOR LOG REPLAY
+			String logPath =
+					LogFileUtil
+							.findReplayLog(); // Pull the replay log from AdvantageScope (or prompt the user)
+			Logger.setReplaySource(new WPILOGReader(logPath)); // Read replay log
+			Logger.addDataReceiver(
+					new WPILOGWriter(
+							LogFileUtil.addPathSuffix(logPath, "_sim"))); // Save outputs to a new log
+			*/
 			Logger.addDataReceiver(new NT4Publisher());
-			// Logger.addDataReceiver(new NT4Publisher());9
 		}
 
-		// Logger.disableDeterministicTimestamps() // See "Deterministic Timestamps" in the
-		// "Understanding Data Flow" page
-		// Logger.registerURCL(URCL.startExternal());
-		Logger.start(); // Start logging! No more data receivers, replay sources, or metadata values may
-		// be added.
-		// Pathfinding.setPathfinder(new LocalADStarAK());
-
-		// m_pdh.setSwitchableChannel(false);
+		Logger.start();
 	}
 
 	/**

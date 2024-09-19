@@ -170,3 +170,7 @@ out/
 
 # Simulation GUI and other tools window save file
 *-window.json
+
+# Python tools 
+tools/__pycache__
+tools/tool_venv
